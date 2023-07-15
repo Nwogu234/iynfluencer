@@ -9,7 +9,7 @@ class SignUpController extends GetxController {
   final lastnameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final countryController= TextEditingController();
+  final countryController = TextEditingController();
   final apiClient = ApiClient();
 
   final isShowPassword = true.obs;
@@ -49,7 +49,7 @@ class SignUpController extends GetxController {
     try {
       Response loginResponse = await apiClient.signUp(signUpModelObj.value);
 
-      if (loginResponse.body['status'].toString()== 'success') {
+      if (loginResponse.body['status'].toString() == 'success') {
         Get.back();
         Get.snackbar('Success', 'Sign up successful!');
         print(signUpModelObj.value.email);
@@ -60,15 +60,16 @@ class SignUpController extends GetxController {
             'code': '0000',
           },
         );
-
       } else {
         print(loginResponse.statusCode);
         Get.back();
-        Get.snackbar('Failure', 'Sign up failed! ${loginResponse.body['message']}');
+        Get.snackbar(
+            'Failure', 'Sign up failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);
       Get.back();
       Get.snackbar('Error', 'Something went wrong during sign up.');
     }
- }}
+  }
+}

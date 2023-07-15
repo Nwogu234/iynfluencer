@@ -19,7 +19,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             backgroundColor: ColorConstant.whiteA70001,
             body: SingleChildScrollView(
               child: Form(

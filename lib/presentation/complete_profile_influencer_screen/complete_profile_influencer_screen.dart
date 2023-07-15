@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/widgets/custom_drop_down.dart';
 import 'controller/complete_profile_influencer_controller.dart';
@@ -24,7 +23,7 @@ class CompleteProfileInfluencerScreen
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             backgroundColor: ColorConstant.whiteA70001,
             appBar: CustomAppBar(
                 height: getVerticalSize(54),
@@ -45,148 +44,144 @@ class CompleteProfileInfluencerScreen
                 ]),
             body: Form(
                 key: _formKey,
-                child: SingleChildScrollView(
-                    padding: getPadding(top: 10),
-                    child: Padding(
-                        padding: getPadding(left: 19, right: 20, bottom: 5),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                  padding: getPadding(left: 1),
-                                  child: Text("msg_complete_profile".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtH1)),
-                              Padding(
-                                padding: getPadding(top: 10),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    final ImagePicker _picker = ImagePicker();
-                                    try {
-                                      // Pick an image
-                                      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                                      if (image != null) {
-                                        controller.profileImage.value = File(image.path);
-                                      }
-                                    } catch (e) {
-                                      print(e);
-                                      // You can display an error message to the user
-                                      Get.snackbar('Error', 'Failed to pick an image. Please try again.');
-                                    }
-                                  },
-                                  child: Obx(
-                                        () => controller.profileImage.value == null
-                                        ? CustomImageView(
-                                      svgPath: ImageConstant.imgCheckmark,
-                                      height: getVerticalSize(90),
-                                      width: getHorizontalSize(95),
-                                      margin: getMargin(left: 8, top: 31),
-                                    )
-                                        : CircleAvatar(
-                                      radius: getVerticalSize(45),
-                                      backgroundImage: FileImage(controller.profileImage.value!),
-                                    ),
-                                  ),
+                child: Padding(
+                    padding: getPadding(left: 19, right: 20, bottom: 5),
+                    child: ListView(
+
+                        children: [
+                          Padding(
+                              padding: getPadding(left: 1),
+                              child: Text("msg_complete_profile".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtH1)),
+                          Padding(
+                            padding: getPadding(top: 10),
+                            child: GestureDetector(
+                              onTap: () async {
+                                final ImagePicker _picker = ImagePicker();
+                                try {
+                                  // Pick an image
+                                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                                  if (image != null) {
+                                    controller.profileImage.value = File(image.path);
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                  // You can display an error message to the user
+                                  Get.snackbar('Error', 'Failed to pick an image. Please try again.');
+                                }
+                              },
+                              child: Obx(
+                                    () => controller.profileImage.value == null
+                                    ? CustomImageView(
+                                  svgPath: ImageConstant.imgCheckmark,
+                                  height: getVerticalSize(90),
+                                  width: getHorizontalSize(95),
+                                  margin: getMargin(left: 8, top: 31),
+                                )
+                                    : CircleAvatar(
+                                  radius: getVerticalSize(45),
+                                  backgroundImage: FileImage(controller.profileImage.value!),
                                 ),
                               ),
-                              Padding(
-                                  padding: getPadding(top: 25),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: getPadding(top: 25),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text("msg_what_s_your_primary".tr,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle.txtSatoshiLight13Gray900),
-
-
-
-                                              CustomDropDown(
-                                                items: controller.dropdownItems,
-                                                margin: getMargin(top: 6),
-                                                padding: DropDownPadding.PaddingT14,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ])),
-                              Padding(
-                                  padding: getPadding(top: 25),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            width: getHorizontalSize(266),
-                                            margin: getMargin(right: 68),
-                                            child: Text(
-                                                "msg_which_social_media".tr,
-                                                maxLines: null,
-                                                textAlign: TextAlign.left,
-                                                style: AppStyle
-                                                    .txtSatoshiLight13Gray900)),
-
-                                        CustomButton(
-                                            height: getVerticalSize(44),
-                                            text: "Add platforms",
-                                            onTap: () {
-                                              controller.startAddingAccount();
-                                            },
-                                            margin: getMargin(top: 24),
-                                            variant: ButtonVariant.OutlineGray300b2,
-                                            padding: ButtonPadding.PaddingT12,
-                                            fontStyle: ButtonFontStyle.SatoshiLight14,
-                                            prefixWidget: Container(
-                                                margin: getMargin(right: 6),
-                                                child: CustomImageView(
-                                                    svgPath:
-                                                    ImageConstant.imgFrameGray700))),
-
-                                        Obx(() => controller.isAddingAccount.value
-                                            ? _buildAccountForm()
-                                            : _buildAccountChips()),
-                                      ])),
-
-                              Padding(
-                                  padding: getPadding(top: 22),
-                                  child: Column(
-                                      crossAxisAlignment:
+                            ),
+                          ),
+                          Padding(
+                              padding: getPadding(top: 25),
+                              child: Column(
+                                  crossAxisAlignment:
                                       CrossAxisAlignment.start,
-                                      mainAxisAlignment:
+                                  mainAxisAlignment:
                                       MainAxisAlignment.start,
-                                      children: [
-                                        Text("lbl_bio".tr,
-                                            overflow: TextOverflow.ellipsis,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(top: 25),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text("msg_what_s_your_primary".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle.txtSatoshiLight13Gray900),
+
+
+
+                                          CustomDropDown(
+                                            items: controller.dropdownItems,
+                                            margin: getMargin(top: 6),
+                                            padding: DropDownPadding.PaddingT14,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ])),
+                          Padding(
+                              padding: getPadding(top: 25),
+                              child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        width: getHorizontalSize(266),
+                                        margin: getMargin(right: 68),
+                                        child: Text(
+                                            "msg_which_social_media".tr,
+                                            maxLines: null,
                                             textAlign: TextAlign.left,
                                             style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        CustomTextFormField(
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller.bioController,
-                                            hintText:
-                                            "msg_brief_intro_about".tr,
-                                            margin: getMargin(top: 7),
-                                            // padding: TextFormFieldPadding.PaddingT47,
-                                            textInputAction: TextInputAction.done,
-                                            maxLines: 5)
-                                      ])),
+                                                .txtSatoshiLight13Gray900)),
 
-                            ])
-                    )
+                                    CustomButton(
+                                        height: getVerticalSize(44),
+                                        text: "Add platforms",
+                                        onTap: () {
+                                          controller.startAddingAccount();
+                                        },
+                                        margin: getMargin(top: 24),
+                                        variant: ButtonVariant.OutlineGray300b2,
+                                        padding: ButtonPadding.PaddingT12,
+                                        fontStyle: ButtonFontStyle.SatoshiLight14,
+                                        prefixWidget: Container(
+                                            margin: getMargin(right: 6),
+                                            child: CustomImageView(
+                                                svgPath:
+                                                ImageConstant.imgFrameGray700))),
+
+                                    Obx(() => controller.isAddingAccount.value
+                                        ? _buildAccountForm()
+                                        : _buildAccountChips()),
+                                  ])),
+
+                          Padding(
+                              padding: getPadding(top: 22),
+                              child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  children: [
+                                    Text("lbl_bio".tr,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: AppStyle
+                                            .txtSatoshiLight13Gray900),
+                                    CustomTextFormField(
+                                        focusNode: FocusNode(),
+                                        autofocus: true,
+                                        controller: controller.bioController,
+                                        hintText:
+                                        "msg_brief_intro_about".tr,
+                                        margin: getMargin(top: 7),
+                                        // padding: TextFormFieldPadding.PaddingT47,
+                                        textInputAction: TextInputAction.done,
+                                        maxLines: 5)
+                                  ])),
+
+                        ])
                 )
             ),
             bottomNavigationBar: CustomButton(

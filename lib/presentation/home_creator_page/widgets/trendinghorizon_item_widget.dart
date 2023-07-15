@@ -2,15 +2,16 @@ import '../controller/home_creator_controller.dart';
 import '../models/trendinghorizon_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class TrendinghorizonItemWidget extends StatelessWidget {
   TrendinghorizonItemWidget(
-    this.trendinghorizonItemModelObj, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+      this.trendinghorizonItemModelObj, {
+        Key? key,
+      }) : super(
+    key: key,
+  );
 
   TrendinghorizonItemModel trendinghorizonItemModelObj;
 
@@ -22,64 +23,41 @@ class TrendinghorizonItemWidget extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerRight,
         child: Padding(
-          padding: getPadding(
-            right: 16,
-          ),
+          padding: EdgeInsets.only(right: 16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomImageView(
                 imagePath: ImageConstant.imgRectangle5055,
-                height: getSize(
-                  90,
-                ),
-                width: getSize(
-                  90,
-                ),
-                radius: BorderRadius.circular(
-                  getHorizontalSize(
-                    45,
-                  ),
-                ),
+                height: 90.h,
+                width: 90.w,
+                radius: BorderRadius.circular(45.r),
               ),
               Padding(
-                padding: getPadding(
-                  top: 5,
-                ),
+                padding: EdgeInsets.only(top: 5.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
                       clipBehavior: Clip.antiAlias,
                       elevation: 0,
-                      margin: getMargin(
-                        top: 1,
-                        bottom: 1,
-                      ),
+                      margin: EdgeInsets.symmetric(vertical: 1.h),
                       color: ColorConstant.gray20001,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusStyle.circleBorder7,
+                        borderRadius: BorderRadius.circular(7.r),
                       ),
                       child: Container(
-                        height: getSize(
-                          14,
-                        ),
-                        width: getSize(
-                          14,
-                        ),
+                        height: 14.h,
+                        width: 14.w,
                         decoration: AppDecoration.fillGray20001.copyWith(
-                          borderRadius: BorderRadiusStyle.circleBorder7,
+                          borderRadius: BorderRadius.circular(7.r),
                         ),
                         child: Stack(
                           children: [
                             CustomImageView(
                               svgPath: ImageConstant.imgClose,
-                              height: getVerticalSize(
-                                12,
-                              ),
-                              width: getHorizontalSize(
-                                14,
-                              ),
+                              height: 12.h,
+                              width: 14.w,
                               alignment: Alignment.center,
                             ),
                           ],
@@ -87,9 +65,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: getPadding(
-                        left: 6,
-                      ),
+                      padding: EdgeInsets.only(left: 6.w),
                       child: Text(
                         "lbl_nkiru_james".tr,
                         overflow: TextOverflow.ellipsis,
