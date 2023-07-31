@@ -18,7 +18,9 @@ class CustomDropDown extends StatelessWidget {
       this.prefixConstraints,
       this.items,
       this.onChanged,
-      this.validator});
+      this.validator,
+      this.value,
+      this.onTap});
 
   DropDownPadding? padding;
 
@@ -33,6 +35,8 @@ class CustomDropDown extends StatelessWidget {
   double? width;
 
   EdgeInsetsGeometry? margin;
+
+  final SelectionPopupModel? value;
 
   FocusNode? focusNode;
 
@@ -49,6 +53,7 @@ class CustomDropDown extends StatelessWidget {
   List<SelectionPopupModel>? items;
 
   Function(SelectionPopupModel)? onChanged;
+  final VoidCallback? onTap;
 
   FormFieldValidator<SelectionPopupModel>? validator;
 
@@ -63,6 +68,7 @@ class CustomDropDown extends StatelessWidget {
   }
 
   _buildDropDownWidget() {
+
     return Container(
       width: width ?? double.maxFinite,
       // margin: margin,
@@ -71,6 +77,7 @@ class CustomDropDown extends StatelessWidget {
         autofocus: autofocus!,
         icon: icon,
         style: _setFontStyle(),
+        value: value,
         decoration: _buildDecoration(),
         items: items?.map((SelectionPopupModel item) {
           return DropdownMenuItem<SelectionPopupModel>(
@@ -84,6 +91,12 @@ class CustomDropDown extends StatelessWidget {
         onChanged: (value) {
           onChanged!(value!);
         },
+        // onTap: (){
+        //   if(onTap != null){
+        //     onTap!();
+        //   }
+        // },
+
         validator: validator,
       ),
     );

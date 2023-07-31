@@ -302,7 +302,7 @@ class CompleteProfileInfluencerScreen
 
   onTapSaveand() {
     Get.toNamed(
-      AppRoutes.influencerHomeScreen,
+      AppRoutes.influencerTabScreen,
     );
   }
 

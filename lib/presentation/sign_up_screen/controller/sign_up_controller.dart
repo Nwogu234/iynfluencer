@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/presentation/email_code/email_code.dart';
@@ -31,6 +32,7 @@ class SignUpController extends GetxController {
     passwordController.dispose();
     super.onClose();
   }
+  var storage = FlutterSecureStorage();
 
   Future<void> signUp() async {
     signUpModelObj.update((val) {
@@ -48,10 +50,13 @@ class SignUpController extends GetxController {
 
     try {
       Response loginResponse = await apiClient.signUp(signUpModelObj.value);
+      var headers = loginResponse.headers;
+      var authorization = headers?['authorization'];
 
       if (loginResponse.body['status'].toString() == 'success') {
         Get.back();
         Get.snackbar('Success', 'Sign up successful!');
+        await storage.write(key: 'token', value: authorization.toString());
         print(signUpModelObj.value.email);
         Get.toNamed(
           AppRoutes.emailCodeScreen,

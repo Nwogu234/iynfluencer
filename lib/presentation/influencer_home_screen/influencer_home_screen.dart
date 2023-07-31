@@ -1,5 +1,8 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/influencer_drawer_item/controller/influencer_drawer_controller.dart';
 import 'package:iynfluencer/widgets/app_bar/influencer_buttom_bar.dart';
 
+import '../influencer_drawer_item/influencer_drawer.dart';
 import '../influencer_home_screen/widgets/influencer_home_item_widget.dart';
 import '../jobs_jobs_influencer_tab_container_screen/jobs_jobs_influencer_tab_container_screen.dart';
 import 'controller/influencer_home_controller.dart';
@@ -30,13 +33,17 @@ class InfluencerHomeScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
+            drawer: InfluencerDraweritem(InfluencerDrawerController()),
             backgroundColor: ColorConstant.whiteA70001,
             appBar: CustomAppBar(
                 height: getVerticalSize(63),
                 leadingWidth: 55,
                 leading: AppbarCircleimage(
-                    imagePath: ImageConstant.imgGroup89935x35,
-                    margin: getMargin(left: 20, top: 14, bottom: 14)),
+                imagePath: ImageConstant.imgGroup899,
+                margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
+                onTap: () {
+                  openDrawer();
+                }),
                 title: AppbarSearchview(
                     margin: getMargin(left: 14),
                     hintText: "msg_search_creators".tr,
@@ -133,5 +140,9 @@ class InfluencerHomeScreen extends StatelessWidget {
     Get.toNamed(
       AppRoutes.jobDetailsScreen,
     );
+  }
+
+  openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
   }
 }
