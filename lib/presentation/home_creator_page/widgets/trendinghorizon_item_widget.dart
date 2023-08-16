@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import '../../../data/models/Influencer/influencer_response_model.dart';
 import '../controller/home_creator_controller.dart';
 import '../models/trendinghorizon_item_model.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +10,35 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 // ignore: must_be_immutable
 class TrendinghorizonItemWidget extends StatelessWidget {
   TrendinghorizonItemWidget(
-      this.trendinghorizonItemModelObj, {
-        Key? key,
-      }) : super(
-    key: key,
-  );
+    this.trendinghorizonItem, {
+    Key? key,
+  }) : super(
+          key: key,
+        );
 
-  TrendinghorizonItemModel trendinghorizonItemModelObj;
+  Influencer trendinghorizonItem;
 
   var controller = Get.find<HomeCreatorController>();
 
   @override
   Widget build(BuildContext context) {
+    String? avatarUrl =
+        trendinghorizonItem.user?.first.avatar; // Assuming this is a String
+    ImageProvider imageProvider;
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = NetworkImage(avatarUrl);
+    } else {
+      imageProvider = NetworkImage('https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
+    }
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
     return IntrinsicWidth(
       child: Align(
         alignment: Alignment.centerRight,
@@ -28,10 +48,10 @@ class TrendinghorizonItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomImageView(
-                imagePath: ImageConstant.imgRectangle5055,
+                url: avatarUrl ?? ImageConstant.imgRectangle5055,
                 height: 90.h,
                 width: 90.w,
-                radius: BorderRadius.circular(45.r),
+                radius: BorderRadius.circular(45.r), // Half of the height and width
               ),
               Padding(
                 padding: EdgeInsets.only(top: 5.h),
@@ -54,12 +74,17 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                         ),
                         child: Stack(
                           children: [
-                            CustomImageView(
-                              svgPath: ImageConstant.imgClose,
-                              height: 12.h,
-                              width: 14.w,
-                              alignment: Alignment.center,
+                            Icon(
+                              Icons.local_fire_department_rounded,
+                              size: 14,
+                              color: Colors.deepOrange,
                             ),
+                            // CustomImageView(
+                            //   svgPath: ImageConstant.imgClose,
+                            //   height: 12.h,
+                            //   width: 14.w,
+                            //   alignment: Alignment.center,
+                            // ),
                           ],
                         ),
                       ),
@@ -67,7 +92,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: 6.w),
                       child: Text(
-                        "lbl_nkiru_james".tr,
+                        "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiBold125,

@@ -195,7 +195,7 @@ class InfluencerDraweritem extends StatelessWidget {
   onTapBecomean() {
     Get.delete<JobsJobsInfluencerTabContainerController>();
     Get.delete<TabController>();
-    Get.toNamed(
+    Get.offNamed(
       AppRoutes.homeCreatorContainerScreen,
 
     );

@@ -5,9 +5,10 @@ class SignUpModel {
    String lastName;
    String email;
    String password;
+   String country;
    bool termsAndConditions;
 
-   SignUpModel({required this.firstName, required this.lastName, required this.email, required this.password, required this.termsAndConditions});
+   SignUpModel({required this.firstName, required this.lastName, required this.email, required this.password,required this.country, required this.termsAndConditions});
 
    Map<String, dynamic> toJson() {
       return {
@@ -15,6 +16,7 @@ class SignUpModel {
          'lastName': lastName,
          'email': email,
          'password': password,
+         'country':country,
          'termsAndConditionsAgreement': termsAndConditions,
       };
    }

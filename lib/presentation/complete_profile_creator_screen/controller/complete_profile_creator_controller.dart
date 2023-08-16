@@ -87,13 +87,14 @@ class CompleteProfileCreatorController extends GetxController {
     update();
   }
 
-  ///this is the function called to created the profile on the backend
+  ///this is the function called to create the creator profile on the backend
   Future<void> completeProfile() async {
     completeProfileCreatorModelObj.update((val) {
       val?.bio = bio.text;
       val?.niches =
           selectedDropdownItems.value.map((item) => item.title).toList();
     });
+
     Get.dialog(
       Center(child: CircularProgressIndicator()), // showing a loading dialog
       barrierDismissible: false, // user must not close it manually
@@ -104,9 +105,9 @@ class CompleteProfileCreatorController extends GetxController {
       Response loginResponse = await apiClient.creatorProfile(
           completeProfileCreatorModelObj.value, token);
       var headers = loginResponse.headers;
+      Get.back();
 
-      if (loginResponse.body['status'].toString() == 'success') {
-        Get.back();
+      if (loginResponse.statusCode == 201) {
         Get.snackbar('Success', 'Profile Updated');
         await storage.write(key: 'activeProfile', value: "Creator");
         Get.toNamed(
@@ -114,13 +115,11 @@ class CompleteProfileCreatorController extends GetxController {
         );
       } else {
         print(loginResponse.statusCode);
-        Get.back();
         Get.snackbar(
             'Failure', 'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);
-      Get.back();
       Get.snackbar('Error', 'Profile activation failed');
     }
   }

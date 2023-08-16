@@ -63,7 +63,9 @@ class LogInController extends GetxController {
         Get.snackbar('Failure', 'login in failed ${loginResponse.body["message"].toString()}');
       }
     } catch (e) {
+      Get.back();
       print(e);
+      Get.snackbar('Error', 'Sever interrupted');
     }
   }
 

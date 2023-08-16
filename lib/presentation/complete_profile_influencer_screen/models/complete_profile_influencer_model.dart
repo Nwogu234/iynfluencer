@@ -15,7 +15,7 @@ class CompleteProfileInfluencerModel {
   Map<String, dynamic> toJson() {
     return {
       'bio': bio,
-      'niches': niches,
+      'niche': niches,
       'socials': socials.map((social) => social.toJson()).toList(),
     };
   }

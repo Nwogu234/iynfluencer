@@ -21,6 +21,7 @@ class SignUpController extends GetxController {
     lastName: '',
     email: '',
     password: '',
+    country:'',
     termsAndConditions: false,
   ).obs;
 
@@ -40,6 +41,7 @@ class SignUpController extends GetxController {
       val?.lastName = lastnameController.text;
       val?.email = emailController.text;
       val?.password = passwordController.text;
+      val?.country=countryController.text;
       val?.termsAndConditions = isCheckbox.value;
     });
 

@@ -24,8 +24,8 @@ class ChooseProfileController extends GetxController {
   userId: "kE4ngwqkZgG5",
   createdAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
   updatedAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
-  creatorId: "GtgMWdNV7Vgj",
-  influencerId: "nTG2-KMMNVCI",
+  creatorId: null,
+  influencerId: null,
     id: '',
   ).obs;
 
@@ -48,42 +48,41 @@ class ChooseProfileController extends GetxController {
     try{
       userModel.value = await apiClient.getUser(token!);
       print(userModel.value);
-      if (userModel.value==null){
+      if (userModel.value.firstName.isEmpty){
         print('not fucking working');
       }
       else{
         print ('its all good');
+        var creator = userModel.value.creatorId;
+        var inflencer = userModel.value.influencerId;
+
+
+        if(selectedCard.value==0){
+          if (creator==null){
+            Get.toNamed(
+              AppRoutes.completeProfileCreatorScreen,
+            );
+          }
+          else {
+            await storage.write(key: 'activeProfile', value: "Creator");
+            Get.toNamed(AppRoutes.homeCreatorContainerScreen);
+          }
+        }
+        else{
+          if (inflencer==null){
+            Get.toNamed(
+              AppRoutes.completeProfileInfluencerScreen,
+            );
+          }
+          else {
+            await storage.write(key: 'activeProfile', value: "Influencer");
+            Get.toNamed(AppRoutes.influencerTabScreen);
+          }
+        }
       }
     }
     catch(e){
       print(e);
-    }
-
-    var creator = userModel.value.creatorId;
-    var inflencer = userModel.value.influencerId;
-
-
-    if(selectedCard.value==0){
-      storage.write(key: 'activeProfile', value: 'Creator');
-      if (creator==null){
-        Get.toNamed(
-          AppRoutes.completeProfileCreatorScreen,
-        );
-      }
-      else {
-        Get.toNamed(AppRoutes.homeCreatorContainerScreen);
-      }
-    }
-    else{
-      storage.write(key: 'activeProfile', value: 'Influencer');
-      if (inflencer==null){
-        Get.toNamed(
-          AppRoutes.completeProfileInfluencerScreen,
-        );
-      }
-      else {
-        Get.toNamed(AppRoutes.influencerTabScreen);
-      }
     }
   }
 

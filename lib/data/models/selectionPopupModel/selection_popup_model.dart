@@ -16,11 +16,11 @@ class SelectionPopupModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is SelectionPopupModel &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              title == other.title &&
-              value == other.value;
+      other is SelectionPopupModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          title == other.title &&
+          value == other.value;
 
   @override
   int get hashCode => id.hashCode ^ title.hashCode ^ value.hashCode;

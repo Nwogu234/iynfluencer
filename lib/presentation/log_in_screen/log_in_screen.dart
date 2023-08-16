@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import 'controller/log_in_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -55,11 +57,13 @@ class LogInScreen extends GetWidget<LogInController> {
                                 hintText: "lbl_email_username".tr,
                                 margin: getMargin(top: 36),
                                 variant: TextFormFieldVariant.Neutral,
-                                fontStyle: TextFormFieldFontStyle.SatoshiLight14,
+                                fontStyle:
+                                    TextFormFieldFontStyle.SatoshiLight14,
                                 textInputType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null ||
-                                      (!isValidEmail(value, isRequired: true))) {
+                                      (!isValidEmail(value,
+                                          isRequired: true))) {
                                     return "Please enter valid email";
                                   }
                                   return null;
@@ -86,7 +90,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                               TextInputType.visiblePassword,
                                           suffix: InkWell(
                                               onTap: () {
-                                                controller.isShowPassword.value =
+                                                controller
+                                                        .isShowPassword.value =
                                                     !controller
                                                         .isShowPassword.value;
                                               },
@@ -123,13 +128,14 @@ class LogInScreen extends GetWidget<LogInController> {
                                               padding: getPadding(top: 9),
                                               child: Text(
                                                   "msg_forgot_password".tr,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
-                                                  style:
-                                                      AppStyle.txtSatoshiBold13)))
+                                                  style: AppStyle
+                                                      .txtSatoshiBold13)))
                                     ])),
                             CustomButton(
-                              onTap:onTapContinue,
+                                onTap: onTapContinue,
                                 height: getVerticalSize(50),
                                 text: "lbl_log_in".tr,
                                 margin: getMargin(top: 24),
@@ -141,14 +147,19 @@ class LogInScreen extends GetWidget<LogInController> {
                                     child: RichText(
                                         text: TextSpan(children: [
                                           TextSpan(
-                                              text:
-                                                  "msg_don_t_have_an_account2".tr,
+                                              text: "msg_don_t_have_an_account2"
+                                                  .tr,
                                               style: TextStyle(
                                                   color: ColorConstant.gray600,
                                                   fontSize: getFontSize(14),
                                                   fontFamily: 'Satoshi',
                                                   fontWeight: FontWeight.w700)),
                                           TextSpan(
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  // Handle the tap event here
+                                                  Get.toNamed(AppRoutes.signUpScreen);
+                                                },
                                               text: "lbl_create_account".tr,
                                               style: TextStyle(
                                                   color: ColorConstant.cyan300,
@@ -165,25 +176,29 @@ class LogInScreen extends GetWidget<LogInController> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                          padding: getPadding(top: 12, bottom: 7),
+                                          padding:
+                                              getPadding(top: 12, bottom: 7),
                                           child: SizedBox(
                                               width: getHorizontalSize(99),
                                               child: Divider(
                                                   height: getVerticalSize(1),
                                                   thickness: getVerticalSize(1),
-                                                  color: ColorConstant.gray200))),
+                                                  color:
+                                                      ColorConstant.gray200))),
                                       Text("msg_or_continue_with".tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: AppStyle.txtOutfitMedium16),
                                       Padding(
-                                          padding: getPadding(top: 12, bottom: 7),
+                                          padding:
+                                              getPadding(top: 12, bottom: 7),
                                           child: SizedBox(
                                               width: getHorizontalSize(99),
                                               child: Divider(
                                                   height: getVerticalSize(1),
                                                   thickness: getVerticalSize(1),
-                                                  color: ColorConstant.gray200)))
+                                                  color:
+                                                      ColorConstant.gray200)))
                                     ])),
                             Align(
                                 alignment: Alignment.center,
@@ -203,7 +218,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                               margin: getMargin(
                                                   left: 34, top: 2, bottom: 2),
                                               child: Stack(
-                                                  alignment: Alignment.topCenter,
+                                                  alignment:
+                                                      Alignment.topCenter,
                                                   children: [
                                                     CustomImageView(
                                                         svgPath: ImageConstant
@@ -218,10 +234,12 @@ class LogInScreen extends GetWidget<LogInController> {
                                                         height:
                                                             getVerticalSize(16),
                                                         width:
-                                                            getHorizontalSize(14),
+                                                            getHorizontalSize(
+                                                                14),
                                                         alignment:
                                                             Alignment.topCenter,
-                                                        margin: getMargin(top: 5))
+                                                        margin:
+                                                            getMargin(top: 5))
                                                   ])),
                                           CustomImageView(
                                               imagePath:
@@ -248,7 +266,6 @@ class LogInScreen extends GetWidget<LogInController> {
     }
     controller.logIn();
   }
-
 
   /// Navigates to the forgotPasswordScreen when the action is triggered.
 

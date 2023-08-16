@@ -193,7 +193,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
   onTapBecomean() {
     Get.delete<CreatorHireslistTabContainerController>();
     Get.delete<TabController>();
-    Get.toNamed(
+    Get.offNamed(
       AppRoutes.influencerTabScreen,
 
     );

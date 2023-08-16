@@ -802,19 +802,19 @@ class AppRoutes {
         AppNavigationBinding(),
       ],
     ),
-    // GetPage(
-    //   name: initialRoute,
-    //   page: () => SplashScreen(),
-    //   bindings: [
-    //     SplashBinding(),
-    //   ],
-    // )
-
     GetPage(
       name: initialRoute,
-      page: () => AppNavigationScreen(),
+      page: () => SplashScreen(),
       bindings: [
-            AppNavigationBinding(),
-      ],)
+        SplashBinding(),
+      ],
+    )
+
+    // GetPage(
+    //   name: initialRoute,
+    //   page: () => AppNavigationScreen(),
+    //   bindings: [
+    //         AppNavigationBinding(),
+    //   ],)
   ];
 }

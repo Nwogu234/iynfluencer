@@ -13,7 +13,7 @@ class CompleteProfileCreatorModel {
   Map<String, dynamic> toJson() {
     return {
       'bio': bio,
-      'niches': niches,
+      'niche': niches,
     };
   }
 }

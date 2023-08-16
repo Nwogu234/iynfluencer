@@ -1,3 +1,4 @@
+import '../../../data/models/Influencer/influencer_response_model.dart';
 import '../controller/home_creator_controller.dart';
 import '../models/listrectangle50_item_model.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +7,34 @@ import 'package:iynfluencer/core/app_export.dart';
 // ignore: must_be_immutable
 class Listrectangle50ItemWidget extends StatelessWidget {
   Listrectangle50ItemWidget(
-    this.listrectangle50ItemModelObj, {
+    this.listrectangle50, {
     Key? key,
   }) : super(
           key: key,
         );
 
-  Listrectangle50ItemModel listrectangle50ItemModelObj;
+  Influencer listrectangle50;
 
   var controller = Get.find<HomeCreatorController>();
 
   @override
   Widget build(BuildContext context) {
+    String? avatarUrl =
+        listrectangle50.user?.first.avatar; // Assuming this is a String
+    String imageProvider;
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = "mypic.wit";
+    }
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
     return SizedBox(
       width: double.maxFinite,
       child: Container(
@@ -40,7 +57,7 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                 alignment: Alignment.topRight,
                 children: [
                   CustomImageView(
-                    imagePath: ImageConstant.imgRectangle5058,
+                    url: imageProvider,
                     height: getVerticalSize(
                       267,
                     ),
@@ -103,7 +120,7 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "lbl_bariga_oscar".tr,
+                      "${capitalizeFirstLetter(listrectangle50.user?.first.firstName)} ${capitalizeFirstLetter(listrectangle50.user?.first.lastName)}",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold16,
@@ -115,7 +132,7 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                         bottom: 2,
                       ),
                       child: Text(
-                        "lbl_nigeria".tr,
+                        "${listrectangle50.user?.first.country}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiLight13,
@@ -198,7 +215,7 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                       left: 8,
                     ),
                     child: Text(
-                      "msg_8_jobs_completed".tr,
+                      "${listrectangle50.jobsDone.toString()} jobs completed",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiLight135,
