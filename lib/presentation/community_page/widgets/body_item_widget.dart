@@ -71,6 +71,9 @@ class BodyItemWidget extends StatelessWidget {
                     right: 32,
                     bottom: 19,
                   ),
+                  onTap: (){
+                    Get.back();
+                  },
                 ),
               ],
               // itemCount: bodyItemModelObj.appbarItemList.length,

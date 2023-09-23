@@ -59,6 +59,7 @@ class SignUpController extends GetxController {
         Get.back();
         Get.snackbar('Success', 'Sign up successful!');
         await storage.write(key: 'token', value: authorization.toString());
+        print(authorization);
         print(signUpModelObj.value.email);
         Get.toNamed(
           AppRoutes.emailCodeScreen,

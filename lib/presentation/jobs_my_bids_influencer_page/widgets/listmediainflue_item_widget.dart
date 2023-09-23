@@ -1,4 +1,5 @@
 import '../controller/jobs_my_bids_influencer_controller.dart';
+import '../models/jobs_my_bids_influencer_model.dart';
 import '../models/listmediainflue_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -13,7 +14,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
           key: key,
         );
 
-  ListmediainflueItemModel listmediainflueItemModelObj;
+  JobsMyBidsInfluencerModel listmediainflueItemModelObj;
 
   var controller = Get.find<JobsMyBidsInfluencerController>();
 
@@ -36,7 +37,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      listmediainflueItemModelObj.mediainfluencerTxt.value,
+                      "${listmediainflueItemModelObj.job?.title}",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold16,
@@ -106,7 +107,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                             ),
                             child: Obx(
                               () => Text(
-                                listmediainflueItemModelObj.victorucheTxt.value,
+                                "${listmediainflueItemModelObj.job?.creator.first.creatorId}",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold14Gray900ab,

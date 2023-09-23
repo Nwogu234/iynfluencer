@@ -61,7 +61,6 @@ import 'package:iynfluencer/presentation/creator_profile_reveiws_tab_container_s
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/presentation/job_details_screen/binding/job_details_binding.dart';
 
-
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/jobs_jobs_influencer_tab_container_screen.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/binding/jobs_jobs_influencer_tab_container_binding.dart';
 
@@ -356,6 +355,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: homeCreatorContainerScreen,
+      page: () => HomeCreatorContainerScreen(),
+      bindings: [
+        HomeCreatorContainerBinding(),
+      ],
+    ),
+    GetPage(
       name: splashScreen,
       page: () => SplashScreen(),
       bindings: [
@@ -385,7 +391,7 @@ class AppRoutes {
     ),
     GetPage(
       name: emailCodeScreen,
-      page: () => EmailCodeScreen(email: '',code:''),
+      page: () => EmailCodeScreen(email: '', code: ''),
       bindings: [
         EmailCodeBinding(),
       ],
@@ -802,6 +808,11 @@ class AppRoutes {
         AppNavigationBinding(),
       ],
     ),
+
+    /// GetPage(name: initialRoute, page: () => SplashScreen(), bindings: [
+    // SplashBinding(),
+    // ]),
+
     GetPage(
       name: initialRoute,
       page: () => SplashScreen(),
@@ -809,12 +820,5 @@ class AppRoutes {
         SplashBinding(),
       ],
     )
-
-    // GetPage(
-    //   name: initialRoute,
-    //   page: () => AppNavigationScreen(),
-    //   bindings: [
-    //         AppNavigationBinding(),
-    //   ],)
   ];
 }

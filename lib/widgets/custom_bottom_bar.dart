@@ -10,7 +10,7 @@ class CustomBottomBar extends StatelessWidget {
         );
 
   RxInt selectedIndex = 0.obs;
-
+  final BottomBarController controller = Get.put(BottomBarController());
   List<BottomMenuModel> bottomMenuList = [
     BottomMenuModel(
       icon: ImageConstant.imgFrameCyan300,
@@ -61,7 +61,7 @@ class CustomBottomBar extends StatelessWidget {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           elevation: 0,
-          currentIndex: selectedIndex.value,
+          currentIndex: controller.selectedIndex.value,
           type: BottomNavigationBarType.fixed,
           items: List.generate(bottomMenuList.length, (index) {
             return BottomNavigationBarItem(
@@ -129,7 +129,7 @@ class CustomBottomBar extends StatelessWidget {
             );
           }),
           onTap: (index) {
-            selectedIndex.value = index;
+            controller.selectedIndex.value = index;
             onChanged?.call(bottomMenuList[index].type);
           },
         ),
@@ -182,4 +182,7 @@ class DefaultWidget extends StatelessWidget {
       ),
     );
   }
+}
+class BottomBarController extends GetxController {
+  RxInt selectedIndex = 0.obs;
 }

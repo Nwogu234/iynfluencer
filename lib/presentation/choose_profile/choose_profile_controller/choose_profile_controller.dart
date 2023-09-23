@@ -9,89 +9,92 @@ import '../../onboarding_screen_two_screen/models/onboarding_screen_two_model.da
 
 class ChooseProfileController extends GetxController {
   var selectedCard = 0.obs;
-  var userModel =  UserModel(
-  firstName: "",
-  lastName: "",
-  email: "",
-  termsAndConditionsAgreement: true,
-  isNewUser: true,
-  isSocial: false,
-  verified: false,
-  verifiedEmail: false,
-  followers: 0,
-  following: 0,
-  views: 0,
-  userId: "kE4ngwqkZgG5",
-  createdAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
-  updatedAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
-  creatorId: null,
-  influencerId: null,
+  var userModel = UserModel(
+    firstName: "",
+    lastName: "",
+    email: "",
+    termsAndConditionsAgreement: true,
+    isNewUser: true,
+    isSocial: false,
+    verified: false,
+    verifiedEmail: false,
+    followers: 0,
+    following: 0,
+    views: 0,
+    userId: "kE4ngwqkZgG5",
+    createdAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
+    updatedAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
+    creatorId: null,
+    influencerId: null,
     id: '',
   ).obs;
 
   void updateSelectedCard(int index) {
     selectedCard.value = index;
   }
+
   late List<Map<String, String>> data;
   final apiClient = ApiClient();
   ImageConstant imageConstant = ImageConstant();
   late Rx<OnboardingScreenTwoModel> onboardingScreenTwoModelObj;
 
-  onTapSignupasa() async{
+  onTapSignupasa() async {
     Get.dialog(
       Center(child: CircularProgressIndicator()), // showing a loading dialog
       barrierDismissible: false, // user must not close it manually
     );
     final storage = new FlutterSecureStorage();
     var token = await storage.read(key: "token");
-    print (token);
-    try{
+    print(token);
+    try {
       userModel.value = await apiClient.getUser(token!);
       print(userModel.value);
-      if (userModel.value.firstName.isEmpty){
+      if (userModel.value.firstName == "") {
         print('not fucking working');
-      }
-      else{
-        print ('its all good');
+      } else {
+        print('its all good');
         var creator = userModel.value.creatorId;
         var inflencer = userModel.value.influencerId;
 
-
-        if(selectedCard.value==0){
-          if (creator==null){
+        if (selectedCard.value == 0) {
+          if (creator == null) {
             Get.toNamed(
               AppRoutes.completeProfileCreatorScreen,
             );
-          }
-          else {
+          } else {
             await storage.write(key: 'activeProfile', value: "Creator");
-            Get.toNamed(AppRoutes.homeCreatorContainerScreen);
+            Get.offNamed(AppRoutes.homeCreatorContainerScreen);
           }
-        }
-        else{
-          if (inflencer==null){
-            Get.toNamed(
+        } else {
+          if (inflencer == null) {
+            Get.offNamed(
               AppRoutes.completeProfileInfluencerScreen,
             );
-          }
-          else {
+          } else {
             await storage.write(key: 'activeProfile', value: "Influencer");
-            Get.toNamed(AppRoutes.influencerTabScreen);
+            Get.offNamed(AppRoutes.influencerTabScreen);
           }
         }
       }
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
   ChooseProfileController() {
     data = [
-      {'svg': ImageConstant.imgOnboardingvectorGray300, 'text': "msg_find_best_influencers".tr},
-      {'svg': ImageConstant.imgOnboardingvector, 'text': "msg_get_paid_by_growing".tr},
-      {'svg': ImageConstant.imgOnboardingvectorGray300, 'text': "msg_collaboration_between".tr},
-
+      {
+        'svg': ImageConstant.imgOnboardingvectorGray300,
+        'text': "msg_find_best_influencers".tr
+      },
+      {
+        'svg': ImageConstant.imgOnboardingvector,
+        'text': "msg_get_paid_by_growing".tr
+      },
+      {
+        'svg': ImageConstant.imgOnboardingvectorGray300,
+        'text': "msg_collaboration_between".tr
+      },
     ];
     onboardingScreenTwoModelObj = OnboardingScreenTwoModel(data).obs;
   }

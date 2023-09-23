@@ -19,12 +19,11 @@ class SocialMediaAccount {
 }
 
 class CompleteProfileInfluencerController extends GetxController
-    with SingleGetTickerProviderMixin{
+    with SingleGetTickerProviderMixin {
   final formKey = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
   Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [],socials: []).obs;
-
+      CompleteProfileInfluencerModel(bio: "", niches: [], socials: []).obs;
 
   RxList<SelectionPopupModel> nicheToDisplay = RxList<SelectionPopupModel>();
   RxList<SelectionPopupModel> platformToDisplay = RxList<SelectionPopupModel>();
@@ -188,13 +187,18 @@ class CompleteProfileInfluencerController extends GetxController
     socialMediaAccounts.remove(platform);
     update();
   }
+
   ///this is the function called to create the creator profile on the backend
   Future<void> completeProfile() async {
     completeProfileInfluencerModelObj.update((val) {
       val?.bio = bioController.text;
-      val?.niches =
-          selectedNiches.value.map((item) => item.title).toList();
-      val?.socials=socialMediaAccounts.value.map((item) => Social(name: item.platformName.title, followers: item.followersCount, url: item.platformUrl)).toList();
+      val?.niches = selectedNiches.value.map((item) => item.title).toList();
+      val?.socials = socialMediaAccounts.value
+          .map((item) => Social(
+              name: item.platformName.title,
+              followers: item.followersCount,
+              url: item.platformUrl))
+          .toList();
     });
 
     Get.dialog(
@@ -217,15 +221,14 @@ class CompleteProfileInfluencerController extends GetxController
         );
       } else {
         print(loginResponse.statusCode);
-        Get.snackbar(
-            'Failure', 'Profile activation failed! ${loginResponse.body['message']}');
+        Get.snackbar('Failure',
+            'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);
       Get.snackbar('Error', 'Profile activation failed');
     }
   }
-
 
   @override
   void onInit() {

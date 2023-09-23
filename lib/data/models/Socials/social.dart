@@ -7,9 +7,8 @@ class Social {
 
   Social(
       {required this.platformName,
-        required this.followersCount,
-        required this.platformUrl}
-      );
+      required this.followersCount,
+      required this.platformUrl});
 
   factory Social.fromJson(Map<String, dynamic> json) {
     return Social(

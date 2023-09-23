@@ -15,14 +15,14 @@ import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 import 'models/jobs_jobs_influencer_tab_container_model.dart';
 
 // ignore_for_file: must_be_immutable
-class JobsJobsInfluencerTabContainerScreen
-    extends StatelessWidget{
-   JobsJobsInfluencerTabContainerScreen({Key? key})
+class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
+  JobsJobsInfluencerTabContainerScreen({Key? key})
       : super(
           key: key,
         );
-   JobsJobsInfluencerTabContainerController controller =
-   Get.put(JobsJobsInfluencerTabContainerController(JobsJobsInfluencerTabContainerModel().obs));
+  JobsJobsInfluencerTabContainerController controller = Get.put(
+      JobsJobsInfluencerTabContainerController(
+          JobsJobsInfluencerTabContainerModel().obs));
   @override
   Widget build(BuildContext context) {
     return SafeArea(

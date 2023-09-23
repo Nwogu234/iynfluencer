@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+
 import '../controller/creator_hireslist_controller.dart';
 import '../models/hires_item_model.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,14 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class HiresItemWidget extends StatelessWidget {
   HiresItemWidget(
-    this.hiresItemModelObj, {
+    this.hiresItemlistObj, {
     Key? key,
     this.onTapBidcard,
   }) : super(
           key: key,
         );
 
-  HiresItemModel hiresItemModelObj;
+  Job hiresItemlistObj;
 
   var controller = Get.find<CreatorHireslistController>();
 

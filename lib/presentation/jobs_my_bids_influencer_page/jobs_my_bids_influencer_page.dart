@@ -1,3 +1,6 @@
+import 'package:iynfluencer/widgets/custom_loading.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
+
 import '../jobs_my_bids_influencer_page/widgets/listmediainflue_item_widget.dart';
 import 'controller/jobs_my_bids_influencer_controller.dart';
 import 'models/jobs_my_bids_influencer_model.dart';
@@ -6,14 +9,39 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class JobsMyBidsInfluencerPage extends StatelessWidget {
+class JobsMyBidsInfluencerPage extends StatefulWidget {
   JobsMyBidsInfluencerPage({Key? key})
       : super(
           key: key,
         );
 
-  JobsMyBidsInfluencerController controller =
-      Get.put(JobsMyBidsInfluencerController(JobsMyBidsInfluencerModel().obs));
+  @override
+  State<JobsMyBidsInfluencerPage> createState() =>
+      _JobsMyBidsInfluencerPageState();
+}
+
+class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
+    with SingleTickerProviderStateMixin {
+  late JobsMyBidsInfluencerController controller;
+
+  // Get.put(JobsMyBidsInfluencerController(JobsMyBidsInfluencerModel().obs));
+  final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+
+    // Create the controller using jobpostingItemList from creatorJobslistModelObj
+    // Create the controller using jobpostingItemList from creatorJobslistModelObj
+    controller = Get.put(JobsMyBidsInfluencerController(
+      jobsMyBidsInfluencerModelObj.listmediainflueItemList,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +62,7 @@ class JobsMyBidsInfluencerPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: getPadding(
-                    left:19,
+                    left: 19,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +102,7 @@ class JobsMyBidsInfluencerPage extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: getPadding(
-                       top: 10,
+                      top: 10,
                       bottom: 180,
                     ),
                     child: Obx(
@@ -91,14 +119,11 @@ class JobsMyBidsInfluencerPage extends StatelessWidget {
                             ),
                           );
                         },
-                        itemCount: controller.jobsMyBidsInfluencerModelObj
-                            .value.listmediainflueItemList.value.length,
+                        itemCount:
+                            controller.jobsMyBidsInfluencerModelObj.length,
                         itemBuilder: (context, index) {
-                          ListmediainflueItemModel model = controller
-                              .jobsMyBidsInfluencerModelObj
-                              .value
-                              .listmediainflueItemList
-                              .value[index];
+                          JobsMyBidsInfluencerModel model =
+                              controller.jobsMyBidsInfluencerModelObj[index];
                           return ListmediainflueItemWidget(
                             model,
                           );
@@ -106,7 +131,7 @@ class JobsMyBidsInfluencerPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),

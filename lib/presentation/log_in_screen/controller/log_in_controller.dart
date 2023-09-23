@@ -44,23 +44,25 @@ class LogInController extends GetxController {
         var headers = loginResponse.headers;
         var authorization = headers?['authorization'];
         await storage.write(key: 'token', value: authorization.toString());
+
         ///the 3 commented line is code to test that the login in process is working as intended
-        await storage.write(key: 'activeProfile', value:null);
-        var test = await storage.read(key: 'test');
-        print(test);
+        // await storage.write(key: 'activeProfile', value:null);
+        // var test = await storage.read(key: 'test');
+        // print(test);
         var activeProfile = await storage.read(key: 'activeProfile');
         print(activeProfile);
-            if (activeProfile == null) {
-              Get.offNamed(AppRoutes.chooseProfile);
-            } else if (activeProfile == 'Creator') {
-              Get.offNamed(AppRoutes.homeCreatorContainerScreen);
-            }
-            else {Get.offNamed(AppRoutes.influencerTabScreen);}
-
+        if (activeProfile == null) {
+          Get.offNamed(AppRoutes.chooseProfile);
+        } else if (activeProfile == 'Creator') {
+          Get.offNamed(AppRoutes.homeCreatorContainerScreen);
+        } else {
+          Get.offNamed(AppRoutes.influencerTabScreen);
+        }
       } else {
         print(loginResponse.statusCode);
         Get.back();
-        Get.snackbar('Failure', 'login in failed ${loginResponse.body["message"].toString()}');
+        Get.snackbar('Failure',
+            'login in failed ${loginResponse.body["message"].toString()}');
       }
     } catch (e) {
       Get.back();
