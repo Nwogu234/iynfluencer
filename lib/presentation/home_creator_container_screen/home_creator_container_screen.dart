@@ -11,21 +11,31 @@ import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 
 class HomeCreatorContainerScreen
     extends GetWidget<HomeCreatorContainerController> {
-  const HomeCreatorContainerScreen({Key? key}) : super(key: key);
+  HomeCreatorContainerScreen(
+      {this.initialNestedRoute = AppRoutes.homeCreatorPage, Key? key})
+      : super(key: key);
+
+   String initialNestedRoute;
+  var currentRoute = AppRoutes.homeCreatorPage.obs;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             backgroundColor: ColorConstant.whiteA700,
-            body: Navigator(
+            body: Obx(() {
+              return Navigator(
                 key: Get.nestedKey(1),
-                initialRoute: AppRoutes.homeCreatorPage,
+                initialRoute: controller.currentRoute.value,
                 onGenerateRoute: (routeSetting) => GetPageRoute(
-                    page: () => getCurrentPage(routeSetting.name!),
-                    transition: Transition.noTransition)),
+                  page: () => getCurrentPage(controller.currentRoute.value),
+                  transition: Transition.fadeIn,
+                ),
+              );
+            }),
             bottomNavigationBar:
                 CustomBottomBar(onChanged: (BottomBarEnum type) {
+                 controller.currentRoute.value=getCurrentRoute(type);
               Get.toNamed(getCurrentRoute(type), id: 1);
             })));
   }

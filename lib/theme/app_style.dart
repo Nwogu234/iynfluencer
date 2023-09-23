@@ -296,7 +296,7 @@ class AppStyle {
       13,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w700,
   );
 
   static TextStyle txtSatoshiLight1273 = TextStyle(

@@ -10,7 +10,7 @@ class AppbarImage extends StatelessWidget {
     this.imagePath,
     this.svgPath,
     this.margin,
-    this.onTap,
+    required this.onTap,
   }) : super(
           key: key,
         );
@@ -25,13 +25,13 @@ class AppbarImage extends StatelessWidget {
 
   EdgeInsetsGeometry? margin;
 
-  Function? onTap;
+  Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTap?.call();
+        onTap();
       },
       child: Padding(
         padding: margin ?? EdgeInsets.zero,

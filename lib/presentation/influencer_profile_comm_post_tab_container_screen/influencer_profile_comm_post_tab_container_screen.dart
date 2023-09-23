@@ -65,7 +65,11 @@ class InfluencerProfileCommPostTabContainerScreen
                                                     margin: getMargin(
                                                         left: 16,
                                                         right: 16,
-                                                        bottom: 4))
+                                                        bottom: 4),
+                                                  onTap: (){
+                                                    Get.back();
+                                                  },
+                                                )
                                               ])
                                         ]))),
                             Align(

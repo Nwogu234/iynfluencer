@@ -41,12 +41,20 @@ class ChatsScreen extends GetWidget<ChatsController> {
                       width: getSize(18),
                       svgPath: ImageConstant.imgFrame18x18,
                       margin:
-                          getMargin(left: 23, top: 23, right: 22, bottom: 1)),
+                          getMargin(left: 23, top: 23, right: 22, bottom: 1),
+                    onTap: (){
+                      Get.back();
+                    },
+                  ),
                   AppbarImage(
                       height: getSize(20),
                       width: getSize(20),
                       svgPath: ImageConstant.imgFrame20x20,
-                      margin: getMargin(left: 23, top: 22, right: 45))
+                      margin: getMargin(left: 23, top: 22, right: 45),
+                    onTap: (){
+                      Get.back();
+                    },
+                  )
                 ],
                 styleType: Style.bgOutlineIndigo50_1),
             body: Container(

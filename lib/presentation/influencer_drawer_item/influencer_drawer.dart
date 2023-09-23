@@ -1,3 +1,5 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/influencer_drawer_item/controller/influencer_drawer_controller.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/controller/jobs_jobs_influencer_tab_container_controller.dart';
 
@@ -7,11 +9,14 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../influencer_home_screen/controller/influencer_home_controller.dart';
+
 // ignore_for_file: must_be_immutable
 class InfluencerDraweritem extends StatelessWidget {
   InfluencerDraweritem(this.controller, {Key? key}) : super(key: key);
 
-  InfluencerDrawerController controller;
+  InfluencerHomeController controller;
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -163,20 +168,26 @@ class InfluencerDraweritem extends StatelessWidget {
                               height: 1.h,
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgQuestion,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 2.h),
-                                child: Text("lbl_sign_out".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray600))
-                          ]))
+                      GestureDetector(
+                        onTap: (){
+                          storage.write(key: 'token', value: null);
+                          Get.offAllNamed(AppRoutes.logInScreen);
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
+                            child: Row(children: [
+                              CustomImageView(
+                                  svgPath: ImageConstant.imgQuestion,
+                                  height: 24.h,
+                                  width: 24.w),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 14.w, top: 2.h),
+                                  child: Text("lbl_sign_out".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600))
+                            ])),
+                      )
                     ]))));
   }
 
@@ -193,13 +204,23 @@ class InfluencerDraweritem extends StatelessWidget {
   }
 
   onTapBecomean() {
-    Get.delete<JobsJobsInfluencerTabContainerController>();
-    Get.delete<TabController>();
-    Get.offNamed(
-      AppRoutes.homeCreatorContainerScreen,
+    if(controller.user.userModelObj.value.creatorId!=null){
+      Get.delete<JobsJobsInfluencerTabContainerController>();
+      Get.delete<TabController>();
+      storage.write(key: "activeProfile", value: "Creator");
+      Get.offNamed(
+        AppRoutes.homeCreatorContainerScreen,
 
+      );
+      controller.dispose();
+    }
+    else{
+    Get.offNamed(
+    AppRoutes.completeProfileCreatorScreen,
     );
-    controller.dispose();
+    }
+
+
   }
 }
 

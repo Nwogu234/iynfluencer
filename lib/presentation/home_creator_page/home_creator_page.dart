@@ -54,7 +54,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage> with SingleTickerProv
         child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: ColorConstant.whiteA700,
-            drawer: CreatorProfileDraweritem(CreatorProfileController()),
+            drawer: CreatorProfileDraweritem(controller),
             appBar: CustomAppBar(
                 height: 63.h,
                 leadingWidth: 55.w,

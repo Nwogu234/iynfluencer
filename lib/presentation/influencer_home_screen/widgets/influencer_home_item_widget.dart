@@ -1,3 +1,4 @@
+import '../../../data/models/Jobs/job_model.dart';
 import '../controller/influencer_home_controller.dart';
 import '../models/influencer_home_item_model.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +7,14 @@ import 'package:iynfluencer/core/app_export.dart';
 // ignore: must_be_immutable
 class InfluencerHomeItemWidget extends StatelessWidget {
   InfluencerHomeItemWidget(
-    this.influencerHomeItemModelObj, {
+    this._job, {
     Key? key,
     this.onTapJobpost,
   }) : super(
           key: key,
         );
 
-  InfluencerHomeItemModel influencerHomeItemModelObj;
+  Job _job;
 
   var controller = Get.find<InfluencerHomeController>();
 
@@ -38,7 +39,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "msg_gaming_app_influencer".tr,
+                "${_job.title}",
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiBold14Gray900ab,
@@ -52,8 +53,8 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                   right: 13,
                 ),
                 child: Text(
-                  "msg_looking_for_a_game".tr,
-                  maxLines: null,
+                  "${_job.description}",
+                  maxLines: 2,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtSatoshiLight14Gray900ab,
                 ),
@@ -81,7 +82,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                             top: 3,
                           ),
                           child: Text(
-                            "lbl_200_500".tr,
+                            "\$${_job.budgetFrom}-\$${_job.budgetTo}".tr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -104,7 +105,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                             top: 3,
                           ),
                           child: Text(
-                            "lbl_10_weeks".tr,
+                            "${_job.duration} weeks".tr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -161,7 +162,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                         bottom: 3,
                       ),
                       child: Text(
-                        "lbl_mark_adebayo".tr,
+                        "${_job.user?.firstName}".tr,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiBold14Gray900ab,

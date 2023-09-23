@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
-// import 'package:iynfluencer/data/general_controllers/user_controller.dart';
-// import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_jobs_influencer_model.dart';
 
 /// A controller class for the JobsJobsInfluencerPage.
@@ -12,6 +13,7 @@ import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_j
 /// current jobsJobsInfluencerModelObj
 class JobsJobsInfluencerController extends GetxController {
   JobsJobsInfluencerController(this.jobsJobsInfluencerModelObj);
+  // Rx<JobsJobsInfluencerModel> jobsJobsInfluencerModelObj;
 
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();

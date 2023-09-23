@@ -1,3 +1,5 @@
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../controller/jobs_my_bids_influencer_controller.dart';
 import '../models/listmediainflue_item_model.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,10 @@ class ListmediainflueItemWidget extends StatelessWidget {
           key: key,
         );
 
-  ListmediainflueItemModel listmediainflueItemModelObj;
+  JobsMyBidsInfluencerModel listmediainflueItemModelObj;
 
-  var controller = Get.find<JobsMyBidsInfluencerController>();
+  // JobsMyBidsInfluencerController controller =
+  //     Get.put<JobsMyBidsInfluencerController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +37,11 @@ class ListmediainflueItemWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Text(
-                      listmediainflueItemModelObj.mediainfluencerTxt.value,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold16,
-                    ),
+                  Text(
+                    listmediainflueItemModelObj.job!.title!,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    style: AppStyle.txtSatoshiBold16,
                   ),
                   CustomImageView(
                     svgPath: ImageConstant.imgVector,
@@ -104,13 +105,11 @@ class ListmediainflueItemWidget extends StatelessWidget {
                               top: 5,
                               bottom: 5,
                             ),
-                            child: Obx(
-                              () => Text(
-                                listmediainflueItemModelObj.victorucheTxt.value,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold14Gray900ab,
-                              ),
+                            child: Text(
+                              'Another Name',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold14Gray900ab,
                             ),
                           ),
                           Padding(
@@ -120,7 +119,9 @@ class ListmediainflueItemWidget extends StatelessWidget {
                               bottom: 3,
                             ),
                             child: Text(
-                              "lbl_1_week_ago".tr,
+                              timeago.format(DateTime.parse(
+                                  listmediainflueItemModelObj.job!.createdAt!)),
+                              // "lbl_1_week_ago".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125,
@@ -137,7 +138,8 @@ class ListmediainflueItemWidget extends StatelessWidget {
                         top: 11,
                       ),
                       child: Text(
-                        "msg_looking_for_a_game3".tr,
+                        listmediainflueItemModelObj.job!.description!,
+                        // "msg_looking_for_a_game3".tr,
                         maxLines: null,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiLight14Gray900ab,
@@ -174,11 +176,15 @@ class ListmediainflueItemWidget extends StatelessWidget {
                         width: getHorizontalSize(
                           94,
                         ),
-                        text: "lbl_accepted".tr,
+                        text: listmediainflueItemModelObj.status!,
+                        // text: "lbl_accepted".tr,
                         margin: getMargin(
                           top: 5,
                         ),
-                        variant: ButtonVariant.FillGreenA10099,
+                        variant:
+                            listmediainflueItemModelObj.status! == 'pending'
+                                ? ButtonVariant.FillGreenA10099
+                                : ButtonVariant.FillRed10099,
                         shape: ButtonShape.RoundedBorder12,
                         padding: ButtonPadding.PaddingT4,
                         fontStyle: ButtonFontStyle.SatoshiBold115Green700,
@@ -213,7 +219,8 @@ class ListmediainflueItemWidget extends StatelessWidget {
                             top: 7,
                           ),
                           child: Text(
-                            "lbl_500".tr,
+                            // "lbl_500".tr,
+                            '\$${listmediainflueItemModelObj.price!.toString()}',
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold125Gray900a7,

@@ -8,4 +8,5 @@ import 'package:iynfluencer/presentation/home_creator_container_screen/models/ho
 class HomeCreatorContainerController extends GetxController {
   Rx<HomeCreatorContainerModel> homeCreatorContainerModelObj =
       HomeCreatorContainerModel().obs;
+  var currentRoute = AppRoutes.homeCreatorPage.obs;
 }

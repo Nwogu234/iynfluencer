@@ -1,5 +1,7 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
-import 'controller/creator_profile_controller.dart';
+import '../home_creator_page/controller/home_creator_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
@@ -9,7 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreatorProfileDraweritem extends StatelessWidget {
   CreatorProfileDraweritem(this.controller, {Key? key}) : super(key: key);
 
-  CreatorProfileController controller;
+  HomeCreatorController controller;
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -161,20 +164,26 @@ class CreatorProfileDraweritem extends StatelessWidget {
                               height: 1.h,
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgQuestion,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 2.h),
-                                child: Text("lbl_sign_out".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray600))
-                          ]))
+                      GestureDetector(
+                        onTap: (){
+                          storage.write(key: 'token', value: null);
+                          Get.offAllNamed(AppRoutes.logInScreen);
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
+                            child: Row(children: [
+                              CustomImageView(
+                                  svgPath: ImageConstant.imgQuestion,
+                                  height: 24.h,
+                                  width: 24.w),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 14.w, top: 2.h),
+                                  child: Text("lbl_sign_out".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600))
+                            ])),
+                      )
                     ]))));
   }
 
@@ -191,12 +200,21 @@ class CreatorProfileDraweritem extends StatelessWidget {
   }
 
   onTapBecomean() {
-    Get.delete<CreatorHireslistTabContainerController>();
-    Get.delete<TabController>();
-    Get.offNamed(
-      AppRoutes.influencerTabScreen,
+    if(controller.user.userModelObj.value.influencerId !=null){
+      Get.delete<CreatorHireslistTabContainerController>();
+      Get.delete<TabController>();
+      storage.write(key: "activeProfile", value: "Influencer");
+      Get.offNamed(
+        AppRoutes.influencerTabScreen,
+      );
+      controller.dispose();
+    }
+    else{
+      Get.offNamed(
+        AppRoutes.completeProfileInfluencerScreen,
+      );
+    }
 
-    );
-    controller.dispose();
+
   }
 }
