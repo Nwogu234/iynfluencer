@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResponsiveErrorWidget extends StatelessWidget {
   final String errorMessage;
+  final String buttonText;
   final VoidCallback onRetry;
   final bool fullPage;
 
@@ -10,6 +11,7 @@ class ResponsiveErrorWidget extends StatelessWidget {
     required this.errorMessage,
     required this.onRetry,
     this.fullPage = false,
+    this.buttonText = 'Try Again',
   });
 
   @override
@@ -34,7 +36,7 @@ class ResponsiveErrorWidget extends StatelessWidget {
             SizedBox(height: 20.h), // Responsive height
             ElevatedButton(
               onPressed: onRetry,
-              child: Text('Try Again',
+              child: Text(buttonText,
                   style: TextStyle(fontSize: 14.sp)), // Responsive font size
             ),
           ],

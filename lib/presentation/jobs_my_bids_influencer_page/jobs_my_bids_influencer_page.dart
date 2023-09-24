@@ -109,8 +109,6 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                       bottom: 180,
                     ),
                     child: Obx(() {
-                      print('controller length');
-                      print(controller.jobsMyBidsInfluencerModelObj.value);
                       if (controller.isLoading.value) {
                         // return CustomLoadingWidget(
                         //   animationController: animationController,
@@ -128,58 +126,57 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                               ),
                             );
                           },
-                          itemCount: 5,
+                          itemCount: 4,
                           itemBuilder: (context, index) {
                             return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
                           },
                         );
-                      } else if (controller.isError.value) {
-                        return ResponsiveErrorWidget(
-                          errorMessage: controller.error.value,
-                          onRetry: () {
-                            controller.getInfluencerJobBids();
-                          },
-                          fullPage: true,
-                        ); // Your error widget
-                      } else if (controller
-                              .jobsMyBidsInfluencerModelObj.value.length ==
-                          0) {
-                        return ResponsiveEmptyWidget(
-                          errorMessage: 'No Job Bids Available',
-                          onRetry: () {
-                            Get.toNamed(AppRoutes.influencerHomeScreen);
-                          },
-                          fullPage: true,
-                        ); // Your error widget
                       } else {
-                        return ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: false,
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return SizedBox(
-                              height: getVerticalSize(
-                                10,
-                              ),
-                            );
-                          },
-                          itemCount:
-                              controller.jobsMyBidsInfluencerModelObj.length > 0
-                                  ? controller
-                                      .jobsMyBidsInfluencerModelObj.length
-                                  : 0,
-                          itemBuilder: (context, index) {
-                            JobsMyBidsInfluencerModel model =
-                                controller.jobsMyBidsInfluencerModelObj[index];
-                            print('-----');
-                            print(model.coverLetter);
-                            return ListmediainflueItemWidget(
-                              model,
-                            );
-                          },
-                        );
+                        if (controller.isError.value) {
+                          return ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else if (controller
+                                .jobsMyBidsInfluencerModelObj.isEmpty &&
+                            !controller.isTrendLoading.value) {
+                          return ResponsiveEmptyWidget(
+                            errorMessage: 'No Job Bids Available',
+                            onRetry: () {
+                              Get.toNamed(AppRoutes.influencerHomeScreen);
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else {
+                          return ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: false,
+                            separatorBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return SizedBox(
+                                height: getVerticalSize(
+                                  10,
+                                ),
+                              );
+                            },
+                            itemCount:
+                                controller.jobsMyBidsInfluencerModelObj.length,
+                            itemBuilder: (context, index) {
+                              JobsMyBidsInfluencerModel model = controller
+                                  .jobsMyBidsInfluencerModelObj[index];
+                              print('-----');
+                              print(model.coverLetter);
+                              return ListmediainflueItemWidget(
+                                model,
+                              );
+                            },
+                          );
+                        }
                       }
                     }),
                   ),

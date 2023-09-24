@@ -56,8 +56,11 @@ class JobsMyBidsInfluencerController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        getInfluencerJobBids();
-        isLoading.value = false;
+        getInfluencerJobBids().then((value) {
+          isLoading.value = false;
+        }).catchError((err) {
+          isLoading.value = false;
+        });
       }
     } catch (e) {
       print(e);

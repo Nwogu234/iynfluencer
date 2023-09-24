@@ -85,45 +85,69 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                     ),
                     child: Obx(() {
                       if (controller.isLoading.value) {
-                        return CustomLoadingWidget(
-                          animationController: animationController,
-                        ); // Your custom loading widget
-                      } else if (controller.error.value.isNotEmpty) {
-                        return ResponsiveErrorWidget(
-                          errorMessage: controller.error.value,
-                          onRetry: () {},
-                          fullPage: true,
-                        ); // Your error widget
-                      } else {
+                        // return CustomLoadingWidget(
+                        //   animationController: animationController,
+                        // ); // Your custom loading widget
                         return ListView.separated(
                           physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
+                          shrinkWrap: false,
                           separatorBuilder: (
                             context,
                             index,
                           ) {
                             return SizedBox(
                               height: getVerticalSize(
-                                23,
+                                10,
                               ),
                             );
                           },
-                          itemCount: controller.isTrendLoading.value
-                              ? 5
-                              : controller
-                                  .jobsJobsInfluencerModelObj.value.length,
+                          itemCount: 4,
                           itemBuilder: (context, index) {
-                            if (controller.isTrendLoading.value) {
-                              return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
-                            } else {
+                            return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                          },
+                        );
+                      } else {
+                        if (controller.error.value.isNotEmpty) {
+                          return ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else if (controller
+                                .jobsJobsInfluencerModelObj.value.isEmpty &&
+                            !controller.isTrendLoading.value) {
+                          return ResponsiveEmptyWidget(
+                            errorMessage: 'No Influencers Job Available',
+                            onRetry: () {},
+                            fullPage: true,
+                          ); //
+                        } else {
+                          return ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            separatorBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return SizedBox(
+                                height: getVerticalSize(
+                                  23,
+                                ),
+                              );
+                            },
+                            itemCount: controller
+                                .jobsJobsInfluencerModelObj.value.length,
+                            itemBuilder: (context, index) {
                               Job model = controller
                                   .jobsJobsInfluencerModelObj.value[index];
                               return ListclientItemWidget(
                                 model,
                               );
-                            }
-                          },
-                        );
+                            },
+                          );
+                        }
                       }
                     }),
                   ),
