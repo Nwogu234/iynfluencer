@@ -79,6 +79,8 @@ class JobsMyBidsInfluencerController extends GetxController {
       }
     } catch (e) {
       print(e);
+      Get.snackbar('Error', 'Something went wrong');
+
       error('Something went wrong');
       isTrendLoading.value = false;
     }

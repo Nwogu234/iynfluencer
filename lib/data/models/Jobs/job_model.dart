@@ -59,45 +59,45 @@ class JobData {
 }
 
 class Job {
-  final String id;
-  final String creatorId;
-  final String title;
-  final String description;
-  final List<String> responsibilities;
-  final List<String> category;
-  final int budgetFrom;
-  final int budgetTo;
-  final int duration;
-  final bool public;
-  final bool hired;
-  final bool suspended;
-  final String jobId;
-  final String createdAt;
-  final String updatedAt;
-  final int version;
-  final creator;
-  final int bidsCount;
+  final String? id;
+  final String? creatorId;
+  final String? title;
+  final String? description;
+  final List<String>? responsibilities;
+  final List<String>? category;
+  final int? budgetFrom;
+  final int? budgetTo;
+  final int? duration;
+  final bool? public;
+  final bool? hired;
+  final bool? suspended;
+  final String? jobId;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? version;
+  final Creator? creator;
+  final int? bidsCount;
   final User? user;
 
   Job({
-    required this.id,
-    required this.creatorId,
-    required this.title,
-    required this.description,
-    required this.responsibilities,
-    required this.category,
-    required this.budgetFrom,
-    required this.budgetTo,
-    required this.duration,
-    required this.public,
-    required this.hired,
-    required this.suspended,
-    required this.jobId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.version,
-    required this.creator,
-    required this.bidsCount,
+    this.id,
+    this.creatorId,
+    this.title,
+    this.description,
+    this.responsibilities,
+    this.category,
+    this.budgetFrom,
+    this.budgetTo,
+    this.duration,
+    this.public,
+    this.hired,
+    this.suspended,
+    this.jobId,
+    this.createdAt,
+    this.updatedAt,
+    this.version,
+    this.creator,
+    this.bidsCount,
     this.user,
   });
 
@@ -142,22 +142,29 @@ class Job {
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       version: json['__v'],
-      creator: Creator.fromJson(json['creator']),
       bidsCount: json['bidsCount'],
-      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      // creator:
+      //     (json['creator'] as List).map((i) => Creator.fromJson(i)).toList(),
+      // user: (json['user'] as List?)!
+      //     .map((i) => User.fromJson(i as Map<String, dynamic>))
+      //     .toList(),
+      creator: json['creator'] != null
+          ? new Creator.fromJson(json['creator'])
+          : null,
+      user: json['user'] != null ? new User.fromJson(json['user']) : null,
     );
   }
 }
 
 class Creator {
-  final String id;
-  final String userId;
-  final String creatorId;
+  final String? id;
+  final String? userId;
+  final String? creatorId;
 
   Creator({
-    required this.id,
-    required this.userId,
-    required this.creatorId,
+    this.id,
+    this.userId,
+    this.creatorId,
   });
 
   factory Creator.fromJson(Map<String, dynamic> json) {
@@ -173,13 +180,13 @@ class Creator {
 //
 //THIS IS FOR POSTING JOBS
 class JobRequest {
-  final String title;
-  final List<String> category;
-  final int budgetFrom;
-  final int budgetTo;
-  final String description;
-  final int duration;
-  final List<String> responsibilities;
+  final String? title;
+  final List<String>? category;
+  final int? budgetFrom;
+  final int? budgetTo;
+  final String? description;
+  final int? duration;
+  final List<String>? responsibilities;
 
   JobRequest({
     required this.title,

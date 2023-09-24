@@ -20,6 +20,30 @@ class ApiClient extends GetConnect {
     httpClient.baseUrl =
         'https://bv9pfcsd5b.execute-api.us-east-1.amazonaws.com/api/v1/';
   }
+  dynamic errorHandler(Response response) {
+    print(response.toString());
+    switch (response.statusCode) {
+      case 200:
+        return response;
+
+      case 201:
+        return response;
+
+      case 202:
+        return response;
+      case 500:
+        throw "Server Error pls retry later";
+      case 401:
+        return Get.toNamed(
+          AppRoutes.logInScreen,
+        );
+      case 403:
+        throw 'Error occurred pls check internet and retry.';
+      case 500:
+      default:
+        throw 'Error occurred retry';
+    }
+  }
 
   //Post request for signup
   Future<Response> signUp(SignUpModel user) async {
@@ -74,7 +98,7 @@ class ApiClient extends GetConnect {
   Future<UserModel> getUser(String token) async {
     String tokenS = token.toString();
     print(token);
-    Response response;
+    Response response = Response();
     try {
       response = await get(
         'users/me',
@@ -95,6 +119,7 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from user');
+      errorHandler(response);
       throw Exception('Server error');
     }
   }
@@ -207,6 +232,30 @@ class ApiClient extends GetConnect {
     }
   }
 
+  Future<Response> getInfluencerAllJobs(String influencerId, var token) async {
+    Response response;
+    try {
+      response = await get(
+        'creators/jobs?influencerId=$influencerId',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
   //List of existing jobs of an influencer
   Future<List<Job>> getInfluencerJobs(
       int pageNumber, int limit, int? budgetFrom, var token) async {
@@ -296,44 +345,14 @@ class ApiClient extends GetConnect {
         },
       );
       if (response.isOk) {
-        List<Map<String, dynamic>> map;
         List<JobsMyBidsInfluencerModel> theJobs = [];
-        print('------------');
-        // print(response.body['data']['docs']);
-        // map = List<Map<String, dynamic>>.from(
-        //     jsonDecode(response.body['data']['docs']));
-
-        final dynamic jobJsonList = response.body['data']['docs'];
+        print('------------here oooo----');
+        print(response.body);
+        List<dynamic> jobJsonList = response.body['data']['docs'];
         // theJobs.add(JobsMyBidsInfluencerModel.fromJson(jobJsonList[0]));
         jobJsonList.forEach((e) {
-          print('----from forech---');
-          print(e);
           theJobs.add(JobsMyBidsInfluencerModel.fromJson(e));
         });
-        // final List<Job> jobs = map
-        //     .map((json) => Job(
-        //           id: json['_id'],
-        //           creatorId: json['creatorId'],
-        //           title: json['title'],
-        //           description: json['description'],
-        //           responsibilities: List<String>.from(json['responsibilities']),
-        //           category: List<String>.from(json['category']),
-        //           budgetFrom: json['budgetFrom'],
-        //           budgetTo: json['budgetTo'],
-        //           duration: json['duration'],
-        //           public: json['public'],
-        //           hired: json['hired'],
-        //           suspended: json['suspended'],
-        //           jobId: json['jobId'],
-        //           createdAt: json['createdAt'],
-        //           updatedAt: json['updatedAt'],
-        //           version: json['__v'],
-        //           creator: (json['creator'] as List)
-        //               .map((i) => Creator.fromJson(i))
-        //               .toList(),
-        //           bidsCount: json['bidsCount'],
-        //         ))
-        //     .toList();
         return theJobs.toList();
       } else {
         print(response);
@@ -342,8 +361,8 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of influencers job nids');
-      print(e);
-      throw Exception('Server error From influencers job  2');
+      // errorHandler(response);
+      throw Exception('Server error From influencers job  2');
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+
 import '../controller/jobs_jobs_influencer_controller.dart';
 import '../models/listclient_item_model.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,7 @@ class ListclientItemWidget extends StatelessWidget {
           key: key,
         );
 
-  ListclientItemModel listclientItemModelObj;
-
-  var controller = Get.find<JobsJobsInfluencerController>();
+  Job listclientItemModelObj;
 
   @override
   Widget build(BuildContext context) {
@@ -217,28 +217,26 @@ class ListclientItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(
-                      () => Text(
-                        listclientItemModelObj.mediainfluencerTxt.value,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold18Gray900ab,
-                      ),
+                    Text(
+                      '${listclientItemModelObj.title!.length > 25 ? listclientItemModelObj.title!.substring(0, 25) : listclientItemModelObj.title!}....',
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold18Gray900ab,
                     ),
-                    CustomImageView(
-                      svgPath: ImageConstant.imgVector,
-                      height: getVerticalSize(
-                        1,
-                      ),
-                      width: getHorizontalSize(
-                        13,
-                      ),
-                      margin: getMargin(
-                        left: 168,
-                        top: 11,
-                        bottom: 12,
-                      ),
-                    ),
+                    // CustomImageView(
+                    //   svgPath: ImageConstant.imgVector,
+                    //   height: getVerticalSize(
+                    //     1,
+                    //   ),
+                    //   width: getHorizontalSize(
+                    //     13,
+                    //   ),
+                    //   margin: getMargin(
+                    //     left: 168,
+                    //     top: 11,
+                    //     bottom: 12,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Padding(
@@ -276,7 +274,8 @@ class ListclientItemWidget extends StatelessWidget {
                             bottom: 10,
                           ),
                           child: Text(
-                            "msg_a_game_influencer".tr,
+                            // "msg_a_game_influencer".tr,
+                            listclientItemModelObj.description!,
                             maxLines: null,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight14Gray900ab,
