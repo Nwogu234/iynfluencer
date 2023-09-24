@@ -1,5 +1,6 @@
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
+import 'package:iynfluencer/widgets/skeletons.dart';
 
 import '../jobs_my_bids_influencer_page/widgets/listmediainflue_item_widget.dart';
 import 'controller/jobs_my_bids_influencer_controller.dart';
@@ -105,31 +106,50 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                       top: 10,
                       bottom: 180,
                     ),
-                    child: Obx(
-                      () => ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: false,
-                        separatorBuilder: (
-                          context,
-                          index,
-                        ) {
-                          return SizedBox(
-                            height: getVerticalSize(
-                              1,
-                            ),
-                          );
-                        },
-                        itemCount:
-                            controller.jobsMyBidsInfluencerModelObj.length,
-                        itemBuilder: (context, index) {
-                          JobsMyBidsInfluencerModel model =
-                              controller.jobsMyBidsInfluencerModelObj[index];
-                          return ListmediainflueItemWidget(
-                            model,
-                          );
-                        },
-                      ),
-                    ),
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return CustomLoadingWidget(
+                          animationController: animationController,
+                        ); // Your custom loading widget
+                      } else if (controller.error.value.isNotEmpty) {
+                        return ResponsiveErrorWidget(
+                          errorMessage: controller.error.value,
+                          onRetry: () {
+                            controller.getInfluencerJobBids();
+                          },
+                          fullPage: true,
+                        ); // Your error widget
+                      } else {
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: false,
+                          separatorBuilder: (
+                            context,
+                            index,
+                          ) {
+                            return SizedBox(
+                              height: getVerticalSize(
+                                10,
+                              ),
+                            );
+                          },
+                          itemCount: controller.isTrendLoading.value
+                              ? 5
+                              : controller.jobsMyBidsInfluencerModelObj.length,
+                          itemBuilder: (context, index) {
+                            if (controller.isTrendLoading.value) {
+                              return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                            } else {
+                              JobsMyBidsInfluencerModel model = controller
+                                  .jobsMyBidsInfluencerModelObj[index];
+                              return ListmediainflueItemWidget(
+                                model,
+                              );
+                            }
+                          },
+                        );
+                      }
+                    }),
                   ),
                 )
               ],

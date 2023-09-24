@@ -88,7 +88,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                 createdAt: '2023-08-17T00:00:00.000Z',
                 updatedAt: '2023-08-17T00:00:00.000Z',
                 version: 1,
-                creator: [],
+                // creator: [],
                 bidsCount: 0,
               );
               controller.getJobs();
