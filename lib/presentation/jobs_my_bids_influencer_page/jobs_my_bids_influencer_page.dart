@@ -114,7 +114,9 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                       } else if (controller.error.value.isNotEmpty) {
                         return ResponsiveErrorWidget(
                           errorMessage: controller.error.value,
-                          onRetry: () {},
+                          onRetry: () {
+                            controller.getInfluencerJobBids();
+                          },
                           fullPage: true,
                         ); // Your error widget
                       } else {

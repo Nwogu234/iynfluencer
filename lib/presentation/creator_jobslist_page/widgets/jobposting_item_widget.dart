@@ -90,7 +90,7 @@ class JobpostingItemWidget extends StatelessWidget {
                             top: 3,
                           ),
                           child: Text(
-                            "${creatorJobslistModelObj.createdAt.isDateTime}",
+                            "${creatorJobslistModelObj.createdAt!.isDateTime}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight125,
