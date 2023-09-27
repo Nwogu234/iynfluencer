@@ -333,9 +333,8 @@ class ApiClient extends GetConnect {
   }
 
 //this is for getting list of bids
-  Future<List<JobsMyBidsInfluencerModel>> getInfluencerJobsBids(
-      var token) async {
-    Response response;
+  Future<Response> getInfluencerJobsBids(var token) async {
+    Response response = Response();
     try {
       response = await get(
         'influencers/me/bids',
@@ -345,23 +344,17 @@ class ApiClient extends GetConnect {
         },
       );
       if (response.isOk) {
-        List<JobsMyBidsInfluencerModel> theJobs = [];
         print('------------here oooo----');
-        print(response.body);
-        List<dynamic> jobJsonList = response.body['data']['docs'];
-        // theJobs.add(JobsMyBidsInfluencerModel.fromJson(jobJsonList[0]));
-        jobJsonList.forEach((e) {
-          theJobs.add(JobsMyBidsInfluencerModel.fromJson(e));
-        });
-        return theJobs.toList();
+        // print(response.body);
+        return response;
       } else {
         print(response);
-        print(response.body);
+        // print(response.body);
         throw Exception('Server error From Jobs');
       }
     } catch (e) {
       print('$e from getting list of influencers job nids');
-      // errorHandler(response);
+      errorHandler(response);
       throw Exception('Server error From influencers job  2');
     }
   }

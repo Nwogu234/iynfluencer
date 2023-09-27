@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
@@ -40,8 +42,8 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
     // Create the controller using jobpostingItemList from creatorJobslistModelObj
     // Create the controller using jobpostingItemList from creatorJobslistModelObj
     controller = Get.put(JobsMyBidsInfluencerController(
-      jobsMyBidsInfluencerModelObj.listmediainflueItemList,
-    ));
+        // jobsMyBidsInfluencerModelObj.listmediainflueItemList,
+        ));
   }
   @override
   void dispose() {
@@ -113,18 +115,9 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                     ),
                     child: Obx(() {
                       if (controller.isLoading.value) {
-                        return CustomLoadingWidget(
-                          animationController: animationController,
-                        ); // Your custom loading widget
-                      } else if (controller.error.value.isNotEmpty) {
-                        return ResponsiveErrorWidget(
-                          errorMessage: controller.error.value,
-                          onRetry: () {
-                            controller.getInfluencerJobBids();
-                          },
-                          fullPage: true,
-                        ); // Your error widget
-                      } else {
+                        // return CustomLoadingWidget(
+                        //   animationController: animationController,
+                        // );
                         return ListView.separated(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: false,
@@ -138,21 +131,57 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                               ),
                             );
                           },
-                          itemCount: controller.isTrendLoading.value
-                              ? 5
-                              : controller.jobsMyBidsInfluencerModelObj.length,
+                          itemCount: 4,
                           itemBuilder: (context, index) {
-                            if (controller.isTrendLoading.value) {
-                              return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
-                            } else {
+                            return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                          },
+                        );
+                      } else {
+                        if (controller.isError.value) {
+                          return ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else if (controller
+                                .jobsMyBidsInfluencerModelObj.isEmpty &&
+                            !controller.isTrendLoading.value) {
+                          return ResponsiveEmptyWidget(
+                            errorMessage: 'No Job Bids Available',
+                            onRetry: () {
+                              Get.toNamed(AppRoutes.influencerHomeScreen);
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else {
+                          return ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: false,
+                            separatorBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return SizedBox(
+                                height: getVerticalSize(
+                                  10,
+                                ),
+                              );
+                            },
+                            itemCount:
+                                controller.jobsMyBidsInfluencerModelObj.length,
+                            itemBuilder: (context, index) {
                               JobsMyBidsInfluencerModel model = controller
                                   .jobsMyBidsInfluencerModelObj[index];
+                              print('-----');
+                              print(model.coverLetter);
                               return ListmediainflueItemWidget(
                                 model,
                               );
-                            }
-                          },
-                        );
+                            },
+                          );
+                        }
                       }
                     }),
                   ),

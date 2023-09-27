@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -11,20 +13,22 @@ import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/lis
 /// This class manages the state of the JobsMyBidsInfluencerPage, including the
 /// current jobsMyBidsInfluencerModelObj
 class JobsMyBidsInfluencerController extends GetxController {
-  JobsMyBidsInfluencerController(this.jobsMyBidsInfluencerModelObj);
+  JobsMyBidsInfluencerController();
 
-  RxList<JobsMyBidsInfluencerModel> jobsMyBidsInfluencerModelObj =
+  late RxList<JobsMyBidsInfluencerModel> jobsMyBidsInfluencerModelObj =
       <JobsMyBidsInfluencerModel>[].obs;
 
   final UserController user = Get.find();
 
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
+  Rx<bool> isError = false.obs;
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
   final apiClient = ApiClient();
   var error = ''.obs;
+
   List<JobsMyBidsInfluencerModel> existingJobs = []; // Existing jobs
   // RxList<JobsMyBidsInfluencerModel> newJobs =
   //     <JobsMyBidsInfluencerModel>[].obs; // new jobs
@@ -52,8 +56,11 @@ class JobsMyBidsInfluencerController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        getInfluencerJobBids();
-        isLoading.value = false;
+        getInfluencerJobBids().then((value) {
+          isLoading.value = false;
+        }).catchError((err) {
+          isLoading.value = false;
+        });
       }
     } catch (e) {
       print(e);
@@ -62,26 +69,34 @@ class JobsMyBidsInfluencerController extends GetxController {
     }
   }
 
+// List<JobsMyBidsInfluencerModel>
   Future<void> getInfluencerJobBids() async {
     try {
       error('');
       isTrendLoading.value = true;
-      existingJobs = await apiClient.getInfluencerJobsBids(token);
-      print('=======');
-      print(existingJobs);
+      Response response = await apiClient.getInfluencerJobsBids(token);
+      List<dynamic> jobJsonList = response.body['data']['docs'];
+      print('=====jobJsonList length====');
+      print(jobJsonList.length);
+      if (jobJsonList.length > 0) {
+        jobJsonList.forEach((e) {
+          existingJobs.add(JobsMyBidsInfluencerModel.fromJson(e));
+        });
+      }
       if (existingJobs.isEmpty) {
-        error('Something went wrong');
+        error('');
         isTrendLoading.value = false;
       } else {
         jobsMyBidsInfluencerModelObj.value = existingJobs;
         error('');
         isTrendLoading.value = false;
       }
+      isTrendLoading.value = false;
     } catch (e) {
       print(e);
-      Get.snackbar('Error', 'Something went wrong');
-
+      // Get.snackbar('Error', 'Something went wrong');
       error('Something went wrong');
+      isError.value = true;
       isTrendLoading.value = false;
     }
   }

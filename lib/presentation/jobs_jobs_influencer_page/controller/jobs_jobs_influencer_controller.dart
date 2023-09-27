@@ -20,6 +20,8 @@ class JobsJobsInfluencerController extends GetxController {
 
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
+  Rx<bool> isError = false.obs;
+
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
@@ -47,8 +49,12 @@ class JobsJobsInfluencerController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        getInfluencerJobJobs(user.userModelObj.value.influencerId!);
-        isLoading.value = false;
+        getInfluencerJobJobs(user.userModelObj.value.influencerId!)
+            .then((value) {
+          isLoading.value = false;
+        }).catchError((err) {
+          isLoading.value = false;
+        });
       }
     } catch (e) {
       print(e);
@@ -78,6 +84,7 @@ class JobsJobsInfluencerController extends GetxController {
     } catch (e) {
       print(e);
       error('Something went wrong');
+      isError.value = true;
       isTrendLoading.value = false;
     }
   }

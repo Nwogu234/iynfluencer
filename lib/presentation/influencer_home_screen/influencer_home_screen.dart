@@ -89,40 +89,45 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                   ); // Your error widget
                 } else {
                   return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                            padding: getPadding(top: 13),
-                            child: Text("lbl_recent_postings".tr,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold14Gray900)),
-                        Expanded(
-                            child: Padding(
-                                padding: getPadding(top: 19),
-                                child: Obx(() => ListView.separated(
-                                    physics: BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                          height: getVerticalSize(16));
-                                    },
-                                    itemCount: controller.isJobsLoading.value
-                                        ? 5
-                                        : controller.jobsList.length,
-                                    itemBuilder: (context, index) {
-                                      if (controller.isJobsLoading.value) {
-                                        return InfluencerHomeItemSkeletonWidget();
-                                      } else {
-                                        Job model = controller.jobsList[index];
-                                        return InfluencerHomeItemWidget(model,
-                                            onTapJobpost: () {
-                                          onTapJobpost(model);
-                                        });
-                                      }
-                                    }))))
-                      ]);
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: getPadding(top: 13),
+                          child: Text("lbl_recent_postings".tr,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold14Gray900)),
+                      Expanded(
+                        child: Padding(
+                          padding: getPadding(top: 19),
+                          child: Obx(
+                            () => ListView.separated(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) {
+                                return SizedBox(height: getVerticalSize(16));
+                              },
+                              itemCount: controller.isJobsLoading.value
+                                  ? 5
+                                  : controller.jobsList.length,
+                              itemBuilder: (context, index) {
+                                if (controller.isJobsLoading.value) {
+                                  return InfluencerHomeItemSkeletonWidget();
+                                } else {
+                                  Job model = controller.jobsList[index];
+                                  return InfluencerHomeItemWidget(model,
+                                      onTapJobpost: () {
+                                    onTapJobpost(model);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
                 }
               }),
               // bottomNavigationBar:
