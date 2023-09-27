@@ -88,7 +88,7 @@ class HomeCreatorController extends GetxController {
     try {
       error('');
       recommendedInfluencers.value =
-          await apiClient.getInfluencers(1, 25, token);
+      await apiClient.getInfluencers(1, 25, token);
       if (recommendedInfluencers.isEmpty) {
         error('Something went wrong');
         isRecommendedLoading.value = false;

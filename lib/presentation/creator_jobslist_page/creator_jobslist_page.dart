@@ -3,6 +3,8 @@ import 'package:iynfluencer/presentation/job_details_screen/controller/job_detai
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
+import '../creator_job_details/controller/creator_job_detail_controller.dart';
+import '../creator_job_details/creator_job_details_screen.dart';
 import '../creator_jobslist_page/widgets/jobposting_item_widget.dart';
 import 'controller/creator_jobslist_controller.dart';
 import 'models/creator_jobslist_model.dart';
@@ -48,11 +50,10 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
   }
 
   onTapDetailcard(Job selectedJob) {
-    final jobDetailsController = Get.put(JobDetailsController());
+    final jobDetailsController = Get.put(CreatorJobDetailsController());
     jobDetailsController.setSelectedJob(selectedJob);
-
-    Get.to(
-      JobDetailsScreen(selectedJob: selectedJob),
+    Get.to(()=>
+      CreatorJobDetailsScreen(selectedJob: selectedJob),
     );
   }
 
@@ -92,7 +93,6 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                 bidsCount: 0,
               );
               controller.getJobs();
-              controller.getNewJob(newJob);
             },
             fullPage: true,
           ); // Your error widget
@@ -106,7 +106,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                   physics: BouncingScrollPhysics(),
                   itemCount: controller.isTrendLoading.value
                       ? 5 // Adjust the number of skeleton items as needed
-                      : controller.creatorJobslistModelObj.length,
+                      : controller.existingJobs.length,
                   separatorBuilder: (context, index) {
                     return SizedBox(
                       height: getVerticalSize(20),
@@ -116,7 +116,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                     if (controller.isTrendLoading.value) {
                       return TrendinghorizonItemSkeletonWidget(); // Skeleton widget
                     } else {
-                      Job model = controller.creatorJobslistModelObj[index];
+                      Job model = controller.existingJobs[index];
                       return JobpostingItemWidget(
                           creatorJobslistModelObj: model,
                           index: index,

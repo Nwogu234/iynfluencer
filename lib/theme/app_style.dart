@@ -80,7 +80,7 @@ class AppStyle {
       14.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold18Gray900a7 = TextStyle(
@@ -134,7 +134,7 @@ class AppStyle {
       12,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtH2Gray600 = TextStyle(
@@ -143,7 +143,7 @@ class AppStyle {
       16,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight14BlueA700 = TextStyle(
@@ -152,7 +152,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtRobotoRegular20 = TextStyle(
@@ -170,7 +170,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtOutfitRegular14 = TextStyle(
@@ -183,12 +183,12 @@ class AppStyle {
   );
 
   static TextStyle txtSatoshiLight135Gray600 = TextStyle(
-    color: ColorConstant.gray600,
+    color: ColorConstant.black900,
     fontSize: getFontSize(
       13.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight12Bluegray600 = TextStyle(
@@ -197,7 +197,7 @@ class AppStyle {
       12,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight138Bluegray9009e = TextStyle(
@@ -206,7 +206,7 @@ class AppStyle {
       13.8,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBlack36 = TextStyle(
@@ -278,7 +278,7 @@ class AppStyle {
       11.92,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold13Gray900e5 = TextStyle(
@@ -305,7 +305,7 @@ class AppStyle {
       12.73,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight125 = TextStyle(
@@ -314,7 +314,7 @@ class AppStyle {
       12.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold118 = TextStyle(
@@ -332,7 +332,7 @@ class AppStyle {
       16,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtH1 = TextStyle(
@@ -350,7 +350,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight125Gray600ab = TextStyle(
@@ -359,7 +359,7 @@ class AppStyle {
       12.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold13 = TextStyle(
@@ -440,7 +440,7 @@ class AppStyle {
       13,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold20 = TextStyle(
@@ -458,7 +458,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight135Blue900 = TextStyle(
@@ -467,7 +467,7 @@ class AppStyle {
       13.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight13Gray900 = TextStyle(
@@ -476,7 +476,7 @@ class AppStyle {
       13,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight138 = TextStyle(
@@ -485,7 +485,7 @@ class AppStyle {
       13.8,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtH2Gray900 = TextStyle(
@@ -494,7 +494,7 @@ class AppStyle {
       16,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight14Gray900 = TextStyle(
@@ -503,7 +503,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight135 = TextStyle(
@@ -512,7 +512,7 @@ class AppStyle {
       13.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold135Gray900ab = TextStyle(
@@ -530,7 +530,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold24 = TextStyle(
@@ -557,7 +557,7 @@ class AppStyle {
       12.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight145 = TextStyle(
@@ -566,7 +566,7 @@ class AppStyle {
       14.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtRobotoRegular16 = TextStyle(
@@ -593,7 +593,7 @@ class AppStyle {
       12,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight13 = TextStyle(
@@ -602,7 +602,7 @@ class AppStyle {
       13,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight14 = TextStyle(
@@ -611,7 +611,7 @@ class AppStyle {
       14,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight15 = TextStyle(
@@ -620,7 +620,7 @@ class AppStyle {
       15,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiBold18Gray900ab = TextStyle(
@@ -638,7 +638,7 @@ class AppStyle {
       11.79,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight1137 = TextStyle(
@@ -647,7 +647,7 @@ class AppStyle {
       11.37,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle txtSatoshiLight10 = TextStyle(
@@ -656,6 +656,6 @@ class AppStyle {
       10,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
   );
 }

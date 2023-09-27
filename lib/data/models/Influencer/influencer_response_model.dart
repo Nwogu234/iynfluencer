@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+
 import '../use_model/user_model.dart';
 import '../Socials/social.dart';
 
@@ -71,34 +73,40 @@ class Influencer {
   final String? influencerId;
   final int? jobsDone;
   final List<User>? user;
+  final List<Job>? jobs;
 
   Influencer(
       {this.id,
-      this.userId,
-      this.niche,
-      this.bio,
-      this.completed,
-      this.socials,
-      this.suspended,
-      this.influencerId,
-      this.user,
-      this.jobsDone});
+        this.userId,
+        this.niche,
+        this.bio,
+        this.completed,
+        this.socials,
+        this.suspended,
+        this.influencerId,
+        this.user,
+        this.jobsDone,
+        this.jobs});
 
   factory Influencer.fromJson(Map<String, dynamic> json) {
     return Influencer(
-        id: json['_id'] as String?,
-        userId: json['userId'] as String?,
-        niche: (json['niche'] as List?)?.map((i) => i as String).toList(),
-        bio: json['bio'] as String?,
-        completed: json['completed'] as bool?,
-        socials: (json['socials'] as List?)
-            ?.map((i) => Social.fromJson(i as Map<String, dynamic>))
-            .toList(),
-        suspended: json['suspended'] as bool?,
-        influencerId: json['influencerId'] as String?,
-        user: (json['user'] as List?)!
-            .map((i) => User.fromJson(i as Map<String, dynamic>))
-            .toList(),
-        jobsDone: (json['jobsCompleted'] as int?));
+      id: json['_id'] as String?,
+      userId: json['userId'] as String?,
+      niche: (json['niche'] as List?)?.map((i) => i as String).toList(),
+      bio: json['bio'] as String?,
+      completed: json['completed'] as bool?,
+      socials: (json['socials'] as List?)
+          ?.map((i) => Social.fromJson(i as Map<String, dynamic>))
+          .toList(),
+      suspended: json['suspended'] as bool?,
+      influencerId: json['influencerId'] as String?,
+      user: (json['user'] as List?)!
+          .map((i) => User.fromJson(i as Map<String, dynamic>))
+          .toList(),
+      jobsDone: (json['jobsCompleted'] as int?),
+      jobs: (json['jobs'] as List?)
+          ?.map((i) => Job.fromJson(i as Map<String, dynamic>))
+          .toList(),
+    );
   }
 }

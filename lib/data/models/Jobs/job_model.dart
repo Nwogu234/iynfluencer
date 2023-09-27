@@ -1,3 +1,4 @@
+import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 
 class JobResponse {

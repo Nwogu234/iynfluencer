@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+
 import '../influencer_profile_about_page/widgets/chipviewframe89_item_widget.dart';
 import 'controller/influencer_profile_about_controller.dart';
 import 'models/chipviewframe89_item_model.dart';
@@ -6,10 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 class InfluencerProfileAboutPage extends StatelessWidget {
-  InfluencerProfileAboutPage({Key? key})
-      : super(
-          key: key,
-        );
+  InfluencerProfileAboutPage({this.selectedInfluencer});
+
+  final Influencer? selectedInfluencer;
 
   InfluencerProfileAboutController controller = Get.put(
       InfluencerProfileAboutController(InfluencerProfileAboutModel().obs));
@@ -51,7 +52,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                             top: 7,
                           ),
                           child: Text(
-                            "msg_meet_sarah_a_passionate".tr,
+                            "${selectedInfluencer?.bio}",
                             maxLines: null,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight14Gray900,
@@ -74,30 +75,21 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                             left: 2,
                             top: 10,
                           ),
-                          child: Obx(
-                            () => Wrap(
-                              runSpacing: getVerticalSize(
-                                5,
-                              ),
-                              spacing: getHorizontalSize(
-                                5,
-                              ),
-                              children: List<Widget>.generate(
-                                controller.influencerProfileAboutModelObj.value
-                                    .chipviewframe89ItemList.value.length,
-                                (index) {
-                                  Chipviewframe89ItemModel model = controller
-                                      .influencerProfileAboutModelObj
-                                      .value
-                                      .chipviewframe89ItemList
-                                      .value[index];
-
-                                  return Chipviewframe89ItemWidget(
-                                    model,
-                                  );
-                                },
-                              ),
+                          child: Wrap(
+                            runSpacing: getVerticalSize(
+                              5,
                             ),
+                            spacing: getHorizontalSize(
+                              5,
+                            ),
+                            children: selectedInfluencer?.niche?.map((item) {
+                              return Chipviewframe89ItemWidget(
+                                Chipviewframe89ItemModel(
+                                  chipviewframe89ModelObj: item,
+                                ),
+                              );
+                            })?.toList() ??
+                                [],
                           ),
                         ),
                         Padding(
@@ -139,7 +131,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                   top: 2,
                                 ),
                                 child: Text(
-                                  "lbl_lagos_nigeria".tr,
+                                  "${selectedInfluencer?.user?.first.country}",
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.txtSatoshiLight14Gray900,
@@ -179,30 +171,32 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                             top: 9,
                             right: 52,
                           ),
-                          child: Row(
-                            children: [
-                              CustomImageView(
-                                svgPath: ImageConstant.imgLink,
-                                height: getSize(
-                                  20,
+                          child: Expanded(
+                            child: Row(
+                              children: [
+                                CustomImageView(
+                                  svgPath: ImageConstant.imgLink,
+                                  height: getSize(
+                                    20,
+                                  ),
+                                  width: getSize(
+                                    20,
+                                  ),
                                 ),
-                                width: getSize(
-                                  20,
+                                Padding(
+                                  padding: getPadding(
+                                    left: 10,
+                                    top: 1,
+                                  ),
+                                  child: Text(
+                                    "${selectedInfluencer?.socials?.first?.platformUrl}",
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiLight14BlueA700,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: getPadding(
-                                  left: 10,
-                                  top: 1,
-                                ),
-                                child: Text(
-                                  "msg_https_drive_g".tr,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: AppStyle.txtSatoshiLight14BlueA700,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Padding(

@@ -126,6 +126,8 @@ import 'package:get/get.dart';
 
 import '../presentation/choose_profile/choose_profile.dart';
 import '../presentation/choose_profile/choose_profile_bindings/choose_profile_binding.dart';
+import '../presentation/creator_job_details/binding/creator_job_details_binding.dart';
+import '../presentation/creator_job_details/creator_job_details_screen.dart';
 import '../presentation/email_code/email_code.dart';
 import '../presentation/email_code/email_code_bindings/email_code_bindings.dart';
 import '../presentation/influencer_tabs/binding/influencer_binding.dart';
@@ -252,6 +254,8 @@ class AppRoutes {
       '/creator_profile_reveiws_tab_container_screen';
 
   static const String jobDetailsScreen = '/job_details_screen';
+
+  static const String creatorJobDetailsScreen = '/creator_job_details_screen';
 
   static const String jobsMyBidsInfluencerPage =
       '/jobs_my_bids_influencer_page';
@@ -582,6 +586,13 @@ class AppRoutes {
       page: () => JobDetailsScreen(),
       bindings: [
         JobDetailsBinding(),
+      ],
+    ),
+    GetPage(
+      name: creatorJobDetailsScreen,
+      page: () => CreatorJobDetailsScreen(),
+      bindings: [
+        CreatorJobDetailsBinding(),
       ],
     ),
     // GetPage(

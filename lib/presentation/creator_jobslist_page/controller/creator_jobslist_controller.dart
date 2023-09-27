@@ -51,26 +51,6 @@ class CreatorJobslistController extends GetxController {
         error('');
         isLoading.value = false;
         getJobs();
-        Job newJob = Job(
-          id: 'placeholder_id',
-          creatorId: 'placeholder_creator_id',
-          title: 'New Job Title',
-          description: 'No description available.',
-          responsibilities: ['No responsibilities specified'],
-          category: ['Uncategorized'],
-          budgetFrom: 0,
-          budgetTo: 0,
-          duration: 0,
-          public: true,
-          hired: false,
-          suspended: false,
-          jobId: 'placeholder_job_id',
-          createdAt: '2023-08-17T00:00:00.000Z',
-          updatedAt: '2023-08-17T00:00:00.000Z',
-          version: 1,
-          // creator: [],
-          bidsCount: 0,
-        );
         // getNewJob(newJob); Why are you creating a new job
       }
     } catch (e) {
@@ -84,13 +64,17 @@ class CreatorJobslistController extends GetxController {
     try {
       error('');
       isTrendLoading.value = true;
-      existingJobs = await apiClient.getInfluencerJobs(1, 15, 8000, token);
-      if (existingJobs.isEmpty) {
-        error('Something went wrong');
-        isTrendLoading.value = false;
-      } else {
+      Response response = await apiClient.getCreatorJobs(token);
+
+      if (response.isOk) {
+        final responseJson = response.body;
+        final jobResponse = JobResponse.fromJson(responseJson);
+        existingJobs= jobResponse.data.docs;
         error('');
         isTrendLoading.value = false;
+      } else {
+        error('Something went wrong');
+        isTrendLoading..value = false;
       }
     } catch (e) {
       print(e);
@@ -99,26 +83,6 @@ class CreatorJobslistController extends GetxController {
     }
   }
 
-  Future<void> getNewJob(Job newJob) async {
-    isRecommendedLoading.value = true;
-    try {
-      error('');
-      final response = await apiClient.createJob(newJob, token);
-
-      if (response.isOk) {
-        // If the job creation is successful, add it to the list of trendingJobs
-        final createdJob = Job.fromJson(response.body['data']);
-        existingJobs.insert(0, createdJob); // Add the new job at the beginning
-      } else {
-        throw Exception(
-            'Failed to create a new job. Server error: ${response.statusText}');
-      }
-    } catch (e) {
-      error('Something went wrong');
-      print(e);
-      isRecommendedLoading.value = false;
-    }
-  }
 
   @override
   void onInit() {

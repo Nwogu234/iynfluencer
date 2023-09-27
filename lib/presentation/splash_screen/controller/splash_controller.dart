@@ -22,7 +22,7 @@ class SplashController extends GetxController {
   @override
   void onReady() async {
     String? token = await storage.read(key: "token");
-    await storage.write(key: 'activeProfile', value: null);
+    // await storage.write(key: 'activeProfile', value: null);
     String? activeProfile = await storage.read(key: "activeProfile");
 
     await _delayedProgressUpdate(2000, 0.2);

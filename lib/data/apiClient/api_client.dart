@@ -308,7 +308,7 @@ class ApiClient extends GetConnect {
   }
 
   //this is for posting a new job
-  Future<Response> createJob(Job jobRequest, var token) async {
+  Future<Response> createJob(JobRequest jobRequest, var token) async {
     Response response;
     try {
       response = await post('creators/me/jobs', jobRequest.toJson(), headers: {
@@ -363,6 +363,31 @@ class ApiClient extends GetConnect {
       print('$e from getting list of influencers job nids');
       // errorHandler(response);
       throw Exception('Server error From influencers job  2');
+    }
+  }
+
+  //this is for getting a creators list of jobs
+  Future<Response> getCreatorJobs(var token) async {
+    Response response;
+    try {
+      response = await get(
+        'creators/me/jobs',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of creator jobs');
+      print(e);
+      throw Exception('Server error');
     }
   }
 }

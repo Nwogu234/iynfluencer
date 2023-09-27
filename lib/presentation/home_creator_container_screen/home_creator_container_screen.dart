@@ -12,10 +12,10 @@ import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 class HomeCreatorContainerScreen
     extends GetWidget<HomeCreatorContainerController> {
   HomeCreatorContainerScreen(
-      {this.initialNestedRoute = AppRoutes.homeCreatorPage, Key? key})
+      {Key? key})
       : super(key: key);
 
-   String initialNestedRoute;
+
   var currentRoute = AppRoutes.homeCreatorPage.obs;
 
   @override

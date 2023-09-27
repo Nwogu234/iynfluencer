@@ -90,72 +90,112 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                       textAlign: TextAlign.left,
                                       style: AppStyle.txtSatoshiBold14Gray900)),
                               Align(
-                                  alignment: Alignment.center,
+                                  alignment: Alignment.topLeft,
                                   child: Container(
                                       width: getHorizontalSize(334),
                                       margin: getMargin(
                                           left: 20, top: 9, right: 20),
-                                      child: Text(
-                                          "${selectedJob?.responsibilities}",
-                                          maxLines: null,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle
-                                              .txtSatoshiLight13Gray900ab))),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: selectedJob!.responsibilities!.map((mediaFile) {
+                                          return Padding(
+                                                padding: getPadding( top: 7),
+                                                child: Text(
+                                                    mediaFile, //duration,budget,list of r4
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.left,
+                                                    style: AppStyle
+                                                        .txtSatoshiLight13Gray900ab));
+                                        }).toList(),
+                                      ),
+                                  )),
                               Padding(
                                   padding: getPadding(left: 20, top: 28),
                                   child: Text("lbl_about_job".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: AppStyle.txtSatoshiBold14Gray900)),
-                              //   Padding(
-                              //       padding:
-                              //           getPadding(left: 20, top: 14, right: 53),
-                              //       child: Obx(() => ListView.separated(
-                              //           physics: NeverScrollableScrollPhysics(),
-                              //           shrinkWrap: true,
-                              //           separatorBuilder: (context, index) {
-                              //             return SizedBox(
-                              //                 height: getVerticalSize(15));
-                              //           },
-                              //           itemCount: jobDetailsItemList.length,
-                              //           itemBuilder: (context, index) {
-                              //             Job model = jobDetailsItemList[index];
-                              //             if (controller.isTrendLoading.value) {
-                              //               return TrendinghorizonItemSkeletonWidget(); // Skeleton widget
-                              //             } else {
-                              //               return JobDetailsItemWidget(
-                              //                   jobDetailsItemModelObj: model,
-                              //                   index: index);
-                              //             }
-                              //           }))),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 7),
-                                  child: Text(
-                                      "lbl_total_bids".tr, //duration,budget,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiLight135Gray600)),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 6),
-                                  child: RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                            text: "${selectedJob?.bidsCount}",
-                                            style: TextStyle(
-                                                color: ColorConstant.gray900,
-                                                fontSize: getFontSize(12.5),
-                                                fontFamily: 'Satoshi',
-                                                fontWeight: FontWeight.w700)),
-                                        TextSpan(
-                                            text: "lbl_bidders".tr,
-                                            style: TextStyle(
-                                                color: ColorConstant.gray600,
-                                                fontSize: getFontSize(13.5),
-                                                fontFamily: 'Satoshi',
-                                                fontWeight: FontWeight.w300))
-                                      ]),
-                                      textAlign: TextAlign.left)),
+
+                              Row(children: [
+                                Column(
+                                  children: [
+                                    Padding(
+                                        padding: getPadding(left: 20, top: 7),
+                                        child: Text(
+                                            "lbl_total_bids"
+                                                .tr, //duration,budget,list of r4
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
+                                            style:
+                                            AppStyle.txtSatoshiBold125Gray900a7)),
+                                    Padding(
+                                        padding: getPadding(left: 20, top: 6),
+                                        child: RichText(
+                                            text: TextSpan(children: [
+                                              TextSpan(
+                                                  text: "${selectedJob?.bidsCount??0} ",
+                                                  style: AppStyle.txtSatoshiBold125Gray900a7),
+                                              TextSpan(
+                                                  text: "lbl_bidders".tr,
+                                                  style: AppStyle.txtSatoshiBold125Gray900a7)
+                                            ]),
+                                            textAlign: TextAlign.left)),
+                                  ],
+                                ),
+
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(left: 20, top: 7),
+                                      child: Text(
+                                        "Duration".tr,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: AppStyle.txtSatoshiBold125Gray900a7,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: getPadding(left: 20, top: 7),
+                                      child: Text(
+                                        "${selectedJob?.duration} days",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style:
+                                        AppStyle.txtSatoshiBold125Gray900a7,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: getPadding(left: 20, top: 7),
+                                        child: Text(
+                                          "lbl_budget".tr,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: AppStyle.txtSatoshiBold125Gray900a7,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: getPadding(left: 20, top: 7),
+                                        child: Text(
+                                          '\$${capitalizeFirstLetter(selectedJob?.budgetFrom.toString())} - ${capitalizeFirstLetter(selectedJob?.budgetTo.toString())}',
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style:
+                                          AppStyle.txtSatoshiBold125Gray900a7,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                              ),
+
                               Padding(
                                   padding: getPadding(left: 20, top: 30),
                                   child: Text("lbl_about_client".tr,
@@ -164,7 +204,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                       style: AppStyle.txtSatoshiBold14Gray900)),
                               Padding(
                                   padding:
-                                      getPadding(left: 20, top: 13, right: 53),
+                                  getPadding(left: 20, top: 13, right: 53),
                                   child: Row(children: [
                                     CustomImageView(
                                         imagePath: ImageConstant.imgGroup85229,
@@ -176,14 +216,14 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                         padding: getPadding(left: 16, top: 4),
                                         child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             children: [
                                               Text(
                                                   "${capitalizeFirstLetter(selectedJob?.user?.firstName)} ${capitalizeFirstLetter(selectedJob?.user?.lastName)}",
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
                                                   style: AppStyle
                                                       .txtSatoshiBold13Gray900ab),
@@ -191,45 +231,45 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                                 Text(
                                                     "${selectedJob?.user?.country}",
                                                     overflow:
-                                                        TextOverflow.ellipsis,
+                                                    TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
                                                     style: AppStyle
                                                         .txtSatoshiLight12),
                                                 Card(
                                                     clipBehavior:
-                                                        Clip.antiAlias,
+                                                    Clip.antiAlias,
                                                     elevation: 0,
                                                     margin: getMargin(
                                                         left: 10, bottom: 3),
                                                     color:
-                                                        ColorConstant.gray20001,
+                                                    ColorConstant.gray20001,
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadiusStyle
-                                                                .circleBorder7),
+                                                        BorderRadiusStyle
+                                                            .circleBorder7),
                                                     child: Container(
                                                         height: getSize(14),
                                                         width: getSize(14),
                                                         decoration: AppDecoration
                                                             .fillGray20001
                                                             .copyWith(
-                                                                borderRadius:
-                                                                    BorderRadiusStyle
-                                                                        .circleBorder7),
+                                                            borderRadius:
+                                                            BorderRadiusStyle
+                                                                .circleBorder7),
                                                         child: Stack(children: [
                                                           CustomImageView(
                                                               svgPath:
-                                                                  ImageConstant
-                                                                      .imgContrast,
+                                                              ImageConstant
+                                                                  .imgContrast,
                                                               height:
-                                                                  getVerticalSize(
-                                                                      13),
+                                                              getVerticalSize(
+                                                                  13),
                                                               width:
-                                                                  getHorizontalSize(
-                                                                      14),
+                                                              getHorizontalSize(
+                                                                  14),
                                                               alignment:
-                                                                  Alignment
-                                                                      .center)
+                                                              Alignment
+                                                                  .center)
                                                         ])))
                                               ])
                                             ])),
@@ -242,7 +282,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                         variant: ButtonVariant.FillGray200ab,
                                         padding: ButtonPadding.PaddingAll4,
                                         fontStyle:
-                                            ButtonFontStyle.SatoshiBold13)
+                                        ButtonFontStyle.SatoshiBold13)
                                   ])),
                               Padding(
                                   padding: getPadding(left: 20, top: 19),
@@ -251,13 +291,13 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                         padding: getPadding(top: 1),
                                         child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             children: [
                                               Text("lbl_13_jobs_posted".tr,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
                                                   style: AppStyle
                                                       .txtSatoshiBold125Gray900a7),
@@ -267,50 +307,50 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                                       text: TextSpan(children: [
                                                         TextSpan(
                                                             text:
-                                                                "lbl_3_open_jobs"
-                                                                    .tr,
+                                                            "lbl_3_open_jobs"
+                                                                .tr,
                                                             style: TextStyle(
                                                                 color:
-                                                                    ColorConstant
-                                                                        .gray600,
+                                                                ColorConstant
+                                                                    .gray600,
                                                                 fontSize:
-                                                                    getFontSize(
-                                                                        13.5),
+                                                                getFontSize(
+                                                                    13.5),
                                                                 fontFamily:
-                                                                    'Satoshi',
+                                                                'Satoshi',
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w300)),
+                                                                FontWeight
+                                                                    .w300)),
                                                         TextSpan(
                                                             text: "lbl_view".tr,
                                                             style: TextStyle(
                                                                 color:
-                                                                    ColorConstant
-                                                                        .blue900,
+                                                                ColorConstant
+                                                                    .blue900,
                                                                 fontSize:
-                                                                    getFontSize(
-                                                                        13.5),
+                                                                getFontSize(
+                                                                    13.5),
                                                                 fontFamily:
-                                                                    'Satoshi',
+                                                                'Satoshi',
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w300))
+                                                                FontWeight
+                                                                    .w300))
                                                       ]),
                                                       textAlign:
-                                                          TextAlign.left))
+                                                      TextAlign.left))
                                             ])),
                                     Padding(
                                         padding:
-                                            getPadding(left: 70, bottom: 1),
+                                        getPadding(left: 70, bottom: 1),
                                         child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             children: [
                                               Text("lbl_member_since".tr,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
                                                   style: AppStyle
                                                       .txtSatoshiLight135Gray600),
@@ -318,7 +358,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                                   padding: getPadding(top: 3),
                                                   child: Text("lbl_mar_2022".tr,
                                                       overflow:
-                                                          TextOverflow.ellipsis,
+                                                      TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,
                                                       style: AppStyle
                                                           .txtSatoshiBold125Gray900a7))

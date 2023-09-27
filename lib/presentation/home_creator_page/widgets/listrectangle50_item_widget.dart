@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_tab_container_controller.dart';
+import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/influencer_profile_comm_post_tab_container_screen.dart';
+
 import '../../../data/models/Influencer/influencer_response_model.dart';
 import '../controller/home_creator_controller.dart';
 import '../models/listrectangle50_item_model.dart';
@@ -7,15 +10,27 @@ import 'package:iynfluencer/core/app_export.dart';
 // ignore: must_be_immutable
 class Listrectangle50ItemWidget extends StatelessWidget {
   Listrectangle50ItemWidget(
-    this.listrectangle50, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+      this.listrectangle50, {
+        Key? key,
+      }) : super(
+    key: key,
+  );
 
   Influencer listrectangle50;
 
   var controller = Get.find<HomeCreatorController>();
+
+  onTapprofilecard(Influencer listrectangle50) {
+    final influencerProfileCommPostTabContainerController =
+    Get.put(InfluencerProfileCommPostTabContainerController());
+    influencerProfileCommPostTabContainerController
+        .setSelectedInfluencer(listrectangle50);
+
+    Get.to(
+      InfluencerProfileCommPostTabContainerScreen(
+          listrectangle50: listrectangle50),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +52,9 @@ class Listrectangle50ItemWidget extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTapprofilecard(listrectangle50);
+      },
       child: SizedBox(
         width: double.maxFinite,
         child: Container(

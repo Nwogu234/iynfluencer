@@ -43,6 +43,11 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
       jobsMyBidsInfluencerModelObj.listmediainflueItemList,
     ));
   }
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

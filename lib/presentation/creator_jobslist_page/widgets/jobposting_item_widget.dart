@@ -16,6 +16,7 @@ class JobpostingItemWidget extends StatelessWidget {
 
   var controller = Get.find<CreatorJobslistController>();
 
+
   @override
   Widget build(BuildContext context) {
     String? avatarUrl =
@@ -35,6 +36,8 @@ class JobpostingItemWidget extends StatelessWidget {
       }
       return text[0].toUpperCase() + text.substring(1);
     }
+    DateTime? parsedDate = DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
+    String formattedDate = parsedDate != null ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}" : 'Unknown Date';
 
     return GestureDetector(
       onTap: () {
@@ -52,54 +55,34 @@ class JobpostingItemWidget extends StatelessWidget {
                 right: 26,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomImageView(
-                    url: avatarUrl ?? ImageConstant.imgGroup852,
-                    height: getSize(
-                      45,
-                    ),
-                    width: getSize(
-                      45,
-                    ),
-                    radius: BorderRadius.circular(
-                      getSize(
-                        22.5,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: getPadding(
-                      left: 12,
-                      top: 3,
-                      bottom: 2,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${capitalizeFirstLetter(creatorJobslistModelObj.user?.firstName)} ${capitalizeFirstLetter(creatorJobslistModelObj.user?.lastName)}",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900ab,
-                        ),
-                        Padding(
-                          padding: getPadding(
-                            left: 1,
-                            top: 3,
-                          ),
-                          child: Text(
-                            "${creatorJobslistModelObj.createdAt!.isDateTime}",
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight125,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              Padding(
+              padding: getPadding(
+
+                top: 15
+              ),
+              child: Text(
+                "${creatorJobslistModelObj.title}",
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold125Gray900a7,
+              ),
+            ),
                   Spacer(),
+            Padding(
+              padding: getPadding(
+
+                top: 15,),
+
+              child: Text(
+                "$formattedDate",
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiLight135Gray600,
+              ),
+            ),
+
                   CustomImageView(
                     svgPath: ImageConstant.imgVector,
                     height: getVerticalSize(
@@ -117,18 +100,7 @@ class JobpostingItemWidget extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: getPadding(
-              left: 19,
-              top: 22,
-            ),
-            child: Text(
-              "${creatorJobslistModelObj.title}",
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.left,
-              style: AppStyle.txtSatoshiBold14Gray900ab,
-            ),
-          ),
+
           Container(
             width: getHorizontalSize(
               321,
@@ -142,7 +114,7 @@ class JobpostingItemWidget extends StatelessWidget {
               "${creatorJobslistModelObj.description}",
               maxLines: null,
               textAlign: TextAlign.left,
-              style: AppStyle.txtSatoshiLight14Gray900ab,
+              style: AppStyle.txtSatoshiLight135Gray600,
             ),
           ),
           Padding(
@@ -162,17 +134,17 @@ class JobpostingItemWidget extends StatelessWidget {
                       "lbl_budget".tr,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiLight135Gray600,
+                      style: AppStyle.txtSatoshiBold125Gray900a7,
                     ),
                     Padding(
                       padding: getPadding(
                         top: 3,
                       ),
                       child: Text(
-                        "${capitalizeFirstLetter(creatorJobslistModelObj.budgetFrom.toString())} ${capitalizeFirstLetter(creatorJobslistModelObj.budgetTo.toString())}",
+                        "\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetFrom.toString())}-\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetTo.toString())}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold125Gray900a7,
+                        style: AppStyle.txtSatoshiLight135Gray600,
                       ),
                     ),
                   ],
@@ -185,17 +157,17 @@ class JobpostingItemWidget extends StatelessWidget {
                       "msg_project_duration".tr,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiLight135Gray600,
+                      style: AppStyle.txtSatoshiBold125Gray900a7,
                     ),
                     Padding(
                       padding: getPadding(
                         top: 3,
                       ),
                       child: Text(
-                        "${creatorJobslistModelObj.duration}",
+                        "${creatorJobslistModelObj.duration} days",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold125Gray900a7,
+                        style: AppStyle.txtSatoshiLight135Gray600,
                       ),
                     ),
                   ],
@@ -245,7 +217,7 @@ class JobpostingItemWidget extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "${creatorJobslistModelObj.bidsCount}",
+                          text: "${creatorJobslistModelObj.bidsCount ?? 0}",
                                 style: TextStyle(
                                   color: ColorConstant.gray900E5,
                                   fontSize: getFontSize(
@@ -289,18 +261,7 @@ class JobpostingItemWidget extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "${creatorJobslistModelObj.hired}",
-                                  style: TextStyle(
-                                    color: ColorConstant.gray900E5,
-                                    fontSize: getFontSize(
-                                      13,
-                                    ),
-                                    fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "lbl_hires".tr,
+                                  text: "Hired".tr,
                                   style: TextStyle(
                                     color: ColorConstant.gray600,
                                     fontSize: getFontSize(
@@ -321,33 +282,24 @@ class JobpostingItemWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
+                                TextSpan(
+                                  text: "${creatorJobslistModelObj.hired}",
+                                  style: TextStyle(
+                                    color: ColorConstant.gray900E5,
+                                    fontSize: getFontSize(
+                                      13,
+                                    ),
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+
                               ],
                             ),
                             textAlign: TextAlign.left,
                           ),
                         ),
                         Spacer(),
-                        CustomImageView(
-                          svgPath: ImageConstant.imgFrameGray600,
-                          height: getSize(
-                            18,
-                          ),
-                          width: getSize(
-                            18,
-                          ),
-                        ),
-                        Padding(
-                          padding: getPadding(
-                            left: 6,
-                            bottom: 1,
-                          ),
-                          child: Text(
-                            "lbl_237".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold115Gray600,
-                          ),
-                        ),
                         CustomImageView(
                           svgPath: ImageConstant.imgEyeGray600,
                           height: getSize(

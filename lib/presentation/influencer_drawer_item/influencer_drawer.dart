@@ -210,7 +210,6 @@ class InfluencerDraweritem extends StatelessWidget {
       storage.write(key: "activeProfile", value: "Creator");
       Get.offNamed(
         AppRoutes.homeCreatorContainerScreen,
-
       );
       controller.dispose();
     }

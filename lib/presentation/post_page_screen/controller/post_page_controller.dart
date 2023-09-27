@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/media_file/media_file.dart';
 import 'package:iynfluencer/presentation/post_page_screen/models/post_page_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../widgets/custom_bottom_bar.dart';
+import '../../home_creator_container_screen/controller/home_creator_container_controller.dart';
 
 /// A controller class for the PostPageScreen.
 ///
@@ -13,6 +17,9 @@ import 'package:flutter/material.dart';
 class PostPageController extends GetxController
     with SingleGetTickerProviderMixin {
   PostPageController(this.postPageModelObj);
+  final formKeyMain = GlobalKey<FormState>();
+  var storage = FlutterSecureStorage();
+  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
   TextEditingController inputController = TextEditingController();
 
   TextEditingController frametwelveController = TextEditingController();
@@ -27,6 +34,7 @@ class PostPageController extends GetxController
 
   TextEditingController frametwelvetwoController = TextEditingController();
   late AnimationController animationController;
+  BottomBarController bumcont=Get.put(BottomBarController());
 
   // this is for the job category
 
@@ -129,51 +137,6 @@ class PostPageController extends GetxController
   var token;
   var error = ''.obs;
 
-  Future<void> postJob() async {
-    final apiClient = ApiClient();
-    // Collect user input from the form fields.
-    final String title = inputController.text;
-    final String description = frametwelveoneController.text;
-    final int budgetFrom = int.tryParse(priceController.text) ?? 0;
-    final int budgetTo = int.tryParse(priceoneController.text) ?? 0;
-    final int duration = int.tryParse(durationController.text) ?? 0;
-
-    // Create a new job instance with the collected data.
-    final newJob = Job(
-      title: title,
-      description: description,
-      budgetFrom: budgetFrom,
-      budgetTo: budgetTo,
-      id: 'placeholder_id',
-      creatorId: 'placeholder_creator_id',
-      duration: duration,
-      public: true,
-      hired: false,
-      suspended: false,
-      jobId: 'placeholder_job_id',
-      createdAt: '2023-08-17T00:00:00.000Z',
-      updatedAt: '2023-08-17T00:00:00.000Z',
-      version: 1,
-      // creator: [],
-      bidsCount: 0,
-      responsibilities: resposibilities.toList(),
-      category: [selectedNiche.value.value],
-    );
-
-    try {
-      final response = await apiClient.createJob(newJob, token);
-
-      if (response.isOk) {
-        Get.snackbar('Success', 'Job posted successfully');
-      } else {
-        Get.snackbar('Error', 'Job posting failed');
-      }
-    } catch (e) {
-      print('Error: $e');
-      Get.snackbar('Error', 'An error occurred while posting the job');
-    }
-  }
-
   // for media selection
   var selectedMediaFiles = <MediaFile>[].obs;
   // Add a method to add a selected media file
@@ -210,6 +173,8 @@ class PostPageController extends GetxController
   }
 
   void submitForm(BuildContext context) async {
+    token= await storage.read(key: 'token');
+    print("this is running");
     // Validate the media files
     if (!validateMediaFiles(selectedMediaFiles)) {
       // Media file validation failed
@@ -218,63 +183,32 @@ class PostPageController extends GetxController
           content: Text('Media files are invalid or exceed 25 MB total.'),
         ),
       );
-      return;
+      print("media validated");
     }
-    if (formKey.currentState!.validate()) {
+    if (formKeyMain.currentState!.validate()) {
       final JobRequest jobRequest = JobRequest(
         title: inputController.text,
         description: frametwelveoneController.text,
         budgetFrom: int.tryParse(priceController.text) ?? 0,
         budgetTo: int.tryParse(priceoneController.text) ?? 0,
         duration: int.tryParse(durationController.text) ?? 0,
-        category: selectedNiche.value.value,
-        responsibilities: resposibilities.toList(),
+        category: selectedNiches.value.map((item) => item.title).toList(),
+        responsibilities: resposibilities.value,
       );
-
-      // Adapt the form data to the Job model structure
-      final Job adaptedJob = Job(
-        title: jobRequest.title,
-        description: jobRequest.description,
-        budgetFrom: jobRequest.budgetFrom,
-        budgetTo: jobRequest.budgetTo,
-        duration: jobRequest.duration,
-        category: jobRequest.category,
-        responsibilities: jobRequest.responsibilities,
-        id: 'placeholder_id',
-        creatorId: 'placeholder_creator_id',
-        public: true,
-        hired: false,
-        suspended: false,
-        jobId: 'placeholder_job_id',
-        createdAt: '2023-08-17T00:00:00.000Z',
-        updatedAt: '2023-08-17T00:00:00.000Z',
-        version: 1,
-        // creator: [],
-        bidsCount: 0,
-      );
-
       final apiClient = ApiClient();
-
       // Sending it to a server using an API request
       try {
-        final response = await apiClient.createJob(adaptedJob, token);
+        final response = await apiClient.createJob(jobRequest, token);
 
         if (response.isOk) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Form submitted successfully.'),
-            ),
-          );
-          // Job posting was successful.
-          final Map<String, dynamic> responseData =
-              json.decode(response.toString());
-          final jobPosted = Job.fromJson(responseData);
-          // Navigate to CreatorJobslistPage with the newly created job data
-          Get.offNamed(
-            '/creator-jobslist',
-            arguments: {'adaptedJob': jobPosted},
-          );
-        } else if (response.statusCode == 400) {
+          Get.snackbar('Success', 'Your job has been posted!');
+          homcont.currentRoute.value=AppRoutes.creatorHireslistTabContainerPage;
+          Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
+          bumcont.selectedIndex.value=1;
+        }
+
+
+        else if (response.statusCode == 400) {
           // Handles bad request errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -329,6 +263,8 @@ class PostPageController extends GetxController
   @override
   void onClose() {
     super.onClose();
+    homcont.dispose();
+    bumcont.dispose();
     animationController.dispose();
     inputController.dispose();
     frametwelveController.dispose();
