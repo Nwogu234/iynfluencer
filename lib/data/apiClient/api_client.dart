@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
 import 'package:iynfluencer/presentation/creator_profile_draweritem/models/creator_profile_model.dart';
@@ -325,6 +326,31 @@ class ApiClient extends GetConnect {
         print('Server error: ${response.statusText}');
         return response;
         throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  Future<Response> bidAJob(BidModel bidRequest, var token) async {
+    Response response;
+    try {
+      response =
+          await post('influencers/me/bids', bidRequest.toJson(), headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        // print(response);
+        // print(response.body);
+        // print(response.statusCode);
+        // print(user.toJson());
+        print('Server error: ${response.statusText}');
+        return response;
+        // throw Exception('Server error');
       }
     } catch (e) {
       print(e);

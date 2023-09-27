@@ -25,9 +25,12 @@ class ListmediainflueItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: (() {
-          Get.to(JobDetailsScreen(
-            selectedJob: listmediainflueItemModelObj.job,
-          ));
+          Get.to(
+            JobDetailsScreen(
+              selectedJob: listmediainflueItemModelObj.job,
+              fromBids: true,
+            ),
+          );
         }),
         child: SizedBox(
           width: double.maxFinite,
