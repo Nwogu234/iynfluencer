@@ -12,9 +12,13 @@ import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
 class JobDetailsScreen extends GetWidget<JobDetailsController> {
-  const JobDetailsScreen({this.selectedJob});
+  JobDetailsScreen({
+    this.selectedJob,
+    this.fromBids = false,
+  });
 
   final Job? selectedJob;
+  final bool? fromBids;
 
   @override
   Widget build(BuildContext context) {
@@ -29,357 +33,359 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
     }
 
     return SafeArea(
-        child: Scaffold(
-            backgroundColor: ColorConstant.whiteA700,
-            appBar: CustomAppBar(
-                height: getVerticalSize(48),
-                leadingWidth: 50,
-                leading: AppbarImage(
-                    height: getSize(30),
-                    width: getSize(30),
-                    svgPath: ImageConstant.imgArrowleftGray600,
-                    margin: getMargin(left: 20, top: 9, bottom: 9),
-                    onTap: () {
-                      onTapArrowleft16();
-                    }),
-                centerTitle: true,
-                title: AppbarTitle(text: "lbl_job_details".tr),
-                styleType: Style.bgOutlineIndigo50_1),
-            body: SizedBox(
-                width: size.width,
-                child: SingleChildScrollView(
-                    padding: getPadding(top: 25),
-                    child: Padding(
-                        padding: getPadding(bottom: 5),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                  padding: getPadding(left: 19),
-                                  child: Text("${selectedJob?.title}",
-                                      overflow: TextOverflow.ellipsis,
+      child: Scaffold(
+        backgroundColor: ColorConstant.whiteA700,
+        appBar: CustomAppBar(
+            height: getVerticalSize(48),
+            leadingWidth: 50,
+            leading: AppbarImage(
+                height: getSize(30),
+                width: getSize(30),
+                svgPath: ImageConstant.imgArrowleftGray600,
+                margin: getMargin(left: 20, top: 9, bottom: 9),
+                onTap: () {
+                  onTapArrowleft16();
+                }),
+            centerTitle: true,
+            title: AppbarTitle(text: "lbl_job_details".tr),
+            styleType: Style.bgOutlineIndigo50_1),
+        body: SizedBox(
+            width: size.width,
+            child: SingleChildScrollView(
+                padding: getPadding(top: 25),
+                child: Padding(
+                    padding: getPadding(bottom: 5),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                              padding: getPadding(left: 19),
+                              child: Text("${selectedJob?.title}",
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold18)),
+                          CustomImageView(
+                              imagePath: ImageConstant.imgRectangle5069,
+                              height: getVerticalSize(221),
+                              width: getHorizontalSize(375),
+                              margin: getMargin(top: 22)),
+                          Padding(
+                              padding: getPadding(left: 20, top: 27),
+                              child: Text("lbl_description".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900)),
+                          Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  width: getHorizontalSize(324),
+                                  margin:
+                                      getMargin(left: 20, top: 9, right: 30),
+                                  child: Text("${selectedJob?.description}",
+                                      maxLines: null,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold18)),
-                              CustomImageView(
-                                  imagePath: ImageConstant.imgRectangle5069,
-                                  height: getVerticalSize(221),
-                                  width: getHorizontalSize(375),
-                                  margin: getMargin(top: 22)),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 27),
-                                  child: Text("lbl_description".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold14Gray900)),
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                      width: getHorizontalSize(324),
-                                      margin: getMargin(
-                                          left: 20, top: 9, right: 30),
-                                      child: Text("${selectedJob?.description}",
-                                          maxLines: null,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle
-                                              .txtSatoshiLight13Gray900ab))),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 29),
-                                  child: Text("lbl_responsiblities".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold14Gray900)),
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Container(
-                                      width: getHorizontalSize(334),
-                                      margin: getMargin(
-                                          left: 20, top: 9, right: 20),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: selectedJob!.responsibilities!.map((mediaFile) {
-                                          return Padding(
-                                                padding: getPadding( top: 7),
-                                                child: Text(
-                                                    mediaFile, //duration,budget,list of r4
-                                                    overflow: TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.left,
-                                                    style: AppStyle
-                                                        .txtSatoshiLight13Gray900ab));
-                                        }).toList(),
-                                      ),
-                                  )),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 28),
-                                  child: Text("lbl_about_job".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold14Gray900)),
-
-                              Row(children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                        padding: getPadding(left: 20, top: 7),
+                                      style: AppStyle
+                                          .txtSatoshiLight13Gray900ab))),
+                          Padding(
+                              padding: getPadding(left: 20, top: 29),
+                              child: Text("lbl_responsiblities".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900)),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                width: getHorizontalSize(334),
+                                margin: getMargin(left: 20, top: 9, right: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: selectedJob!.responsibilities!
+                                      .map((mediaFile) {
+                                    return Padding(
+                                        padding: getPadding(top: 7),
                                         child: Text(
-                                            "lbl_total_bids"
-                                                .tr, //duration,budget,list of r4
+                                            mediaFile, //duration,budget,list of r4
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
-                                            style:
-                                            AppStyle.txtSatoshiBold125Gray900a7)),
-                                    Padding(
-                                        padding: getPadding(left: 20, top: 6),
-                                        child: RichText(
-                                            text: TextSpan(children: [
-                                              TextSpan(
-                                                  text: "${selectedJob?.bidsCount??0} ",
-                                                  style: AppStyle.txtSatoshiBold125Gray900a7),
-                                              TextSpan(
-                                                  text: "lbl_bidders".tr,
-                                                  style: AppStyle.txtSatoshiBold125Gray900a7)
-                                            ]),
-                                            textAlign: TextAlign.left)),
-                                  ],
+                                            style: AppStyle
+                                                .txtSatoshiLight13Gray900ab));
+                                  }).toList(),
                                 ),
-
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
+                              )),
+                          Padding(
+                              padding: getPadding(left: 20, top: 28),
+                              child: Text("lbl_about_job".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900)),
+                          Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Padding(
                                       padding: getPadding(left: 20, top: 7),
                                       child: Text(
-                                        "Duration".tr,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: AppStyle.txtSatoshiBold125Gray900a7,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: getPadding(left: 20, top: 7),
-                                      child: Text(
-                                        "${selectedJob?.duration} days",
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style:
-                                        AppStyle.txtSatoshiBold125Gray900a7,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: getPadding(left: 20, top: 7),
-                                        child: Text(
-                                          "lbl_budget".tr,
+                                          "lbl_total_bids"
+                                              .tr, //duration,budget,list of r4
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiBold125Gray900a7,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: getPadding(left: 20, top: 7),
-                                        child: Text(
-                                          '\$${capitalizeFirstLetter(selectedJob?.budgetFrom.toString())} - ${capitalizeFirstLetter(selectedJob?.budgetTo.toString())}',
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style:
-                                          AppStyle.txtSatoshiBold125Gray900a7,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                              ],
+                                          style: AppStyle
+                                              .txtSatoshiBold125Gray900a7)),
+                                  Padding(
+                                      padding: getPadding(left: 20, top: 6),
+                                      child: RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                                text:
+                                                    "${selectedJob?.bidsCount ?? 0} ",
+                                                style: AppStyle
+                                                    .txtSatoshiBold125Gray900a7),
+                                            TextSpan(
+                                                text: "lbl_bidders".tr,
+                                                style: AppStyle
+                                                    .txtSatoshiBold125Gray900a7)
+                                          ]),
+                                          textAlign: TextAlign.left)),
+                                ],
                               ),
-
-                              Padding(
-                                  padding: getPadding(left: 20, top: 30),
-                                  child: Text("lbl_about_client".tr,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: getPadding(left: 20, top: 7),
+                                    child: Text(
+                                      "Duration".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold14Gray900)),
-                              Padding(
-                                  padding:
-                                  getPadding(left: 20, top: 13, right: 53),
-                                  child: Row(children: [
-                                    CustomImageView(
-                                        imagePath: ImageConstant.imgGroup85229,
-                                        height: getSize(40),
-                                        width: getSize(40),
-                                        radius: BorderRadius.circular(
-                                            getSize(20.0))),
-                                    Padding(
-                                        padding: getPadding(left: 16, top: 4),
-                                        child: Column(
-                                            crossAxisAlignment:
+                                      style:
+                                          AppStyle.txtSatoshiBold125Gray900a7,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: getPadding(left: 20, top: 7),
+                                    child: Text(
+                                      "${selectedJob?.duration} days",
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style:
+                                          AppStyle.txtSatoshiBold125Gray900a7,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: getPadding(left: 20, top: 7),
+                                    child: Text(
+                                      "lbl_budget".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style:
+                                          AppStyle.txtSatoshiBold125Gray900a7,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: getPadding(left: 20, top: 7),
+                                    child: Text(
+                                      '\$${capitalizeFirstLetter(selectedJob?.budgetFrom.toString())} - ${capitalizeFirstLetter(selectedJob?.budgetTo.toString())}',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style:
+                                          AppStyle.txtSatoshiBold125Gray900a7,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                              padding: getPadding(left: 20, top: 30),
+                              child: Text("lbl_about_client".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900)),
+                          Padding(
+                              padding: getPadding(left: 20, top: 13, right: 53),
+                              child: Row(children: [
+                                CustomImageView(
+                                    imagePath: ImageConstant.imgGroup85229,
+                                    height: getSize(40),
+                                    width: getSize(40),
+                                    radius:
+                                        BorderRadius.circular(getSize(20.0))),
+                                Padding(
+                                    padding: getPadding(left: 16, top: 4),
+                                    child: Column(
+                                        crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                            mainAxisAlignment:
+                                        mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  "${capitalizeFirstLetter(selectedJob?.user?.firstName)} ${capitalizeFirstLetter(selectedJob?.user?.lastName)}",
-                                                  overflow:
-                                                  TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle
-                                                      .txtSatoshiBold13Gray900ab),
-                                              Row(children: [
-                                                Text(
-                                                    "${selectedJob?.user?.country}",
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.left,
-                                                    style: AppStyle
-                                                        .txtSatoshiLight12),
-                                                Card(
-                                                    clipBehavior:
-                                                    Clip.antiAlias,
-                                                    elevation: 0,
-                                                    margin: getMargin(
-                                                        left: 10, bottom: 3),
-                                                    color:
-                                                    ColorConstant.gray20001,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
+                                        children: [
+                                          Text(
+                                              "${capitalizeFirstLetter(selectedJob?.user?.firstName)} ${capitalizeFirstLetter(selectedJob?.user?.lastName)}",
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiBold13Gray900ab),
+                                          Row(children: [
+                                            Text(
+                                                "${selectedJob?.user?.country}",
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style:
+                                                    AppStyle.txtSatoshiLight12),
+                                            Card(
+                                                clipBehavior: Clip.antiAlias,
+                                                elevation: 0,
+                                                margin: getMargin(
+                                                    left: 10, bottom: 3),
+                                                color: ColorConstant.gray20001,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
                                                         BorderRadiusStyle
                                                             .circleBorder7),
-                                                    child: Container(
-                                                        height: getSize(14),
-                                                        width: getSize(14),
-                                                        decoration: AppDecoration
-                                                            .fillGray20001
-                                                            .copyWith(
+                                                child: Container(
+                                                    height: getSize(14),
+                                                    width: getSize(14),
+                                                    decoration: AppDecoration
+                                                        .fillGray20001
+                                                        .copyWith(
                                                             borderRadius:
-                                                            BorderRadiusStyle
-                                                                .circleBorder7),
-                                                        child: Stack(children: [
-                                                          CustomImageView(
-                                                              svgPath:
-                                                              ImageConstant
-                                                                  .imgContrast,
-                                                              height:
+                                                                BorderRadiusStyle
+                                                                    .circleBorder7),
+                                                    child: Stack(children: [
+                                                      CustomImageView(
+                                                          svgPath: ImageConstant
+                                                              .imgContrast,
+                                                          height:
                                                               getVerticalSize(
                                                                   13),
-                                                              width:
+                                                          width:
                                                               getHorizontalSize(
                                                                   14),
-                                                              alignment:
-                                                              Alignment
-                                                                  .center)
-                                                        ])))
-                                              ])
-                                            ])),
-                                    Spacer(),
-                                    CustomButton(
-                                        height: getVerticalSize(30),
-                                        width: getHorizontalSize(86),
-                                        text: "lbl_message".tr,
-                                        margin: getMargin(top: 5, bottom: 5),
-                                        variant: ButtonVariant.FillGray200ab,
-                                        padding: ButtonPadding.PaddingAll4,
-                                        fontStyle:
-                                        ButtonFontStyle.SatoshiBold13)
-                                  ])),
-                              Padding(
-                                  padding: getPadding(left: 20, top: 19),
-                                  child: Row(children: [
-                                    Padding(
-                                        padding: getPadding(top: 1),
-                                        child: Column(
-                                            crossAxisAlignment:
+                                                          alignment:
+                                                              Alignment.center)
+                                                    ])))
+                                          ])
+                                        ])),
+                                Spacer(),
+                                CustomButton(
+                                    height: getVerticalSize(30),
+                                    width: getHorizontalSize(86),
+                                    text: "lbl_message".tr,
+                                    margin: getMargin(top: 5, bottom: 5),
+                                    variant: ButtonVariant.FillGray200ab,
+                                    padding: ButtonPadding.PaddingAll4,
+                                    fontStyle: ButtonFontStyle.SatoshiBold13)
+                              ])),
+                          Padding(
+                              padding: getPadding(left: 20, top: 19),
+                              child: Row(children: [
+                                Padding(
+                                    padding: getPadding(top: 1),
+                                    child: Column(
+                                        crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                            mainAxisAlignment:
+                                        mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                            children: [
-                                              Text("lbl_13_jobs_posted".tr,
-                                                  overflow:
-                                                  TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle
-                                                      .txtSatoshiBold125Gray900a7),
-                                              Padding(
-                                                  padding: getPadding(top: 3),
-                                                  child: RichText(
-                                                      text: TextSpan(children: [
-                                                        TextSpan(
-                                                            text:
-                                                            "lbl_3_open_jobs"
-                                                                .tr,
-                                                            style: TextStyle(
-                                                                color:
-                                                                ColorConstant
-                                                                    .gray600,
-                                                                fontSize:
+                                        children: [
+                                          Text("lbl_13_jobs_posted".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiBold125Gray900a7),
+                                          Padding(
+                                              padding: getPadding(top: 3),
+                                              child: RichText(
+                                                  text: TextSpan(children: [
+                                                    TextSpan(
+                                                        text: "lbl_3_open_jobs"
+                                                            .tr,
+                                                        style: TextStyle(
+                                                            color: ColorConstant
+                                                                .gray600,
+                                                            fontSize:
                                                                 getFontSize(
                                                                     13.5),
-                                                                fontFamily:
+                                                            fontFamily:
                                                                 'Satoshi',
-                                                                fontWeight:
+                                                            fontWeight:
                                                                 FontWeight
                                                                     .w300)),
-                                                        TextSpan(
-                                                            text: "lbl_view".tr,
-                                                            style: TextStyle(
-                                                                color:
-                                                                ColorConstant
-                                                                    .blue900,
-                                                                fontSize:
+                                                    TextSpan(
+                                                        text: "lbl_view".tr,
+                                                        style: TextStyle(
+                                                            color: ColorConstant
+                                                                .blue900,
+                                                            fontSize:
                                                                 getFontSize(
                                                                     13.5),
-                                                                fontFamily:
+                                                            fontFamily:
                                                                 'Satoshi',
-                                                                fontWeight:
+                                                            fontWeight:
                                                                 FontWeight
                                                                     .w300))
-                                                      ]),
-                                                      textAlign:
-                                                      TextAlign.left))
-                                            ])),
-                                    Padding(
-                                        padding:
-                                        getPadding(left: 70, bottom: 1),
-                                        child: Column(
-                                            crossAxisAlignment:
+                                                  ]),
+                                                  textAlign: TextAlign.left))
+                                        ])),
+                                Padding(
+                                    padding: getPadding(left: 70, bottom: 1),
+                                    child: Column(
+                                        crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                            mainAxisAlignment:
+                                        mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                            children: [
-                                              Text("lbl_member_since".tr,
+                                        children: [
+                                          Text("lbl_member_since".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiLight135Gray600),
+                                          Padding(
+                                              padding: getPadding(top: 3),
+                                              child: Text("lbl_mar_2022".tr,
                                                   overflow:
-                                                  TextOverflow.ellipsis,
+                                                      TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
                                                   style: AppStyle
-                                                      .txtSatoshiLight135Gray600),
-                                              Padding(
-                                                  padding: getPadding(top: 3),
-                                                  child: Text("lbl_mar_2022".tr,
-                                                      overflow:
-                                                      TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.left,
-                                                      style: AppStyle
-                                                          .txtSatoshiBold125Gray900a7))
-                                            ]))
-                                  ]))
-                            ])))),
-            bottomNavigationBar: Container(
-                margin: getMargin(left: 20, right: 20, bottom: 20),
-                decoration: AppDecoration.outlineIndigo507,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomButton(
-                          height: getVerticalSize(44),
-                          text: "lbl_bid".tr,
-                          padding: ButtonPadding.PaddingAll12,
-                          onTap: () {
-                            onTapBid();
-                          })
-                    ]))));
+                                                      .txtSatoshiBold125Gray900a7))
+                                        ]))
+                              ]))
+                        ])))),
+        bottomNavigationBar: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              fromBids != null && fromBids == true
+                  ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "lbl_edit_bid".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        // onTapBid();
+                      },
+                    )
+                  : CustomButton(
+                      height: getVerticalSize(44),
+                      text: "lbl_bid".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        onTapBid();
+                      },
+                    ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Navigates to the bidScreen when the action is triggered.
@@ -387,9 +393,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
   onTapBid() {
-    Get.toNamed(
-      AppRoutes.bidScreen,
-    );
+    Get.toNamed(AppRoutes.bidScreen, arguments: selectedJob);
   }
 
   /// Navigates to the previous screen.

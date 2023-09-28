@@ -1,3 +1,21 @@
-/// This class defines the variables used in the [bid_screen],
-/// and is typically used to hold data that is passed between different parts of the application.
-class BidModel { }
+class BidModel {
+  String? jobId;
+  String? coverLetter;
+  int? price;
+
+  BidModel({this.jobId, this.coverLetter, this.price});
+
+  BidModel.fromJson(Map<String, dynamic> json) {
+    jobId = json['jobId'];
+    coverLetter = json['coverLetter'];
+    price = json['price'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['jobId'] = this.jobId;
+    data['coverLetter'] = this.coverLetter;
+    data['price'] = this.price;
+    return data;
+  }
+}

@@ -1,3 +1,5 @@
+import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
+
 import '../controller/bid_controller.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +10,6 @@ import 'package:get/get.dart';
 class BidBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => BidController());
+    Get.lazyPut(() => BidController(BidModel().obs));
   }
 }

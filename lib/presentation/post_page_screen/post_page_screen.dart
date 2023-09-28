@@ -206,7 +206,6 @@ class PostPageScreen extends GetWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -218,11 +217,11 @@ class PostPageScreen extends GetWidget {
           ),
           leadingWidth: 44,
           leading: AppbarImage(
-              onTap: (){
-                print("AppbarImage onTap triggered");
-                Navigator.of(context).popUntil((route) => route.isFirst);
-                controller.bumcont.selectedIndex.value=0;
-              },
+            onTap: () {
+              print("AppbarImage onTap triggered");
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              controller.bumcont.selectedIndex.value = 0;
+            },
             height: getSize(
               24,
             ),
@@ -349,14 +348,16 @@ class PostPageScreen extends GetWidget {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: controller.selectedMediaFiles.map((mediaFile) {
+                            children:
+                                controller.selectedMediaFiles.map((mediaFile) {
                               return ListTile(
                                 title: Text(mediaFile.name),
                                 subtitle: Text(mediaFile.type),
                                 trailing: IconButton(
                                   icon: Icon(Icons.remove_circle),
                                   onPressed: () {
-                                    controller.removeSelectedMediaFile(mediaFile);
+                                    controller
+                                        .removeSelectedMediaFile(mediaFile);
                                   },
                                 ),
                                 onTap: () {
@@ -366,7 +367,8 @@ class PostPageScreen extends GetWidget {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text('Media Preview'),
-                                        content: MediaFileWidget(mediaFile: mediaFile),
+                                        content: MediaFileWidget(
+                                            mediaFile: mediaFile),
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () {
@@ -439,10 +441,11 @@ class PostPageScreen extends GetWidget {
                               },
                             ),
                           ),
-                          Obx(() => Wrap(
-                                spacing: 8.0.w,
-                                children:
-                                    controller.selectedNiches.value.map((niche) {
+                          Obx(
+                            () => Wrap(
+                              spacing: 8.0.w,
+                              children: controller.selectedNiches.value.map(
+                                (niche) {
                                   return Chip(
                                     label: Text('${niche.title}'),
                                     deleteIcon: Icon(
@@ -451,8 +454,10 @@ class PostPageScreen extends GetWidget {
                                     onDeleted: () =>
                                         controller.handleNicheDelete(niche),
                                   );
-                                }).toList(),
-                              )),
+                                },
+                              ).toList(),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -485,7 +490,8 @@ class PostPageScreen extends GetWidget {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           "lbl_from".tr,
@@ -500,7 +506,8 @@ class PostPageScreen extends GetWidget {
                                           ),
                                           focusNode: FocusNode(),
                                           autofocus: true,
-                                          controller: controller.priceController,
+                                          controller:
+                                              controller.priceController,
                                           hintText: "lbl_50".tr,
                                           margin: getMargin(
                                             top: 7,
@@ -518,7 +525,8 @@ class PostPageScreen extends GetWidget {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                           "lbl_to".tr,
