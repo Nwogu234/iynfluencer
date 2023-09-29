@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/apiClient/api_client.dart';
 import '../../../data/general_controllers/user_controller.dart';
+import '../../../data/models/Influencer/influencer_response_model.dart';
 
 /// A controller class for the InfluencerHomeScreen.
 ///
@@ -26,6 +27,7 @@ class InfluencerHomeController extends GetxController {
   var error = ''.obs;
   Rx<bool> isJobsLoading = false.obs;
   List<Job> jobsList = <Job>[].obs;
+  List<Job> infJobsList = <Job>[].obs;
 
   late AnimationController animationController;
 
@@ -50,7 +52,7 @@ class InfluencerHomeController extends GetxController {
       } else {
         error('');
         isLoading.value = false;
-        getJobs();
+        getJobs(user);
       }
     } catch (e) {
       print(e);
@@ -60,17 +62,20 @@ class InfluencerHomeController extends GetxController {
   }
 
   //this is to get the list of jobs
-  getJobs() async {
+  getJobs(UserController user) async {
     Response response;
     try {
       error('');
       isJobsLoading.value = true;
-      response = await apiClient.getAllJobs(1, 25, token);
+      response = await apiClient.getInfluencerAllJobs(user.userModelObj.value.influencerId!, token);
       print(response.body);
       if (response.isOk) {
         final responseJson = response.body;
         final jobResponse = JobResponse.fromJson(responseJson);
         jobsList = jobResponse.data.docs;
+        infJobsList = jobsList
+            .where((item) => item.creatorId!=user.userModelObj.value.creatorId)
+            .toList();
         print(jobsList); // List of Influencers
         error('');
         isJobsLoading.value = false;

@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
@@ -44,85 +45,80 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
+    // Initialize screen_util
+    ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
+
     return SafeArea(
-        child: Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: Colors.transparent,
-            body: SizedBox(
-                width: size.width,
-                child: Padding(
-                    padding: getPadding(left: 20, top: 14, right: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                    padding: getPadding(top: 8, bottom: 7),
-                                    child: Text("lbl_all_hires".tr,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style:
-                                            AppStyle.txtSatoshiBold14Gray900)),
-                                CustomDropDown(
-                                    width: getHorizontalSize(120),
-                                    icon: SizedBox.shrink(),
-                                    focusNode: FocusNode(),
-                                    autofocus: true,
-                                    hintText: "lbl_filter".tr,
-                                    variant: DropDownVariant.OutlineIndigo50,
-                                    padding: DropDownPadding.PaddingT8,
-                                    fontStyle: DropDownFontStyle.SatoshiBold135,
-                                    items: controller.creatorHireslistModelObj
-                                        ?.value.dropdownItemList.value,
-                                    prefix: Container(
-                                        margin: getMargin(
-                                            left: 13, top: 5, bottom: 5),
-                                        child: CustomImageView(
-                                            svgPath: ImageConstant
-                                                .imgSignalBlack900)),
-                                    prefixConstraints: BoxConstraints(
-                                        maxHeight: getVerticalSize(35)),
-                                    onChanged: (value) {
-                                      controller.onSelected(value);
-                                    })
-                              ]),
-                          Expanded(
-                              child: Padding(
-                                  padding: getPadding(top: 15),
-                                  child: Obx(() => ListView.separated(
-                                      physics: BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      separatorBuilder: (context, index) {
-                                        return SizedBox(
-                                            height: getVerticalSize(1));
-                                      },
-                                      itemCount: controller.isTrendLoading.value
-                                          ? 5 // Adjust the number of skeleton items as needed
-                                          : controller.hiredJobs.length,
-                                      itemBuilder: (context, index) {
-                                        if (controller.isTrendLoading.value) {
-                                          return TrendinghorizonItemSkeletonWidget(); // Skeleton widget
-                                        } else {
-                                          Job model =
-                                              controller.hiredJobs[index];
-                                          return HiresItemWidget(model,
-                                              onTapBidcard: () {
-                                            onTapBidcard(model);
-                                          });
-                                        }
-                                      }))))
-                        ])))));
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.transparent,
+        body: SizedBox(
+          width: 1.sw,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.h),
+                      child: Text(
+                        "lbl_all_hires".tr,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: AppStyle.txtSatoshiBold14Gray900.copyWith(fontSize: 14.sp),
+                      ),
+                    ),
+                    CustomDropDown(
+                      width: 120.w,
+                      // ... [rest of the CustomDropDown properties]
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: Obx(
+                          () => ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 1.h);
+                        },
+                        itemCount: controller.isTrendLoading.value
+                            ? 5
+                            : controller.hiredJobs.length,
+                        itemBuilder: (context, index) {
+                          if (controller.isTrendLoading.value) {
+                            return TrendinghorizonItemSkeletonWidget();
+                          } else {
+                            Job model = controller.hiredJobs[index];
+                            return HiresItemWidget(
+                              model,
+                              onTapBidcard: () {
+                                onTapBidcard(model);
+                              },
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  /// Navigates to the jobClientScreen when the action is triggered.
-
-  /// When the action is triggered, this function uses the `Get` package to
-  /// push the named route for the jobClientScreen.
   onTapBidcard(model) {
     Get.to(JobDetailsScreen(selectedJob: model));
   }

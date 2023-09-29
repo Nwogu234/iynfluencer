@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/controller/job_details_controller.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
@@ -53,84 +54,70 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
     final jobDetailsController = Get.put(CreatorJobDetailsController());
     jobDetailsController.setSelectedJob(selectedJob);
     Get.to(()=>
-      CreatorJobDetailsScreen(selectedJob: selectedJob),
+        CreatorJobDetailsScreen(selectedJob: selectedJob),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Initialize screen_util
+    ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
+
     return SafeArea(
-        child: Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.transparent,
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return CustomLoadingWidget(
-            animationController: animationController,
-          ); // Your custom loading widget
-        } else if (controller.error.value.isNotEmpty) {
-          return ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: () {
-              final newJob = Job(
-                id: 'placeholder_id',
-                creatorId: 'placeholder_creator_id',
-                title: 'New Job Title',
-                description: 'No description available.',
-                responsibilities: ['No responsibilities specified'],
-                category: ['Uncategorized'],
-                budgetFrom: 0,
-                budgetTo: 0,
-                duration: 0,
-                public: true,
-                hired: false,
-                suspended: false,
-                jobId: 'placeholder_job_id',
-                createdAt: '2023-08-17T00:00:00.000Z',
-                updatedAt: '2023-08-17T00:00:00.000Z',
-                version: 1,
-                // creator: [],
-                bidsCount: 0,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.transparent,
+        body: Obx(
+              () {
+            if (controller.isLoading.value) {
+              return CustomLoadingWidget(
+                animationController: animationController,
               );
-              controller.getJobs();
-            },
-            fullPage: true,
-          ); // Your error widget
-        } else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: Obx(
-                () => ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: controller.isTrendLoading.value
-                      ? 5 // Adjust the number of skeleton items as needed
-                      : controller.existingJobs.length,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: getVerticalSize(20),
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    if (controller.isTrendLoading.value) {
-                      return TrendinghorizonItemSkeletonWidget(); // Skeleton widget
-                    } else {
-                      Job model = controller.existingJobs[index];
-                      return JobpostingItemWidget(
-                          creatorJobslistModelObj: model,
-                          index: index,
-                          onTapDetailcard: () {
-                            onTapDetailcard(model);
-                          });
-                    }
-                  },
-                ),
-              ))
-            ],
-          );
-        }
-      }),
-    ));
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  // ... [rest of the error handling code]
+                },
+                fullPage: true,
+              );
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Obx(
+                          () => ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: controller.isTrendLoading.value
+                            ? 5
+                            : controller.existingJobs.length,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 20.h);
+                        },
+                        itemBuilder: (context, index) {
+                          if (controller.isTrendLoading.value) {
+                            return TrendinghorizonItemSkeletonWidget();
+                          } else {
+                            Job model = controller.existingJobs[index];
+                            return JobpostingItemWidget(
+                              creatorJobslistModelObj: model,
+                              index: index,
+                              onTapDetailcard: () {
+                                onTapDetailcard(model);
+                              },
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 }

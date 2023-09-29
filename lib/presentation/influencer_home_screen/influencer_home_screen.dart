@@ -110,12 +110,12 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                               },
                               itemCount: controller.isJobsLoading.value
                                   ? 5
-                                  : controller.jobsList.length,
+                                  : controller.infJobsList.length,
                               itemBuilder: (context, index) {
                                 if (controller.isJobsLoading.value) {
                                   return InfluencerHomeItemSkeletonWidget();
                                 } else {
-                                  Job model = controller.jobsList[index];
+                                  Job model = controller.infJobsList[index];
                                   return InfluencerHomeItemWidget(model,
                                       onTapJobpost: () {
                                     onTapJobpost(model);

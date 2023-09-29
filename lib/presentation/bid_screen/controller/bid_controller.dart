@@ -73,6 +73,7 @@ class BidController extends GetxController with SingleGetTickerProviderMixin {
           );
         }
       } catch (e) {
+        print(e);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('An error occurred while submitting the form.'),
