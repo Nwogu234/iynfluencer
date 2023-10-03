@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+
 import '../controller/job_details_controller.dart';
 import '../models/job_details_item_model.dart';
 import 'package:flutter/material.dart';
@@ -5,19 +7,25 @@ import 'package:iynfluencer/core/app_export.dart';
 
 // ignore: must_be_immutable
 class JobDetailsItemWidget extends StatelessWidget {
-  JobDetailsItemWidget(
-    this.jobDetailsItemModelObj, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+  JobDetailsItemWidget({
+    required this.jobDetailsItemModelObj,
+    required this.index,
+  });
 
-  JobDetailsItemModel jobDetailsItemModelObj;
+  final Job jobDetailsItemModelObj;
+  final int index;
 
   var controller = Get.find<JobDetailsController>();
 
   @override
   Widget build(BuildContext context) {
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
     return Row(
       children: [
         Column(
@@ -26,7 +34,7 @@ class JobDetailsItemWidget extends StatelessWidget {
           children: [
             Obx(
               () => Text(
-                jobDetailsItemModelObj.budgetTxt.value,
+                "lbl_budget".tr,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiLight135Gray600,
@@ -38,7 +46,7 @@ class JobDetailsItemWidget extends StatelessWidget {
               ),
               child: Obx(
                 () => Text(
-                  jobDetailsItemModelObj.priceTxt.value,
+                  "${capitalizeFirstLetter(jobDetailsItemModelObj.budgetFrom.toString())} ${capitalizeFirstLetter(jobDetailsItemModelObj.budgetTo.toString())}",
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -57,7 +65,7 @@ class JobDetailsItemWidget extends StatelessWidget {
             children: [
               Obx(
                 () => Text(
-                  jobDetailsItemModelObj.projectdurationTxt.value,
+                  "Project duration", // add project duration when created
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtSatoshiLight135Gray600,
@@ -69,7 +77,7 @@ class JobDetailsItemWidget extends StatelessWidget {
                 ),
                 child: Obx(
                   () => Text(
-                    jobDetailsItemModelObj.weekscounterTxt.value,
+                    "10 Weeks", // add project duration when created
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiBold125Gray900a7,

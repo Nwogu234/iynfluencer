@@ -28,9 +28,11 @@ class HomeCreatorPage extends StatefulWidget {
   _HomeCreatorPageState createState() => _HomeCreatorPageState();
 }
 
-class _HomeCreatorPageState extends State<HomeCreatorPage> with SingleTickerProviderStateMixin {
+class _HomeCreatorPageState extends State<HomeCreatorPage>
+    with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  HomeCreatorController controller = Get.put(HomeCreatorController(HomeCreatorModel().obs));
+  HomeCreatorController controller =
+  Get.put(HomeCreatorController(HomeCreatorModel().obs));
   late AnimationController animationController;
 
   @override
@@ -50,122 +52,135 @@ class _HomeCreatorPageState extends State<HomeCreatorPage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: ColorConstant.whiteA700,
-            drawer: CreatorProfileDraweritem(CreatorProfileController()),
-            appBar: CustomAppBar(
-                height: 63.h,
-                leadingWidth: 55.w,
-                leading: AppbarCircleimage(
-                    imagePath: ImageConstant.imgGroup899,
-                    margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
-                    onTap: () {
-                      openDrawer();
-                    }),
-                title: AppbarSearchview(
-                    margin: EdgeInsets.only(left: 14.w),
-                    hintText: "msg_search_influncers".tr,
-                    controller: controller.searchController),
-                styleType: Style.bgOutlineIndigo50),
-            body: Obx(
-                  () {
-                if (controller.isLoading.value) {
-                  return CustomLoadingWidget(animationController: animationController,); // Your custom loading widget
-                } else if (controller.error.value.isNotEmpty) {
-                  return ResponsiveErrorWidget(
-                    errorMessage: controller.error.value,
-                    onRetry: controller.getUser, // Remove the parentheses
-                    fullPage: true,
-                  ); // Your error widget
-                } else {
-                  return Container(
-                      width: 1.sw,
-                      padding: EdgeInsets.only(top: 24.h, bottom: 24.h),
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                  padding: EdgeInsets.only(left: 20.w, right: 23.w),
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.only(top: 1.h),
-                                            child: Text("lbl_trending".tr,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.left,
-                                                style: AppStyle.txtSatoshiBold16)),
-                                        CustomImageView(
-                                            svgPath: ImageConstant.imgForward,
-                                            height: 20.h,
-                                            width: 20.w,
-                                            margin: EdgeInsets.only(bottom: 3.h))
-                                      ])),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: SizedBox(
-                                  height: 133.h,
-                                  child: Obx(() => ListView.separated(
-                                    padding: EdgeInsets.only(left: 20.w, top: 21.h),
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(height: 16.h);
-                                    },
-                                    itemCount: controller.isTrendLoading.value
-                                        ? 5 // Adjust the number of skeleton items as needed
-                                        : controller.trendingInfluencers.length,
-                                    itemBuilder: (context, index) {
-                                      if (controller.isTrendLoading.value) {
-                                        return TrendinghorizonItemSkeletonWidget(); // Skeleton widget
-                                      } else {
-                                        Influencer model = controller.trendingInfluencers[index];
-                                        return TrendinghorizonItemWidget(model);
-                                      }
-                                    },
-                                  )),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 20.w, top: 23.h),
-                                  child: Text("msg_recommended_influencers".tr,
-                                      overflow: TextOverflow.ellipsis, textAlign: TextAlign.left, style: AppStyle.txtSatoshiBold16),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 20.w, top: 5.h, right: 20.w),
-                                child: Obx(() => ListView.separated(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  separatorBuilder: (context, index) {
-                                    return SizedBox(height: 24.h);
-                                  },
-                                  itemCount: controller.isRecommendedLoading.value
-                                      ? 5 // Adjust the number of skeleton items as needed
-                                      : controller.recommendedInfluencers.length,
-                                  itemBuilder: (context, index) {
-                                    if (controller.isRecommendedLoading.value) {
-                                      return Listrectangle50ItemSkeletonWidget(); // Skeleton widget
-                                    } else {
-                                      Influencer model = controller.recommendedInfluencers[index];
-                                      return Listrectangle50ItemWidget(model);
-                                    }
-                                  },
-                                )),
-                              )
-                            ]),
-                      )); // Your content widget
-                }
-              },
-            ),
+    // Initialize screen_util
+    ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
-            ));
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: ColorConstant.whiteA700,
+        drawer: CreatorProfileDraweritem(controller),
+        appBar: CustomAppBar(
+          height: 63.h,
+          leadingWidth: 55.w,
+          leading: AppbarCircleimage(
+            imagePath: ImageConstant.imgGroup899,
+            margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
+            onTap: openDrawer,
+          ),
+          title: AppbarSearchview(
+            margin: EdgeInsets.only(left: 14.w),
+            hintText: "msg_search_influncers".tr,
+            controller: controller.searchController,
+          ),
+          styleType: Style.bgOutlineIndigo50,
+        ),
+        body: Obx(
+              () {
+            if (controller.isLoading.value) {
+              return CustomLoadingWidget(
+                animationController: animationController,
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: controller.getUser,
+                fullPage: true,
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "lbl_trending".tr,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                            ),
+                            CustomImageView(
+                              svgPath: ImageConstant.imgForward,
+                              height: 20.h,
+                              width: 20.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 21.h),
+                      Container(
+                        height: 133.h,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.only(left: 20.w),
+                          itemCount: controller.isTrendLoading.value
+                              ? 5
+                              : controller.trendingInfluencers.length,
+                          itemBuilder: (context, index) {
+                            if (controller.isTrendLoading.value) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 16.w),
+                                child: TrendinghorizonItemSkeletonWidget(),
+                              );
+                            } else {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 16.w),
+                                child: TrendinghorizonItemWidget(controller.trendingInfluencers[index]),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.w, top: 23.h),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "msg_recommended_influencers".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          children: [
+                            for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value
+                                    ? 5
+                                    : controller.recommendedInfluencers.length);
+                            index++)
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 24.h),
+                                child: controller.isRecommendedLoading.value
+                                    ? Listrectangle50ItemSkeletonWidget()
+                                    : Listrectangle50ItemWidget(
+                                    controller.recommendedInfluencers[index]),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   openDrawer() {

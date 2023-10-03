@@ -12,12 +12,9 @@ class JobsJobsInfluencerTabContainerController extends GetxController
       this.jobsJobsInfluencerTabContainerModelObj);
 
   Rx<JobsJobsInfluencerTabContainerModel>
-  jobsJobsInfluencerTabContainerModelObj =
+      jobsJobsInfluencerTabContainerModelObj =
       JobsJobsInfluencerTabContainerModel().obs;
 
   late TabController tabsviewController =
-  Get.put(TabController(vsync: this, length: 3));
-
-
+      Get.put(TabController(vsync: this, length: 3));
 }
-

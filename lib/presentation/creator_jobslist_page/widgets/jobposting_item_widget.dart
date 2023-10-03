@@ -1,289 +1,188 @@
-import '../controller/creator_jobslist_controller.dart';
-import '../models/jobposting_item_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import '../controller/creator_jobslist_controller.dart';
 
-// ignore: must_be_immutable
 class JobpostingItemWidget extends StatelessWidget {
-  JobpostingItemWidget(
-    this.jobpostingItemModelObj, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+  final Job creatorJobslistModelObj;
+  final int index;
+  VoidCallback? onTapDetailcard;
 
-  JobpostingItemModel jobpostingItemModelObj;
+  JobpostingItemWidget({
+    required this.creatorJobslistModelObj,
+    required this.index,
+    this.onTapDetailcard,
+  });
 
   var controller = Get.find<CreatorJobslistController>();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: getPadding(
-              left: 19,
-              right: 26,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomImageView(
-                  imagePath: ImageConstant.imgGroup852,
-                  height: getSize(
-                    45,
-                  ),
-                  width: getSize(
-                    45,
-                  ),
-                  radius: BorderRadius.circular(
-                    getSize(
-                      22.5,
+    ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
+
+    String? avatarUrl = creatorJobslistModelObj.user?.avatar;
+    ImageProvider imageProvider;
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = NetworkImage(avatarUrl);
+    } else {
+      imageProvider = NetworkImage('https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
+    }
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    DateTime? parsedDate = DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
+    String formattedDate = parsedDate != null
+        ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}"
+        : 'Unknown Date';
+
+    return GestureDetector(
+      onTap: () {
+        onTapDetailcard?.call();
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.only(left: 19.w, right: 26.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: Text(
+                      "${creatorJobslistModelObj.title}",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold125Gray900a7,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: getPadding(
-                    left: 12,
-                    top: 3,
-                    bottom: 2,
+                  Spacer(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: Text(
+                      "$formattedDate",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiLight135Gray600,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "lbl_micheal_scott".tr,
+                  CustomImageView(
+                    svgPath: ImageConstant.imgVector,
+                    height: 1.h,
+                    width: 13.w,
+                    margin: EdgeInsets.only(top: 22.h, bottom: 21.h),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: 321.w,
+            margin: EdgeInsets.only(left: 20.w, top: 8.h, right: 33.w),
+            child: Text(
+              "${creatorJobslistModelObj.description}",
+              maxLines: null,
+              textAlign: TextAlign.left,
+              style: AppStyle.txtSatoshiLight135Gray600,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 19.w, top: 14.h, right: 88.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "lbl_budget".tr,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold125Gray900a7,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 3.h),
+                      child: Text(
+                        "\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetFrom.toString())}-\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetTo.toString())}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold14Gray900ab,
+                        style: AppStyle.txtSatoshiLight135Gray600,
                       ),
-                      Padding(
-                        padding: getPadding(
-                          left: 1,
-                          top: 3,
-                        ),
-                        child: Text(
-                          "lbl_mar_16_2023".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight125,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Spacer(),
-                CustomImageView(
-                  svgPath: ImageConstant.imgVector,
-                  height: getVerticalSize(
-                    1,
-                  ),
-                  width: getHorizontalSize(
-                    13,
-                  ),
-                  margin: getMargin(
-                    top: 22,
-                    bottom: 21,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "msg_project_duration".tr,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold125Gray900a7,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 3.h),
+                      child: Text(
+                        "${creatorJobslistModelObj.duration} days",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: AppStyle.txtSatoshiLight135Gray600,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-        ),
-        Padding(
-          padding: getPadding(
-            left: 19,
-            top: 22,
-          ),
-          child: Text(
-            "msg_music_video_influencer".tr,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            style: AppStyle.txtSatoshiBold14Gray900ab,
-          ),
-        ),
-        Container(
-          width: getHorizontalSize(
-            321,
-          ),
-          margin: getMargin(
-            left: 20,
-            top: 8,
-            right: 33,
-          ),
-          child: Text(
-            "msg_looking_for_a_game".tr,
-            maxLines: null,
-            textAlign: TextAlign.left,
-            style: AppStyle.txtSatoshiLight14Gray900ab,
-          ),
-        ),
-        Padding(
-          padding: getPadding(
-            left: 19,
-            top: 14,
-            right: 88,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          SizedBox(
+            width: double.maxFinite,
+            child: Container(
+              margin: EdgeInsets.only(top: 18.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              decoration: AppDecoration.outlineIndigo501,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "lbl_budget".tr,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiLight135Gray600,
+                  CustomImageView(
+                    imagePath: ImageConstant.imgRectangle5066,
+                    height: 181.h,
+                    width: 335.w,
+                    radius: BorderRadius.circular(7.r),
                   ),
                   Padding(
-                    padding: getPadding(
-                      top: 3,
-                    ),
-                    child: Text(
-                      "lbl_200_500".tr,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold125Gray900a7,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "msg_project_duration".tr,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiLight135Gray600,
-                  ),
-                  Padding(
-                    padding: getPadding(
-                      top: 3,
-                    ),
-                    child: Text(
-                      "lbl_10_weeks".tr,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold125Gray900a7,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: double.maxFinite,
-          child: Container(
-            margin: getMargin(
-              top: 18,
-            ),
-            padding: getPadding(
-              left: 20,
-              right: 20,
-            ),
-            decoration: AppDecoration.outlineIndigo501,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CustomImageView(
-                  imagePath: ImageConstant.imgRectangle5066,
-                  height: getVerticalSize(
-                    181,
-                  ),
-                  width: getHorizontalSize(
-                    335,
-                  ),
-                  radius: BorderRadius.circular(
-                    getHorizontalSize(
-                      7,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: getPadding(
-                    left: 2,
-                    top: 14,
-                    right: 5,
-                    bottom: 14,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "lbl_14".tr,
-                              style: TextStyle(
-                                color: ColorConstant.gray900E5,
-                                fontSize: getFontSize(
-                                  13,
-                                ),
-                                fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "lbl_bids".tr,
-                              style: TextStyle(
-                                color: ColorConstant.gray600,
-                                fontSize: getFontSize(
-                                  13,
-                                ),
-                                fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                            TextSpan(
-                              text: " ",
-                              style: TextStyle(
-                                color: ColorConstant.cyan300,
-                                fontSize: getFontSize(
-                                  11.5,
-                                ),
-                                fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      Padding(
-                        padding: getPadding(
-                          left: 13,
-                        ),
-                        child: RichText(
+                    padding: EdgeInsets.only(left: 2.w, top: 14.h, right: 5.w, bottom: 14.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "lbl_0".tr,
+                                text: "${creatorJobslistModelObj.bidsCount ?? 0}",
                                 style: TextStyle(
                                   color: ColorConstant.gray900E5,
-                                  fontSize: getFontSize(
-                                    13,
-                                  ),
+                                  fontSize: 13.sp,
                                   fontFamily: 'Satoshi',
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                               TextSpan(
-                                text: "lbl_hires".tr,
+                                text: "lbl_bids".tr,
                                 style: TextStyle(
                                   color: ColorConstant.gray600,
-                                  fontSize: getFontSize(
-                                    13,
-                                  ),
+                                  fontSize: 13.sp,
                                   fontFamily: 'Satoshi',
                                   fontWeight: FontWeight.w300,
                                 ),
@@ -292,9 +191,7 @@ class JobpostingItemWidget extends StatelessWidget {
                                 text: " ",
                                 style: TextStyle(
                                   color: ColorConstant.cyan300,
-                                  fontSize: getFontSize(
-                                    11.5,
-                                  ),
+                                  fontSize: 11.5.sp,
                                   fontFamily: 'Satoshi',
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -303,61 +200,68 @@ class JobpostingItemWidget extends StatelessWidget {
                           ),
                           textAlign: TextAlign.left,
                         ),
-                      ),
-                      Spacer(),
-                      CustomImageView(
-                        svgPath: ImageConstant.imgFrameGray600,
-                        height: getSize(
-                          18,
+                        Padding(
+                          padding: EdgeInsets.only(left: 13.w),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Hired".tr,
+                                  style: TextStyle(
+                                    color: ColorConstant.gray600,
+                                    fontSize: 13.sp,
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: " ",
+                                  style: TextStyle(
+                                    color: ColorConstant.cyan300,
+                                    fontSize: 11.5.sp,
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "${creatorJobslistModelObj.hired}",
+                                  style: TextStyle(
+                                    color: ColorConstant.gray900E5,
+                                    fontSize: 13.sp,
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                        width: getSize(
-                          18,
+                        Spacer(),
+                        CustomImageView(
+                          svgPath: ImageConstant.imgEyeGray600,
+                          height: 18.h,
+                          width: 18.w,
+                          margin: EdgeInsets.only(left: 13.w),
                         ),
-                      ),
-                      Padding(
-                        padding: getPadding(
-                          left: 6,
-                          bottom: 1,
+                        Padding(
+                          padding: EdgeInsets.only(left: 6.w, bottom: 1.h),
+                          child: Text(
+                            "lbl_865".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold115Gray600,
+                          ),
                         ),
-                        child: Text(
-                          "lbl_237".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold115Gray600,
-                        ),
-                      ),
-                      CustomImageView(
-                        svgPath: ImageConstant.imgEyeGray600,
-                        height: getSize(
-                          18,
-                        ),
-                        width: getSize(
-                          18,
-                        ),
-                        margin: getMargin(
-                          left: 13,
-                        ),
-                      ),
-                      Padding(
-                        padding: getPadding(
-                          left: 6,
-                          bottom: 1,
-                        ),
-                        child: Text(
-                          "lbl_865".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold115Gray600,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

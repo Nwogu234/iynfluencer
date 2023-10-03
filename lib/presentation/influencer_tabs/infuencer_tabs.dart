@@ -8,8 +8,6 @@ import 'contoller/influencers_tabs_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-
-
 class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
   const InfluencerTabsScreen({Key? key}) : super(key: key);
 
@@ -25,12 +23,9 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
                     page: () => getCurrentPage(routeSetting.name!),
                     transition: Transition.native)),
             bottomNavigationBar:
-            InfluencerBottomBar(onChanged: (BottomBarEnum type) {
+                InfluencerBottomBar(onChanged: (BottomBarEnum type) {
               Get.toNamed(getCurrentRoute(type), id: 3);
-            }
-            )
-        )
-    );
+            })));
   }
 }
 

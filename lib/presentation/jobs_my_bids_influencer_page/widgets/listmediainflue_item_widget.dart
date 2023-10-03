@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../controller/jobs_my_bids_influencer_controller.dart';
 import '../models/listmediainflue_item_model.dart';
 import 'package:flutter/material.dart';
@@ -13,221 +16,236 @@ class ListmediainflueItemWidget extends StatelessWidget {
           key: key,
         );
 
-  ListmediainflueItemModel listmediainflueItemModelObj;
+  JobsMyBidsInfluencerModel listmediainflueItemModelObj;
 
-  var controller = Get.find<JobsMyBidsInfluencerController>();
+  // JobsMyBidsInfluencerController controller =
+  //     Get.put<JobsMyBidsInfluencerController>();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Container(
-        decoration: AppDecoration.outlineIndigo501,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: getPadding(
-                right: 9,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(
-                    () => Text(
-                      listmediainflueItemModelObj.mediainfluencerTxt.value,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold16,
-                    ),
-                  ),
-                  CustomImageView(
-                    svgPath: ImageConstant.imgVector,
-                    height: getVerticalSize(
-                      1,
-                    ),
-                    width: getHorizontalSize(
-                      13,
-                    ),
-                    margin: getMargin(
-                      top: 11,
-                      bottom: 9,
-                    ),
-                  ),
-                ],
-              ),
+    return GestureDetector(
+        onTap: (() {
+          Get.to(
+            JobDetailsScreen(
+              selectedJob: listmediainflueItemModelObj.job,
+              fromBids: true,
             ),
-            SizedBox(
-              width: double.maxFinite,
-              child: Container(
-                margin: getMargin(
-                  top: 17,
-                ),
-                padding: getPadding(
-                  left: 12,
-                  top: 7,
-                  right: 12,
-                  bottom: 7,
-                ),
-                decoration: AppDecoration.outlineIndigo508.copyWith(
-                  borderRadius: BorderRadiusStyle.circleBorder7,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: getPadding(
-                        top: 2,
-                      ),
-                      child: Row(
-                        children: [
-                          CustomImageView(
-                            imagePath: ImageConstant.imgGroup85233,
-                            height: getSize(
-                              30,
-                            ),
-                            width: getSize(
-                              30,
-                            ),
-                            radius: BorderRadius.circular(
-                              getSize(
-                                15.0,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: getPadding(
-                              left: 12,
-                              top: 5,
-                              bottom: 5,
-                            ),
-                            child: Obx(
-                              () => Text(
-                                listmediainflueItemModelObj.victorucheTxt.value,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold14Gray900ab,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: getPadding(
-                              left: 13,
-                              top: 9,
-                              bottom: 3,
-                            ),
-                            child: Text(
-                              "lbl_1_week_ago".tr,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight125,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: getHorizontalSize(
-                        310,
-                      ),
-                      margin: getMargin(
-                        top: 11,
-                      ),
-                      child: Text(
-                        "msg_looking_for_a_game3".tr,
-                        maxLines: null,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight14Gray900ab,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: getPadding(
-                left: 4,
-                top: 15,
-                right: 78,
-                bottom: 19,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+          );
+        }),
+        child: SizedBox(
+          width: double.maxFinite,
+          child: Container(
+            decoration: AppDecoration.outlineIndigo501,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: getPadding(
+                    right: 9,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "lbl_status".tr,
+                        listmediainflueItemModelObj.job!.title!,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600,
+                        style: AppStyle.txtSatoshiBold16,
                       ),
-                      CustomButton(
+                      CustomImageView(
+                        svgPath: ImageConstant.imgVector,
                         height: getVerticalSize(
-                          25,
+                          1,
                         ),
                         width: getHorizontalSize(
-                          94,
+                          13,
                         ),
-                        text: "lbl_accepted".tr,
                         margin: getMargin(
-                          top: 5,
-                        ),
-                        variant: ButtonVariant.FillGreenA10099,
-                        shape: ButtonShape.RoundedBorder12,
-                        padding: ButtonPadding.PaddingT4,
-                        fontStyle: ButtonFontStyle.SatoshiBold115Green700,
-                        prefixWidget: Container(
-                          margin: getMargin(
-                            right: 4,
-                          ),
-                          child: CustomImageView(
-                            svgPath: ImageConstant.imgSearchGreen700,
-                          ),
+                          top: 11,
+                          bottom: 9,
                         ),
                       ),
                     ],
                   ),
-                  Padding(
+                ),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: Container(
+                    margin: getMargin(
+                      top: 17,
+                    ),
                     padding: getPadding(
-                      top: 2,
-                      bottom: 3,
+                      left: 12,
+                      top: 7,
+                      right: 12,
+                      bottom: 7,
+                    ),
+                    decoration: AppDecoration.outlineIndigo508.copyWith(
+                      borderRadius: BorderRadiusStyle.circleBorder7,
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "lbl_your_bid_price".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight135Gray600,
-                        ),
                         Padding(
                           padding: getPadding(
-                            top: 7,
+                            top: 2,
+                          ),
+                          child: Row(
+                            children: [
+                              CustomImageView(
+                                imagePath: ImageConstant.imgGroup85233,
+                                height: getSize(
+                                  30,
+                                ),
+                                width: getSize(
+                                  30,
+                                ),
+                                radius: BorderRadius.circular(
+                                  getSize(
+                                    15.0,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: getPadding(
+                                  left: 12,
+                                  top: 5,
+                                  bottom: 5,
+                                ),
+                                child: Text(
+                                  'Another Name',
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900ab,
+                                ),
+                              ),
+                              Padding(
+                                padding: getPadding(
+                                  left: 13,
+                                  top: 9,
+                                  bottom: 3,
+                                ),
+                                child: Text(
+                                  timeago.format(DateTime.parse(
+                                      listmediainflueItemModelObj
+                                          .job!.createdAt!)),
+                                  // "lbl_1_week_ago".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiLight125,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: getHorizontalSize(
+                            310,
+                          ),
+                          margin: getMargin(
+                            top: 11,
                           ),
                           child: Text(
-                            "lbl_500".tr,
-                            overflow: TextOverflow.ellipsis,
+                            listmediainflueItemModelObj.job!.description!,
+                            // "msg_looking_for_a_game3".tr,
+                            maxLines: null,
                             textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold125Gray900a7,
+                            style: AppStyle.txtSatoshiLight14Gray900ab,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: getPadding(
+                    left: 4,
+                    top: 15,
+                    right: 78,
+                    bottom: 19,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "lbl_status".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiLight135Gray600,
+                          ),
+                          CustomButton(
+                            height: getVerticalSize(
+                              25,
+                            ),
+                            width: getHorizontalSize(
+                              94,
+                            ),
+                            text: listmediainflueItemModelObj.status!,
+                            // text: "lbl_accepted".tr,
+                            margin: getMargin(
+                              top: 5,
+                            ),
+                            variant:
+                                listmediainflueItemModelObj.status! == 'pending'
+                                    ? ButtonVariant.FillGreenA10099
+                                    : ButtonVariant.FillRed10099,
+                            shape: ButtonShape.RoundedBorder12,
+                            padding: ButtonPadding.PaddingT4,
+                            fontStyle: ButtonFontStyle.SatoshiBold115Green700,
+                            prefixWidget: Container(
+                              margin: getMargin(
+                                right: 4,
+                              ),
+                              child: CustomImageView(
+                                svgPath: ImageConstant.imgSearchGreen700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: getPadding(
+                          top: 2,
+                          bottom: 3,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "lbl_your_bid_price".tr,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiLight135Gray600,
+                            ),
+                            Padding(
+                              padding: getPadding(
+                                top: 7,
+                              ),
+                              child: Text(
+                                // "lbl_500".tr,
+                                '\$${listmediainflueItemModelObj.price!.toString()}',
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.txtSatoshiBold125Gray900a7,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

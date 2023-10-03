@@ -1,6 +1,8 @@
-import 'package:get/get.dart';/// This class is used in the [listclient_item_widget] screen.
-class ListclientItemModel {Rx<String> mediainfluencerTxt = Rx("Media Influencer");
+import 'package:get/get.dart';
 
-Rx<String>? id = Rx("");
+/// This class is used in the [listclient_item_widget] screen.
+class ListclientItemModel {
+  Rx<String> mediainfluencerTxt = Rx("Media Influencer");
 
- }
+  Rx<String>? id = Rx("");
+}

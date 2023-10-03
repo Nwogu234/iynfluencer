@@ -79,6 +79,7 @@ final Map<String, String> enUs = {
   "lbl_message": "Message",
   "lbl_bid_details": "Bid Details",
   "lbl_bid": "Bid",
+  "lbl_edit_bid": "Edit Bid",
   "lbl_fumilayo_jane": "Fumilayo Jane",
   "lbl_13_jobs_posted": "13 jobs posted",
   "lbl_500": "\$500",
@@ -385,6 +386,7 @@ final Map<String, String> enUs = {
   "msg_saved_influencers": "Saved Influencers",
   "msg_input_all_milestones":
       "Input all milestones and responsibilities of the influencer",
+  "msg_input_all_terms": "Input all your Terms and Conditions",
   "lbl_sign_out": "Sign out",
   "lbl_2_30_pm": "2:30 pm",
   "lbl_add_comment": "Add comment...",

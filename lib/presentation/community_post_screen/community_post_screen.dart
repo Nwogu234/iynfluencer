@@ -38,6 +38,9 @@ class CommunityPostScreen extends GetWidget<CommunityPostController> {
               top: 17,
               bottom: 16,
             ),
+            onTap: (){
+              Get.back();
+            },
           ),
           actions: [
             AppbarButton(
@@ -47,6 +50,9 @@ class CommunityPostScreen extends GetWidget<CommunityPostController> {
                 right: 21,
                 bottom: 12,
               ),
+              onTap: (){
+                Get.back();
+              },
             ),
           ],
           styleType: Style.bgShadowGray9000c,

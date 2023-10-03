@@ -1,12 +1,14 @@
-import 'package:get/get.dart';/// This class is used in the [job_details_item_widget] screen.
-class JobDetailsItemModel {Rx<String> budgetTxt = Rx("Budget");
+import 'package:get/get.dart';
 
-Rx<String> priceTxt = Rx("200 - 500");
+/// This class is used in the [job_details_item_widget] screen.
+class JobDetailsItemModel {
+  Rx<String> budgetTxt = Rx("Budget");
 
-Rx<String> projectdurationTxt = Rx("Project duration");
+  // Rx<String> priceTxt = Rx("200 - 500");
 
-Rx<String> weekscounterTxt = Rx("10 Weeks");
+  Rx<String> projectdurationTxt = Rx("Project duration");
 
-Rx<String>? id = Rx("");
+  Rx<String> weekscounterTxt = Rx("10 Weeks");
 
- }
+  Rx<String>? id = Rx("");
+}

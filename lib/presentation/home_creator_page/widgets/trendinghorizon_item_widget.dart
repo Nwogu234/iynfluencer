@@ -7,23 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// ignore: must_be_immutable
 class TrendinghorizonItemWidget extends StatelessWidget {
-  TrendinghorizonItemWidget(
-    this.trendinghorizonItem, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+  final Influencer trendinghorizonItem;
+  final controller = Get.find<HomeCreatorController>();
 
-  Influencer trendinghorizonItem;
-
-  var controller = Get.find<HomeCreatorController>();
+  TrendinghorizonItemWidget(this.trendinghorizonItem, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String? avatarUrl =
-        trendinghorizonItem.user?.first.avatar; // Assuming this is a String
+    String? avatarUrl = trendinghorizonItem.user?.first.avatar;
     ImageProvider imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -51,7 +43,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                 url: avatarUrl ?? ImageConstant.imgRectangle5055,
                 height: 90.h,
                 width: 90.w,
-                radius: BorderRadius.circular(45.r), // Half of the height and width
+                radius: BorderRadius.circular(45.r),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 5.h),
@@ -76,15 +68,9 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.local_fire_department_rounded,
-                              size: 14,
+                              size: 14.sp,
                               color: Colors.deepOrange,
                             ),
-                            // CustomImageView(
-                            //   svgPath: ImageConstant.imgClose,
-                            //   height: 12.h,
-                            //   width: 14.w,
-                            //   alignment: Alignment.center,
-                            // ),
                           ],
                         ),
                       ),
@@ -95,7 +81,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                         "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold125,
+                        style: AppStyle.txtSatoshiBold125.copyWith(fontSize: 16.sp),
                       ),
                     ),
                   ],

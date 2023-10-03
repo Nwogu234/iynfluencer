@@ -61,7 +61,6 @@ import 'package:iynfluencer/presentation/creator_profile_reveiws_tab_container_s
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/presentation/job_details_screen/binding/job_details_binding.dart';
 
-
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/jobs_jobs_influencer_tab_container_screen.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/binding/jobs_jobs_influencer_tab_container_binding.dart';
 
@@ -127,6 +126,8 @@ import 'package:get/get.dart';
 
 import '../presentation/choose_profile/choose_profile.dart';
 import '../presentation/choose_profile/choose_profile_bindings/choose_profile_binding.dart';
+import '../presentation/creator_job_details/binding/creator_job_details_binding.dart';
+import '../presentation/creator_job_details/creator_job_details_screen.dart';
 import '../presentation/email_code/email_code.dart';
 import '../presentation/email_code/email_code_bindings/email_code_bindings.dart';
 import '../presentation/influencer_tabs/binding/influencer_binding.dart';
@@ -254,6 +255,8 @@ class AppRoutes {
 
   static const String jobDetailsScreen = '/job_details_screen';
 
+  static const String creatorJobDetailsScreen = '/creator_job_details_screen';
+
   static const String jobsMyBidsInfluencerPage =
       '/jobs_my_bids_influencer_page';
 
@@ -356,6 +359,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: homeCreatorContainerScreen,
+      page: () => HomeCreatorContainerScreen(),
+      bindings: [
+        HomeCreatorContainerBinding(),
+      ],
+    ),
+    GetPage(
       name: splashScreen,
       page: () => SplashScreen(),
       bindings: [
@@ -385,7 +395,7 @@ class AppRoutes {
     ),
     GetPage(
       name: emailCodeScreen,
-      page: () => EmailCodeScreen(email: '',code:''),
+      page: () => EmailCodeScreen(email: '', code: ''),
       bindings: [
         EmailCodeBinding(),
       ],
@@ -576,6 +586,13 @@ class AppRoutes {
       page: () => JobDetailsScreen(),
       bindings: [
         JobDetailsBinding(),
+      ],
+    ),
+    GetPage(
+      name: creatorJobDetailsScreen,
+      page: () => CreatorJobDetailsScreen(),
+      bindings: [
+        CreatorJobDetailsBinding(),
       ],
     ),
     // GetPage(
@@ -802,6 +819,11 @@ class AppRoutes {
         AppNavigationBinding(),
       ],
     ),
+
+    /// GetPage(name: initialRoute, page: () => SplashScreen(), bindings: [
+    // SplashBinding(),
+    // ]),
+
     GetPage(
       name: initialRoute,
       page: () => SplashScreen(),
@@ -809,12 +831,5 @@ class AppRoutes {
         SplashBinding(),
       ],
     )
-
-    // GetPage(
-    //   name: initialRoute,
-    //   page: () => AppNavigationScreen(),
-    //   bindings: [
-    //         AppNavigationBinding(),
-    //   ],)
   ];
 }

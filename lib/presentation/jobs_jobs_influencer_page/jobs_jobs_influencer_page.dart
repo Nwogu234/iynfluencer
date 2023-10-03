@@ -1,3 +1,8 @@
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/widgets/custom_loading.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
+import 'package:iynfluencer/widgets/skeletons.dart';
+
 import '../jobs_jobs_influencer_page/widgets/listclient_item_widget.dart';
 import 'controller/jobs_jobs_influencer_controller.dart';
 import 'models/jobs_jobs_influencer_model.dart';
@@ -12,8 +17,10 @@ class JobsJobsInfluencerPage extends StatelessWidget {
           key: key,
         );
 
-  JobsJobsInfluencerController controller =
-      Get.put(JobsJobsInfluencerController(JobsJobsInfluencerModel().obs));
+  JobsJobsInfluencerController controller = Get.put(
+      JobsJobsInfluencerController(
+          JobsJobsInfluencerModel().listclientItemList));
+  late AnimationController animationController;
 
   @override
   Widget build(BuildContext context) {
@@ -76,34 +83,73 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                     padding: getPadding(
                       top: 18,
                     ),
-                    child: Obx(
-                      () => ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (
-                          context,
-                          index,
-                        ) {
-                          return SizedBox(
-                            height: getVerticalSize(
-                              23,
-                            ),
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        // return CustomLoadingWidget(
+                        //   animationController: animationController,
+                        // ); // Your custom loading widget
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: false,
+                          separatorBuilder: (
+                            context,
+                            index,
+                          ) {
+                            return SizedBox(
+                              height: getVerticalSize(
+                                10,
+                              ),
+                            );
+                          },
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                          },
+                        );
+                      } else {
+                        if (controller.error.value.isNotEmpty) {
+                          return ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ); // Your error widget
+                        } else if (controller
+                                .jobsJobsInfluencerModelObj.value.isEmpty &&
+                            !controller.isTrendLoading.value) {
+                          return ResponsiveEmptyWidget(
+                            errorMessage: 'No Influencers Job Available',
+                            onRetry: () {},
+                            fullPage: true,
+                          ); //
+                        } else {
+                          return ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            separatorBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return SizedBox(
+                                height: getVerticalSize(
+                                  23,
+                                ),
+                              );
+                            },
+                            itemCount: controller
+                                .jobsJobsInfluencerModelObj.value.length,
+                            itemBuilder: (context, index) {
+                              Job model = controller
+                                  .jobsJobsInfluencerModelObj.value[index];
+                              return ListclientItemWidget(
+                                model,
+                              );
+                            },
                           );
-                        },
-                        itemCount: controller.jobsJobsInfluencerModelObj
-                            .value.listclientItemList.value.length,
-                        itemBuilder: (context, index) {
-                          ListclientItemModel model = controller
-                              .jobsJobsInfluencerModelObj
-                              .value
-                              .listclientItemList
-                              .value[index];
-                          return ListclientItemWidget(
-                            model,
-                          );
-                        },
-                      ),
-                    ),
+                        }
+                      }
+                    }),
                   ),
                 ),
               ],

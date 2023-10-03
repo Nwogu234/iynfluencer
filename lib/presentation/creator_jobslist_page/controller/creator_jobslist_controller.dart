@@ -1,9 +1,99 @@
-import 'package:iynfluencer/core/app_export.dart';import 'package:iynfluencer/presentation/creator_jobslist_page/models/creator_jobslist_model.dart';/// A controller class for the CreatorJobslistPage.
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:flutter/material.dart';
+
+import '../../../data/apiClient/api_client.dart';
+
+/// A controller class for the HomeCreatorPage.
 ///
-/// This class manages the state of the CreatorJobslistPage, including the
-/// current creatorJobslistModelObj
-class CreatorJobslistController extends GetxController {CreatorJobslistController(this.creatorJobslistModelObj);
+/// This class manages the state of the HomeCreatorPage, including the
+/// current homeCreatorModelObj
+class CreatorJobslistController extends GetxController {
+  CreatorJobslistController(this.creatorJobslistModelObj);
+  final UserController user = Get.find();
 
-Rx<CreatorJobslistModel> creatorJobslistModelObj;
+  Rx<bool> isLoading = false.obs;
+  Rx<bool> isTrendLoading = false.obs;
+  Rx<bool> isRecommendedLoading = false.obs;
+  final storage = new FlutterSecureStorage();
+  var token;
+  final apiClient = ApiClient();
+  var error = ''.obs;
+  List<Job> existingJobs = []; // Existing jobs
+  RxList<Job> newJobs = <Job>[].obs; // new jobs
+  TextEditingController searchController = TextEditingController();
 
- }
+  RxList<Job> creatorJobslistModelObj;
+
+//this is for animation
+  late AnimationController animationController;
+
+  void initializeAnimationController(TickerProvider vsync) {
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: vsync,
+    )..repeat();
+  }
+
+//*animation stops here
+  getUser() async {
+    isLoading.value = true;
+    error('');
+    token = await storage.read(key: "token");
+    try {
+      await user.getUser();
+      if (user.userModelObj.value.firstName.isEmpty) {
+        error('Something went wrong');
+        isLoading.value = false;
+      } else {
+        error('');
+        isLoading.value = false;
+        getJobs();
+        // getNewJob(newJob); Why are you creating a new job
+      }
+    } catch (e) {
+      print(e);
+      error('Something went wrong');
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getJobs() async {
+    try {
+      error('');
+      isTrendLoading.value = true;
+      Response response = await apiClient.getCreatorJobs(token);
+
+      if (response.isOk) {
+        final responseJson = response.body;
+        final jobResponse = JobResponse.fromJson(responseJson);
+        existingJobs= jobResponse.data.docs;
+        error('');
+        isTrendLoading.value = false;
+      } else {
+        error('Something went wrong');
+        isTrendLoading..value = false;
+      }
+    } catch (e) {
+      print(e);
+      error('Something went wrong');
+      isTrendLoading.value = false;
+    }
+  }
+
+
+  @override
+  void onInit() {
+    print('OnInit called');
+    getUser();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    searchController.dispose();
+  }
+}

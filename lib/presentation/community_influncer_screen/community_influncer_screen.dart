@@ -84,6 +84,9 @@ class CommunityInfluncerScreen extends GetWidget<CommunityInfluncerController> {
                             right: 32,
                             bottom: 19,
                           ),
+                          onTap: (){
+                            Get.back();
+                          },
                         ),
                       ],
                     ),

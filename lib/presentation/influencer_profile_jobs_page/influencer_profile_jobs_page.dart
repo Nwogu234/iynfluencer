@@ -1,13 +1,14 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+
 import 'controller/influencer_profile_jobs_controller.dart';
 import 'models/influencer_profile_jobs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 class InfluencerProfileJobsPage extends StatelessWidget {
-  InfluencerProfileJobsPage({Key? key})
-      : super(
-          key: key,
-        );
+  InfluencerProfileJobsPage({this.selectedInfluencer});
+
+  final Influencer? selectedInfluencer;
 
   InfluencerProfileJobsController controller = Get.put(
       InfluencerProfileJobsController(InfluencerProfileJobsModel().obs));
@@ -72,7 +73,7 @@ class InfluencerProfileJobsPage extends StatelessWidget {
                                 bottom: 2,
                               ),
                               child: Text(
-                                "lbl_jufy_promotion".tr,
+                                "${selectedInfluencer?.jobs?.first.title}",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold14Gray900a7,
@@ -173,7 +174,7 @@ class InfluencerProfileJobsPage extends StatelessWidget {
                                 bottom: 2,
                               ),
                               child: Text(
-                                "lbl_jufy_promotion".tr,
+                                "${selectedInfluencer?.jobs?.first.title}",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold14Gray900a7,
@@ -274,7 +275,7 @@ class InfluencerProfileJobsPage extends StatelessWidget {
                                 bottom: 2,
                               ),
                               child: Text(
-                                "lbl_jufy_promotion".tr,
+                                "${selectedInfluencer?.jobs?.first.title}",
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold14Gray900a7,

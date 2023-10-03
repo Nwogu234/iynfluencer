@@ -1,9 +1,8 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../widgets/custo_dropdown.dart';
-import 'controller/complete_profile_influencer_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/core/utils/validation_functions.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
@@ -12,13 +11,16 @@ import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 
+import '../../widgets/custo_dropdown.dart';
+import 'controller/complete_profile_influencer_controller.dart';
+
 // ignore_for_file: must_be_immutable
 
 class CompleteProfileInfluencerScreen
     extends GetWidget<CompleteProfileInfluencerController> {
-  CompleteProfileInfluencerScreen({Key? key}) : super(key: key);
-
   final _formKey = GlobalKey<FormState>();
+
+  CompleteProfileInfluencerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +255,42 @@ class CompleteProfileInfluencerScreen
     );
   }
 
-// Rest of the methods...
+void onTapArrowleft1() {
+    Get.back();
+  }
+
+  void onTapSaveand()async {
+
+    if (controller.socialMediaAccounts.value.isEmpty) {
+      controller.errorText.value = "Please select at least one platform";
+      // Return early if validation fails
+    }
+    if (_formKey.currentState!.validate()) {
+      await controller.completeProfile();
+    }
+  }
+
+  Widget _buildAccountChips() {
+    var accountsCopy = controller.socialMediaAccounts.toList();
+
+    return FadeTransition(
+      opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: controller.animationController, curve: Curves.easeOut),
+      ),
+      child: Wrap(
+        spacing: 8.0.w,
+        children: accountsCopy.map((account) {
+          return Chip(
+            label: Text('${account.platformName.title} - ${account.followersCount} followers'),
+            deleteIcon: Icon(Icons.close),
+            onDeleted: () => controller.handleDelete(account, account.platformName),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // Rest of the methods...
   Widget _buildAccountForm() {
     var platformNameController = TextEditingController();
     var followersCountController = TextEditingController();
@@ -338,7 +375,6 @@ class CompleteProfileInfluencerScreen
                       text: 'Cancel',
                       onTap: () {
                         controller.isAddingAccount.value = false;
-                        controller.animationController.reverse();
                       },
                     ),
                   ),
@@ -367,42 +403,6 @@ class CompleteProfileInfluencerScreen
         ),
       ),
     );
-  }
-
-  Widget _buildAccountChips() {
-    var accountsCopy = controller.socialMediaAccounts.toList();
-
-    return FadeTransition(
-      opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller.animationController, curve: Curves.easeOut),
-      ),
-      child: Wrap(
-        spacing: 8.0.w,
-        children: accountsCopy.map((account) {
-          return Chip(
-            label: Text('${account.platformName.title} - ${account.followersCount} followers'),
-            deleteIcon: Icon(Icons.close),
-            onDeleted: () => controller.handleDelete(account, account.platformName),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  void onTapSaveand()async {
-
-    if (controller.socialMediaAccounts.value.isEmpty) {
-      controller.errorText.value = "Please select at least one platform";
-      // Return early if validation fails
-    }
-    if (_formKey.currentState!.validate()) {
-      await controller.completeProfile();
-      Get.toNamed(AppRoutes.influencerTabScreen);
-    }
-  }
-
-  void onTapArrowleft1() {
-    Get.back();
   }
 }
 
