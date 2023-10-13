@@ -83,12 +83,12 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                               5,
                             ),
                             children: selectedInfluencer?.niche?.map((item) {
-                              return Chipviewframe89ItemWidget(
-                                Chipviewframe89ItemModel(
-                                  chipviewframe89ModelObj: item,
-                                ),
-                              );
-                            })?.toList() ??
+                                  return Chipviewframe89ItemWidget(
+                                    Chipviewframe89ItemModel(
+                                      chipviewframe89ModelObj: item,
+                                    ),
+                                  );
+                                })?.toList() ??
                                 [],
                           ),
                         ),
@@ -127,7 +127,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                               ),
                               Padding(
                                 padding: getPadding(
-                                  left: 6,
+                                  left: 2,
                                   top: 2,
                                 ),
                                 child: Text(
@@ -185,7 +185,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: getPadding(
-                                    left: 10,
+                                    left: 4,
                                     top: 1,
                                   ),
                                   child: Text(

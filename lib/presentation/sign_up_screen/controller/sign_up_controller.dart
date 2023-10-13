@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/country/country_model.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/presentation/email_code/email_code.dart';
 import 'package:iynfluencer/presentation/sign_up_screen/models/sign_up_model.dart';
@@ -21,7 +22,7 @@ class SignUpController extends GetxController {
     lastName: '',
     email: '',
     password: '',
-    country:'',
+    country: '',
     termsAndConditions: false,
   ).obs;
 
@@ -33,7 +34,10 @@ class SignUpController extends GetxController {
     passwordController.dispose();
     super.onClose();
   }
+
   var storage = FlutterSecureStorage();
+
+  Rx<Country?> selectedCountry = Rx<Country?>(null);
 
   Future<void> signUp() async {
     signUpModelObj.update((val) {
@@ -41,7 +45,7 @@ class SignUpController extends GetxController {
       val?.lastName = lastnameController.text;
       val?.email = emailController.text;
       val?.password = passwordController.text;
-      val?.country=countryController.text;
+      val?.country = countryController.text;
       val?.termsAndConditions = isCheckbox.value;
     });
 
@@ -79,5 +83,75 @@ class SignUpController extends GetxController {
       Get.back();
       Get.snackbar('Error', 'Something went wrong during sign up.');
     }
+  }
+
+  List<Country> countries = [
+    Country('AF', 'Afghanistan'),
+    Country('DZ', 'Algeria'),
+    Country('AO', 'Angola'),
+    Country('AR', 'Argentina'),
+    Country('AU', 'Australia'),
+    Country('AT', 'Austria'),
+    Country('BE', 'Belgium'),
+    Country('CM', 'Cameroon'),
+    Country('CA', 'Canada'),
+    Country('CL', 'Chile'),
+    Country('CN', 'China'),
+    Country('CO', 'Colombia'),
+    Country('HR', 'Croatia'),
+    Country('DK', 'Denmark'),
+    Country('EG', 'Egypt'),
+    Country('FR', 'France'),
+    Country('DE', 'Germany'),
+    Country('GH', 'Ghana'),
+    Country('GR', 'Greece'),
+    Country('IN', 'India'),
+    Country('ID', 'Indonesia'),
+    Country('IT', 'Italy'),
+    Country('CL', 'Ivory Coast'),
+    Country('JM', 'Jamaica'),
+    Country('JP', 'Japan'),
+    Country('KE', 'Kenya'),
+    Country('MX', 'Mexico'),
+    Country('MA', 'Morocco'),
+    Country('NL', 'Netherlands'),
+    Country('NZ', 'New Zealand'),
+    Country('NG', 'Nigeria'),
+    Country('KP', 'North Korea'),
+    Country('NO', 'Norway'),
+    Country('PY', 'Paraguay'),
+    Country('PH', 'Philippines'),
+    Country('PL', 'Poland'),
+    Country('PT', 'Portugal'),
+    Country('QA', 'Qatar'),
+    Country('RU', 'Russia'),
+    Country('SA', 'Saudi Arabia'),
+    Country('SN', 'Senegal'),
+    Country('RS', 'Serbia'),
+    Country('SG', 'Singapore'),
+    Country('ZA', 'South Africa'),
+    Country('KR', 'South Korea'),
+    Country('ES', 'Spain'),
+    Country('SE', 'Sweden'),
+    Country('CH', 'Switzerland'),
+    Country('TH', 'Thailand'),
+    Country('TN', 'Tunisia'),
+    Country('TR', 'Turkey'),
+    Country('UA', 'Ukraine'),
+    Country('AE', 'United Arab Emirates'),
+    Country('GB', 'United Kingdom'),
+    Country('US', 'United States'),
+    Country('US', 'Uruguay'),
+  ];
+
+  void countryFilter(String query) {
+    final lowercaseInput = query.toLowerCase();
+
+    final filteredCountries = countries.where((country) =>
+        // country.code.toLowerCase().contains(lowercaseInput) ||
+        country.name.toLowerCase().contains(lowercaseInput)).toList();
+
+    selectedCountry.value =
+        filteredCountries.isEmpty ? null : filteredCountries[0];
   }
 }
