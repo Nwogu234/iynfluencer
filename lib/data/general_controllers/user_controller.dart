@@ -11,7 +11,6 @@ import '../apiClient/api_client.dart';
 /// This class manages the state of the InfluencerHomeScreen, including the
 /// current influencerHomeModelObj
 class UserController extends GetxController {
-
   Rx<UserModel> userModelObj = UserModel(
     firstName: "",
     lastName: "",
@@ -35,21 +34,20 @@ class UserController extends GetxController {
   var token;
   final apiClient = ApiClient();
 
-
-  getUser()async{
+  getUser() async {
     token = await storage.read(key: "token");
-    try{
+    try {
       userModelObj.value = await apiClient.getUser(token!);
-      if (userModelObj.value.firstName.isEmpty){
+      if (userModelObj.value.firstName.isEmpty) {
         return ('Something went wrong');
-      }
-      else{
+      } else {
         return ('Its Ok');
-      }}
-    catch(e){
+      }
+    } catch (e) {
       print(e);
     }
   }
+
   @override
   void onClose() {
     super.onClose();

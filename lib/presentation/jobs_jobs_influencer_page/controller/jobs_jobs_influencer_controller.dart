@@ -14,14 +14,11 @@ import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_j
 class JobsJobsInfluencerController extends GetxController {
   JobsJobsInfluencerController(this.jobsJobsInfluencerModelObj);
   // Rx<JobsJobsInfluencerModel> jobsJobsInfluencerModelObj;
-
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();
-
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isError = false.obs;
-
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
@@ -98,7 +95,7 @@ class JobsJobsInfluencerController extends GetxController {
 
   @override
   void onClose() {
+    animationController.dispose();
     super.onClose();
-    // searchController.dispose();
   }
 }

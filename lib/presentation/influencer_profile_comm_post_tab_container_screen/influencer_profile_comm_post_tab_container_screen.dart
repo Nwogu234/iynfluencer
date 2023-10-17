@@ -1,5 +1,5 @@
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
-
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'controller/influencer_profile_comm_post_tab_container_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -10,6 +10,8 @@ import 'package:iynfluencer/presentation/influencer_profile_review_page/influenc
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
+import 'modals/hire_modal.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class InfluencerProfileCommPostTabContainerScreen
     extends GetWidget<InfluencerProfileCommPostTabContainerController> {
@@ -50,7 +52,7 @@ class InfluencerProfileCommPostTabContainerScreen
                           height: getVerticalSize(361),
                           width: double.maxFinite,
                           child:
-                          Stack(alignment: Alignment.bottomLeft, children: [
+                              Stack(alignment: Alignment.bottomLeft, children: [
                             Align(
                                 alignment: Alignment.topCenter,
                                 child: SizedBox(
@@ -79,15 +81,16 @@ class InfluencerProfileCommPostTabContainerScreen
                                                   }),
                                               actions: [
                                                 AppbarImage(
-                                                    height: getVerticalSize(26),
-                                                    width:
-                                                    getHorizontalSize(60),
-                                                    svgPath: ImageConstant
-                                                        .imgComputer,
-                                                    margin: getMargin(
-                                                        left: 16,
-                                                        right: 16,
-                                                        bottom: 4), onTap: (){},)
+                                                  height: getVerticalSize(26),
+                                                  width: getHorizontalSize(60),
+                                                  svgPath:
+                                                      ImageConstant.imgComputer,
+                                                  margin: getMargin(
+                                                      left: 16,
+                                                      right: 16,
+                                                      bottom: 4),
+                                                  onTap: () {},
+                                                )
                                               ])
                                         ]))),
                             Align(
@@ -97,9 +100,9 @@ class InfluencerProfileCommPostTabContainerScreen
                                     child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
                                               imagePath: avatarUrl ??
@@ -111,126 +114,138 @@ class InfluencerProfileCommPostTabContainerScreen
                                                   getHorizontalSize(42)),
                                               margin: getMargin(left: 10)),
                                           Padding(
-                                              padding: getPadding(top: 18),
-                                              child: Column(
-                                                  crossAxisAlignment:
+                                            padding: getPadding(top: 18),
+                                            child: Column(
+                                              crossAxisAlignment:
                                                   CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
+                                              mainAxisAlignment:
                                                   MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        "${capitalizeFirstLetter(listrectangle50?.user?.first.firstName)} ${capitalizeFirstLetter(listrectangle50?.user?.first.lastName)}",
+                                              children: [
+                                                Text(
+                                                    "${capitalizeFirstLetter(listrectangle50?.user?.first.firstName)} ${capitalizeFirstLetter(listrectangle50?.user?.first.lastName)}",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.left,
+                                                    style: AppStyle
+                                                        .txtSatoshiBold24),
+                                                Padding(
+                                                    padding: getPadding(
+                                                        left: 1, top: 4),
+                                                    child: Text(
+                                                        "${listrectangle50?.user?.first.country}",
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         textAlign:
-                                                        TextAlign.left,
-                                                        style: AppStyle
-                                                            .txtSatoshiBold24),
-                                                    Padding(
-                                                        padding: getPadding(
-                                                            left: 1, top: 4),
-                                                        child: Text(
-                                                            "${listrectangle50?.user?.first.country}",
-                                                            overflow:
-                                                            TextOverflow
-                                                                .ellipsis,
-                                                            textAlign:
                                                             TextAlign.left,
-                                                            style: AppStyle
-                                                                .txtSatoshiLight14Gray900a2)),
-                                                    Padding(
-                                                        padding:
-                                                        getPadding(top: 5),
-                                                        child: Row(children: [
-                                                          CustomImageView(
-                                                              svgPath: ImageConstant
-                                                                  .imgFrameAmber500,
-                                                              height:
-                                                              getSize(18),
-                                                              width:
-                                                              getSize(18),
-                                                              margin: getMargin(
-                                                                  bottom: 1)),
-                                                          Padding(
-                                                              padding:
-                                                              getPadding(
-                                                                  left: 6,
-                                                                  bottom:
-                                                                  1),
-                                                              child: RichText(
-                                                                  text: TextSpan(
-                                                                      children: [
-                                                                        TextSpan(
-                                                                            text: "lbl_3_52"
-                                                                                .tr,
-                                                                            style: TextStyle(
-                                                                                color: ColorConstant.gray900,
-                                                                                fontSize: getFontSize(13.5),
-                                                                                fontFamily: 'Satoshi',
-                                                                                fontWeight: FontWeight.w300)),
-                                                                        TextSpan(
-                                                                            text:
+                                                        style: AppStyle
+                                                            .txtSatoshiLight14Gray900a2)),
+                                                Padding(
+                                                  padding: getPadding(top: 5),
+                                                  child: Row(
+                                                    children: [
+                                                      CustomImageView(
+                                                          svgPath: ImageConstant
+                                                              .imgFrameAmber500,
+                                                          height: getSize(18),
+                                                          width: getSize(18),
+                                                          margin: getMargin(
+                                                              bottom: 1)),
+                                                      Padding(
+                                                          padding: getPadding(
+                                                              left: 6,
+                                                              bottom: 1),
+                                                          child: RichText(
+                                                              text: TextSpan(
+                                                                  children: [
+                                                                    TextSpan(
+                                                                        text: "lbl_3_52"
+                                                                            .tr,
+                                                                        style: TextStyle(
+                                                                            color: ColorConstant
+                                                                                .gray900,
+                                                                            fontSize: getFontSize(
+                                                                                13.5),
+                                                                            fontFamily:
+                                                                                'Satoshi',
+                                                                            fontWeight:
+                                                                                FontWeight.w300)),
+                                                                    TextSpan(
+                                                                        text:
                                                                             " ",
-                                                                            style: TextStyle(
-                                                                                color: ColorConstant.blueGray400,
-                                                                                fontSize: getFontSize(13.5),
-                                                                                fontFamily: 'Satoshi',
-                                                                                fontWeight: FontWeight.w300))
-                                                                      ]),
-                                                                  textAlign:
+                                                                        style: TextStyle(
+                                                                            color: ColorConstant
+                                                                                .blueGray400,
+                                                                            fontSize: getFontSize(
+                                                                                13.5),
+                                                                            fontFamily:
+                                                                                'Satoshi',
+                                                                            fontWeight:
+                                                                                FontWeight.w300))
+                                                                  ]),
+                                                              textAlign:
                                                                   TextAlign
                                                                       .left)),
-                                                          CustomImageView(
-                                                              svgPath: ImageConstant
-                                                                  .imgFrameBlueGray400,
-                                                              height:
-                                                              getSize(15),
-                                                              width:
-                                                              getSize(15),
-                                                              margin: getMargin(
-                                                                  left: 8,
-                                                                  top: 1,
-                                                                  bottom: 3)),
-                                                          Padding(
-                                                              padding:
-                                                              getPadding(
-                                                                  left: 8,
-                                                                  top: 1),
-                                                              child: Text(
-                                                                  "${listrectangle50?.jobsDone} jobs completed",
-                                                                  overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                                  textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                                  style: AppStyle
-                                                                      .txtSatoshiLight135))
-                                                        ]))
-                                                  ])),
+                                                      CustomImageView(
+                                                          svgPath: ImageConstant
+                                                              .imgFrameBlueGray400,
+                                                          height: getSize(15),
+                                                          width: getSize(15),
+                                                          margin: getMargin(
+                                                              left: 8,
+                                                              top: 1,
+                                                              bottom: 3)),
+                                                      Padding(
+                                                        padding: getPadding(
+                                                            left: 8, top: 1),
+                                                        child: Text(
+                                                          "${listrectangle50?.jobsDone} jobs completed",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: AppStyle
+                                                              .txtSatoshiLight135,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                           Padding(
                                               padding:
-                                              getPadding(left: 2, top: 14),
+                                                  getPadding(left: 2, top: 14),
                                               child: Row(children: [
                                                 CustomButton(
-                                                    height: getVerticalSize(34),
-                                                    width:
-                                                    getHorizontalSize(101),
-                                                    text: "lbl_hire".tr,
-                                                    padding:
-                                                    ButtonPadding.PaddingT4,
-                                                    fontStyle: ButtonFontStyle
-                                                        .SatoshiBold15,
-                                                    prefixWidget: Container(
-                                                        margin:
-                                                        getMargin(right: 6),
-                                                        child: CustomImageView(
-                                                            svgPath: ImageConstant
-                                                                .imgFrameWhiteA70018x18))),
+                                                  height: getVerticalSize(34),
+                                                  width: getHorizontalSize(101),
+                                                  text: "lbl_hire".tr,
+                                                  padding:
+                                                      ButtonPadding.PaddingT4,
+                                                  onTap: () =>
+                                                      showBarModalBottomSheet(
+                                                    expand: false,
+                                                    context: context,
+                                                    enableDrag: true,
+                                                    builder: (context) =>
+                                                        HireModal(
+                                                            influencer:
+                                                                listrectangle50!),
+                                                  ),
+                                                  fontStyle: ButtonFontStyle
+                                                      .SatoshiBold15,
+                                                  prefixWidget: Container(
+                                                    margin: getMargin(right: 6),
+                                                    child: CustomImageView(
+                                                        svgPath: ImageConstant
+                                                            .imgFrameWhiteA70018x18),
+                                                  ),
+                                                ),
                                                 CustomButton(
                                                     height: getVerticalSize(34),
                                                     width:
-                                                    getHorizontalSize(110),
+                                                        getHorizontalSize(110),
                                                     text: "lbl_message".tr,
                                                     margin: getMargin(left: 12),
                                                     variant: ButtonVariant
@@ -258,18 +273,18 @@ class InfluencerProfileCommPostTabContainerScreen
                                                 right: 11,
                                                 bottom: 1),
                                             decoration:
-                                            AppDecoration.outlineIndigo501,
+                                                AppDecoration.outlineIndigo501,
                                             child: Column(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Container(
                                                       height:
-                                                      getVerticalSize(44),
+                                                          getVerticalSize(44),
                                                       width: getHorizontalSize(
                                                           347),
                                                       margin:
-                                                      getMargin(bottom: 6),
+                                                          getMargin(bottom: 6),
                                                       child: TabBar(
                                                           controller: controller
                                                               .tabviewController,
@@ -279,70 +294,70 @@ class InfluencerProfileCommPostTabContainerScreen
                                                               fontSize: getFontSize(
                                                                   14),
                                                               fontFamily:
-                                                              'Satoshi',
+                                                                  'Satoshi',
                                                               fontWeight:
-                                                              FontWeight
-                                                                  .w300),
+                                                                  FontWeight
+                                                                      .w300),
                                                           unselectedLabelColor:
-                                                          ColorConstant
-                                                              .gray600,
+                                                              ColorConstant
+                                                                  .gray600,
                                                           unselectedLabelStyle:
-                                                          TextStyle(
-                                                              fontSize:
-                                                              getFontSize(
-                                                                  14),
-                                                              fontFamily:
-                                                              'Satoshi',
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w300),
+                                                              TextStyle(
+                                                                  fontSize:
+                                                                      getFontSize(
+                                                                          14),
+                                                                  fontFamily:
+                                                                      'Satoshi',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300),
                                                           indicatorColor:
-                                                          ColorConstant
-                                                              .cyan300,
+                                                              ColorConstant
+                                                                  .cyan300,
                                                           tabs: [
                                                             Tab(
                                                                 child: Text(
                                                                     "lbl_about"
                                                                         .tr,
                                                                     overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis)),
+                                                                        TextOverflow
+                                                                            .ellipsis)),
                                                             Tab(
                                                                 child: Text(
                                                                     "lbl_posts"
                                                                         .tr,
                                                                     overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis)),
+                                                                        TextOverflow
+                                                                            .ellipsis)),
                                                             Tab(
                                                                 child: Text(
                                                                     "lbl_jobs"
                                                                         .tr,
                                                                     overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis)),
+                                                                        TextOverflow
+                                                                            .ellipsis)),
                                                             Tab(
                                                                 child: Text(
                                                                     "lbl_reviews"
                                                                         .tr,
                                                                     overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis))
+                                                                        TextOverflow
+                                                                            .ellipsis))
                                                           ]))
                                                 ]))),
                                     SizedBox(
                                         height: getVerticalSize(701),
                                         child: TabBarView(
                                             controller:
-                                            controller.tabviewController,
+                                                controller.tabviewController,
                                             children: [
                                               InfluencerProfileAboutPage(
                                                   selectedInfluencer:
-                                                  listrectangle50),
+                                                      listrectangle50),
                                               InfluencerProfileCommPostPage(),
                                               InfluencerProfileJobsPage(
                                                   selectedInfluencer:
-                                                  listrectangle50),
+                                                      listrectangle50),
                                               InfluencerProfileReviewPage()
                                             ]))
                                   ])))

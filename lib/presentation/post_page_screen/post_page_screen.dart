@@ -24,13 +24,15 @@ import 'models/post_page_model.dart';
 
 // ignore_for_file: must_be_immutable
 class PostPageScreen extends GetWidget {
-  PostPageScreen({Key? key})
+  PostPageScreen(
+      {Key? key, this.fromHire = false, this.fromHireInfluencerId = ''})
       : super(
           key: key,
         ); //
   PostPageController controller =
       Get.put(PostPageController(PostPageModel().obs));
-
+  bool fromHire;
+  String fromHireInfluencerId;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<MediaFile> selectedMediaFiles = [];
   void removeSelectedMediaFile(String filePath) {
@@ -244,7 +246,7 @@ class PostPageScreen extends GetWidget {
                 bottom: 12,
               ),
               onTap: () {
-                controller.submitForm(context);
+                controller.submitForm(context, fromHire, fromHireInfluencerId);
               },
             ),
           ],

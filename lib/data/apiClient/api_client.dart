@@ -233,11 +233,61 @@ class ApiClient extends GetConnect {
     }
   }
 
+  Future<Response> getAllCreatorJobs(token) async {
+    Response response;
+    try {
+      response = await get(
+        'creators/jobs',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  Future<Response> sendJobRequestService(SendJobRequest body, token) async {
+    Response response = Response();
+    try {
+      response = await post(
+        'creators/jobs',
+        body.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw response;
+      }
+    } catch (e) {
+      print('$e Error Sending Job Request');
+      print(e);
+      throw e;
+    }
+  }
+
   Future<Response> getInfluencerAllJobs(String influencerId, var token) async {
     Response response;
     try {
       response = await get(
-        'creators/jobs?influencerId=$influencerId',
+        'creators/jobs/influencer',
+        // 'creators/jobs?influencerId=$influencerId',
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
