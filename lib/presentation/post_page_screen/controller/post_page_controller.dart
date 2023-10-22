@@ -4,6 +4,7 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/media_file/media_file.dart';
+import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_hire_modal_controller.dart';
 import 'package:iynfluencer/presentation/post_page_screen/models/post_page_model.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,11 @@ class PostPageController extends GetxController
   PostPageController(this.postPageModelObj);
   final formKeyMain = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
-  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
+  HomeCreatorContainerController homcont =
+      Get.put(HomeCreatorContainerController());
+  InfluencerProfileCommHireModalContainerController hireJobController =
+      Get.put(InfluencerProfileCommHireModalContainerController());
+
   TextEditingController inputController = TextEditingController();
 
   TextEditingController frametwelveController = TextEditingController();
@@ -34,7 +39,7 @@ class PostPageController extends GetxController
 
   TextEditingController frametwelvetwoController = TextEditingController();
   late AnimationController animationController;
-  BottomBarController bumcont=Get.put(BottomBarController());
+  BottomBarController bumcont = Get.put(BottomBarController());
 
   // this is for the job category
 
@@ -182,8 +187,9 @@ class PostPageController extends GetxController
     return true;
   }
 
-  void submitForm(BuildContext context) async {
-    token= await storage.read(key: 'token');
+  void submitForm(
+      BuildContext context, bool fromHire, String? fromHireInfluencerId) async {
+    token = await storage.read(key: 'token');
     print("this is running");
     // Validate the media files
     if (!validateMediaFiles(selectedMediaFiles)) {
@@ -209,16 +215,24 @@ class PostPageController extends GetxController
       // Sending it to a server using an API request
       try {
         final response = await apiClient.createJob(jobRequest, token);
-
+        print('-----');
+        print(response.body['data']);
         if (response.isOk) {
-          Get.snackbar('Success', 'Your job has been posted!');
-          homcont.currentRoute.value=AppRoutes.creatorHireslistTabContainerPage;
-          Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
-          bumcont.selectedIndex.value=1;
-        }
-
-
-        else if (response.statusCode == 400) {
+          if (fromHire) {
+            await hireJobController.sendJobRequest(
+                response.body['data']['jobId'], fromHireInfluencerId!);
+            Get.snackbar(
+                'Success', 'Your New Job has been posted and Assigned!');
+          } else {
+            Get.snackbar('Success', 'Your job has been posted!');
+            homcont.currentRoute.value =
+                AppRoutes.creatorHireslistTabContainerPage;
+            Navigator.of(Get.nestedKey(1)!.currentState!.context)
+                .pushReplacementNamed(
+                    AppRoutes.creatorHireslistTabContainerPage);
+            bumcont.selectedIndex.value = 1;
+          }
+        } else if (response.statusCode == 400) {
           // Handles bad request errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

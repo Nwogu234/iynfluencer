@@ -7,8 +7,6 @@ import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_jobs_influencer_model.dart';
 
-import '../../../widgets/app_bar/influencer_buttom_bar.dart';
-
 /// A controller class for the JobsJobsInfluencerPage.
 ///
 /// This class manages the state of the JobsJobsInfluencerPage, including the
@@ -24,7 +22,6 @@ class JobsJobsInfluencerController extends GetxController {
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isError = false.obs;
-
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
@@ -102,7 +99,7 @@ class JobsJobsInfluencerController extends GetxController {
   @override
   void onClose() {
     bumcont.dispose();
+    animationController.dispose();
     super.onClose();
-    // searchController.dispose();
   }
 }

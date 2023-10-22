@@ -80,6 +80,8 @@ final Map<String, String> enUs = {
   "lbl_bid_details": "Bid Details",
   "lbl_bid": "Bid",
   "lbl_edit_bid": "Edit Bid",
+  "lbl_use_job": "Use Selected Job",
+  "lbl_post_job": "Post A New Job",
   "lbl_fumilayo_jane": "Fumilayo Jane",
   "lbl_13_jobs_posted": "13 jobs posted",
   "lbl_500": "\$500",
