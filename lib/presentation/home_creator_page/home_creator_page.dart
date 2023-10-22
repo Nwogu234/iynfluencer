@@ -52,6 +52,16 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   @override
   Widget build(BuildContext context) {
+    // String? avatarUrl =
+    //     controller.user.userModelObj.value.avatar; // Assuming this is a String
+    // String imageProvider;
+    // print(avatarUrl);
+    // if (avatarUrl !='') {
+    //   imageProvider = avatarUrl;
+    // } else {
+    //   imageProvider = "mypic.wit";
+    // }
+
     // Initialize screen_util
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
@@ -64,7 +74,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
           height: 63.h,
           leadingWidth: 55.w,
           leading: AppbarCircleimage(
-            imagePath: ImageConstant.imgGroup899,
+            url: controller.user.userModelObj.value.avatar,
             margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
             onTap: openDrawer,
           ),

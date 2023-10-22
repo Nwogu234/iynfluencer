@@ -49,9 +49,11 @@ class ResponsiveErrorWidget extends StatelessWidget {
 class ResponsiveEmptyWidget extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onRetry;
+  final String buttonText;
   final bool fullPage;
 
   ResponsiveEmptyWidget({
+    required this.buttonText,
     required this.errorMessage,
     required this.onRetry,
     this.fullPage = false,
@@ -79,7 +81,7 @@ class ResponsiveEmptyWidget extends StatelessWidget {
             SizedBox(height: 20.h), // Responsive height
             ElevatedButton(
               onPressed: onRetry,
-              child: Text('Bid A Job',
+              child: Text(buttonText,
                   style: TextStyle(fontSize: 14.sp)), // Responsive font size
             ),
           ],

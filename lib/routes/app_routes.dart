@@ -824,6 +824,13 @@ class AppRoutes {
     // SplashBinding(),
     // ]),
 
+    // GetPage(
+    //   name: initialRoute,
+    //   page: () => AppNavigationScreen(),
+    //   bindings: [
+    //     AppNavigationBinding(),
+    //   ],
+    // )
     GetPage(
       name: initialRoute,
       page: () => SplashScreen(),

@@ -9,11 +9,13 @@ class AppbarCircleimage extends StatelessWidget {
     this.svgPath,
     this.margin,
     this.onTap,
+    this.url
   }) : super(
           key: key,
         );
 
   String? imagePath;
+  String? url;
 
   String? svgPath;
 
@@ -32,6 +34,7 @@ class AppbarCircleimage extends StatelessWidget {
         child: CustomImageView(
           svgPath: svgPath,
           imagePath: imagePath,
+          url: url,
           height: getSize(
             35,
           ),

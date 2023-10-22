@@ -115,21 +115,31 @@ class PostPageController extends GetxController
   Rx<bool> isAddingResponsibility = false.obs;
   final formKey = GlobalKey<FormState>();
   Rx<String> errorText = "".obs;
-  var resposibilities = <String>[].obs;
+  var responsibilities = <String>[].obs;
   startAddingResponsibilities() {
     isAddingResponsibility.value = true;
   }
 
   addResponsibilities(String responsibility) {
-    resposibilities.add(responsibility);
+    responsibilities.add(responsibility);
     print(responsibility);
     isAddingResponsibility.value = false;
+  }
+  ///VALIDTAE RESPONSIBILITY LIST
+  bool validateResponsibilities() {
+    if (responsibilities.isEmpty) {
+      errorText.value = 'At least one responsibility must be added!';
+      return false;
+    } else {
+      errorText.value = '';
+      return true;
+    }
   }
 
   Rx<PostPageModel> postPageModelObj = PostPageModel().obs;
 
   handleDelete(String account) {
-    resposibilities.remove(account);
+    responsibilities.remove(account);
     update();
   }
 
@@ -185,15 +195,15 @@ class PostPageController extends GetxController
       );
       print("media validated");
     }
-    if (formKeyMain.currentState!.validate()) {
+    if (formKeyMain.currentState!.validate()&&validateResponsibilities()) {
       final JobRequest jobRequest = JobRequest(
         title: inputController.text,
         description: frametwelveoneController.text,
         budgetFrom: int.tryParse(priceController.text) ?? 0,
         budgetTo: int.tryParse(priceoneController.text) ?? 0,
         duration: int.tryParse(durationController.text) ?? 0,
-        category: selectedNiches.value.map((item) => item.title).toList(),
-        responsibilities: resposibilities.value,
+        category: selectedNiches.map((item) => item.title).toList(),
+        responsibilities: responsibilities,
       );
       final apiClient = ApiClient();
       // Sending it to a server using an API request
@@ -230,7 +240,8 @@ class PostPageController extends GetxController
             ),
           );
         }
-      } catch (error) {
+      } catch (e) {
+        print(e);
         // Handles other API request errors (e.g., network errors)
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
-  const InfluencerTabsScreen({Key? key}) : super(key: key);
-
+   InfluencerTabsScreen({Key? key}) : super(key: key);
+  var currentRoute = AppRoutes.influencerHomeScreen.obs;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,12 +18,13 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
             backgroundColor: ColorConstant.whiteA700,
             body: Navigator(
                 key: Get.nestedKey(3),
-                initialRoute: AppRoutes.influencerHomeScreen,
+                initialRoute:  controller.currentRoute.value,
                 onGenerateRoute: (routeSetting) => GetPageRoute(
-                    page: () => getCurrentPage(routeSetting.name!),
+                    page: () => getCurrentPage(controller.currentRoute.value),
                     transition: Transition.native)),
             bottomNavigationBar:
                 InfluencerBottomBar(onChanged: (BottomBarEnum type) {
+              controller.currentRoute.value=getCurrentRoute(type);
               Get.toNamed(getCurrentRoute(type), id: 3);
             })));
   }

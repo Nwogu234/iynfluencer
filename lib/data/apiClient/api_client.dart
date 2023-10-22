@@ -35,7 +35,7 @@ class ApiClient extends GetConnect {
       case 500:
         throw "Server Error pls retry later";
       case 401:
-        return Get.toNamed(
+        return Get.offAllNamed(
           AppRoutes.logInScreen,
         );
       case 403:
@@ -123,6 +123,41 @@ class ApiClient extends GetConnect {
       errorHandler(response);
       throw Exception('Server error');
     }
+  }
+  //this is for getting url to upload user pic
+  Future<Response> getPicUrl(var token) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'users/me/upload_media_url?contentType=image/jpeg&field=avatar',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('error getting url');
+      }
+    } catch (e) {
+      errorHandler(response);
+      throw Exception('error getting url');
+    }
+  }
+  // this is for updating profile pic url
+  Future<Response> postAvatar(String avatarUrl, String token) {
+    return post(
+      'users/me/save_avatar',{"avatar": avatarUrl}, // replace with your specific endpoint path
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      },
+
+    );
   }
 
   //post request for creating a creator profile
