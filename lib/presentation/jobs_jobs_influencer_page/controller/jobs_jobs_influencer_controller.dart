@@ -5,7 +5,10 @@ import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_jobs_influencer_model.dart';
+
+import '../../../widgets/app_bar/influencer_buttom_bar.dart';
 
 /// A controller class for the JobsJobsInfluencerPage.
 ///
@@ -18,10 +21,11 @@ class JobsJobsInfluencerController extends GetxController {
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();
   InfluencerBottomBarController bumcont=Get.put(InfluencerBottomBarController());
+  InfluencerTabsController infTabcont=Get.put(InfluencerTabsController());
 
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
-  Rx<bool> isError = false.obs;
+  Rx<bool> isEpty = false.obs;
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
@@ -69,22 +73,24 @@ class JobsJobsInfluencerController extends GetxController {
       isTrendLoading.value = true;
       Response response =
           await apiClient.getInfluencerAllJobs(influencerId, token);
-      List<dynamic> dd = response.body['data']['docs'];
-      dd.forEach((element) {
-        existingJobs.add(Job.fromJson(element));
-      });
-      if (existingJobs.isEmpty) {
-        error('Something went wrong');
-        isTrendLoading.value = false;
-      } else {
-        jobsJobsInfluencerModelObj.value = existingJobs;
-        error('');
-        isTrendLoading.value = false;
+      if(response.isOk){
+        List<dynamic> dd = response.body['docs'];
+        dd.forEach((element) {
+          existingJobs.add(Job.fromJson(element));
+        });
+        if (existingJobs.isEmpty) {
+          error('');
+          isEpty.value = true;
+          isTrendLoading.value = false;
+        } else {
+          jobsJobsInfluencerModelObj.value = existingJobs;
+          error('');
+          isTrendLoading.value = false;
+        }
       }
     } catch (e) {
       print(e);
       error('Something went wrong');
-      isError.value = true;
       isTrendLoading.value = false;
     }
   }
@@ -99,6 +105,7 @@ class JobsJobsInfluencerController extends GetxController {
   @override
   void onClose() {
     bumcont.dispose();
+    infTabcont.dispose();
     animationController.dispose();
     super.onClose();
   }

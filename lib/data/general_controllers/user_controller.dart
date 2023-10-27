@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -70,12 +72,14 @@ class UserController extends GetxController {
 
     // 2. Upload the file using the pre-signed URL
     final file = File(filePath);
+    final List<int> fileBytes = file.readAsBytesSync();
+
     final uploadResponse = await http.put(
       Uri.parse(presignedUrl),
       headers: {
-    'Content-Type': 'image/jpeg', // This should match what you set in the backend
+        'Content-Type': 'image/jpeg', // This should match what you set in the backend
       },
-      body: file.readAsBytesSync(),
+      body: fileBytes,
     );
 
     if (uploadResponse.statusCode == 200) {

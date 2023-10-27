@@ -222,7 +222,7 @@ class PostPageScreen extends GetWidget {
             onTap: () {
               print("AppbarImage onTap triggered");
               controller.homcont.currentRoute.value=AppRoutes.homeCreatorPage;
-              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorPage);
+              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
               controller.bumcont.selectedIndex.value = 0;
             },
             height: getSize(

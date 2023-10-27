@@ -118,14 +118,13 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                             },
                             fullPage: true,
                           ); // Your error widget
-                        } else if (controller
-                                .jobsJobsInfluencerModelObj.value.isEmpty &&
-                            !controller.isTrendLoading.value) {
+                        } else if (controller.isEpty.value) {
                           return ResponsiveEmptyWidget(
                             errorMessage: 'You have not gotten any jobs',
                             buttonText: "Bid on jobs now!",
                             onRetry: () {
-                              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
+                              controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;
+                              Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
                               controller.bumcont.selectedIndex.value=0;
                             },
                             fullPage: true,

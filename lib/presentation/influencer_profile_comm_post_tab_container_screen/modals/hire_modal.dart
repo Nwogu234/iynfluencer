@@ -6,7 +6,6 @@ import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_j
 import 'package:iynfluencer/presentation/post_page_screen/post_page_screen.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HireModal extends StatelessWidget {
@@ -18,7 +17,7 @@ class HireModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 590,
+
       padding: getPadding(top: 12, bottom: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,194 +37,193 @@ class HireModal extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            height: 400,
-            child: Container(
-              child: Obx(
-                () {
-                  if (_controller.isLoading.value) {
-                    // return CustomLoadingWidget(
-                    //   animationController: animationController,
-                    // ); // Your custom loading widget
-                    return ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: false,
-                      separatorBuilder: (
-                        context,
-                        index,
-                      ) {
-                        return SizedBox(
-                          height: getVerticalSize(
-                            10,
-                          ),
-                        );
-                      },
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return InfluencerHireJobSkeletonWidget(); // Skeleton widget
-                      },
-                    );
-                  } else {
-                    if (_controller.jobsForHire.value.isEmpty) {
-                      return Container(
-                        child: Center(
-                          child: Text(
-                            'No Jobs Available',
-                            style: TextStyle(
-                              color: ColorConstant.black900,
-                              fontSize: getFontSize(
-                                17,
-                              ),
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+          Expanded(
+            child: Obx(
+              () {
+                if (_controller.isLoading.value) {
+                  // return CustomLoadingWidget(
+                  //   animationController: animationController,
+                  // ); // Your custom loading widget
+                  return ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: false,
+                    separatorBuilder: (
+                      context,
+                      index,
+                    ) {
+                      return SizedBox(
+                        height: getVerticalSize(
+                          10,
                         ),
                       );
-                    } else {
-                      return ListView.builder(
-                        itemCount: _controller.jobsForHire.value.length,
-                        itemBuilder: (context, index) => SizedBox(
-                          width: double.maxFinite,
-                          child: Padding(
-                            padding: getPadding(left: 12, right: 12),
-                            child: Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  if (_controller.selectedJob.value ==
-                                      _controller
-                                          .jobsForHire.value[index].jobId!) {
-                                    _controller.selectedJob.value = '';
-                                  } else {
-                                    _controller.selectedJob.value = _controller
-                                        .jobsForHire.value[index].jobId!;
-                                  }
-                                },
-                                child: Container(
-                                  margin: getMargin(
-                                    top: 17,
-                                  ),
-                                  padding: getPadding(
-                                    left: 12,
-                                    top: 7,
-                                    right: 12,
-                                    bottom: 7,
-                                  ),
-                                  decoration: AppDecoration.outlineIndigo508
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder7,
-                                          border: Border.all(
-                                            color:
-                                                _controller.selectedJob.value ==
-                                                        _controller.jobsForHire
-                                                            .value[index].jobId!
-                                                    ? ColorConstant.blue900
-                                                    : ColorConstant.indigo50,
-                                            width: getHorizontalSize(
-                                              1,
+                    },
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return InfluencerHireJobSkeletonWidget(); // Skeleton widget
+                    },
+                  );
+                } else {
+                  if (_controller.jobsForHire.isEmpty) {
+                    return Container(
+                      child: Center(
+                        child: Text(
+                          'No Jobs Available',
+                          style: TextStyle(
+                            color: ColorConstant.black900,
+                            fontSize: getFontSize(
+                              17,
+                            ),
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      physics:  BouncingScrollPhysics(),
+                      itemCount: _controller.jobsForHire.length,
+                      itemBuilder: (context, index) => SizedBox(
+                        width: double.maxFinite,
+                        child: Padding(
+                          padding: getPadding(left: 12, right: 12),
+                          child: Obx(
+                            () => InkWell(
+                              onTap: () {
+                                if (_controller.selectedJob.value ==
+                                    _controller
+                                        .jobsForHire[index].jobId!) {
+                                  _controller.selectedJob.value = '';
+                                } else {
+                                  _controller.selectedJob.value = _controller
+                                      .jobsForHire[index].jobId!;
+                                }
+                                print (_controller.selectedJob);
+                              },
+                              child: Container(
+                                margin: getMargin(
+                                  top: 17,
+                                ),
+                                padding: getPadding(
+                                  left: 12,
+                                  top: 7,
+                                  right: 12,
+                                  bottom: 7,
+                                ),
+                                decoration: AppDecoration.outlineIndigo508
+                                    .copyWith(
+                                        borderRadius:
+                                            BorderRadiusStyle.circleBorder7,
+                                        border: Border.all(
+                                          color:
+                                              _controller.selectedJob.value ==
+                                                      _controller.jobsForHire
+                                                          [index].jobId!
+                                                  ? ColorConstant.blue900
+                                                  : ColorConstant.indigo50,
+                                          width: getHorizontalSize(
+                                            1,
+                                          ),
+                                        )),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(
+                                        top: 2,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          CustomImageView(
+                                            imagePath:
+                                                ImageConstant.imgGroup85233,
+                                            height: getSize(
+                                              30,
                                             ),
-                                          )),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: getPadding(
-                                          top: 2,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            CustomImageView(
-                                              imagePath:
-                                                  ImageConstant.imgGroup85233,
-                                              height: getSize(
-                                                30,
+                                            width: getSize(
+                                              30,
+                                            ),
+                                            radius: BorderRadius.circular(
+                                              getSize(
+                                                15.0,
                                               ),
-                                              width: getSize(
-                                                30,
-                                              ),
-                                              radius: BorderRadius.circular(
-                                                getSize(
-                                                  15.0,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: getPadding(
+                                              left: 12,
+                                              top: 5,
+                                              bottom: 5,
+                                            ),
+                                            child: Text(
+                                              _controller.jobsForHire
+                                                  [index].title!,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiBold14Gray900ab,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: FractionallySizedBox(
+                                              widthFactor: 0.4,
+                                              child: Padding(
+                                                padding: getPadding(
+                                                  left: 13,
+                                                  top: 9,
+                                                  bottom: 3,
+                                                ),
+                                                child: Text(
+                                                  timeago.format(
+                                                      DateTime.parse(
+                                                          _controller
+                                                              .jobsForHire
+                                                              [index]
+                                                              .updatedAt!)),
+                                                  // "lbl_1_week_ago".tr,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.left,
+                                                  style: AppStyle
+                                                      .txtSatoshiLight125,
                                                 ),
                                               ),
                                             ),
-                                            Container(
-                                              padding: getPadding(
-                                                left: 12,
-                                                top: 5,
-                                                bottom: 5,
-                                              ),
-                                              child: Text(
-                                                _controller.jobsForHire
-                                                    .value[index].title!,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.left,
-                                                style: AppStyle
-                                                    .txtSatoshiBold14Gray900ab,
-                                              ),
-                                            ),
-                                            Flexible(
-                                              child: FractionallySizedBox(
-                                                widthFactor: 0.4,
-                                                child: Padding(
-                                                  padding: getPadding(
-                                                    left: 13,
-                                                    top: 9,
-                                                    bottom: 3,
-                                                  ),
-                                                  child: Text(
-                                                    timeago.format(
-                                                        DateTime.parse(
-                                                            _controller
-                                                                .jobsForHire
-                                                                .value[index]
-                                                                .updatedAt!)),
-                                                    // "lbl_1_week_ago".tr,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.left,
-                                                    style: AppStyle
-                                                        .txtSatoshiLight125,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      Container(
-                                        width: getHorizontalSize(
-                                          310,
-                                        ),
-                                        margin: getMargin(
-                                          top: 11,
-                                        ),
-                                        child: Text(
-                                          _controller.jobsForHire.value[index]
-                                              .description!,
-                                          // "msg_looking_for_a_game3".tr,
-                                          maxLines: null,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle
-                                              .txtSatoshiLight14Gray900ab,
-                                        ),
+                                    ),
+                                    Container(
+                                      width: getHorizontalSize(
+                                        310,
                                       ),
-                                    ],
-                                  ),
+                                      margin: getMargin(
+                                        top: 11,
+                                      ),
+                                      child: Text(
+                                        _controller.jobsForHire[index]
+                                            .description!,
+                                        // "msg_looking_for_a_game3".tr,
+                                        maxLines: null,
+                                        textAlign: TextAlign.left,
+                                        style: AppStyle
+                                            .txtSatoshiLight14Gray900ab,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      );
-                    }
+                      ),
+                    );
                   }
-                },
-              ),
+                }
+              },
             ),
           ),
           Container(
