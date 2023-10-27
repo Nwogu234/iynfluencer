@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -13,25 +14,25 @@ import '../apiClient/api_client.dart';
 /// current influencerHomeModelObj
 class UserController extends GetxController {
   Rx<UserModel> userModelObj = UserModel(
-    firstName: "",
-    lastName: "",
-    email: "",
-    termsAndConditionsAgreement: true,
-    isNewUser: true,
-    isSocial: false,
-    verified: false,
-    verifiedEmail: false,
-    followers: 0,
-    following: 0,
-    views: 0,
-    userId: "",
-    createdAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
-    updatedAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
-    creatorId: null,
-    influencerId: null,
-    id: '',
-    avatar: ''
-  ).obs;
+          firstName: "",
+          lastName: "",
+          email: "",
+          termsAndConditionsAgreement: true,
+          isNewUser: true,
+          isSocial: false,
+          verified: false,
+          verifiedEmail: false,
+          followers: 0,
+          following: 0,
+          views: 0,
+          userId: "",
+          createdAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
+          updatedAt: DateTime.parse("2023-06-05T20:35:42.936Z"),
+          creatorId: null,
+          influencerId: null,
+          id: '',
+          avatar: '')
+      .obs;
   final storage = new FlutterSecureStorage();
   var token;
   final apiClient = ApiClient();
@@ -49,6 +50,7 @@ class UserController extends GetxController {
       print(e);
     }
   }
+
   Future<void> uploadUserPic(String filePath) async {
     Get.dialog(
       Center(child: CircularProgressIndicator()), // showing a loading dialog
@@ -60,8 +62,7 @@ class UserController extends GetxController {
 
     if (!response.isOk) {
       Get.back();
-      Get.snackbar('Error',
-          'Failed to upload image. Please try again.');
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
       print('Failed to obtain pre-signed URL');
       return;
     }
@@ -73,31 +74,29 @@ class UserController extends GetxController {
     final uploadResponse = await http.put(
       Uri.parse(presignedUrl),
       headers: {
-    'Content-Type': 'image/jpeg', // This should match what you set in the backend
+        'Content-Type':
+            'image/jpeg', // This should match what you set in the backend
       },
       body: file.readAsBytesSync(),
     );
 
     if (uploadResponse.statusCode == 200) {
       print('File successfully uploaded');
-      String picUrl =presignedUrl.split('?').first;
-      final response = await apiClient.postAvatar(picUrl,token);
+      String picUrl = presignedUrl.split('?').first;
+      final response = await apiClient.postAvatar(picUrl, token);
       if (response.isOk) {
         Get.back();
-        Get.snackbar('Success',
-            'Image uploaded');
+        Get.snackbar('Success', 'Image uploaded');
         print('Success: ${response.body}');
       } else {
         Get.back();
-        Get.snackbar('Error',
-            'Failed to upload image. Please try again.');
+        Get.snackbar('Error', 'Failed to upload image. Please try again.');
         print('Error: ${response.body}');
       }
       print(uploadResponse.body);
     } else {
       Get.back();
-      Get.snackbar('Error',
-          'Failed to upload image. Please try again.');
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
       print('File upload failed');
     }
   }
