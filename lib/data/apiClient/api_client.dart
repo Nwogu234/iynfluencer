@@ -124,6 +124,7 @@ class ApiClient extends GetConnect {
       throw Exception('Server error');
     }
   }
+
   //this is for getting url to upload user pic
   Future<Response> getPicUrl(var token) async {
     Response response = Response();
@@ -148,15 +149,16 @@ class ApiClient extends GetConnect {
       throw Exception('error getting url');
     }
   }
+
   // this is for updating profile pic url
   Future<Response> postAvatar(String avatarUrl, String token) {
     return post(
-      'users/me/save_avatar',{"avatar": avatarUrl}, // replace with your specific endpoint path
+      'users/me/save_avatar',
+      {"avatar": avatarUrl}, // replace with your specific endpoint path
       headers: {
         "Content-Type": "application/json",
         'Authorization': token,
       },
-
     );
   }
 
@@ -268,35 +270,35 @@ class ApiClient extends GetConnect {
     }
   }
 
-  Future<Response> getAllCreatorJobs(token) async {
-    Response response;
-    try {
-      response = await get(
-        'creators/jobs',
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        return response;
-      } else {
-        print(response);
-        print(response.body);
-        throw Exception('Server error');
-      }
-    } catch (e) {
-      print('$e from getting list of influencers');
-      print(e);
-      throw Exception('Server error');
-    }
-  }
+  // Future<Response> getAllJobs(token) async {
+  //   Response response;
+  //   try {
+  //     response = await get(
+  //       'creators/jobs',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': token,
+  //       },
+  //     );
+  //     if (response.isOk) {
+  //       return response;
+  //     } else {
+  //       print(response);
+  //       print(response.body);
+  //       throw Exception('Server error');
+  //     }
+  //   } catch (e) {
+  //     print('$e from getting list of influencers');
+  //     print(e);
+  //     throw Exception('Server error');
+  //   }
+  // }
 
   Future<Response> sendJobRequestService(SendJobRequest body, token) async {
     Response response = Response();
     try {
       response = await post(
-        'creators/jobs',
+        'creators/me/jobs/request/send',
         body.toJson(),
         headers: {
           "Content-Type": "application/json",
@@ -317,6 +319,7 @@ class ApiClient extends GetConnect {
     }
   }
 
+  //List of existing jobs of an influencer
   Future<Response> getInfluencerAllJobs(String influencerId, var token) async {
     Response response;
     try {
@@ -330,57 +333,6 @@ class ApiClient extends GetConnect {
       );
       if (response.isOk) {
         return response;
-      } else {
-        print(response);
-        print(response.body);
-        throw Exception('Server error');
-      }
-    } catch (e) {
-      print('$e from getting list of influencers');
-      print(e);
-      throw Exception('Server error');
-    }
-  }
-
-  //List of existing jobs of an influencer
-  Future<List<Job>> getInfluencerJobs(
-      int pageNumber, int limit, int? budgetFrom, var token) async {
-    Response response;
-    try {
-      response = await get(
-        budgetFrom is int
-            ? 'creators/jobs?budgetFrom=$budgetFrom'
-            : 'creators/jobs',
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        final List<dynamic> jobJsonList = response.body['data']['docs'];
-        final List<Job> jobs = jobJsonList
-            .map((json) => Job(
-                  id: json['_id'],
-                  creatorId: json['creatorId'],
-                  title: json['title'],
-                  description: json['description'],
-                  responsibilities: List<String>.from(json['responsibilities']),
-                  category: List<String>.from(json['category']),
-                  budgetFrom: json['budgetFrom'],
-                  budgetTo: json['budgetTo'],
-                  duration: json['duration'],
-                  public: json['public'],
-                  hired: json['hired'],
-                  suspended: json['suspended'],
-                  jobId: json['jobId'],
-                  createdAt: json['createdAt'],
-                  updatedAt: json['updatedAt'],
-                  version: json['__v'],
-                  creator: Creator.fromJson(json['creator']),
-                  bidsCount: json['bidsCount'],
-                ))
-            .toList();
-        return jobs;
       } else {
         print(response);
         print(response.body);
@@ -418,6 +370,7 @@ class ApiClient extends GetConnect {
     }
   }
 
+//this is for posting a new bid
   Future<Response> bidAJob(BidModel bidRequest, var token) async {
     Response response;
     try {
@@ -449,6 +402,60 @@ class ApiClient extends GetConnect {
     try {
       response = await get(
         'influencers/me/bids',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        print('------------here oooo----');
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('Server error From Jobs');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers job nids');
+      errorHandler(response);
+      throw Exception('Server error From influencers job  2');
+    }
+  }
+
+  Future<Response> getInfluencerJobsRequests(
+    var token,
+  ) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'influencers/me/jobs/requests',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        print('------------here oooo----');
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('Server error From Jobs');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers job nids');
+      errorHandler(response);
+      throw Exception('Server error From influencers job  2');
+    }
+  }
+
+  Future<Response> InfluencerDeclineJobsRequests(var token, String id) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'influencers/me/jobs/request/$id/decline',
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,

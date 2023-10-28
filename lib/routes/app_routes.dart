@@ -772,7 +772,7 @@ class AppRoutes {
     ),
     GetPage(
       name: withdrawalScreen,
-      page: () => WithdrawalScreen(),
+      page : () => WithdrawalScreen(),
       bindings: [
         WithdrawalBinding(),
       ],
@@ -824,19 +824,19 @@ class AppRoutes {
     // SplashBinding(),
     // ]),
 
-    // GetPage(
-    //   name: initialRoute,
-    //   page: () => AppNavigationScreen(),
-    //   bindings: [
-    //     AppNavigationBinding(),
-    //   ],
-    // )
     GetPage(
       name: initialRoute,
-      page: () => SplashScreen(),
+      page: () => AppNavigationScreen(),
       bindings: [
-        SplashBinding(),
+        AppNavigationBinding(),
       ],
     )
+    // GetPage(
+    //   name: initialRoute,
+    //   page: () => SplashScreen(),
+    //   bindings: [
+    //     SplashBinding(),
+    //   ],
+    // )
   ];
 }

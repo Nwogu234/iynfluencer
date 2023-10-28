@@ -1,5 +1,4 @@
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'controller/influencer_profile_comm_post_tab_container_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -224,15 +223,9 @@ class InfluencerProfileCommPostTabContainerScreen
                                                   padding:
                                                       ButtonPadding.PaddingT4,
                                                   onTap: () =>
-                                                      showBarModalBottomSheet(
-                                                    expand: false,
-                                                    context: context,
-                                                    enableDrag: true,
-                                                    builder: (context) =>
-                                                        HireModal(
-                                                            influencer:
-                                                                listrectangle50!),
-                                                  ),
+                                                     Get.bottomSheet(HireModal(
+                                                         influencer:
+                                                         listrectangle50!),backgroundColor: ColorConstant.whiteA700),
                                                   fontStyle: ButtonFontStyle
                                                       .SatoshiBold15,
                                                   prefixWidget: Container(

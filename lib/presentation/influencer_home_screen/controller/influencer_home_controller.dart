@@ -67,7 +67,7 @@ class InfluencerHomeController extends GetxController {
     try {
       error('');
       isJobsLoading.value = true;
-      response = await apiClient.getInfluencerAllJobs(user.userModelObj.value.influencerId!, token);
+      response = await apiClient.getAllJobs(1, 20, token);
       print(response.body);
       if (response.isOk) {
         final responseJson = response.body;

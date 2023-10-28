@@ -71,13 +71,15 @@ class UserController extends GetxController {
 
     // 2. Upload the file using the pre-signed URL
     final file = File(filePath);
+    final List<int> fileBytes = file.readAsBytesSync();
+
     final uploadResponse = await http.put(
       Uri.parse(presignedUrl),
       headers: {
         'Content-Type':
             'image/jpeg', // This should match what you set in the backend
       },
-      body: file.readAsBytesSync(),
+      body: fileBytes,
     );
 
     if (uploadResponse.statusCode == 200) {

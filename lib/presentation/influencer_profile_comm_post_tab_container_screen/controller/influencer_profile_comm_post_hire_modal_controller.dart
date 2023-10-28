@@ -23,6 +23,7 @@ class InfluencerProfileCommHireModalContainerController extends GetxController
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isRequestLoading = false.obs;
   Rx<bool> isError = false.obs;
+  Response responsee = Response();
   List<Job> previousJobs = []; // Existing jobs
 
   final storage = new FlutterSecureStorage();
@@ -71,14 +72,14 @@ class InfluencerProfileCommHireModalContainerController extends GetxController
     try {
       error('');
       isTrendLoading.value = true;
-      Response response = await apiClient.getAllCreatorJobs(token);
+      Response response = await apiClient.getCreatorJobs(token);
       List<dynamic> dd = response.body['data']['docs'];
       dd.forEach((element) {
         if (element['hired'] == false) {
           previousJobs.add(Job.fromJson(element));
         }
       });
-      if (previousJobs.isEmpty) {
+      if (!response.isOk) {
         error('Something went wrong');
         isTrendLoading.value = false;
       } else {
@@ -99,21 +100,30 @@ class InfluencerProfileCommHireModalContainerController extends GetxController
     try {
       isRequestLoading.value = true;
       error('');
-      response = await apiClient.sendJobRequestService(
+      responsee = await apiClient.sendJobRequestService(
           new SendJobRequest(influencerId: influencerId, jobId: jobId), token);
 
-      if (response.body) {
+      if (responsee.isOk) {
         isRequestLoading.value = false;
         // Get.toNamed(
         //   AppRoutes.logInScreen,
         // );
         selectedJob.value = '';
+        Get.back();
+        Get.snackbar('Success', 'Request sent',backgroundColor: ColorConstant.whiteA700);
         getUnHiredJobs();
+      }
+      else if(!responsee.isOk){
+        isRequestLoading.value = false;
+        Get.back();
+        Get.snackbar('Error', '${responsee.body['message']}');
+        error('Something went wrong');
       }
     } catch (e) {
       isRequestLoading.value = false;
-      print(response.toString());
-      Get.snackbar('Error', 'Error Sending Job Request');
+      print(e);
+      Get.back();
+      Get.snackbar('Error','An error  occured');
       error('Something went wrong');
     }
   }
