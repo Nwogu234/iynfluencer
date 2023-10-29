@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../data/general_controllers/user_controller.dart';
 import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
 import '../home_creator_page/controller/home_creator_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,12 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   HomeCreatorController controller;
   final storage = new FlutterSecureStorage();
-
+  String capitalize(String text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -35,13 +41,14 @@ class CreatorProfileDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text("lbl_emma_williams".tr,
+                          child:  Text(
+                              "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text("lbl_emmawlm".tr,
+                          child: Text("@${controller.user.userModelObj.value.firstName}".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125Gray600ab)),

@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:country_flags/country_flags.dart';
+
 import '../../../data/models/Influencer/influencer_response_model.dart';
 import '../controller/home_creator_controller.dart';
 import '../models/trendinghorizon_item_model.dart';
@@ -66,11 +68,17 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                         ),
                         child: Stack(
                           children: [
-                            Icon(
-                              Icons.local_fire_department_rounded,
-                              size: 14.sp,
-                              color: Colors.deepOrange,
+                            CountryFlag.fromCountryCode(
+                              'NG',
+                              height: 48,
+                              width: 62,
+                              borderRadius: 8,
                             ),
+                            // Icon(
+                            //   Icons.local_fire_department_rounded,
+                            //   size: 14.sp,
+                            //   color: Colors.deepOrange,
+                            // ),
                           ],
                         ),
                       ),

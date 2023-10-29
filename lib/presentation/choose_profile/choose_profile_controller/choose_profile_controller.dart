@@ -27,6 +27,7 @@ class ChooseProfileController extends GetxController {
     creatorId: null,
     influencerId: null,
     id: '',
+    avatar: ''
   ).obs;
 
   void updateSelectedCard(int index) {

@@ -35,7 +35,7 @@ class ApiClient extends GetConnect {
       case 500:
         throw "Server Error pls retry later";
       case 401:
-        return Get.toNamed(
+        return Get.offAllNamed(
           AppRoutes.logInScreen,
         );
       case 403:
@@ -123,6 +123,41 @@ class ApiClient extends GetConnect {
       errorHandler(response);
       throw Exception('Server error');
     }
+  }
+  //this is for getting url to upload user pic
+  Future<Response> getPicUrl(var token) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'users/me/upload_media_url?contentType=image/jpeg&field=avatar',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('error getting url');
+      }
+    } catch (e) {
+      errorHandler(response);
+      throw Exception('error getting url');
+    }
+  }
+  // this is for updating profile pic url
+  Future<Response> postAvatar(String avatarUrl, String token) {
+    return post(
+      'users/me/save_avatar',{"avatar": avatarUrl}, // replace with your specific endpoint path
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      },
+
+    );
   }
 
   //post request for creating a creator profile
@@ -233,11 +268,62 @@ class ApiClient extends GetConnect {
     }
   }
 
+  // Future<Response> getAllJobs(token) async {
+  //   Response response;
+  //   try {
+  //     response = await get(
+  //       'creators/jobs',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': token,
+  //       },
+  //     );
+  //     if (response.isOk) {
+  //       return response;
+  //     } else {
+  //       print(response);
+  //       print(response.body);
+  //       throw Exception('Server error');
+  //     }
+  //   } catch (e) {
+  //     print('$e from getting list of influencers');
+  //     print(e);
+  //     throw Exception('Server error');
+  //   }
+  // }
+
+  Future<Response> sendJobRequestService(SendJobRequest body, token) async {
+    Response response = Response();
+    try {
+      response = await post(
+        'creators/me/jobs/request/send',
+        body.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw response;
+      }
+    } catch (e) {
+      print('$e Error Sending Job Request');
+      print(e);
+      throw e;
+    }
+  }
+
+  //List of existing jobs of an influencer
   Future<Response> getInfluencerAllJobs(String influencerId, var token) async {
     Response response;
     try {
       response = await get(
-        'creators/jobs?influencerId=$influencerId',
+        'creators/jobs/influencer',
+        // 'creators/jobs?influencerId=$influencerId',
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
@@ -257,56 +343,6 @@ class ApiClient extends GetConnect {
     }
   }
 
-  //List of existing jobs of an influencer
-  Future<List<Job>> getInfluencerJobs(
-      int pageNumber, int limit, int? budgetFrom, var token) async {
-    Response response;
-    try {
-      response = await get(
-        budgetFrom is int
-            ? 'creators/jobs?budgetFrom=$budgetFrom'
-            : 'creators/jobs',
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        final List<dynamic> jobJsonList = response.body['data']['docs'];
-        final List<Job> jobs = jobJsonList
-            .map((json) => Job(
-                  id: json['_id'],
-                  creatorId: json['creatorId'],
-                  title: json['title'],
-                  description: json['description'],
-                  responsibilities: List<String>.from(json['responsibilities']),
-                  category: List<String>.from(json['category']),
-                  budgetFrom: json['budgetFrom'],
-                  budgetTo: json['budgetTo'],
-                  duration: json['duration'],
-                  public: json['public'],
-                  hired: json['hired'],
-                  suspended: json['suspended'],
-                  jobId: json['jobId'],
-                  createdAt: json['createdAt'],
-                  updatedAt: json['updatedAt'],
-                  version: json['__v'],
-                  creator: Creator.fromJson(json['creator']),
-                  bidsCount: json['bidsCount'],
-                ))
-            .toList();
-        return jobs;
-      } else {
-        print(response);
-        print(response.body);
-        throw Exception('Server error');
-      }
-    } catch (e) {
-      print('$e from getting list of influencers');
-      print(e);
-      throw Exception('Server error');
-    }
-  }
 
   //this is for posting a new job
   Future<Response> createJob(JobRequest jobRequest, var token) async {
@@ -332,7 +368,7 @@ class ApiClient extends GetConnect {
       throw Exception('Server error');
     }
   }
-
+//this is for posting a new bid
   Future<Response> bidAJob(BidModel bidRequest, var token) async {
     Response response;
     try {

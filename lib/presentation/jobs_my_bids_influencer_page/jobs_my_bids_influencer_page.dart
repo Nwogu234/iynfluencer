@@ -4,6 +4,7 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
+import '../../widgets/app_bar/influencer_buttom_bar.dart';
 import '../jobs_my_bids_influencer_page/widgets/listmediainflue_item_widget.dart';
 import 'controller/jobs_my_bids_influencer_controller.dart';
 import 'models/jobs_my_bids_influencer_model.dart';
@@ -26,6 +27,7 @@ class JobsMyBidsInfluencerPage extends StatefulWidget {
 class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
     with SingleTickerProviderStateMixin {
   late JobsMyBidsInfluencerController controller;
+  InfluencerBottomBarController bumcont=Get.put(InfluencerBottomBarController());
 
   // Get.put(JobsMyBidsInfluencerController(JobsMyBidsInfluencerModel().obs));
   final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
@@ -150,8 +152,10 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                             !controller.isTrendLoading.value) {
                           return ResponsiveEmptyWidget(
                             errorMessage: 'No Job Bids Available',
+                            buttonText: "Bid on jobs now!",
                             onRetry: () {
-                              Get.toNamed(AppRoutes.influencerHomeScreen);
+                              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
+                              bumcont.selectedIndex.value=0;
                             },
                             fullPage: true,
                           ); // Your error widget

@@ -59,7 +59,7 @@ class SignUpController extends GetxController {
       var headers = loginResponse.headers;
       var authorization = headers?['authorization'];
 
-      if (loginResponse.body['status'].toString() == 'success') {
+      if (loginResponse.isOk) {
         Get.back();
         Get.snackbar('Success', 'Sign up successful!');
         await storage.write(key: 'token', value: authorization.toString());
