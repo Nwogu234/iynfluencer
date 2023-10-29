@@ -22,7 +22,8 @@ class CustomTextFormField extends StatelessWidget {
       this.prefixConstraints,
       this.suffix,
       this.suffixConstraints,
-      this.validator});
+      this.validator,
+      this.onChanged});
 
   TextFormFieldShape? shape;
 
@@ -63,6 +64,7 @@ class CustomTextFormField extends StatelessWidget {
   BoxConstraints? suffixConstraints;
 
   FormFieldValidator<String>? validator;
+  Function? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +91,11 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines ?? 1,
         decoration: _buildDecoration(),
         validator: validator,
+          onChanged: (text) {
+            if (onChanged != null) {
+              onChanged!(text);
+            }
+          },
       ),
     );
   }

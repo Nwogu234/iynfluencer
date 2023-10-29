@@ -223,3 +223,23 @@ class JobRequest {
     );
   }
 }
+
+//Send Job Request By Mostly Creators
+class SendJobRequest {
+  String? jobId;
+  String? influencerId;
+
+  SendJobRequest({this.jobId, this.influencerId});
+
+  SendJobRequest.fromJson(Map<String, dynamic> json) {
+    jobId = json['jobId'];
+    influencerId = json['influencerId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['jobId'] = this.jobId;
+    data['influencerId'] = this.influencerId;
+    return data;
+  }
+}

@@ -127,6 +127,7 @@ class CompleteProfileCreatorController extends GetxController {
   @override
   void onInit() {
     print('OnInit called');
+
     super.onInit();
     itemsToDisplay.value = dropdownItems.value
         .where((item) => !selectedDropdownItems.contains(item))

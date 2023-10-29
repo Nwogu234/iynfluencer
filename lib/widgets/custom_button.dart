@@ -13,6 +13,7 @@ class CustomButton extends StatelessWidget {
       this.width,
       this.height,
       this.text,
+      this.loading = false,
       this.prefixWidget,
       this.suffixWidget});
 
@@ -33,6 +34,7 @@ class CustomButton extends StatelessWidget {
   double? width;
 
   double? height;
+  bool loading;
 
   String? text;
 
@@ -67,11 +69,16 @@ class CustomButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           prefixWidget ?? SizedBox(),
-          Text(
-            text ?? "",
-            textAlign: TextAlign.center,
-            style: _setFontStyle(),
-          ),
+          loading
+              ? CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1,
+                )
+              : Text(
+                  text ?? "",
+                  textAlign: TextAlign.center,
+                  style: _setFontStyle(),
+                ),
           suffixWidget ?? SizedBox(),
         ],
       );
@@ -489,6 +496,7 @@ enum ButtonShape {
   RoundedBorder12,
   RoundedBorder3,
 }
+
 enum ButtonPadding {
   PaddingAll15,
   PaddingAll12,
@@ -500,6 +508,7 @@ enum ButtonPadding {
   PaddingT8,
   PaddingT32,
 }
+
 enum ButtonVariant {
   FillCyan300,
   Neutral,
@@ -519,6 +528,7 @@ enum ButtonVariant {
   FillCyan30066,
   OutlineIndigo50_3,
 }
+
 enum ButtonFontStyle {
   SatoshiBold14WhiteA700,
   SatoshiBold14,

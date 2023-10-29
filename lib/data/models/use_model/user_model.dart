@@ -1,5 +1,6 @@
 class UserModel {
   final String id;
+  final String avatar;
   final String firstName;
   final String lastName;
   final String email;
@@ -35,6 +36,7 @@ class UserModel {
     required this.updatedAt,
     required this.creatorId,
     required this.influencerId,
+    required this.avatar,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class UserModel {
       following: json['following'] ?? 0,
       views: json['views'] ?? 0,
       userId: json['userId'] ?? '',
+      avatar: json['avatar']??'',
       createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
       updatedAt: DateTime.parse(json['updatedAt'] as String) ?? DateTime.now(),
       creatorId: json['creatorId'] ?? null,

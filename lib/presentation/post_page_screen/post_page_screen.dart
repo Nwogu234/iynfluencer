@@ -24,13 +24,15 @@ import 'models/post_page_model.dart';
 
 // ignore_for_file: must_be_immutable
 class PostPageScreen extends GetWidget {
-  PostPageScreen({Key? key})
+  PostPageScreen(
+      {Key? key, this.fromHire = false, this.fromHireInfluencerId = ''})
       : super(
           key: key,
         ); //
   PostPageController controller =
       Get.put(PostPageController(PostPageModel().obs));
-
+  bool fromHire;
+  String fromHireInfluencerId;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<MediaFile> selectedMediaFiles = [];
   void removeSelectedMediaFile(String filePath) {
@@ -219,7 +221,8 @@ class PostPageScreen extends GetWidget {
           leading: AppbarImage(
             onTap: () {
               print("AppbarImage onTap triggered");
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              controller.homcont.currentRoute.value=AppRoutes.homeCreatorPage;
+              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
               controller.bumcont.selectedIndex.value = 0;
             },
             height: getSize(
@@ -244,7 +247,7 @@ class PostPageScreen extends GetWidget {
                 bottom: 12,
               ),
               onTap: () {
-                controller.submitForm(context);
+                controller.submitForm(context, fromHire, fromHireInfluencerId);
               },
             ),
           ],
@@ -277,6 +280,12 @@ class PostPageScreen extends GetWidget {
                       autofocus: true,
                       controller: controller.inputController,
                       hintText: "msg_what_is_the_job".tr,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a job title';
+                        }
+                        return null; // Return null if the input is valid
+                      },
                       margin: getMargin(
                         left: 1,
                       ),
@@ -443,8 +452,8 @@ class PostPageScreen extends GetWidget {
                           ),
                           Obx(
                             () => Wrap(
-                              spacing: 8.0.w,
-                              children: controller.selectedNiches.value.map(
+                              spacing: 8.0,
+                              children: controller.selectedNiches.map(
                                 (niche) {
                                   return Chip(
                                     label: Text('${niche.title}'),
@@ -501,6 +510,18 @@ class PostPageScreen extends GetWidget {
                                               AppStyle.txtSatoshiLight13Gray900,
                                         ),
                                         CustomTextFormField(
+                                          validator: (value) {
+                                            double? thisValue = double.tryParse(value ?? "");
+                                            double? otherValue = double.tryParse(controller.priceoneController.text);
+
+                                            if (thisValue == null) {
+                                              return 'Please enter a valid number';
+                                            } else if (otherValue != null && thisValue >= otherValue) {
+                                              return 'Value should be less than the other field';
+                                            }
+
+                                            return null;
+                                          },
                                           width: getHorizontalSize(
                                             160,
                                           ),
@@ -539,6 +560,18 @@ class PostPageScreen extends GetWidget {
                                           width: getHorizontalSize(
                                             160,
                                           ),
+                                          validator: (value) {
+                                            double? thisValue = double.tryParse(value ?? "");
+                                            double? otherValue = double.tryParse(controller.priceController.text);
+
+                                            if (thisValue == null) {
+                                              return 'Please enter a valid number';
+                                            } else if (otherValue != null && thisValue <= otherValue) {
+                                              return 'Value should be greater than the other field';
+                                            }
+
+                                            return null;
+                                          },
                                           focusNode: FocusNode(),
                                           autofocus: true,
                                           controller:
@@ -611,6 +644,12 @@ class PostPageScreen extends GetWidget {
                             autofocus: true,
                             controller: controller.frametwelveoneController,
                             hintText: "msg_explain_briefly".tr,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a duration';
+                              }
+                              return null; // Return null if the input is valid
+                            },
                             margin: getMargin(
                               top: 6,
                             ),
@@ -619,52 +658,54 @@ class PostPageScreen extends GetWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: getPadding(
-                        top: 29,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "msg_add_responsibilities".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13Gray900,
-                          ),
-                          CustomButton(
-                            height: getVerticalSize(44.h),
-                            text: "Add the tasks to be carried out",
-                            onTap: () {
-                              controller.startAddingResponsibilities();
-                            },
-                            margin: getMargin(top: 24.h),
-                            variant: ButtonVariant.OutlineGray300b2,
-                            padding: ButtonPadding.PaddingT12,
-                            fontStyle: ButtonFontStyle.SatoshiLight14,
-                            prefixWidget: Container(
-                              margin: getMargin(right: 6.w),
-                              child: CustomImageView(
-                                  svgPath: ImageConstant.imgFrameGray700),
-                            ),
-                          ),
-                          Obx(() => controller.isAddingResponsibility.value
-                              ? _buildAccountForm()
-                              : _buildAccountChips()),
-                          if (controller.errorText.value != null)
-                            Obx(
-                              () => Text(
-                                controller.errorText.value,
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 10.sp,
-                                ),
-                              ),
-                            )
-                        ],
-                      ),
-                    ),
+
+    Padding(
+        padding: getPadding(
+          top: 29,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "msg_add_responsibilities".tr,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+              style: AppStyle.txtSatoshiLight13Gray900,
+            ),
+            CustomButton(
+              height: getVerticalSize(44.h),
+              text: "Add the tasks to be carried out",
+              onTap: () {
+                controller.startAddingResponsibilities();
+              },
+              margin: getMargin(top: 24.h),
+              variant: ButtonVariant.OutlineGray300b2,
+              padding: ButtonPadding.PaddingT12,
+              fontStyle: ButtonFontStyle.SatoshiLight14,
+              prefixWidget: Container(
+                margin: getMargin(right: 6.w),
+                child: CustomImageView(
+                    svgPath: ImageConstant.imgFrameGray700),
+              ),
+            ),
+            Obx(() => controller.isAddingResponsibility.value
+                ? _buildAccountForm()
+                : _buildAccountChips()),
+            if (controller.errorText.value.isNotEmpty)
+              Obx(
+                    () => Text(
+                  controller.errorText.value,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              )
+          ],
+        ),
+      ),
+
                   ],
                 ),
               ),
@@ -748,7 +789,7 @@ class PostPageScreen extends GetWidget {
 
   //This is for showing the list of responsibilities
   Widget _buildAccountChips() {
-    List responsibilitiesCopy = controller.resposibilities.toList();
+    List responsibilitiesCopy = controller.responsibilities.toList();
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
