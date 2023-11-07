@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class UserModel {
   final String id;
   final String avatar;
@@ -54,11 +56,45 @@ class UserModel {
       following: json['following'] ?? 0,
       views: json['views'] ?? 0,
       userId: json['userId'] ?? '',
-      avatar: json['avatar']??'',
+      avatar: json['avatar'] ?? '',
       createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
       updatedAt: DateTime.parse(json['updatedAt'] as String) ?? DateTime.now(),
       creatorId: json['creatorId'] ?? null,
       influencerId: json['influencerId'] ?? null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'termsAndConditionsAgreement': termsAndConditionsAgreement,
+      'isNewUser': isNewUser,
+      'isSocial': isSocial,
+      'verified': verified,
+      'verifiedEmail': verifiedEmail,
+      'followers': followers,
+      'following': following,
+      'views': views,
+      'userId': userId,
+      'avatar': avatar,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'creatorId': creatorId,
+      'influencerId': influencerId,
+    };
+  }
+}
+
+class EditProfileArguments {
+  final String firstName;
+  final String lastName;
+  final String country;
+  final String profileImage;
+  final String bio;
+
+  EditProfileArguments(
+      this.firstName, this.lastName, this.country, this.profileImage, this.bio);
 }

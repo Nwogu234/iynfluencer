@@ -40,6 +40,8 @@ import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen
 import 'package:iynfluencer/presentation/chats_opened_screen/binding/chats_opened_binding.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/edit_profile_listed_jobs_tab_container_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/binding/edit_profile_listed_jobs_tab_container_binding.dart';
+import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/edit_profile_listed_jobs_tab_two_container_screen.dart';
+import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
 import 'package:iynfluencer/presentation/edit_profile_details_screen/edit_profile_details_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_details_screen/binding/edit_profile_details_binding.dart';
 import 'package:iynfluencer/presentation/notification_mentions_screen/notification_mentions_screen.dart';
@@ -215,6 +217,9 @@ class AppRoutes {
 
   static const String editProfileListedJobsTabContainerScreen =
       '/edit_profile_listed_jobs_tab_container_screen';
+
+  static const String editProfileListedJobsTabTwoContainerScreen =
+      '/edit_profile_listed_jobs_tab_two_container_screen';
 
   static const String editProfileCommPostsPage =
       '/edit_profile_comm_posts_page';
@@ -519,6 +524,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: editProfileListedJobsTabTwoContainerScreen,
+      page: () => EditProfileListedJobsTabTwoContainerScreen(),
+      bindings: [
+        EditProfileListedJobsTabTwoContainerBinding(),
+      ],
+    ),
+    GetPage(
       name: editProfileDetailsScreen,
       page: () => EditProfileDetailsScreen(),
       bindings: [
@@ -772,7 +784,7 @@ class AppRoutes {
     ),
     GetPage(
       name: withdrawalScreen,
-      page : () => WithdrawalScreen(),
+      page: () => WithdrawalScreen(),
       bindings: [
         WithdrawalBinding(),
       ],
