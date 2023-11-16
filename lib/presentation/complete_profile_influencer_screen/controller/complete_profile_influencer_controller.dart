@@ -23,7 +23,8 @@ class CompleteProfileInfluencerController extends GetxController
   final formKey = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
   Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [], socials: []).obs;
+      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: [])
+          .obs;
 
   RxList<SelectionPopupModel> nicheToDisplay = RxList<SelectionPopupModel>();
   RxList<SelectionPopupModel> platformToDisplay = RxList<SelectionPopupModel>();

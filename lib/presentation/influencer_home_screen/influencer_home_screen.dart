@@ -24,7 +24,12 @@ import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'models/influencer_home_model.dart';
 
 class InfluencerHomeScreen extends StatefulWidget {
-  InfluencerHomeScreen({Key? key}) : super(key: key);
+  final String? profileImage;
+
+  InfluencerHomeScreen({
+    Key? key,
+    this.profileImage,
+  }) : super(key: key);
 
   @override
   _InfluencerHomeScreenState createState() => _InfluencerHomeScreenState();
@@ -36,6 +41,8 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
+  String? updatedProfileImage;
+
   @override
   void initState() {
     super.initState();
@@ -56,13 +63,16 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
     return SafeArea(
         child: Scaffold(
             key: _scaffoldKey,
-            drawer: InfluencerDraweritem(controller),
+            drawer: InfluencerDraweritem(
+              controller: controller,
+              updatedProfileImage: updatedProfileImage,
+            ),
             backgroundColor: ColorConstant.whiteA70001,
             appBar: CustomAppBar(
                 height: getVerticalSize(63),
                 leadingWidth: 55,
                 leading: AppbarCircleimage(
-                    imagePath: ImageConstant.imgGroup899,
+                    imagePath: updatedProfileImage ?? ImageConstant.imgGroup899,
                     margin:
                         EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
                     onTap: () {

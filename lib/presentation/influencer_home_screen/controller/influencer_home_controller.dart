@@ -74,7 +74,8 @@ class InfluencerHomeController extends GetxController {
         final jobResponse = JobResponse.fromJson(responseJson);
         jobsList = jobResponse.data.docs;
         infJobsList = jobsList
-            .where((item) => item.creatorId!=user.userModelObj.value.creatorId)
+            .where(
+                (item) => item.creatorId != user.userModelObj.value.creatorId)
             .toList();
         print(jobsList); // List of Influencers
         error('');
@@ -102,5 +103,6 @@ class InfluencerHomeController extends GetxController {
   void onClose() {
     super.onClose();
     searchController.dispose();
+    animationController.dispose();
   }
 }

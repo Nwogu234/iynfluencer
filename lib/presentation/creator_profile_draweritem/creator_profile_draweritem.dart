@@ -20,6 +20,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
     }
     return text[0].toUpperCase() + text.substring(1).toLowerCase();
   }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -41,14 +42,16 @@ class CreatorProfileDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child:  Text(
+                          child: Text(
                               "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text("@${controller.user.userModelObj.value.firstName}".tr,
+                          child: Text(
+                              "@${controller.user.userModelObj.value.firstName}"
+                                  .tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125Gray600ab)),
@@ -78,15 +81,17 @@ class CreatorProfileDraweritem extends StatelessWidget {
                             onTapMenutab03();
                           },
                           child: Padding(
-                              padding: EdgeInsets.only(left: 1.w, top: 20.h, right: 8.w),
+                              padding: EdgeInsets.only(
+                                  left: 1.w, top: 20.h, right: 8.w),
                               child: Row(children: [
                                 CustomImageView(
                                     svgPath:
-                                    ImageConstant.imgFrameBlueGray40024x24,
+                                        ImageConstant.imgFrameBlueGray40024x24,
                                     height: 24.h,
                                     width: 24.w),
                                 Padding(
-                                    padding: EdgeInsets.only(left: 14.w, top: 1.h),
+                                    padding:
+                                        EdgeInsets.only(left: 14.w, top: 1.h),
                                     child: Text("lbl_notifications".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
@@ -94,13 +99,17 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                 Spacer(),
                                 Container(
                                     width: 20.w,
-                                    margin: EdgeInsets.only(top: 3.h, bottom: 1.h),
+                                    margin:
+                                        EdgeInsets.only(top: 3.h, bottom: 1.h),
                                     padding: EdgeInsets.only(
-                                        left: 4.w, top: 1.h, right: 4.w, bottom: 1.h),
+                                        left: 4.w,
+                                        top: 1.h,
+                                        right: 4.w,
+                                        bottom: 1.h),
                                     decoration: AppDecoration.txtFillRed500
                                         .copyWith(
-                                        borderRadius: BorderRadius.circular(
-                                            11.r)),
+                                            borderRadius:
+                                                BorderRadius.circular(11.r)),
                                     child: Text("lbl_9".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
@@ -155,13 +164,12 @@ class CreatorProfileDraweritem extends StatelessWidget {
                               margin: EdgeInsets.only(left: 25.w),
                               decoration: BoxDecoration(
                                   color: ColorConstant.cyan300,
-                                  borderRadius: BorderRadius.circular(
-                                      8.r)),
+                                  borderRadius: BorderRadius.circular(8.r)),
                               child: CustomImageView(
                                   height: 20.h,
                                   width: 15.w,
                                   svgPath:
-                                  ImageConstant.imgFrameWhiteA70014x14)),
+                                      ImageConstant.imgFrameWhiteA70014x14)),
                           onTap: () {
                             onTapBecomean();
                           }),
@@ -172,19 +180,21 @@ class CreatorProfileDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001)),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           storage.write(key: 'token', value: null);
                           Get.offAllNamed(AppRoutes.logInScreen);
                         },
                         child: Padding(
-                            padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
+                            padding: EdgeInsets.only(
+                                left: 1.w, top: 22.h, bottom: 121.h),
                             child: Row(children: [
                               CustomImageView(
                                   svgPath: ImageConstant.imgQuestion,
                                   height: 24.h,
                                   width: 24.w),
                               Padding(
-                                  padding: EdgeInsets.only(left: 14.w, top: 2.h),
+                                  padding:
+                                      EdgeInsets.only(left: 14.w, top: 2.h),
                                   child: Text("lbl_sign_out".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
@@ -196,7 +206,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   onTapImgFrame901() {
     Get.toNamed(
-      AppRoutes.editProfileListedJobsTabContainerScreen,
+      AppRoutes.editProfileListedJobsTabTwoContainerScreen,
     );
   }
 
@@ -207,7 +217,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
   }
 
   onTapBecomean() {
-    if(controller.user.userModelObj.value.influencerId !=null){
+    if (controller.user.userModelObj.value.influencerId != null) {
       Get.delete<CreatorHireslistTabContainerController>();
       Get.delete<TabController>();
       storage.write(key: "activeProfile", value: "Influencer");
@@ -215,13 +225,10 @@ class CreatorProfileDraweritem extends StatelessWidget {
         AppRoutes.influencerTabScreen,
       );
       controller.dispose();
-    }
-    else{
+    } else {
       Get.offNamed(
         AppRoutes.completeProfileInfluencerScreen,
       );
     }
-
-
   }
 }
