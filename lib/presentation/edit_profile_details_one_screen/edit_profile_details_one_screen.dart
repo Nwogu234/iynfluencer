@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/edit_profile_listed_jobs_tab_two_container_screen.dart';
 
 import 'controller/edit_profile_details_one_controller.dart';
@@ -21,6 +23,7 @@ class EditProfileDetailsOneScreen
   EditProfileDetailsOneScreen({Key? key}) : super(key: key);
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -347,21 +350,32 @@ class EditProfileDetailsOneScreen
 
   void onTapSaveEdit() async {
     if (_formKey.currentState!.validate()) {
-      final bytes = await controller.profileImage.value!.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      String bio = controller.frametwelveController1.text;
+      String niches = controller.frametwelvetwoController.text;
+      String firstName = controller.frametwelveController.text;
+      String lastName = controller.frametwelveController.text;
+      String country = controller.frametwelveoneController.text;
+      File? profileImageFile = controller.profileImage.value;
 
-      final args = EditProfileArguments(
-          controller.frametwelveController.text,
-          controller.frametwelveController.text,
-          controller.frametwelveoneController.text,
-          controller.frametwelveController1.text,
-          base64Image);
+      // Update the profile details and image, and get the updated profile
+      Map<String, dynamic>? result = await userController.editCreatorProfile(
+        bio: bio,
+        niches: niches,
+        firstName: firstName,
+        lastName: lastName,
+        country: country,
+        profileImageFile: profileImageFile,
+      );
 
-      await controller.editProfileTwo();
+      // Extract the updated profile details and image path
+      Users updatedProfile = result?['profileDetails'];
+      String? updatedProfileImagePath = result?['profileImagePath'];
 
       Get.off(
-        EditProfileListedJobsTabTwoContainerScreen(),
-        arguments: args,
+        EditProfileListedJobsTabTwoContainerScreen(
+          updatedProfile: updatedProfile,
+          updatedProfileImagePath: updatedProfileImagePath,
+        ),
       );
     }
   }
