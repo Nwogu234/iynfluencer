@@ -18,16 +18,19 @@ class Listgroup855ItemWidget extends StatelessWidget {
 
   JobsRequestsInfluencerModel listgroup855ItemModelObj;
 
-  var controller = Get.find<JobsRequestsInfluencerController>();
+  final JobsRequestsInfluencerController controller =
+      Get.find<JobsRequestsInfluencerController>();
 
-  Widget cancelButton = TextButton(
-    child: Text("Cancel"),
-    onPressed: () {},
-  );
-  Widget continueButton = TextButton(
-    child: Text("Continue"),
-    onPressed: () {},
-  );
+  // Widget cancelButton = TextButton(
+  //   child: Text("Cancel"),
+  //   onPressed: () {},
+  // );
+  // Widget continueButton = TextButton(
+  //   child: Text("Continue"),
+  //   onPressed: () {
+  //    controller.jobsRequestsInfluencerModelObj();
+  //   },
+  // );
 
   // show the dialog
   Future<void> _showAlertDialog(BuildContext context) async {
@@ -49,7 +52,10 @@ class Listgroup855ItemWidget extends StatelessWidget {
               child: Text('OK'),
               onPressed: () {
                 // Perform an action when OK button is pressed
-                Navigator.of(context).pop(); // close the dialog
+                controller.influencerDeclineRequestJob(
+                    listgroup855ItemModelObj.jobRequestId!,
+                    Navigator.of(context));
+                // Navigator.of(context).pop();
               },
             ),
           ],

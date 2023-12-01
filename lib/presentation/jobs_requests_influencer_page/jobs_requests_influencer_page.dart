@@ -55,7 +55,7 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                 child: Padding(
                   padding: getPadding(
                     left: 20,
-                    top: 22,
+                    // top: 22,
                     right: 20,
                   ),
                   child: Obx(() {
@@ -95,8 +95,10 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                           !controller.isTrendLoading.value) {
                         return ResponsiveEmptyWidget(
                           errorMessage: 'No Job Request Available',
-                          buttonText: "",
-                          onRetry: () {},
+                          buttonText: "Retry Now",
+                          onRetry: () {
+                            controller.getUser();
+                          },
                           fullPage: true,
                         ); // Your error widget
                       } else {

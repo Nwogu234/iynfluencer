@@ -454,8 +454,9 @@ class ApiClient extends GetConnect {
   Future<Response> InfluencerDeclineJobsRequests(var token, String id) async {
     Response response = Response();
     try {
-      response = await get(
+      response = await post(
         'influencers/me/jobs/request/$id/decline',
+        {},
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
@@ -468,7 +469,7 @@ class ApiClient extends GetConnect {
       } else {
         print(response);
         // print(response.body);
-        throw Exception('Server error From Jobs');
+        throw Exception('Server error From Job Request');
       }
     } catch (e) {
       print('$e from getting list of influencers job nids');

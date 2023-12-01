@@ -66,11 +66,12 @@ class JobsRequestsInfluencerController extends GetxController {
       isTrendLoading.value = true;
       Response response = await apiClient.getInfluencerJobsRequests(token);
       List<dynamic> jobJsonList = response.body['data']['docs'];
-      print('=====jobJsonList length====');
       print(jobJsonList.length);
       if (jobJsonList.length > 0) {
         jobJsonList.forEach((e) {
-          existingJobs.add(JobsRequestsInfluencerModel.fromJson(e));
+          if (e['status'] != 'declined') {
+            existingJobs.add(JobsRequestsInfluencerModel.fromJson(e));
+          }
         });
       }
       if (existingJobs.isEmpty) {
@@ -82,6 +83,28 @@ class JobsRequestsInfluencerController extends GetxController {
         isTrendLoading.value = false;
       }
       isTrendLoading.value = false;
+    } catch (e) {
+      print(e);
+      // Get.snackbar('Error', 'Something went wrong');
+      error('Something went wrong');
+      isError.value = true;
+      isTrendLoading.value = false;
+    }
+  }
+
+  Future<void> influencerDeclineRequestJob(String id, close) async {
+    try {
+      error('');
+      isTrendLoading.value = true;
+      Response response =
+          await apiClient.InfluencerDeclineJobsRequests(token, id);
+
+      if (response.statusCode == 201 || response.body['status'] == 'SUCCESS') {
+        close!.pop();
+        Get.snackbar('Success', 'Job Request Declined Successfully');
+
+        getUser();
+      }
     } catch (e) {
       print(e);
       // Get.snackbar('Error', 'Something went wrong');
