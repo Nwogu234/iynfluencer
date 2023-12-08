@@ -7,6 +7,7 @@ import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_jobs_influencer_model.dart';
+import 'package:iynfluencer/widgets/app_bar/influencer_buttom_bar.dart';
 
 import '../../../widgets/app_bar/influencer_buttom_bar.dart';
 
@@ -20,8 +21,9 @@ class JobsJobsInfluencerController extends GetxController {
 
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();
-  InfluencerBottomBarController bumcont=Get.put(InfluencerBottomBarController());
-  InfluencerTabsController infTabcont=Get.put(InfluencerTabsController());
+  InfluencerBottomBarController bumcont =
+      Get.put(InfluencerBottomBarController());
+  InfluencerTabsController infTabcont = Get.put(InfluencerTabsController());
 
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
@@ -73,7 +75,7 @@ class JobsJobsInfluencerController extends GetxController {
       isTrendLoading.value = true;
       Response response =
           await apiClient.getInfluencerAllJobs(influencerId, token);
-      if(response.isOk){
+      if (response.isOk) {
         List<dynamic> dd = response.body['docs'];
         dd.forEach((element) {
           existingJobs.add(Job.fromJson(element));
