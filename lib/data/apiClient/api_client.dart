@@ -502,4 +502,64 @@ class ApiClient extends GetConnect {
       throw Exception('Server error');
     }
   }
+
+// This is for  modifying influencer profile in editprofiledetailscreen
+  Future<Response> updateInfluencerProfile(
+      CompleteProfileInfluencerModel editProfile, var token) async {
+    Response response;
+    try {
+      response = await patch(
+        'influencers/me',
+        editProfile.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(editProfile.toJson());
+        print('Server error: ${response.statusText}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer profile');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+// This is for  modifying creator profile in editprofiledetailonescreen
+  Future<Response> updateCreatorProfile(
+      CompleteProfileCreatorModel editProfileTwo, var token) async {
+    Response response;
+    try {
+      response = await patch(
+        'creators/me',
+        editProfileTwo.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(editProfileTwo.toJson());
+        print('Server error: ${response.statusText}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating creator profile');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
 }

@@ -1,17 +1,17 @@
-import 'package:iynfluencer/data/models/use_model/user_model.dart';
-import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/controller/edit_profile_listed_jobs_tab_container_controller.dart';
-import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/controller/edit_profile_listed_jobs_tab_two_container_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/presentation/creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'package:iynfluencer/presentation/creator_profile_listed_jobs_page/creator_profile_listed_jobs_page.dart';
-import 'package:iynfluencer/presentation/influencer_drawer_item/influencer_drawer.dart';
-import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
-import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
+import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/controller/edit_profile_listed_jobs_tab_two_container_controller.dart';
+import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
+import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class EditProfileListedJobsTabContainerScreen
-    extends GetWidget<EditProfileListedJobsTabContainerController> {
-  const EditProfileListedJobsTabContainerScreen({Key? key}) : super(key: key);
+class EditProfileListedJobsTabTwoContainerScreen
+    extends GetWidget<EditProfileListedJobsTabTwoContainerController> {
+  const EditProfileListedJobsTabTwoContainerScreen({Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,7 @@ class EditProfileListedJobsTabContainerScreen
                                         alignment: Alignment.topLeft,
                                         children: [
                                           CustomImageView(
-                                              imagePath: ImageConstant
-                                                  .imgRectangle5059,
+                                              imagePath: profileImageFile,
                                               height: getVerticalSize(170),
                                               width: getHorizontalSize(375),
                                               alignment: Alignment.center),
@@ -80,8 +79,8 @@ class EditProfileListedJobsTabContainerScreen
                                             MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
-                                              imagePath: profileImageFile,
-                                              //ImageConstant.imgGroup947,
+                                              imagePath:
+                                                  ImageConstant.imgGroup947,
                                               height: getSize(85),
                                               width: getSize(85),
                                               radius: BorderRadius.circular(
@@ -89,8 +88,7 @@ class EditProfileListedJobsTabContainerScreen
                                               margin: getMargin(left: 7)),
                                           Padding(
                                               padding: getPadding(top: 11),
-                                              child: Text(
-                                                  name, // "lbl_mark_adebayo".tr,
+                                              child: Text(name,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
@@ -99,8 +97,7 @@ class EditProfileListedJobsTabContainerScreen
                                           Padding(
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
-                                                Text(
-                                                    country, //"lbl_lagos_nigeria".tr,
+                                                Text(country,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
@@ -229,16 +226,12 @@ class EditProfileListedJobsTabContainerScreen
     final name =
         "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
     final profileImageFile = args.profileImage;
-    final influencerController = InfluencerHomeController(
-        Rx<InfluencerHomeModel>(InfluencerHomeModel()));
+    final controller =
+        HomeCreatorController(Rx<HomeCreatorModel>(HomeCreatorModel()));
 
     // Get.back();
     Get.to(
-      InfluencerDraweritem(
-        controller: influencerController,
-        updatedName: name,
-        updatedProfileImage: profileImageFile,
-      ),
+      CreatorProfileDraweritem(controller),
     );
   }
 
@@ -248,7 +241,7 @@ class EditProfileListedJobsTabContainerScreen
   /// push the named route for the editProfileDetailsScreen.
   onTapEditprofile() {
     Get.toNamed(
-      AppRoutes.editProfileDetailsScreen,
+      AppRoutes.editProfileDetailsOneScreen,
     );
   }
 }
