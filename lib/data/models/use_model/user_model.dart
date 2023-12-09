@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class UserModel {
   final String id;
   final String avatar;
@@ -18,7 +16,11 @@ class UserModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String? creatorId;
+  final String? country;
+  final String? dob;
   final String? influencerId;
+  final String? phone;
+  String?  countryCode;
 
   UserModel({
     required this.id,
@@ -38,7 +40,11 @@ class UserModel {
     required this.updatedAt,
     required this.creatorId,
     required this.influencerId,
+    required this.phone,
+    required this.country,
+    required this.dob,
     required this.avatar,
+     this.countryCode
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -56,34 +62,36 @@ class UserModel {
       following: json['following'] ?? 0,
       views: json['views'] ?? 0,
       userId: json['userId'] ?? '',
-      avatar: json['avatar'] ?? '',
-      createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
+      avatar: json['avatar']??'',
+      country: json["country"]??null,
+      dob: json['dob'] != null ? json['dob'] : null,      createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
       updatedAt: DateTime.parse(json['updatedAt'] as String) ?? DateTime.now(),
       creatorId: json['creatorId'] ?? null,
+      phone: json['phone']?? null,
       influencerId: json['influencerId'] ?? null,
     );
   }
+}
+
+class UpdateUser {
+  final String userName;
+  final String phoneNumber;
+  final String dob;
+  final String country;
+
+  UpdateUser({
+    required this.userName,
+    required this.phoneNumber,
+    required this.country,
+    required this.dob,
+  });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-      'termsAndConditionsAgreement': termsAndConditionsAgreement,
-      'isNewUser': isNewUser,
-      'isSocial': isSocial,
-      'verified': verified,
-      'verifiedEmail': verifiedEmail,
-      'followers': followers,
-      'following': following,
-      'views': views,
-      'userId': userId,
-      'avatar': avatar,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'creatorId': creatorId,
-      'influencerId': influencerId,
+      'username': userName,
+      'phone': phoneNumber,
+      'country': country,
+      'dob': dob, // Convert DateTime to string
     };
   }
 }

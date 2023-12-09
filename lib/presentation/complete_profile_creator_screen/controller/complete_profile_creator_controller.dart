@@ -5,8 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 /// A controller class for the CompleteProfileCreatorScreen.
 ///
@@ -21,8 +19,7 @@ class CompleteProfileCreatorController extends GetxController {
   final apiClient = ApiClient();
 
   Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
-      CompleteProfileCreatorModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
+      CompleteProfileCreatorModel(bio: "", niches: [], user: []).obs;
 
   Rxn<File> profileImage = Rxn<File>(); // Add this
   var storage = FlutterSecureStorage();
@@ -53,12 +50,11 @@ class CompleteProfileCreatorController extends GetxController {
   Rx<SelectionPopupModel> selectedValue =
       SelectionPopupModel(id: 0, title: "None", value: null, isSelected: false)
           .obs;
-  RxString errorText = "".obs;
+  RxString errorText="".obs;
 
   RxList<SelectionPopupModel> selectedDropdownItems =
       <SelectionPopupModel>[].obs;
-
-  ///this is called onChange in the drop down
+///this is called onChange in the drop down
   void onDropdownItemChanged(SelectionPopupModel value) {
     selectedValue.value = value;
     // Check if the item is not already selected
@@ -75,8 +71,7 @@ class CompleteProfileCreatorController extends GetxController {
     print(itemsToDisplay.map((item) => item.toString()).toList());
     selectedValue.value = SelectionPopupModel(id: 0, title: "Select Niche");
   }
-
-  ///this is called when a chip widget is deleted
+///this is called when a chip widget is deleted
   handleDelete(SelectionPopupModel platform) {
     selectedValue.value = itemsToDisplay.last;
     update();
@@ -118,8 +113,8 @@ class CompleteProfileCreatorController extends GetxController {
         );
       } else {
         print(loginResponse.statusCode);
-        Get.snackbar('Failure',
-            'Profile activation failed! ${loginResponse.body['message']}');
+        Get.snackbar(
+            'Failure', 'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);

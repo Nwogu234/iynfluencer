@@ -32,8 +32,7 @@ class EditProfileDetailsOneController extends GetxController {
   var storage = FlutterSecureStorage();
   final apiClient = ApiClient();
   Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
-      CompleteProfileCreatorModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
+      CompleteProfileCreatorModel(bio: "", niches: [], user: []).obs;
 
   Future<void> editProfileTwo() async {
     // Update the bio and niches in the CompleteProfileCreatorModel
@@ -54,7 +53,6 @@ class EditProfileDetailsOneController extends GetxController {
         );
         val?.user?[0] = updatedUser;
       }
-      val?.socials = [];
     });
 
     final profileImageFile = profileImage.value;

@@ -21,6 +21,7 @@ class ApiClient extends GetConnect {
     httpClient.baseUrl =
         'https://bv9pfcsd5b.execute-api.us-east-1.amazonaws.com/api/v1/';
   }
+
   dynamic errorHandler(Response response) {
     print(response.toString());
     switch (response.statusCode) {
@@ -153,13 +154,38 @@ class ApiClient extends GetConnect {
   // this is for updating profile pic url
   Future<Response> postAvatar(String avatarUrl, String token) {
     return post(
-      'users/me/save_avatar',
-      {"avatar": avatarUrl}, // replace with your specific endpoint path
+      'users/me/save_avatar', {"avatar": avatarUrl},
+      // replace with your specific endpoint path
       headers: {
         "Content-Type": "application/json",
         'Authorization': token,
       },
     );
+  }
+
+  // THIS IS FOR UPDATING USER DETAILS
+  Future<Response> updateUser(UpdateUser update, var token) async {
+    Response response;
+    try {
+      response = await patch('users/me', update.toJson(), headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        // print(response);
+        // print(response.body);
+        // print(response.statusCode);
+        // print(user.toJson());
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
   }
 
   //post request for creating a creator profile
@@ -216,6 +242,66 @@ class ApiClient extends GetConnect {
     }
   }
 
+
+  // This is for  modifying influencer profile in editprofiledetailscreen
+  Future<Response> updateInfluencerProfile(
+      CompleteProfileInfluencerModel editProfile, var token) async {
+    Response response;
+    try {
+      response = await patch(
+        'influencers/me',
+        editProfile.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(editProfile.toJson());
+        print('Server error: ${response.statusText}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer profile');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+// This is for  modifying creator profile in editprofiledetailonescreen
+  Future<Response> updateCreatorProfile(
+      CompleteProfileCreatorModel editProfileTwo, var token) async {
+    Response response;
+    try {
+      response = await patch(
+        'creators/me',
+        editProfileTwo.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(editProfileTwo.toJson());
+        print('Server error: ${response.statusText}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating creator profile');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
   // Get Request to get a list of Influencers
   Future<List<Influencer>> getInfluencers(
       int pageNumber, int limit, var token) async {
@@ -443,66 +529,6 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of creator jobs');
-      print(e);
-      throw Exception('Server error');
-    }
-  }
-
-// This is for  modifying influencer profile in editprofiledetailscreen
-  Future<Response> updateInfluencerProfile(
-      CompleteProfileInfluencerModel editProfile, var token) async {
-    Response response;
-    try {
-      response = await patch(
-        'influencers/me',
-        editProfile.toJson(),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        return response;
-      } else {
-        print(response);
-        print(response.body);
-        print(response.statusCode);
-        print(editProfile.toJson());
-        print('Server error: ${response.statusText}');
-        throw Exception('Server error');
-      }
-    } catch (e) {
-      print('$e from updating influencer profile');
-      print(e);
-      throw Exception('Server error');
-    }
-  }
-
-// This is for  modifying creator profile in editprofiledetailonescreen
-  Future<Response> updateCreatorProfile(
-      CompleteProfileCreatorModel editProfileTwo, var token) async {
-    Response response;
-    try {
-      response = await patch(
-        'creators/me',
-        editProfileTwo.toJson(),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        return response;
-      } else {
-        print(response);
-        print(response.body);
-        print(response.statusCode);
-        print(editProfileTwo.toJson());
-        print('Server error: ${response.statusText}');
-        throw Exception('Server error');
-      }
-    } catch (e) {
-      print('$e from updating creator profile');
       print(e);
       throw Exception('Server error');
     }

@@ -20,7 +20,6 @@ class CompleteProfileInfluencerModel {
       'bio': bio,
       'niche': niches,
       'socials': socials.map((social) => social.toJson()).toList(),
-      'user': user?.map((user) => user.toJson()).toList(),
     };
   }
 }

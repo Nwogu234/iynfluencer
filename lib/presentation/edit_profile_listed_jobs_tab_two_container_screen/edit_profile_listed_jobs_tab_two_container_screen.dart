@@ -8,6 +8,8 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
+import '../../data/general_controllers/user_controller.dart';
+
 class EditProfileListedJobsTabTwoContainerScreen
     extends GetWidget<EditProfileListedJobsTabTwoContainerController> {
   const EditProfileListedJobsTabTwoContainerScreen({Key? key})
@@ -21,12 +23,11 @@ class EditProfileListedJobsTabTwoContainerScreen
       }
       return text[0].toUpperCase() + text.substring(1);
     }
-
-    final args = Get.arguments as EditProfileArguments;
+    final args = Get.put(UserController());
     final name =
-        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
-    final country = args.country;
-    final profileImageFile = args.profileImage;
+        "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
+    final country = args.userModelObj.value.country;
+    final profileImageFile = args.userModelObj.value.avatar;
 
     return SafeArea(
         child: Scaffold(
@@ -97,7 +98,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                           Padding(
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
-                                                Text(country,
+                                                Text(country!,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
