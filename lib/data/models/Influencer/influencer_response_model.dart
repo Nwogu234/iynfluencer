@@ -31,6 +31,17 @@ class User {
       avatar: json['avatar'], // Optional field
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['userId'] = this.userId;
+    data['country'] = this.country;
+    data['avatar'] = this.avatar;
+    return data;
+  }
 }
 
 class InfluencerResponse {
@@ -78,16 +89,16 @@ class Influencer {
 
   Influencer(
       {this.id,
-        this.userId,
-        this.niche,
-        this.bio,
-        this.completed,
-        this.socials,
-        this.suspended,
-        this.influencerId,
-        this.user,
-        this.jobsDone,
-        this.jobs});
+      this.userId,
+      this.niche,
+      this.bio,
+      this.completed,
+      this.socials,
+      this.suspended,
+      this.influencerId,
+      this.user,
+      this.jobsDone,
+      this.jobs});
 
   factory Influencer.fromJson(Map<String, dynamic> json) {
     return Influencer(

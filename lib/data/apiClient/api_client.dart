@@ -509,6 +509,61 @@ class ApiClient extends GetConnect {
     }
   }
 
+  Future<Response> getInfluencerJobsRequests(
+    var token,
+  ) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'influencers/me/jobs/requests',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        print('------------here oooo----');
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('Server error From Jobs');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers job nids');
+      errorHandler(response);
+      throw Exception('Server error From influencers job  2');
+    }
+  }
+
+  Future<Response> InfluencerDeclineJobsRequests(var token, String id) async {
+    Response response = Response();
+    try {
+      response = await post(
+        'influencers/me/jobs/request/$id/decline',
+        {},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        print('------------here oooo----');
+        // print(response.body);
+        return response;
+      } else {
+        print(response);
+        // print(response.body);
+        throw Exception('Server error From Job Request');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers job nids');
+      errorHandler(response);
+      throw Exception('Server error From influencers job  2');
+    }
+  }
+
   //this is for getting a creators list of jobs
   Future<Response> getCreatorJobs(var token) async {
     Response response;
