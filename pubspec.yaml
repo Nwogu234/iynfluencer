@@ -20,7 +20,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   flutter_screenutil: ^5.1.1
   pin_code_fields: ^8.0.1
-  sms_autofill: ^2.0.0
+  sms_autofill: ^2.3.0
   pin_input_text_field: ^4.5.1
   country_flags: ^2.1.1
   intl: ^0.18.0

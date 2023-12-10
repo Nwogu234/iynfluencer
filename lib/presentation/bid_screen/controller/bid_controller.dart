@@ -12,7 +12,7 @@ class BidController extends GetxController with SingleGetTickerProviderMixin {
   BidController(this.postPageModelObj);
   Rx<BidModel> postPageModelObj = BidModel().obs;
   var storage = FlutterSecureStorage();
-
+  Rx<bool> isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   Rx<String> errorText = "".obs;
   var termsAndConditions = <String>[].obs;
@@ -41,44 +41,64 @@ class BidController extends GetxController with SingleGetTickerProviderMixin {
   void submitForm(BuildContext context, String jobId) async {
     var token = await storage.read(key: 'token');
     if (formKey.currentState!.validate()) {
-      final bidData = BidModel(
+      if (frametwelveController.text.length <= 20) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Cover Letter Must be Greater than 20 characters'),
+          ),
+        );
+      } else {
+        isLoading.value = true;
+        final bidData = BidModel(
           coverLetter: frametwelveController.text,
           jobId: jobId,
-          price: int.tryParse(priceController.text));
-      try {
-        Response res = await apiClient.bidAJob(bidData, token);
-        if (res.isOk) {
-          Get.snackbar('Success', 'Bid Posted Successfully');
-          // Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
-        } else if (res.statusCode == 400) {
-          // Handles bad request errors
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(res.body?.message ?? res.statusText),
-            ),
-          );
-        } else if (res.statusCode == 401) {
-          // Handle unauthorized errors (e.g., user not authenticated)
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Unauthorized. Please log in.'),
-            ),
-          );
-        } else {
-          // Handle other status codes
+          price: int.tryParse(priceController.text),
+          terms: termsAndConditions,
+        );
+        try {
+          Response res = await apiClient.bidAJob(bidData, token);
+
+          // print(res.statusCode);
+          // print('----- statuscode---');
+          // print(res.body['message']);
+          if (res.isOk) {
+            Get.snackbar('Success', 'Bid Posted Successfully');
+            Get.back();
+            // Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
+          } else if (res.statusCode == 400) {
+            // Handles bad request errors
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(res.body['message'] ?? res.statusText),
+              ),
+            );
+          } else if (res.statusCode == 401) {
+            // Handle unauthorized errors (e.g., user not authenticated)
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Unauthorized. Please log in.'),
+              ),
+            );
+          } else {
+            // Handle other status codes
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('An error occurred while submitting the form.'),
+              ),
+            );
+          }
+          isLoading.value = false;
+        } catch (e) {
+          print('-----errror');
+          isLoading.value = false;
+          // print(res.body);
+          print(e);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('An error occurred while submitting the form.'),
             ),
           );
         }
-      } catch (e) {
-        print(e);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('An error occurred while submitting the form.'),
-          ),
-        );
       }
     }
   }
