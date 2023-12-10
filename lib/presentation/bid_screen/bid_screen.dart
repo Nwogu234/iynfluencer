@@ -219,13 +219,16 @@ class BidScreen extends GetWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomButton(
-                height: getVerticalSize(44),
-                text: "lbl_submit_bid2".tr,
-                padding: ButtonPadding.PaddingAll12,
-                onTap: () {
-                  controller.submitForm(context, selectedJob.jobId!);
-                },
+              Obx(
+                () => CustomButton(
+                  height: getVerticalSize(44),
+                  text: "lbl_submit_bid2".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  loading: controller.isLoading.value,
+                  onTap: () {
+                    controller.submitForm(context, selectedJob.jobId!);
+                  },
+                ),
               ),
             ],
           ),
