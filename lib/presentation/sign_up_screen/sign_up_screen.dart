@@ -1,16 +1,11 @@
-import 'package:iynfluencer/widgets/country_flag.dart';
-import 'package:iynfluencer/widgets/getdropdown_button_form_field.dart';
 import 'controller/sign_up_controller.dart';
-import 'package:iynfluencer/data/models/country/country_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/core/utils/validation_functions.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_checkbox.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
-import 'package:country_flags/country_flags.dart';
 
-import 'models/sign_up_model.dart';
 
 // ignore_for_file: must_be_immutable
 class SignUpScreen extends GetWidget<SignUpController> {
@@ -18,13 +13,6 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  List<Country> filteredCountries = [];
-
-  /*  void onTextChanged(String query) {
-    controller.countryFilter(query);
-
-    });
-  } */
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +58,9 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 hintText: "lbl_first_name".tr,
                                 margin: getMargin(top: 34),
                                 variant: TextFormFieldVariant.Neutral,
-                                fontStyle:
-                                    TextFormFieldFontStyle.SatoshiLight14,
+                                fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                                 validator: (value) {
-                                  if (value == null ||
-                                      !isText(value, isRequired: true)) {
+                                  if (value == null ||!isText(value, isRequired: true)) {
                                     return "Please enter valid text";
                                   }
                                   return null;
@@ -86,80 +72,20 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 hintText: "lbl_last_name".tr,
                                 margin: getMargin(top: 20),
                                 variant: TextFormFieldVariant.Neutral,
-                                fontStyle:
-                                    TextFormFieldFontStyle.SatoshiLight14,
+                                fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                                 validator: (value) {
-                                  if (value == null ||
-                                      !isText(value, isRequired: true)) {
+                                  if (value == null || !isText(value, isRequired: true)) {
                                     return "Please enter valid text";
                                   }
                                   return null;
                                 }),
-                            /*       CustomTextFormField(
+                            CustomTextFormField(
                                 focusNode: FocusNode(),
                                 autofocus: true,
-                                controller: controller.countryController,
+                                controller: controller
+                                    .countryController,
                                 hintText: "Country",
-                                onTextChanged: onTextChanged,
                                 margin: getMargin(top: 6)),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: filteredCountries.length,
-                              itemBuilder: (context, index) {
-                                final country = filteredCountries[index];
-                                return ListTile(
-                                  leading: CountryFlags(
-                                    countryCode:
-                                        country.code, // Use the country code
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  title: Text(country.code),
-                                  subtitle: Text(country.name),
-                                  onTap: () {
-                                    onTapCountryFlag(country);
-                                  },
-                                );
-                              },
-                            ), */
-                            Container(
-                              width: double.infinity,
-                              margin: getMargin(right: 30, top: 15),
-                              child: GetDropdownButtonFormField<Country>(
-                                value: controller.selectedCountry.value,
-                                onChanged: (Country? country) {
-                                  controller.selectedCountry.value = country!;
-                                },
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Please select a country';
-                                  }
-                                  return null;
-                                },
-                                items: controller.countries
-                                    .map<DropdownMenuItem<Country>>(
-                                  (Country country) {
-                                    return DropdownMenuItem<Country>(
-                                      value: country,
-                                      child: Row(
-                                        children: [
-                                          CountryFlags(
-                                            countryCode: country.code,
-                                            height: 20,
-                                            width: 20,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text(country
-                                              .code), // Display the country abbreviation
-                                          SizedBox(width: 8),
-                                          Text(country.name),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ).toList(),
-                              ),
-                            ),
                             CustomTextFormField(
                                 focusNode: FocusNode(),
                                 autofocus: true,
@@ -167,13 +93,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 hintText: "lbl_email".tr,
                                 margin: getMargin(top: 20),
                                 variant: TextFormFieldVariant.Neutral,
-                                fontStyle:
-                                    TextFormFieldFontStyle.SatoshiLight14,
+                                fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                                 textInputType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null ||
-                                      (!isValidEmail(value,
-                                          isRequired: true))) {
+                                      (!isValidEmail(value, isRequired: true))) {
                                     return "Please enter valid email";
                                   }
                                   return null;
@@ -186,8 +110,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 margin: getMargin(top: 20),
                                 variant: TextFormFieldVariant.Neutral,
                                 padding: TextFormFieldPadding.PaddingT14,
-                                fontStyle:
-                                    TextFormFieldFontStyle.SatoshiLight14,
+                                fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                                 textInputAction: TextInputAction.done,
                                 textInputType: TextInputType.visiblePassword,
                                 suffix: InkWell(
@@ -216,15 +139,14 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   }
                                   return null;
                                 },
-                                isObscureText:
-                                    controller.isShowPassword.value)),
+                                isObscureText: controller.isShowPassword.value)),
                             Padding(
                                 padding: getPadding(top: 46, right: 25),
                                 child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Obx(() => CustomCheckbox(
+
                                           width: getHorizontalSize(40),
                                           value: controller.isCheckbox.value,
                                           margin: getMargin(top: 1, bottom: 14),
@@ -248,7 +170,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 margin: getMargin(top: 17),
                                 padding: ButtonPadding.PaddingAll15,
                                 onTap: () {
-                                  onTapContinue(context);
+                                  onTapContinue();
                                 }),
                             Padding(
                                 padding: getPadding(top: 58, bottom: 5),
@@ -258,29 +180,25 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                          padding:
-                                              getPadding(top: 12, bottom: 7),
+                                          padding: getPadding(top: 12, bottom: 7),
                                           child: SizedBox(
                                               width: getHorizontalSize(99),
                                               child: Divider(
                                                   height: getVerticalSize(1),
                                                   thickness: getVerticalSize(1),
-                                                  color:
-                                                      ColorConstant.gray200))),
+                                                  color: ColorConstant.gray200))),
                                       Text("msg_or_continue_with".tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: AppStyle.txtOutfitMedium16),
                                       Padding(
-                                          padding:
-                                              getPadding(top: 12, bottom: 7),
+                                          padding: getPadding(top: 12, bottom: 7),
                                           child: SizedBox(
                                               width: getHorizontalSize(99),
                                               child: Divider(
                                                   height: getVerticalSize(1),
                                                   thickness: getVerticalSize(1),
-                                                  color:
-                                                      ColorConstant.gray200)))
+                                                  color: ColorConstant.gray200)))
                                     ]))
                           ]))),
             ),
@@ -329,42 +247,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the phoneVerificationScreen.
-  onTapContinue(BuildContext context) async {
+  onTapContinue() async{
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    if (!controller.isCheckbox.value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Please accept the terms and conditions."),
-        ),
-      );
-      return;
-    }
+     controller.signUp();
 
-    controller.signUp();
   }
-
-  /* onTapCountryFlag(Country country) {
-    final flagImage = CountryFlags(countryCode: country.code);
-
-    controller.countryController.text = '';
-    controller.countryController.value = TextEditingValue(
-      text: '',
-      selection: TextSelection.fromPosition(TextPosition(offset: 0)),
-    );
-    controller.countryController.text = '';
-    controller.countryController.value = TextEditingValue(
-      text: '',
-      selection: TextSelection.fromPosition(TextPosition(offset: 0)),
-    );
-
-    controller.countryController.text =
-        '$flagImage (${country.code}) ${country.name}';
-    controller.countryController.value = TextEditingValue(
-      text: controller.countryController.text,
-      selection: TextSelection.fromPosition(
-          TextPosition(offset: controller.countryController.text.length)),
-    );
-  } */
 }

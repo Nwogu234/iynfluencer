@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/controller/edit_profile_listed_jobs_tab_container_controller.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/controller/edit_profile_listed_jobs_tab_two_container_controller.dart';
@@ -22,11 +23,11 @@ class EditProfileListedJobsTabContainerScreen
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    final args = Get.arguments as EditProfileArguments;
+    final args = Get.put(UserController());
     final name =
-        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
-    final country = args.country;
-    final profileImageFile = args.profileImage;
+        "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
+    final country = capitalizeFirstLetter(args.userModelObj.value.country);
+    final profileImageFile = args.capitalizeFirstLetter(args.userModelObj.value.avatar);
 
     return SafeArea(
         child: Scaffold(
@@ -100,7 +101,7 @@ class EditProfileListedJobsTabContainerScreen
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
                                                 Text(
-                                                    country, //"lbl_lagos_nigeria".tr,
+                                                    'country', //"lbl_lagos_nigeria".tr,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
