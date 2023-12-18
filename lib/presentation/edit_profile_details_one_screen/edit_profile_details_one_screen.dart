@@ -319,6 +319,8 @@ class EditProfileDetailsOneScreen
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 return "Please enter your bio";
+                                              } else if (value.length < 100) {
+                                                return "Bio Must Be Greater Than 100 characters";
                                               }
                                               return null;
                                             },

@@ -37,7 +37,7 @@ class EditProfileDetailsOneController extends GetxController {
   Future<void> editProfileTwo() async {
     // Update the bio and niches in the CompleteProfileCreatorModel
     completeProfileCreatorModelObj.update((val) {
-      val?.bio = frametwelveController1.text;
+      val?.bio = frametwelveController2.text;
       val?.niches = frametwelvetwoController.text
           .split(',')
           .map((e) => e.trim())
@@ -56,7 +56,6 @@ class EditProfileDetailsOneController extends GetxController {
     });
 
     final profileImageFile = profileImage.value;
-
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
@@ -70,7 +69,8 @@ class EditProfileDetailsOneController extends GetxController {
         token,
       );
 
-      if (updateResponse.statusCode == 201) {
+      if (updateResponse.statusCode == 201 ||
+          updateResponse.statusCode == 200) {
         Get.snackbar('Success', 'Profile Updated');
         // Check if there is a profile image to update
         if (profileImageFile != null) {

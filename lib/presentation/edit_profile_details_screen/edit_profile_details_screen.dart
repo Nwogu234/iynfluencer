@@ -41,158 +41,161 @@ class EditProfileDetailsScreen extends GetWidget<EditProfileDetailsController> {
                       margin:
                           getMargin(left: 28, top: 17, right: 28, bottom: 17))
                 ]),
-            body: Container(
-                width: double.maxFinite,
-                padding: getPadding(left: 20, top: 10, right: 20, bottom: 10),
-                child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                      Text("msg_edit_profile".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtH1),
-                      GestureDetector(
-                        onTap: () async {
-                          final ImagePicker _picker = ImagePicker();
-                          try {
-                            final XFile? image = await _picker.pickImage(
-                                source: ImageSource.gallery);
-                            if (image != null) {
-                              controller.profileImage.value = File(image.path);
+            body: SingleChildScrollView(
+              child: Container(
+                  width: double.maxFinite,
+                  padding: getPadding(left: 20, top: 10, right: 20, bottom: 10),
+                  child: SingleChildScrollView(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                        Text("msg_edit_profile".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtH1),
+                        GestureDetector(
+                          onTap: () async {
+                            final ImagePicker _picker = ImagePicker();
+                            try {
+                              final XFile? image = await _picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (image != null) {
+                                controller.profileImage.value =
+                                    File(image.path);
+                              }
+                            } catch (e) {
+                              Get.snackbar('Error',
+                                  'Failed to pick an image. Please try again.');
                             }
-                          } catch (e) {
-                            Get.snackbar('Error',
-                                'Failed to pick an image. Please try again.');
-                          }
-                        },
-                        child: Obx(
-                          () => controller.profileImage.value == null
-                              ? CustomImageView(
-                                  svgPath: ImageConstant.imgCheckmark,
-                                  height: getVerticalSize(90),
-                                  width: getHorizontalSize(95),
-                                  margin: getMargin(left: 8, top: 31))
-                              : CircleAvatar(
-                                  radius: 45.h,
-                                  backgroundImage:
-                                      FileImage(controller.profileImage.value!),
-                                ),
+                          },
+                          child: Obx(
+                            () => controller.profileImage.value == null
+                                ? CustomImageView(
+                                    svgPath: ImageConstant.imgCheckmark,
+                                    height: getVerticalSize(90),
+                                    width: getHorizontalSize(95),
+                                    margin: getMargin(left: 8, top: 31))
+                                : CircleAvatar(
+                                    radius: 45.h,
+                                    backgroundImage: FileImage(
+                                        controller.profileImage.value!),
+                                  ),
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: getPadding(top: 36),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("lbl_full_name".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiLight13Gray900),
-                                CustomTextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Please enter your name";
-                                      }
-                                      return null;
-                                    },
-                                    focusNode: FocusNode(),
-                                    autofocus: true,
-                                    controller:
-                                        controller.frametwelveController,
-                                    hintText: "lbl_john_doe".tr,
-                                    margin: getMargin(top: 7))
-                              ])),
-                      Padding(
-                          padding: getPadding(top: 23),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("lbl_country".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiLight13Gray900),
-                                CustomTextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Please enter your country";
-                                      }
-                                      return null;
-                                    },
-                                    focusNode: FocusNode(),
-                                    autofocus: true,
-                                    controller:
-                                        controller.frametwelveoneController,
-                                    hintText: "lbl_eg_nigeria".tr,
-                                    margin: getMargin(top: 6))
-                              ])),
-                      Padding(
-                          padding: getPadding(top: 23),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("msg_what_s_your_primary".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiLight13Gray900),
-                                CustomTextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Please enter your niche";
-                                      }
-                                      return null;
-                                    },
-                                    focusNode: FocusNode(),
-                                    autofocus: true,
-                                    controller:
-                                        controller.frametwelvetwoController,
-                                    hintText: "msg_eg_videography".tr,
-                                    margin: getMargin(top: 6),
-                                    padding: TextFormFieldPadding.PaddingT14,
-                                    suffix: Container(
-                                        margin: getMargin(
-                                            left: 30,
-                                            top: 14,
-                                            right: 13,
-                                            bottom: 14),
-                                        child: CustomImageView(
-                                            svgPath: ImageConstant
-                                                .imgArrowdownGray600)),
-                                    suffixConstraints: BoxConstraints(
-                                        maxHeight: getVerticalSize(48)))
-                              ])),
-                      Padding(
-                          padding: getPadding(top: 22, bottom: 5),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("lbl_bio".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiLight13Gray900),
-                                CustomTextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Please enter valid text";
-                                      }
-                                      return null;
-                                    },
-                                    focusNode: FocusNode(),
-                                    autofocus: true,
-                                    controller:
-                                        controller.frametwelveController1,
-                                    hintText: "msg_brief_intro_about".tr,
-                                    margin: getMargin(top: 7),
-                                    padding: TextFormFieldPadding.PaddingT47,
-                                    textInputAction: TextInputAction.done,
-                                    maxLines: 5)
-                              ]))
-                    ]))),
+                        Padding(
+                            padding: getPadding(top: 36),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("lbl_full_name".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiLight13Gray900),
+                                  CustomTextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter your name";
+                                        }
+                                        return null;
+                                      },
+                                      focusNode: FocusNode(),
+                                      autofocus: true,
+                                      controller:
+                                          controller.frametwelveController,
+                                      hintText: "lbl_john_doe".tr,
+                                      margin: getMargin(top: 7))
+                                ])),
+                        Padding(
+                            padding: getPadding(top: 23),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("lbl_country".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiLight13Gray900),
+                                  CustomTextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter your country";
+                                        }
+                                        return null;
+                                      },
+                                      focusNode: FocusNode(),
+                                      autofocus: true,
+                                      controller:
+                                          controller.frametwelveoneController,
+                                      hintText: "lbl_eg_nigeria".tr,
+                                      margin: getMargin(top: 6))
+                                ])),
+                        Padding(
+                            padding: getPadding(top: 23),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("msg_what_s_your_primary".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiLight13Gray900),
+                                  CustomTextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter your niche";
+                                        }
+                                        return null;
+                                      },
+                                      focusNode: FocusNode(),
+                                      autofocus: true,
+                                      controller:
+                                          controller.frametwelvetwoController,
+                                      hintText: "msg_eg_videography".tr,
+                                      margin: getMargin(top: 6),
+                                      padding: TextFormFieldPadding.PaddingT14,
+                                      suffix: Container(
+                                          margin: getMargin(
+                                              left: 30,
+                                              top: 14,
+                                              right: 13,
+                                              bottom: 14),
+                                          child: CustomImageView(
+                                              svgPath: ImageConstant
+                                                  .imgArrowdownGray600)),
+                                      suffixConstraints: BoxConstraints(
+                                          maxHeight: getVerticalSize(48)))
+                                ])),
+                        Padding(
+                            padding: getPadding(top: 22, bottom: 5),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("lbl_bio".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiLight13Gray900),
+                                  CustomTextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Please enter valid text";
+                                        }
+                                        return null;
+                                      },
+                                      focusNode: FocusNode(),
+                                      autofocus: true,
+                                      controller:
+                                          controller.frametwelveController1,
+                                      hintText: "msg_brief_intro_about".tr,
+                                      margin: getMargin(top: 7),
+                                      padding: TextFormFieldPadding.PaddingT47,
+                                      textInputAction: TextInputAction.done,
+                                      maxLines: 5)
+                                ]))
+                      ]))),
+            ),
             bottomNavigationBar: CustomButton(
               height: getVerticalSize(50),
               text: "msg_save_and_continue".tr,
@@ -221,6 +224,8 @@ class EditProfileDetailsScreen extends GetWidget<EditProfileDetailsController> {
         EditProfileListedJobsTabContainerScreen(),
         arguments: args,
       );
+    } else {
+      Get.snackbar('Error', 'Complete All Neccessary Fields');
     }
   }
 

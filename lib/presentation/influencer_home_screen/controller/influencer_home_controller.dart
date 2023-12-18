@@ -86,7 +86,7 @@ class InfluencerHomeController extends GetxController {
       }
     } catch (e) {
       print(e);
-      print(jobsList);
+      // print(jobsList);
       error('Something went wrong');
       isJobsLoading.value = false;
     }

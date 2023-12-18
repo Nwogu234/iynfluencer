@@ -242,7 +242,6 @@ class ApiClient extends GetConnect {
     }
   }
 
-
   // This is for  modifying influencer profile in editprofiledetailscreen
   Future<Response> updateInfluencerProfile(
       CompleteProfileInfluencerModel editProfile, var token) async {
@@ -302,6 +301,7 @@ class ApiClient extends GetConnect {
       throw Exception('Server error');
     }
   }
+
   // Get Request to get a list of Influencers
   Future<List<Influencer>> getInfluencers(
       int pageNumber, int limit, var token) async {
@@ -584,6 +584,54 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of creator jobs');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  Future<Response> getAllBidsForAJob(String jobid, var token) async {
+    Response response;
+    try {
+      response = await get(
+        'creators/me/jobs/$jobid/single',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  Future<Response> hireInfluencerForAJob(String bidId, var token) async {
+    Response response;
+    try {
+      response = await get(
+        'creators/me/hires/bids/$bidId',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from hireInfluencerForAJob');
       print(e);
       throw Exception('Server error');
     }

@@ -53,13 +53,14 @@ class EditProfileDetailsController extends GetxController {
 
     // Get the profile image file if it exists
     final profileImageFile = profileImage.value;
+    // print('------- bios--');
+    // print(frametwelveController1.text);
 
+    var token = await storage.read(key: "token");
     Get.dialog(
       Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
     );
-
-    var token = await storage.read(key: "token");
 
     try {
       Response updateResponse = await apiClient.updateInfluencerProfile(
