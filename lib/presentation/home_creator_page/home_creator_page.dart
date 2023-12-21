@@ -32,7 +32,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
     with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeCreatorController controller =
-  Get.put(HomeCreatorController(HomeCreatorModel().obs));
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
   late AnimationController animationController;
 
   @override
@@ -74,7 +74,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
           height: 63.h,
           leadingWidth: 55.w,
           leading: AppbarCircleimage(
-            url: controller.user.userModelObj.value.avatar,
+            url: (controller.updatedProfileImage.value as String?) ??
+                controller.user.userModelObj.value.avatar,
             margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
             onTap: openDrawer,
           ),
@@ -86,7 +87,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
           styleType: Style.bgOutlineIndigo50,
         ),
         body: Obx(
-              () {
+          () {
             if (controller.isLoading.value) {
               return CustomLoadingWidget(
                 animationController: animationController,
@@ -114,7 +115,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                               "lbl_trending".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                              style: AppStyle.txtSatoshiBold16
+                                  .copyWith(fontSize: 16.sp),
                             ),
                             CustomImageView(
                               svgPath: ImageConstant.imgForward,
@@ -142,13 +144,13 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             } else {
                               return Padding(
                                 padding: EdgeInsets.only(right: 16.w),
-                                child: TrendinghorizonItemWidget(controller.trendingInfluencers[index]),
+                                child: TrendinghorizonItemWidget(
+                                    controller.trendingInfluencers[index]),
                               );
                             }
                           },
                         ),
                       ),
-
                       Padding(
                         padding: EdgeInsets.only(left: 20.w, top: 23.h),
                         child: Align(
@@ -157,7 +159,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             "msg_recommended_influencers".tr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                            style: AppStyle.txtSatoshiBold16
+                                .copyWith(fontSize: 16.sp),
                           ),
                         ),
                       ),
@@ -167,17 +170,18 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                         child: Column(
                           children: [
                             for (var index = 0;
-                            index <
-                                (controller.isRecommendedLoading.value
-                                    ? 5
-                                    : controller.recommendedInfluencers.length);
-                            index++)
+                                index <
+                                    (controller.isRecommendedLoading.value
+                                        ? 5
+                                        : controller
+                                            .recommendedInfluencers.length);
+                                index++)
                               Padding(
                                 padding: EdgeInsets.only(bottom: 24.h),
                                 child: controller.isRecommendedLoading.value
                                     ? Listrectangle50ItemSkeletonWidget()
-                                    : Listrectangle50ItemWidget(
-                                    controller.recommendedInfluencers[index]),
+                                    : Listrectangle50ItemWidget(controller
+                                        .recommendedInfluencers[index]),
                               ),
                           ],
                         ),

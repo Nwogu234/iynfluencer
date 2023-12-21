@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/edit_profile_listed_jobs_tab_container_screen.dart';
 
+import '../complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
 import 'controller/edit_profile_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -17,6 +19,7 @@ import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 class EditProfileDetailsScreen extends GetWidget<EditProfileDetailsController> {
   EditProfileDetailsScreen({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
+  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -205,21 +208,32 @@ class EditProfileDetailsScreen extends GetWidget<EditProfileDetailsController> {
 
   void onTapSaveEdit() async {
     if (_formKey.currentState!.validate()) {
-      final bytes = await controller.profileImage.value!.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      String bio = controller.frametwelveController1.text;
+      String niches = controller.frametwelvetwoController.text;
+      String firstName = controller.frametwelveController.text;
+      String lastName = controller.frametwelveController.text;
+      String country = controller.frametwelveoneController.text;
+      File? profileImageFile = controller.profileImage.value;
 
-      final args = EditProfileArguments(
-          controller.frametwelveController.text,
-          controller.frametwelveController.text,
-          controller.frametwelveoneController.text,
-          controller.frametwelveController1.text,
-          base64Image);
+      // Update the profile details and image, and get the updated profile
+      Map<String, dynamic>? result = await userController.editInfluencerProfile(
+        bio: bio,
+        niches: niches,
+        firstName: firstName,
+        lastName: lastName,
+        country: country,
+        profileImageFile: profileImageFile,
+      );
 
-      await controller.editProfile();
+      // Extract the updated profile details and image path
+      User updatedProfile = result?['profileDetails'];
+      String? updatedProfileImagePath = result?['profileImagePath'];
 
       Get.off(
-        EditProfileListedJobsTabContainerScreen(),
-        arguments: args,
+        EditProfileListedJobsTabContainerScreen(
+          updatedProfile: updatedProfile,
+          updatedProfileImagePath: updatedProfileImagePath,
+        ),
       );
     }
   }

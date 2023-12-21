@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -28,6 +29,9 @@ class InfluencerHomeController extends GetxController {
   Rx<bool> isJobsLoading = false.obs;
   List<Job> jobsList = <Job>[].obs;
   List<Job> infJobsList = <Job>[].obs;
+
+  RxString? updatedName = ''.obs;
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
 
   late AnimationController animationController;
 
@@ -89,6 +93,16 @@ class InfluencerHomeController extends GetxController {
       print(jobsList);
       error('Something went wrong');
       isJobsLoading.value = false;
+    }
+  }
+
+  // Function to update profile data
+  void updateProfileData(Map<String, dynamic>? data) {
+    if (data != null) {
+      updatedName?.value = data['profileDetails']['firstName'] +
+          ' ' +
+          data['profileDetails']['lastName'];
+      updatedProfileImage.value = File(data['profileImagePath']);
     }
   }
 

@@ -14,19 +14,25 @@ import '../influencer_home_screen/controller/influencer_home_controller.dart';
 // ignore_for_file: must_be_immutable
 class InfluencerDraweritem extends StatelessWidget {
   final InfluencerHomeController controller;
-  final String? updatedName;
-  final String? updatedProfileImage;
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
   InfluencerDraweritem({
     Key? key,
     required this.controller,
-    this.updatedName,
-    this.updatedProfileImage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String? capitalize(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    final name =
+        "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}";
+
     return Drawer(
         child: SingleChildScrollView(
             child: Container(
@@ -37,8 +43,9 @@ class InfluencerDraweritem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath:
-                              updatedProfileImage ?? ImageConstant.imgFrame901,
+                          imagePath: (controller.updatedProfileImage.value
+                                  as String?) ??
+                              ImageConstant.imgFrame901,
                           height: 48.h,
                           width: 48.w,
                           radius: BorderRadius.circular(24.r),
@@ -47,13 +54,13 @@ class InfluencerDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text(updatedName ?? "lbl_emma_williams".tr,
+                          child: Text(controller.updatedName?.value ?? name,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text(updatedName ?? "lbl_emmawlm".tr,
+                          child: Text(controller.updatedName?.value ?? name,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125Gray600ab)),

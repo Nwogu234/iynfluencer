@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -26,7 +28,8 @@ class HomeCreatorController extends GetxController {
   List<Influencer> trendingInfluencers = [];
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   TextEditingController searchController = TextEditingController();
-
+  RxString? updatedName = ''.obs;
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
 
 //this is for animation
@@ -86,7 +89,7 @@ class HomeCreatorController extends GetxController {
     try {
       error('');
       recommendedInfluencers.value =
-      await apiClient.getInfluencers(1, 25, token);
+          await apiClient.getInfluencers(1, 25, token);
       if (recommendedInfluencers.isEmpty) {
         error('Something went wrong');
         isRecommendedLoading.value = false;
@@ -98,6 +101,16 @@ class HomeCreatorController extends GetxController {
       error('Something went wrong');
       print(e);
       isRecommendedLoading.value = false;
+    }
+  }
+
+  // Function to update profile data
+  void updateProfileData(Map<String, dynamic>? data) {
+    if (data != null) {
+      updatedName?.value = data['profileDetails']['firstName'] +
+          ' ' +
+          data['profileDetails']['lastName'];
+      updatedProfileImage.value = File(data['profileImagePath']);
     }
   }
 

@@ -41,7 +41,6 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
-  String? updatedProfileImage;
 
   @override
   void initState() {
@@ -65,14 +64,15 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
             key: _scaffoldKey,
             drawer: InfluencerDraweritem(
               controller: controller,
-              updatedProfileImage: updatedProfileImage,
             ),
             backgroundColor: ColorConstant.whiteA70001,
             appBar: CustomAppBar(
                 height: getVerticalSize(63),
                 leadingWidth: 55,
                 leading: AppbarCircleimage(
-                    imagePath: updatedProfileImage ?? ImageConstant.imgGroup899,
+                    imagePath:
+                        (controller.updatedProfileImage.value as String?) ??
+                            controller.user.userModelObj.value.avatar,
                     margin:
                         EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
                     onTap: () {
