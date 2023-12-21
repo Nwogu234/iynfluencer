@@ -1,6 +1,5 @@
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 
-import '../use_model/user_model.dart';
 import '../Socials/social.dart';
 
 class User {
@@ -9,6 +8,7 @@ class User {
   final String? lastName;
   final String? userId;
   final String? country;
+  final String? countryCode;
   final String? avatar;
 
   User({
@@ -17,6 +17,7 @@ class User {
     required this.lastName,
     required this.userId,
     required this.country,
+    this.countryCode,
     required this.avatar,
   });
 

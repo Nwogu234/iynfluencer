@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
-import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
-import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:iynfluencer/presentation/creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'package:iynfluencer/presentation/creator_profile_listed_jobs_page/creator_profile_listed_jobs_page.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/controller/edit_profile_listed_jobs_tab_two_container_controller.dart';
@@ -10,17 +8,12 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
+import '../../data/general_controllers/user_controller.dart';
+
 class EditProfileListedJobsTabTwoContainerScreen
     extends GetWidget<EditProfileListedJobsTabTwoContainerController> {
-  EditProfileListedJobsTabTwoContainerScreen({
-    Key? key,
-    this.updatedProfile,
-    this.updatedProfileImagePath,
-  }) : super(key: key);
-
-  final Users? updatedProfile;
-  final String? updatedProfileImagePath;
-  final UserController userController = Get.find();
+  const EditProfileListedJobsTabTwoContainerScreen({Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +23,11 @@ class EditProfileListedJobsTabTwoContainerScreen
       }
       return text[0].toUpperCase() + text.substring(1);
     }
-
+    final args = Get.put(UserController());
     final name =
-        "${capitalizeFirstLetter(updatedProfile?.firstName ?? "")} ${capitalizeFirstLetter(updatedProfile?.lastName ?? "")}";
-
-    String updatedProfileImage =
-        updatedProfileImagePath ?? ImageConstant.imgGroup947;
-    String updatedCountry = updatedProfile?.country ?? "";
+        "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
+    final country = args.userModelObj.value.country;
+    final profileImageFile = args.userModelObj.value.avatar;
 
     return SafeArea(
         child: Scaffold(
@@ -61,7 +52,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                         alignment: Alignment.topLeft,
                                         children: [
                                           CustomImageView(
-                                              imagePath: updatedProfileImage,
+                                              imagePath: profileImageFile,
                                               height: getVerticalSize(170),
                                               width: getHorizontalSize(375),
                                               alignment: Alignment.center),
@@ -107,7 +98,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                           Padding(
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
-                                                Text(updatedCountry,
+                                                Text(country!,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
@@ -224,28 +215,25 @@ class EditProfileListedJobsTabTwoContainerScreen
   ///
   /// When the action is triggered, this function uses the [Get] library to
   /// navigate to the previous screen in the navigation stack.
-  onTapImgArrowleft() async {
-    final homeController = Get.find<HomeCreatorController>();
-
-    // Call editCreatorProfile and wait for the result
-    Map<String, dynamic>? result = await userController.editCreatorProfile(
-      bio: '',
-      niches: '',
-      firstName: '',
-      lastName: '',
-      country: '',
-      profileImageFile: null,
-    );
-
-    if (result != null) {
-      // Update the profile data
-      homeController.updateProfileData(result);
-    } else {
-      Get.snackbar('Error', 'Failed to update profile');
+  onTapImgArrowleft() {
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
     }
 
-    // Navigate back
-    Get.back();
+    final args = Get.arguments as EditProfileArguments;
+    final name =
+        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
+    final profileImageFile = args.profileImage;
+    final controller =
+        HomeCreatorController(Rx<HomeCreatorModel>(HomeCreatorModel()));
+
+    // Get.back();
+    Get.to(
+      CreatorProfileDraweritem(controller),
+    );
   }
 
   /// Navigates to the editProfileDetailsScreen when the action is triggered.

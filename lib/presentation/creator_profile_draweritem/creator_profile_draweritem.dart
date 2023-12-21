@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/data/models/use_model/user_model.dart';
 
 import '../../data/general_controllers/user_controller.dart';
 import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
@@ -126,20 +127,28 @@ class CreatorProfileDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001,
                               indent: 1.w)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 24.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgSettings,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 2.h),
-                                child: Text("lbl_settings".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray900))
-                          ])),
+                      GestureDetector(
+                        onTap: (){
+                          Get.toNamed(AppRoutes.settingsScreen,
+                              arguments: EditProfileArguments(controller.user.userModelObj.value.firstName,
+                                  controller.user.userModelObj.value.lastName,
+                                  controller.user.userModelObj.value.country??'', controller.user.userModelObj.value.avatar, "No bio passing yet"));
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 1.w, top: 24.h),
+                            child: Row(children: [
+                              CustomImageView(
+                                  svgPath: ImageConstant.imgSettings,
+                                  height: 24.h,
+                                  width: 24.w),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 14.w, top: 2.h),
+                                  child: Text("lbl_settings".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray900))
+                            ])),
+                      ),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w, top: 19.h),
                           child: Row(children: [

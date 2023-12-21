@@ -8,8 +8,6 @@ import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_m
 import 'package:flutter/material.dart';
 
 import '../../../data/apiClient/api_client.dart';
-import '../../../data/models/use_model/user_model.dart';
-import '../widgets/trendinghorizon_item_widget.dart';
 
 /// A controller class for the HomeCreatorPage.
 ///

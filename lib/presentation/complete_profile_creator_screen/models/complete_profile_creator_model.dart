@@ -5,14 +5,13 @@ import 'package:get/get.dart';
 class CompleteProfileCreatorModel {
   String bio;
   List<String> niches;
-  List<Social> socials;
-  List<Users> user;
+  List<User>? user;// Update this to be a list of strings
+   List<Social> socials;
 
   CompleteProfileCreatorModel({
     required this.bio,
     required this.niches,
     required this.user,
-    required this.socials,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,35 +40,5 @@ class Social {
       'name': name,
       'followers': followers,
       'url': url,
-    };
-  }
-}
-
-class Users {
-  final String? id;
-  final String? firstName;
-  final String? lastName;
-  final String? userId;
-  final String? country;
-  final String? avatar;
-
-  Users({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.userId,
-    required this.country,
-    required this.avatar,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'userId': userId,
-      'country': country,
-      'avatar': avatar,
-    };
   }
 }

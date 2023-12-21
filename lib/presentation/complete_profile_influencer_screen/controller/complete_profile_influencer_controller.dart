@@ -23,8 +23,7 @@ class CompleteProfileInfluencerController extends GetxController
   final formKey = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
   Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
+      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: []).obs;
 
   RxList<SelectionPopupModel> nicheToDisplay = RxList<SelectionPopupModel>();
   RxList<SelectionPopupModel> platformToDisplay = RxList<SelectionPopupModel>();
@@ -242,7 +241,7 @@ class CompleteProfileInfluencerController extends GetxController
 
     // Define fade-in animation
     fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: animationController!, curve: Curves.easeIn),
+      CurvedAnimation(parent: animationController, curve: Curves.easeIn),
     );
 
     print('OnInit called');

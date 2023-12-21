@@ -1,12 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
-import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
-import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
-import 'package:iynfluencer/presentation/edit_profile_details_screen/models/edit_profile_details_model.dart';
 
 import '../../../data/models/use_model/user_model.dart';
 import '../apiClient/api_client.dart';
@@ -18,6 +15,10 @@ import '../apiClient/api_client.dart';
 class UserController extends GetxController {
   Rx<UserModel> userModelObj = UserModel(
           firstName: "",
+          phone: '',
+          country: '',
+          countryCode: '',
+          dob: DateTime.now().toString(),
           lastName: "",
           email: "",
           termsAndConditionsAgreement: true,
@@ -39,13 +40,21 @@ class UserController extends GetxController {
   final storage = new FlutterSecureStorage();
   var token;
   final apiClient = ApiClient();
-  Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
 
-  Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
-      CompleteProfileCreatorModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
+  String getCountryCode(String countryName) {
+    for (var entry in countries.entries) {
+      if (entry.value == countryName) {
+        return entry.key;
+      }
+    }
+    return ''; // Country name not found
+  }
+  String capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return '';
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   getUser() async {
     token = await storage.read(key: "token");
@@ -54,6 +63,9 @@ class UserController extends GetxController {
       if (userModelObj.value.firstName.isEmpty) {
         return ('Something went wrong');
       } else {
+
+        userModelObj.value.countryCode =
+            getCountryCode(capitalizeFirstLetter(userModelObj.value.country!));
         return ('Its Ok');
       }
     } catch (e) {
@@ -113,146 +125,231 @@ class UserController extends GetxController {
     }
   }
 
-  // Function to edit the influncer profile
-  Future<Map<String, dynamic>?> editInfluencerProfile({
-    required String bio,
-    required String niches,
-    required String firstName,
-    required String lastName,
-    required String country,
-    required File? profileImageFile,
-  }) async {
-    token = await storage.read(key: "token");
-
-    completeProfileInfluencerModelObj.update((val) {
-      val?.bio = bio;
-      val?.niches = niches.split(',').map((e) => e.trim()).toList();
-      if (val?.user.isNotEmpty == true) {
-        final updatedUser = User(
-          id: val?.user[0].id,
-          firstName: firstName,
-          lastName: lastName,
-          userId: val?.user[0].userId,
-          country: country,
-          avatar: val?.user[0].avatar,
-        );
-        val?.user[0] = updatedUser;
-      }
-    });
-
-    // get profile details
-    await getUser();
-
-    Get.dialog(
-      Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
-    );
-
-    try {
-      Response updateResponse = await apiClient.updateInfluencerProfile(
-        completeProfileInfluencerModelObj.value,
-        token!,
-      );
-
-      Get.back();
-
-      if (updateResponse.statusCode == 201) {
-        Get.snackbar('Success', 'Profile Updated');
-
-        // Check if there is a profile image to update
-        if (profileImageFile != null) {
-          // Upload the profile image
-          await uploadUserPic(profileImageFile.path);
-        }
-
-        await storage.write(key: 'activeProfile', value: "Influencer");
-        // Return the updated profile details and profile image path
-        return {
-          'profileDetails': completeProfileInfluencerModelObj.value,
-          'profileImagePath': profileImageFile?.path,
-        };
-      } else {
-        print(updateResponse.statusCode);
-        Get.snackbar('Failure',
-            'Profile activation failed! ${updateResponse.body['message']}');
-      }
-    } catch (e) {
-      print(e);
-      Get.snackbar('Error', 'Profile activation failed');
-    }
-    return null;
-  }
-
-  // Function to edit the creator profile
-  Future<Map<String, dynamic>?> editCreatorProfile({
-    required String bio,
-    required String niches,
-    required String firstName,
-    required String lastName,
-    required String country,
-    required File? profileImageFile,
-  }) async {
-    token = await storage.read(key: "token");
-
-    completeProfileCreatorModelObj.update((val) {
-      val?.bio = bio;
-      val?.niches = niches.split(',').map((e) => e.trim()).toList();
-      if (val?.user.isNotEmpty == true) {
-        final updatedUser = Users(
-          id: val?.user[0].id,
-          firstName: firstName,
-          lastName: lastName,
-          userId: val?.user[0].userId,
-          country: country,
-          avatar: val?.user[0].avatar,
-        );
-        val?.user[0] = updatedUser;
-      }
-    });
-
-    // get profile details
-    await getUser();
-
-    Get.dialog(
-      Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
-    );
-
-    try {
-      Response updateResponse = await apiClient.updateCreatorProfile(
-        completeProfileCreatorModelObj.value,
-        token!,
-      );
-
-      Get.back();
-
-      if (updateResponse.statusCode == 201) {
-        Get.snackbar('Success', 'Profile Updated');
-
-        // Check if there is a profile image to update
-        if (profileImageFile != null) {
-          // Upload the profile image
-          await uploadUserPic(profileImageFile.path);
-        }
-
-        await storage.write(key: 'activeProfile', value: "Creator");
-        // Return the updated profile details and profile image path
-        return {
-          'profileDetails': completeProfileCreatorModelObj.value,
-          'profileImagePath': profileImageFile?.path,
-        };
-      } else {
-        print(updateResponse.statusCode);
-        Get.snackbar('Failure',
-            'Profile activation failed! ${updateResponse.body['message']}');
-      }
-    } catch (e) {
-      print(e);
-      Get.snackbar('Error', 'Profile activation failed');
-    }
-    return null;
-  }
-
+  ///the list of countries
+  Map<String, String> countries = {
+    "AF": "Afghanistan",
+    "AX": "Åland Islands",
+    "AL": "Albania",
+    "DZ": "Algeria",
+    "AS": "American Samoa",
+    "AD": "Andorra",
+    "AO": "Angola",
+    "AI": "Anguilla",
+    "AQ": "Antarctica",
+    "AG": "Antigua and Barbuda",
+    "AR": "Argentina",
+    "AM": "Armenia",
+    "AW": "Aruba",
+    "AU": "Australia",
+    "AT": "Austria",
+    "AZ": "Azerbaijan",
+    "BS": "Bahamas",
+    "BH": "Bahrain",
+    "BD": "Bangladesh",
+    "BB": "Barbados",
+    "BY": "Belarus",
+    "BE": "Belgium",
+    "BZ": "Belize",
+    "BJ": "Benin",
+    "BM": "Bermuda",
+    "BT": "Bhutan",
+    "BO": "Bolivia",
+    "BQ": "Bonaire, Sint Eustatius and Saba",
+    "BA": "Bosnia and Herzegovina",
+    "BW": "Botswana",
+    "BV": "Bouvet Island",
+    "BR": "Brazil",
+    "IO": "British Indian Ocean Territory",
+    "BN": "Brunei Darussalam",
+    "BG": "Bulgaria",
+    "BF": "Burkina Faso",
+    "BI": "Burundi",
+    "CV": "Cabo Verde",
+    "KH": "Cambodia",
+    "CM": "Cameroon",
+    "CA": "Canada",
+    "KY": "Cayman Islands",
+    "CF": "Central African Republic",
+    "TD": "Chad",
+    "CL": "Chile",
+    "CN": "China",
+    "CX": "Christmas Island",
+    "CC": "Cocos (Keeling) Islands",
+    "CO": "Colombia",
+    "KM": "Comoros",
+    "CG": "Congo",
+    "CD": "Congo, Democratic Republic of the",
+    "CK": "Cook Islands",
+    "CR": "Costa Rica",
+    "CI": "Côte d'Ivoire",
+    "HR": "Croatia",
+    "CU": "Cuba",
+    "CW": "Curaçao",
+    "CY": "Cyprus",
+    "CZ": "Czech Republic",
+    "DK": "Denmark",
+    "DJ": "Djibouti",
+    "DM": "Dominica",
+    "DO": "Dominican Republic",
+    "EC": "Ecuador",
+    "EG": "Egypt",
+    "SV": "El Salvador",
+    "GQ": "Equatorial Guinea",
+    "ER": "Eritrea",
+    "EE": "Estonia",
+    "SZ": "Eswatini",
+    "ET": "Ethiopia",
+    "FK": "Falkland Islands (Malvinas)",
+    "FO": "Faroe Islands",
+    "FJ": "Fiji",
+    "FI": "Finland",
+    "FR": "France",
+    "GF": "French Guiana",
+    "PF": "French Polynesia",
+    "TF": "French Southern Territories",
+    "GA": "Gabon",
+    "GM": "Gambia",
+    "GE": "Georgia",
+    "DE": "Germany",
+    "GH": "Ghana",
+    "GI": "Gibraltar",
+    "GR": "Greece",
+    "GL": "Greenland",
+    "GD": "Grenada",
+    "GP": "Guadeloupe",
+    "GU": "Guam",
+    "GT": "Guatemala",
+    "GG": "Guernsey",
+    "GN": "Guinea",
+    "GW": "Guinea-Bissau",
+    "GY": "Guyana",
+    "HT": "Haiti",
+    "HM": "Heard Island and McDonald Islands",
+    "VA": "Holy See",
+    "HN": "Honduras",
+    "HK": "Hong Kong",
+    "HU": "Hungary",
+    "IS": "Iceland",
+    "IN": "India",
+    "ID": "Indonesia",
+    "IR": "Iran",
+    "IQ": "Iraq",
+    "IE": "Ireland",
+    "IM": "Isle of Man",
+    "IL": "Israel",
+    "IT": "Italy",
+    "JM": "Jamaica",
+    "JP": "Japan",
+    "JO": "Jordan",
+    "KZ": "Kazakhstan",
+    "KE": "Kenya",
+    "KI": "Kiribati",
+    "KW": "Kuwait",
+    "KG": "Kyrgyzstan",
+    "LA": "Laos",
+    "LV": "Latvia",
+    "LB": "Lebanon",
+    "LS": "Lesotho",
+    "LR": "Liberia",
+    "LY": "Libya",
+    "LI": "Liechtenstein",
+    "LT": "Lithuania",
+    "LU": "Luxembourg",
+    "MG": "Madagascar",
+    "MW": "Malawi",
+    "MY": "Malaysia",
+    "MV": "Maldives",
+    "ML": "Mali",
+    "MT": "Malta",
+    "MH": "Marshall Islands",
+    "MR": "Mauritania",
+    "MU": "Mauritius",
+    "MX": "Mexico",
+    "FM": "Micronesia",
+    "MD": "Moldova",
+    "MC": "Monaco",
+    "MN": "Mongolia",
+    "ME": "Montenegro",
+    "MA": "Morocco",
+    "MZ": "Mozambique",
+    "MM": "Myanmar (formerly Burma)",
+    "NA": "Namibia",
+    "NR": "Nauru",
+    "NP": "Nepal",
+    "NL": "Netherlands",
+    "NZ": "New Zealand",
+    "NI": "Nicaragua",
+    "NE": "Niger",
+    "NG": "Nigeria",
+    "KP": "North Korea",
+    "MK": "North Macedonia (formerly Macedonia)",
+    "NO": "Norway",
+    "OM": "Oman",
+    "PK": "Pakistan",
+    "PW": "Palau",
+    "PS": "Palestine State",
+    "PA": "Panama",
+    "PG": "Papua New Guinea",
+    "PY": "Paraguay",
+    "PE": "Peru",
+    "PH": "Philippines",
+    "PL": "Poland",
+    "PT": "Portugal",
+    "QA": "Qatar",
+    "RO": "Romania",
+    "RU": "Russia",
+    "RW": "Rwanda",
+    "KN": "Saint Kitts and Nevis",
+    "LC": "Saint Lucia",
+    "VC": "Saint Vincent and the Grenadines",
+    "WS": "Samoa",
+    "SM": "San Marino",
+    "ST": "Sao Tome and Principe",
+    "SA": "Saudi Arabia",
+    "SN": "Senegal",
+    "RS": "Serbia",
+    "SC": "Seychelles",
+    "SL": "Sierra Leone",
+    "SG": "Singapore",
+    "SK": "Slovakia",
+    "SI": "Slovenia",
+    "SB": "Solomon Islands",
+    "SO": "Somalia",
+    "ZA": "South Africa",
+    "KR": "South Korea",
+    "SS": "South Sudan",
+    "ES": "Spain",
+    "LK": "Sri Lanka",
+    "SD": "Sudan",
+    "SR": "Suriname",
+    "SE": "Sweden",
+    "CH": "Switzerland",
+    "SY": "Syria",
+    "TJ": "Tajikistan",
+    "TZ": "Tanzania",
+    "TH": "Thailand",
+    "TL": "Timor-Leste",
+    "TG": "Togo",
+    "TO": "Tonga",
+    "TT": "Trinidad and Tobago",
+    "TN": "Tunisia",
+    "TR": "Turkey",
+    "TM": "Turkmenistan",
+    "TV": "Tuvalu",
+    "UG": "Uganda",
+    "UA": "Ukraine",
+    "AE": "United Arab Emirates",
+    "GB": "United Kingdom",
+    "US": "United States of America",
+    "UY": "Uruguay",
+    "UZ": "Uzbekistan",
+    "VU": "Vanuatu",
+    "VE": "Venezuela",
+    "VN": "Vietnam",
+    "YE": "Yemen",
+    "ZM": "Zambia",
+    "ZW": "Zimbabwe"
+  };
   @override
   void onClose() {
     super.onClose();

@@ -83,11 +83,23 @@ class CustomButton extends StatelessWidget {
         ],
       );
     } else {
-      return Text(
-        text ?? "",
-        textAlign: TextAlign.center,
-        style: _setFontStyle(),
-      );
+      return loading
+          ? Container(
+              width: getVerticalSize(20),
+              height: getVerticalSize(20),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1.5,
+                  strokeCap: StrokeCap.round,
+                ),
+              ),
+            )
+          : Text(
+              text ?? "",
+              textAlign: TextAlign.center,
+              style: _setFontStyle(),
+            );
     }
   }
 

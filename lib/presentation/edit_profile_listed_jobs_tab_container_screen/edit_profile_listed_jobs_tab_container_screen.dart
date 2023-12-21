@@ -10,19 +10,9 @@ import 'package:iynfluencer/presentation/influencer_home_screen/controller/influ
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-import '../complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
-
 class EditProfileListedJobsTabContainerScreen
     extends GetWidget<EditProfileListedJobsTabContainerController> {
-  EditProfileListedJobsTabContainerScreen({
-    Key? key,
-    this.updatedProfile,
-    this.updatedProfileImagePath,
-  }) : super(key: key);
-
-  final User? updatedProfile;
-  final String? updatedProfileImagePath;
-  final UserController userController = Get.find();
+  const EditProfileListedJobsTabContainerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +23,11 @@ class EditProfileListedJobsTabContainerScreen
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    final userName =
-        "${capitalizeFirstLetter(userController.userModelObj.value.firstName)} ${capitalizeFirstLetter(userController.userModelObj.value.lastName)}";
+    final args = Get.put(UserController());
     final name =
-        "${capitalizeFirstLetter(updatedProfile?.firstName ?? userName)} ${capitalizeFirstLetter(updatedProfile?.lastName ?? userName)}";
-
-    String updatedProfileImage =
-        updatedProfileImagePath ?? ImageConstant.imgGroup947;
-    String updatedCountry = updatedProfile?.country ?? "";
+        "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
+    final country = capitalizeFirstLetter(args.userModelObj.value.country);
+    final profileImageFile = args.capitalizeFirstLetter(args.userModelObj.value.avatar);
 
     return SafeArea(
         child: Scaffold(
@@ -94,7 +81,7 @@ class EditProfileListedJobsTabContainerScreen
                                             MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
-                                              imagePath: updatedProfileImage,
+                                              imagePath: profileImageFile,
                                               //ImageConstant.imgGroup947,
                                               height: getSize(85),
                                               width: getSize(85),
@@ -114,7 +101,7 @@ class EditProfileListedJobsTabContainerScreen
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
                                                 Text(
-                                                    updatedCountry, //"lbl_lagos_nigeria".tr,
+                                                    'country', //"lbl_lagos_nigeria".tr,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
@@ -231,28 +218,29 @@ class EditProfileListedJobsTabContainerScreen
   ///
   /// When the action is triggered, this function uses the [Get] library to
   /// navigate to the previous screen in the navigation stack.
-  onTapImgArrowleft() async {
-    final influencerController = Get.find<InfluencerHomeController>();
-
-    // Call editInfluencerProfile and wait for the result
-    Map<String, dynamic>? result = await userController.editInfluencerProfile(
-      bio: '',
-      niches: '',
-      firstName: '',
-      lastName: '',
-      country: '',
-      profileImageFile: null,
-    );
-
-    if (result != null) {
-      // Update the profile data
-      influencerController.updateProfileData(result);
-    } else {
-      Get.snackbar('Error', 'Failed to update profile');
+  onTapImgArrowleft() {
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
     }
 
-    // Navigate back
-    Get.back();
+    final args = Get.arguments as EditProfileArguments;
+    final name =
+        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
+    final profileImageFile = args.profileImage;
+    final influencerController = InfluencerHomeController(
+        Rx<InfluencerHomeModel>(InfluencerHomeModel()));
+
+    // Get.back();
+    Get.to(
+      InfluencerDraweritem(
+        controller: influencerController,
+        updatedName: name,
+        updatedProfileImage: profileImageFile,
+      ),
+    );
   }
 
   /// Navigates to the editProfileDetailsScreen when the action is triggered.
