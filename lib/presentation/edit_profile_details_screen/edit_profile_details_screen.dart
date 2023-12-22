@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_container_screen/edit_profile_listed_jobs_tab_container_screen.dart';
-
 import 'controller/edit_profile_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';

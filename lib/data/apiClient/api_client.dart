@@ -43,7 +43,7 @@ class ApiClient extends GetConnect {
         throw 'Error occurred pls check internet and retry.';
       case 500:
       default:
-        throw 'Error occurred retry';
+        throw response.body['message'] ?? 'Error occurred Retry';
     }
   }
 
@@ -566,7 +566,7 @@ class ApiClient extends GetConnect {
 
   //this is for getting a creators list of jobs
   Future<Response> getCreatorJobs(var token) async {
-    Response response;
+    Response response = Response();
     try {
       response = await get(
         'creators/me/jobs',
@@ -584,16 +584,17 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of creator jobs');
-      print(e);
+      errorHandler(response);
+
       throw Exception('Server error');
     }
   }
 
   Future<Response> getAllBidsForAJob(String jobid, var token) async {
-    Response response;
+    Response response = Response();
     try {
       response = await get(
-        'creators/me/jobs/$jobid/single',
+        'influencers/bids?jobId=$jobid',
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
@@ -608,16 +609,18 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of influencers');
-      print(e);
+      errorHandler(response);
+
       throw Exception('Server error');
     }
   }
 
   Future<Response> hireInfluencerForAJob(String bidId, var token) async {
-    Response response;
+    Response response = Response();
     try {
-      response = await get(
-        'creators/me/hires/bids/$bidId',
+      response = await post(
+        'creators/me/hires/bid/$bidId',
+        null,
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
@@ -626,14 +629,15 @@ class ApiClient extends GetConnect {
       if (response.isOk) {
         return response;
       } else {
-        print(response);
-        print(response.body);
-        throw Exception('Server error');
+        // print(response);
+        // print(response.body);
+        throw response.body['message'];
       }
     } catch (e) {
-      print('$e from hireInfluencerForAJob');
+      print('hireInfluencerForAJob');
       print(e);
-      throw Exception('Server error');
+      errorHandler(response);
+      throw e;
     }
   }
 }

@@ -51,10 +51,12 @@ class BidsController extends GetxController {
       error('');
       isLoading.value = true;
       response = await apiClient.getAllBidsForAJob(jobId, token);
-      print(response.body);
       if (response.isOk) {
         final responseJson = response.body;
-        List<dynamic> dd = responseJson['data']['bids'];
+
+        List<dynamic> dd = responseJson['data']['docs'];
+
+        print('response.isOk');
         if (dd.length > 0) {
           dd.forEach((e) {
             allJobBids.add(JobBids.fromJson(e));

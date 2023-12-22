@@ -52,12 +52,15 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("lbl_mark_adebayo".tr,
+                                  Text(
+                                      "${data!.influencer!.user!.firstName!.capitalize} ${data!.influencer!.user!.lastName!.capitalize}",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style:
                                           AppStyle.txtSatoshiBold13Gray900ab),
-                                  Text("lbl_lagos_nigeria".tr,
+                                  Text(
+                                      data!.influencer!.user!.country!
+                                          .capitalize!,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: AppStyle.txtSatoshiLight13)
@@ -70,11 +73,14 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                             margin: getMargin(top: 22, bottom: 21))
                       ])),
                   Padding(
-                      padding: getPadding(top: 30),
-                      child: Text('Cover Letter',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900)),
+                    padding: getPadding(top: 30),
+                    child: Text(
+                      'Cover Letter',
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold14Gray900,
+                    ),
+                  ),
                   Container(
                       width: getHorizontalSize(331),
                       margin: getMargin(left: 1, top: 10),

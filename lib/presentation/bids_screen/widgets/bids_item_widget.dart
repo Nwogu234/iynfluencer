@@ -52,6 +52,9 @@ class BidsItemWidget extends StatelessWidget {
                         children: [
                           CustomImageView(
                             imagePath: ImageConstant.imgGroup8525,
+                            //                         imagePath:
+                            // bidsItemModelObj.influencer!.user!.avatar!,
+
                             height: getSize(
                               50,
                             ),
@@ -71,7 +74,7 @@ class BidsItemWidget extends StatelessWidget {
                               bottom: 12,
                             ),
                             child: Text(
-                              'Name',
+                              "${bidsItemModelObj.influencer!.user!.firstName!} ${bidsItemModelObj.influencer!.user!.lastName!}",
                               // bidsItemModelObj..value,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,

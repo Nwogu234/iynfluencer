@@ -7,12 +7,15 @@ class JobBids {
   String? influencerId;
   String? coverLetter;
   int? price;
-  List<String>? terms;
   String? status;
   String? bidId;
   String? createdAt;
   String? updatedAt;
   int? iV;
+  bool? hired;
+  String? hiredId;
+  Influencer? influencer;
+  String? id;
 
   JobBids(
       {this.sId,
@@ -20,12 +23,15 @@ class JobBids {
       this.influencerId,
       this.coverLetter,
       this.price,
-      this.terms,
       this.status,
       this.bidId,
       this.createdAt,
       this.updatedAt,
-      this.iV});
+      this.iV,
+      this.hired,
+      this.hiredId,
+      this.influencer,
+      this.id});
 
   JobBids.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -33,12 +39,17 @@ class JobBids {
     influencerId = json['influencerId'];
     coverLetter = json['coverLetter'];
     price = json['price'];
-    terms = json['terms'].cast<String>();
     status = json['status'];
     bidId = json['bidId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    hired = json['hired'];
+    hiredId = json['hiredId'];
+    influencer = json['influencer'] != null
+        ? new Influencer.fromJson(json['influencer'])
+        : null;
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,12 +59,218 @@ class JobBids {
     data['influencerId'] = this.influencerId;
     data['coverLetter'] = this.coverLetter;
     data['price'] = this.price;
-    data['terms'] = this.terms;
     data['status'] = this.status;
     data['bidId'] = this.bidId;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
+    data['hired'] = this.hired;
+    data['hiredId'] = this.hiredId;
+    if (this.influencer != null) {
+      data['influencer'] = this.influencer!.toJson();
+    }
+    data['id'] = this.id;
+    return data;
+  }
+}
+
+class Influencer {
+  String? sId;
+  String? userId;
+  List<String>? niche;
+  String? bio;
+  bool? completed;
+  List<Socials>? socials;
+  bool? suspended;
+  String? influencerId;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  User? user;
+
+  Influencer(
+      {this.sId,
+      this.userId,
+      this.niche,
+      this.bio,
+      this.completed,
+      this.socials,
+      this.suspended,
+      this.influencerId,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.user});
+
+  Influencer.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userId = json['userId'];
+    niche = json['niche'].cast<String>();
+    bio = json['bio'];
+    completed = json['completed'];
+    if (json['socials'] != null) {
+      socials = <Socials>[];
+      json['socials'].forEach((v) {
+        socials!.add(new Socials.fromJson(v));
+      });
+    }
+    suspended = json['suspended'];
+    influencerId = json['influencerId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userId'] = this.userId;
+    data['niche'] = this.niche;
+    data['bio'] = this.bio;
+    data['completed'] = this.completed;
+    if (this.socials != null) {
+      data['socials'] = this.socials!.map((v) => v.toJson()).toList();
+    }
+    data['suspended'] = this.suspended;
+    data['influencerId'] = this.influencerId;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
+    }
+    return data;
+  }
+}
+
+class Socials {
+  String? name;
+  int? followers;
+  String? url;
+
+  Socials({this.name, this.followers, this.url});
+
+  Socials.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    followers = json['followers'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['followers'] = this.followers;
+    data['url'] = this.url;
+    return data;
+  }
+}
+
+class User {
+  String? sId;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? password;
+  bool? termsAndConditionsAgreement;
+  bool? isNewUser;
+  bool? isSocial;
+  bool? verified;
+  bool? verifiedEmail;
+  int? followers;
+  int? following;
+  int? views;
+  String? userId;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  String? creatorId;
+  String? influencerId;
+  String? country;
+  String? dob;
+  String? phone;
+  String? username;
+  String? avatar;
+
+  User(
+      {this.sId,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.password,
+      this.termsAndConditionsAgreement,
+      this.isNewUser,
+      this.isSocial,
+      this.verified,
+      this.verifiedEmail,
+      this.followers,
+      this.following,
+      this.views,
+      this.userId,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.creatorId,
+      this.influencerId,
+      this.country,
+      this.dob,
+      this.phone,
+      this.username,
+      this.avatar});
+
+  User.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    email = json['email'];
+    password = json['password'];
+    termsAndConditionsAgreement = json['termsAndConditionsAgreement'];
+    isNewUser = json['isNewUser'];
+    isSocial = json['isSocial'];
+    verified = json['verified'];
+    verifiedEmail = json['verifiedEmail'];
+    followers = json['followers'];
+    following = json['following'];
+    views = json['views'];
+    userId = json['userId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    creatorId = json['creatorId'];
+    influencerId = json['influencerId'];
+    country = json['country'];
+    dob = json['dob'];
+    phone = json['phone'];
+    username = json['username'];
+    avatar = json['avatar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['termsAndConditionsAgreement'] = this.termsAndConditionsAgreement;
+    data['isNewUser'] = this.isNewUser;
+    data['isSocial'] = this.isSocial;
+    data['verified'] = this.verified;
+    data['verifiedEmail'] = this.verifiedEmail;
+    data['followers'] = this.followers;
+    data['following'] = this.following;
+    data['views'] = this.views;
+    data['userId'] = this.userId;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
+    data['creatorId'] = this.creatorId;
+    data['influencerId'] = this.influencerId;
+    data['country'] = this.country;
+    data['dob'] = this.dob;
+    data['phone'] = this.phone;
+    data['username'] = this.username;
+    data['avatar'] = this.avatar;
     return data;
   }
 }

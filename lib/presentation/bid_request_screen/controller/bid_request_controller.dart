@@ -25,13 +25,14 @@ class BidRequestController extends GetxController {
 
   Future<void> hireInfluencerFunc(String bidId) async {
     var token = await storage.read(key: "token");
+    Response response = Response();
     try {
       error('');
       Get.dialog(
         Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-      Response response = await apiClient.hireInfluencerForAJob(bidId, token);
+      response = await apiClient.hireInfluencerForAJob(bidId, token);
       if (response.isOk) {
         if (response.body['data']['status'] == true) {
           Get.back();
@@ -40,10 +41,11 @@ class BidRequestController extends GetxController {
       }
       Get.back();
       isTrendLoading.value = false;
-    } catch (e) {
-      print(e);
+    } catch (err) {
+      print('-----trying something---');
+      print(err);
       Get.back();
-      Get.snackbar('Error', 'Something went wrong');
+      Get.snackbar('Error', '$err');
       error('Something went wrong');
       isError.value = true;
       isTrendLoading.value = false;
