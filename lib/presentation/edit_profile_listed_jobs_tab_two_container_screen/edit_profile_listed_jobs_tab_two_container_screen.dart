@@ -52,7 +52,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                         alignment: Alignment.topLeft,
                                         children: [
                                           CustomImageView(
-                                              imagePath: profileImageFile,
+                                              imagePath: ImageConstant.profilecover,
                                               height: getVerticalSize(170),
                                               width: getHorizontalSize(375),
                                               alignment: Alignment.center),
@@ -71,7 +71,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                             Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Padding(
-                                    padding: getPadding(left: 20),
+                                    padding: getPadding(left: 20,right: 20),
                                     child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
@@ -80,8 +80,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                             MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
-                                              imagePath:
-                                                  ImageConstant.imgGroup947,
+                                              url: args.userModelObj.value.avatar,
                                               height: getSize(85),
                                               width: getSize(85),
                                               radius: BorderRadius.circular(
@@ -91,7 +90,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                               padding: getPadding(top: 11),
                                               child: Text(name,
                                                   overflow:
-                                                      TextOverflow.ellipsis,
+                                                  TextOverflow.ellipsis,
                                                   textAlign: TextAlign.left,
                                                   style: AppStyle
                                                       .txtSatoshiBold24)),
@@ -100,61 +99,60 @@ class EditProfileListedJobsTabTwoContainerScreen
                                               child: Row(children: [
                                                 Text(country!,
                                                     overflow:
-                                                        TextOverflow.ellipsis,
+                                                    TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
                                                     style: AppStyle
                                                         .txtSatoshiLight14),
                                                 Card(
                                                     clipBehavior:
-                                                        Clip.antiAlias,
+                                                    Clip.antiAlias,
                                                     elevation: 0,
                                                     margin: getMargin(
                                                         left: 10, bottom: 4),
                                                     color:
-                                                        ColorConstant.gray20001,
+                                                    ColorConstant.gray20001,
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadiusStyle
-                                                                .circleBorder7),
+                                                        BorderRadiusStyle
+                                                            .circleBorder7),
                                                     child: Container(
                                                         height: getSize(14),
                                                         width: getSize(14),
                                                         decoration: AppDecoration
                                                             .fillGray20001
                                                             .copyWith(
-                                                                borderRadius:
-                                                                    BorderRadiusStyle
-                                                                        .circleBorder7),
+                                                            borderRadius:
+                                                            BorderRadiusStyle
+                                                                .circleBorder7),
                                                         child: Stack(children: [
                                                           CustomImageView(
                                                               svgPath:
-                                                                  ImageConstant
-                                                                      .imgContrast,
+                                                              ImageConstant
+                                                                  .imgContrast,
                                                               height:
-                                                                  getVerticalSize(
-                                                                      13),
+                                                              getVerticalSize(
+                                                                  13),
                                                               width:
-                                                                  getHorizontalSize(
-                                                                      14),
+                                                              getHorizontalSize(
+                                                                  14),
                                                               alignment:
-                                                                  Alignment
-                                                                      .center)
+                                                              Alignment
+                                                                  .center)
                                                         ])))
                                               ])),
-                                          CustomButton(
-                                              height: getVerticalSize(34),
-                                              width: getHorizontalSize(110),
-                                              text: "lbl_edit_profile".tr,
-                                              margin: getMargin(top: 13),
-                                              variant:
-                                                  ButtonVariant.FillGray200ab,
-                                              padding:
-                                                  ButtonPadding.PaddingAll4,
-                                              fontStyle: ButtonFontStyle
-                                                  .SatoshiBold15Gray900,
-                                              onTap: () {
-                                                onTapEditprofile();
-                                              })
+
+
+                                    Padding(
+                                      padding: getPadding(top: 10),
+                                      child: Obx(() {
+                                        if (controller.profileRx.value!= null) {
+                                          return Text(controller.profileRx.value!.data.bio);  // Displaying profile bio
+                                        } else {
+                                          return CircularProgressIndicator();  // Show loading or placeholder
+                                        }
+                                      }),
+                                    ),
+
                                         ])))
                           ])),
                       Container(
@@ -203,12 +201,17 @@ class EditProfileListedJobsTabTwoContainerScreen
             bottomNavigationBar: CustomButton(
                 height: getVerticalSize(34),
                 width: getHorizontalSize(110),
-                text: "lbl_edit".tr,
-                margin: getMargin(left: 133, right: 132, bottom: 29),
-                variant: ButtonVariant.FillGray20087,
-                shape: ButtonShape.RoundedBorder3,
-                padding: ButtonPadding.PaddingAll4,
-                fontStyle: ButtonFontStyle.SatoshiBold15Gray900)));
+                text: "lbl_edit_profile".tr,
+                margin: getMargin(top: 13),
+                variant:
+                ButtonVariant.FillGray200ab,
+                padding:
+                ButtonPadding.PaddingAll4,
+                fontStyle: ButtonFontStyle
+                    .SatoshiBold15Gray900,
+                onTap: () {
+                  onTapEditprofile();
+                })));
   }
 
   /// Navigates to the previous screen.
@@ -216,24 +219,21 @@ class EditProfileListedJobsTabTwoContainerScreen
   /// When the action is triggered, this function uses the [Get] library to
   /// navigate to the previous screen in the navigation stack.
   onTapImgArrowleft() {
-    String? capitalizeFirstLetter(String? text) {
-      if (text == null || text.isEmpty) {
-        return text;
-      }
-      return text[0].toUpperCase() + text.substring(1);
-    }
+    // String? capitalizeFirstLetter(String? text) {
+    //   if (text == null || text.isEmpty) {
+    //     return text;
+    //   }
+    //   return text[0].toUpperCase() + text.substring(1);
+    // }
+    //
+    // final args = Get.arguments as EditProfileArguments;
+    // final name =
+    //     "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
+    // final profileImageFile = args.profileImage;
+    // final controller =
+    //     HomeCreatorController(Rx<HomeCreatorModel>(HomeCreatorModel()));
 
-    final args = Get.arguments as EditProfileArguments;
-    final name =
-        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
-    final profileImageFile = args.profileImage;
-    final controller =
-        HomeCreatorController(Rx<HomeCreatorModel>(HomeCreatorModel()));
-
-    // Get.back();
-    Get.to(
-      CreatorProfileDraweritem(controller),
-    );
+    Get.back();
   }
 
   /// Navigates to the editProfileDetailsScreen when the action is triggered.
@@ -242,7 +242,7 @@ class EditProfileListedJobsTabTwoContainerScreen
   /// push the named route for the editProfileDetailsScreen.
   onTapEditprofile() {
     Get.toNamed(
-      AppRoutes.editProfileDetailsOneScreen,
+      AppRoutes.editProfileDetailsScreen,
     );
   }
 }

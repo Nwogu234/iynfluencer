@@ -1,98 +1,120 @@
 import 'dart:io';
+import 'package:iynfluencer/data/apiClient/api_client.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
-import 'package:iynfluencer/data/apiClient/api_client.dart';
-import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
-import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
-import 'package:iynfluencer/presentation/edit_profile_details_screen/models/edit_profile_details_model.dart';
+import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:flutter/material.dart';
 
-/// A controller class for the EditProfileDetailsScreen.
-/// This class manages the state of the EditProfileDetailsScreen, including the
-/// current editProfileDetailsModelObj
+/// A controller class for the CompleteProfileCreatorScreen.
+///
+/// This class manages the state of the CompleteProfileCreatorScreen, including the
+/// current completeProfileCreatorModelObj
+
 class EditProfileDetailsController extends GetxController {
-  TextEditingController frametwelveController = TextEditingController();
-
+  TextEditingController bio = TextEditingController();
   TextEditingController frametwelveoneController = TextEditingController();
-
   TextEditingController frametwelvetwoController = TextEditingController();
-
   TextEditingController frametwelveController1 = TextEditingController();
-
-  Rx<EditProfileDetailsModel> editProfileDetailsModelObj =
-      EditProfileDetailsModel().obs;
-
-  final formKey = GlobalKey<FormState>();
-  var storage = FlutterSecureStorage();
   final apiClient = ApiClient();
-  Rxn<File> profileImage = Rxn<File>();
-  Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: [])
-          .obs;
 
-  Future<void> editProfile() async {
-    // Update the bio, niches, and user information influencer
-    completeProfileInfluencerModelObj.update((val) {
-      val?.bio = frametwelveController1.text;
-      val?.niches = frametwelvetwoController.text
-          .split(',')
-          .map((e) => e.trim())
-          .toList();
-      if (val?.user?.isNotEmpty == true) {
-        final updatedUser = User(
-          id: val?.user?[0].id,
-          firstName: frametwelveController.text,
-          lastName: frametwelveController.text,
-          userId: val?.user?[0].userId,
-          country: frametwelveoneController.text,
-          avatar: val?.user?[0].avatar,
-        );
-        val?.user?[0] = updatedUser;
-      }
+  Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
+      CompleteProfileCreatorModel(bio: "", niches: [], user: []).obs;
+
+  Rxn<File> profileImage = Rxn<File>(); // Add this
+  var storage = FlutterSecureStorage();
+
+  RxList<SelectionPopupModel> itemsToDisplay = RxList<SelectionPopupModel>();
+
+  RxList<SelectionPopupModel> dropdownItems = [
+    SelectionPopupModel(id: 0, title: "Select Niche"),
+    SelectionPopupModel(id: 1, title: "Fashion & Style"),
+    SelectionPopupModel(id: 2, title: "Beauty"),
+    SelectionPopupModel(id: 3, title: "Health & Fitness"),
+    SelectionPopupModel(id: 4, title: "Travel"),
+    SelectionPopupModel(id: 5, title: "Food & Cooking"),
+    SelectionPopupModel(id: 6, title: "Parenting & Family"),
+    SelectionPopupModel(
+      id: 7,
+      title: "Tech & Gaming",
+    ),
+    SelectionPopupModel(id: 8, title: "Home & Interior Design"),
+    SelectionPopupModel(id: 9, title: "Finance & Investment"),
+    SelectionPopupModel(id: 10, title: "Entertainment & Celebrity"),
+    SelectionPopupModel(id: 11, title: "Art & DIY Craft"),
+    SelectionPopupModel(id: 12, title: "Sustainability & Eco-friendly"),
+    SelectionPopupModel(id: 13, title: "Education & Career"),
+    SelectionPopupModel(id: 14, title: "Science & Technology"),
+    SelectionPopupModel(id: 15, title: "Others"),
+  ].obs;
+  Rx<SelectionPopupModel> selectedValue =
+      SelectionPopupModel(id: 0, title: "None", value: null, isSelected: false)
+          .obs;
+  RxString errorText="".obs;
+
+  RxList<SelectionPopupModel> selectedDropdownItems =
+      <SelectionPopupModel>[].obs;
+  ///this is called onChange in the drop down
+  void onDropdownItemChanged(SelectionPopupModel value) {
+    selectedValue.value = value;
+    // Check if the item is not already selected
+    if (!selectedDropdownItems.contains(value) &&
+        value != SelectionPopupModel(id: 0, title: "Select Niche")) {
+      selectedDropdownItems.add(value);
+    }
+    print("onDropdownItemChanged called");
+    print("Added value to selectedDropdownItems: ${value.title}");
+    print("Current selectedValue: ${selectedValue.value.title}");
+    itemsToDisplay.value = dropdownItems.value
+        .where((item) => !selectedDropdownItems.contains(item))
+        .toList();
+    print(itemsToDisplay.map((item) => item.toString()).toList());
+    selectedValue.value = SelectionPopupModel(id: 0, title: "Select Niche");
+  }
+  ///this is called when a chip widget is deleted
+  handleDelete(SelectionPopupModel platform) {
+    selectedValue.value = itemsToDisplay.last;
+    update();
+    print(selectedValue.value.id);
+    selectedDropdownItems.remove(platform);
+    itemsToDisplay.value = dropdownItems.value
+        .where((item) => !selectedDropdownItems.contains(item))
+        .toList();
+    selectedValue.value = SelectionPopupModel(id: 0, title: "Select Niche");
+    print(selectedValue.value.id);
+    update();
+  }
+
+  ///this is the function called to create the creator profile on the backend
+  Future<void> completeProfile() async {
+    completeProfileCreatorModelObj.update((val) {
+      val?.bio = bio.text;
+      val?.niches =
+          selectedDropdownItems.value.map((item) => item.title).toList();
     });
 
-    // Get the profile image file if it exists
-    final profileImageFile = profileImage.value;
-
     Get.dialog(
-      Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+      Center(child: CircularProgressIndicator()), // showing a loading dialog
+      barrierDismissible: false, // user must not close it manually
     );
-
     var token = await storage.read(key: "token");
 
     try {
-      Response updateResponse = await apiClient.updateInfluencerProfile(
-        completeProfileInfluencerModelObj.value,
-        token,
-      );
-
+      Response loginResponse = await apiClient.updateCreatorProfile(
+          completeProfileCreatorModelObj.value, token);
+      var headers = loginResponse.headers;
       Get.back();
 
-      if (updateResponse.statusCode == 201) {
+      if (loginResponse.statusCode == 200) {
         Get.snackbar('Success', 'Profile Updated');
-
-        // Check if there is a profile image to update
-        if (profileImageFile != null) {
-          // Upload the profile image
-          final uploadResponse = await apiClient.postAvatar(
-            profileImageFile.path,
-            token!,
-          );
-
-          if (uploadResponse.isOk) {
-            Get.snackbar('Success', 'Profile Image Updated');
-          } else {
-            Get.snackbar('Warning', 'Failed to update profile image');
-          }
-        }
-
-        await storage.write(key: 'activeProfile', value: "Influencer");
-        Get.back(result: true); // Navigate back with a result
+        await storage.write(key: 'activeProfile', value: "Creator");
+        Get.offNamed(
+          AppRoutes.homeCreatorContainerScreen,
+        );
       } else {
-        print(updateResponse.statusCode);
-        Get.snackbar('Failure',
-            'Profile activation failed! ${updateResponse.body['message']}');
+        print(loginResponse.statusCode);
+        Get.snackbar(
+            'Failure', 'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);
@@ -101,9 +123,21 @@ class EditProfileDetailsController extends GetxController {
   }
 
   @override
+  void onInit() {
+    print('OnInit called');
+
+    super.onInit();
+    itemsToDisplay.value = dropdownItems.value
+        .where((item) => !selectedDropdownItems.contains(item))
+        .toList();
+    selectedValue.value = SelectionPopupModel(id: 0, title: "Select Niche");
+    print(itemsToDisplay.value);
+  }
+
+  @override
   void onClose() {
     super.onClose();
-    frametwelveController.dispose();
+    bio.dispose();
     frametwelveoneController.dispose();
     frametwelvetwoController.dispose();
     frametwelveController1.dispose();

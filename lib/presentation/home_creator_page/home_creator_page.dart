@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
+import '../../core/utils/size_utils.dart';
 import '../../data/models/Influencer/influencer_response_model.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_circleimage.dart';
@@ -71,11 +72,11 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
         backgroundColor: ColorConstant.whiteA700,
         drawer: CreatorProfileDraweritem(controller),
         appBar: CustomAppBar(
-          height: 63.h,
-          leadingWidth: 55.w,
+          height: getSize(63),
+          leadingWidth: getSize(55),
           leading: AppbarCircleimage(
             url: controller.user.userModelObj.value.avatar,
-            margin: EdgeInsets.only(left: 20.w, top: 14.h, bottom: 14.h),
+            margin: EdgeInsets.only(left: 20, top: 14, bottom: 14),
             onTap: openDrawer,
           ),
           title: AppbarSearchview(

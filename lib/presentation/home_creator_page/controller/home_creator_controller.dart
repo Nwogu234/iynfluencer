@@ -51,6 +51,7 @@ class HomeCreatorController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
+        print(user.userModelObj.value.avatar);
         isLoading.value = false;
         getInfluencers();
         getRecommended();

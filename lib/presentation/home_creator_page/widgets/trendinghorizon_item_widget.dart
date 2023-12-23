@@ -17,7 +17,8 @@ class TrendinghorizonItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? avatarUrl = trendinghorizonItem.user?.first.avatar;
+    String? avatarUrl =
+        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg";
     ImageProvider imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -42,34 +43,35 @@ class TrendinghorizonItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomImageView(
+                fit: BoxFit.cover,
                 url: avatarUrl ?? ImageConstant.imgRectangle5055,
-                height: 90.h,
-                width: 90.w,
-                radius: BorderRadius.circular(45.r),
+                height: getSize(90),
+                width: getSize(90),
+                radius: BorderRadius.circular(45),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 5.h),
+                padding: EdgeInsets.only(top: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
                       clipBehavior: Clip.antiAlias,
                       elevation: 0,
-                      margin: EdgeInsets.symmetric(vertical: 1.h),
+                      margin: EdgeInsets.symmetric(vertical: 1),
                       color: ColorConstant.gray20001,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7.r),
+                        borderRadius: BorderRadius.circular(7),
                       ),
                       child: Container(
                         height: 14.h,
                         width: 14.w,
                         decoration: AppDecoration.fillGray20001.copyWith(
-                          borderRadius: BorderRadius.circular(7.r),
+                          borderRadius: BorderRadius.circular(7),
                         ),
                         child: Stack(
                           children: [
                             CountryFlag.fromCountryCode(
-                              'NG',
+                              controller.user.userModelObj.value.countryCode!,
                               height: 48,
                               width: 62,
                               borderRadius: 8,

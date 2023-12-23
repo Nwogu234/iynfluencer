@@ -34,9 +34,9 @@ class CreatorProfileDraweritem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath: ImageConstant.imgFrame901,
-                          height: 48.h,
-                          width: 48.w,
+                          url: controller.user.userModelObj.value.avatar,
+                          height: getSize(50),
+                          width: getSize(50),
                           radius: BorderRadius.circular(24.r),
                           onTap: () {
                             onTapImgFrame901();

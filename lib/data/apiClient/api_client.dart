@@ -153,6 +153,7 @@ class ApiClient extends GetConnect {
 
   // this is for updating profile pic url
   Future<Response> postAvatar(String avatarUrl, String token) {
+    print("this is the one we are looking for $avatarUrl");
     return post(
       'users/me/save_avatar', {"avatar": avatarUrl},
       // replace with your specific endpoint path
@@ -221,7 +222,7 @@ class ApiClient extends GetConnect {
       CompleteProfileInfluencerModel profile, var token) async {
     Response response;
     try {
-      response = await post('/influencers/me', profile.toJson(), headers: {
+      response = await post('influencers/me', profile.toJson(), headers: {
         "Content-Type": "application/json",
         'Authorization': token,
       });
@@ -243,44 +244,66 @@ class ApiClient extends GetConnect {
   }
 
 
-  // This is for  modifying influencer profile in editprofiledetailscreen
-  Future<Response> updateInfluencerProfile(
-      CompleteProfileInfluencerModel editProfile, var token) async {
+  //patch request for updating a creator profile
+  Future<Response> updateCreatorProfile(
+      CompleteProfileCreatorModel profile, var token) async {
     Response response;
     try {
-      response = await patch(
-        'influencers/me',
-        editProfile.toJson(),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
+      response = await patch('creators/me', profile.toJson(), headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
       if (response.isOk) {
+        print('its good');
         return response;
       } else {
+        print('Problem ooooo');
         print(response);
         print(response.body);
         print(response.statusCode);
-        print(editProfile.toJson());
+        print(profile.toJson());
         print('Server error: ${response.statusText}');
+        return response;
         throw Exception('Server error');
       }
     } catch (e) {
-      print('$e from updating influencer profile');
       print(e);
       throw Exception('Server error');
     }
   }
 
-// This is for  modifying creator profile in editprofiledetailonescreen
-  Future<Response> updateCreatorProfile(
-      CompleteProfileCreatorModel editProfileTwo, var token) async {
+//patch request for updating an influencer profile
+  Future<Response> updateInfluencerProfile(
+      CompleteProfileInfluencerModel profile, var token) async {
     Response response;
     try {
-      response = await patch(
+      response = await patch('influencers/me', profile.toJson(), headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(profile.toJson());
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  //Getting creator profile
+  Future<Response> getCreatorProfile(var token) async {
+    Response response;
+    try {
+      response = await get(
         'creators/me',
-        editProfileTwo.toJson(),
         headers: {
           "Content-Type": "application/json",
           'Authorization': token,
@@ -291,17 +314,15 @@ class ApiClient extends GetConnect {
       } else {
         print(response);
         print(response.body);
-        print(response.statusCode);
-        print(editProfileTwo.toJson());
-        print('Server error: ${response.statusText}');
         throw Exception('Server error');
       }
     } catch (e) {
-      print('$e from updating creator profile');
+      print('$e from getting list of creator jobs');
       print(e);
       throw Exception('Server error');
     }
   }
+
   // Get Request to get a list of Influencers
   Future<List<Influencer>> getInfluencers(
       int pageNumber, int limit, var token) async {
@@ -508,7 +529,7 @@ class ApiClient extends GetConnect {
       throw Exception('Server error From influencers job  2');
     }
   }
-
+//Get Job requests fro an influencer
   Future<Response> getInfluencerJobsRequests(
     var token,
   ) async {
@@ -537,6 +558,7 @@ class ApiClient extends GetConnect {
     }
   }
 
+  //Descline Request for influencer
   Future<Response> InfluencerDeclineJobsRequests(var token, String id) async {
     Response response = Response();
     try {

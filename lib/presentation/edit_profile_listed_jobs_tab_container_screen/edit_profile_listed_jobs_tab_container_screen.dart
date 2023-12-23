@@ -249,7 +249,7 @@ class EditProfileListedJobsTabContainerScreen
   /// push the named route for the editProfileDetailsScreen.
   onTapEditprofile() {
     Get.toNamed(
-      AppRoutes.editProfileDetailsScreen,
+      AppRoutes.editProfileDetailsOneScreen,
     );
   }
 }
