@@ -27,7 +27,8 @@ class JobpostingItemWidget extends StatelessWidget {
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       imageProvider = NetworkImage(avatarUrl);
     } else {
-      imageProvider = NetworkImage('https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
+      imageProvider = NetworkImage(
+          'https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
     }
 
     String? capitalizeFirstLetter(String? text) {
@@ -37,7 +38,8 @@ class JobpostingItemWidget extends StatelessWidget {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    DateTime? parsedDate = DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
+    DateTime? parsedDate =
+        DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
     String formattedDate = parsedDate != null
         ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}"
         : 'Unknown Date';
@@ -90,7 +92,8 @@ class JobpostingItemWidget extends StatelessWidget {
             width: 321.w,
             margin: EdgeInsets.only(left: 20.w, top: 8.h, right: 33.w),
             child: Text(
-              "${creatorJobslistModelObj.description}",
+              truncateWithEllipsis(
+                  myString: creatorJobslistModelObj.description!),
               maxLines: null,
               textAlign: TextAlign.left,
               style: AppStyle.txtSatoshiLight135Gray600,
@@ -162,7 +165,8 @@ class JobpostingItemWidget extends StatelessWidget {
                     radius: BorderRadius.circular(7.r),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 2.w, top: 14.h, right: 5.w, bottom: 14.h),
+                    padding: EdgeInsets.only(
+                        left: 2.w, top: 14.h, right: 5.w, bottom: 14.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -170,7 +174,8 @@ class JobpostingItemWidget extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "${creatorJobslistModelObj.bidsCount ?? 0}",
+                                text:
+                                    "${creatorJobslistModelObj.bidsCount ?? 0}",
                                 style: TextStyle(
                                   color: ColorConstant.gray900E5,
                                   fontSize: 13.sp,

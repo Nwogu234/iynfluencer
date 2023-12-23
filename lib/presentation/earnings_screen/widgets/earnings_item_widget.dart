@@ -5,16 +5,13 @@ import 'package:iynfluencer/core/app_export.dart';
 
 // ignore: must_be_immutable
 class EarningsItemWidget extends StatelessWidget {
-  EarningsItemWidget(
-    this.earningsItemModelObj, {
+  EarningsItemWidget({
     Key? key,
   }) : super(
           key: key,
         );
 
-  EarningsItemModel earningsItemModelObj;
-
-  var controller = Get.find<EarningsController>();
+  // EarningsItemModel earningsItemModelObj;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +42,11 @@ class EarningsItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Obx(
-                () => Text(
-                  earningsItemModelObj.typeTxt.value,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold135Gray900ab,
-                ),
+              Text(
+                'Media Influencer',
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold135Gray900ab,
               ),
               Padding(
                 padding: getPadding(
@@ -82,13 +77,11 @@ class EarningsItemWidget extends StatelessWidget {
                 padding: getPadding(
                   right: 1,
                 ),
-                child: Obx(
-                  () => Text(
-                    earningsItemModelObj.priceTxt.value,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiBold135Gray900ab,
-                  ),
+                child: Text(
+                  '1500',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  style: AppStyle.txtSatoshiBold135Gray900ab,
                 ),
               ),
               Text(

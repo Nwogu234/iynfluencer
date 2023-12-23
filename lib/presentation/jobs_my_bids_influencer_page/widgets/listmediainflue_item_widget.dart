@@ -116,7 +116,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                   bottom: 5,
                                 ),
                                 child: Text(
-                                  'Another Name',
+                                  "",
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.txtSatoshiBold14Gray900ab,
@@ -149,7 +149,10 @@ class ListmediainflueItemWidget extends StatelessWidget {
                             top: 11,
                           ),
                           child: Text(
-                            listmediainflueItemModelObj.job!.description!,
+                            truncateWithEllipsis(
+                              myString:
+                                  listmediainflueItemModelObj.job!.description!,
+                            ),
                             // "msg_looking_for_a_game3".tr,
                             maxLines: null,
                             textAlign: TextAlign.left,

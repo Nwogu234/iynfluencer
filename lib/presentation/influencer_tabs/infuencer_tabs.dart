@@ -1,3 +1,5 @@
+import 'package:iynfluencer/presentation/earnings_screen/earnings_screen.dart';
+
 import '../../widgets/app_bar/influencer_buttom_bar.dart';
 import '../community_page/community_page.dart';
 import '../influencer_home_one_screen/influencer_home_one_screen.dart';
@@ -9,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
-   InfluencerTabsScreen({Key? key}) : super(key: key);
+  InfluencerTabsScreen({Key? key}) : super(key: key);
   var currentRoute = AppRoutes.influencerHomeScreen.obs;
   @override
   Widget build(BuildContext context) {
@@ -18,13 +20,13 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
             backgroundColor: ColorConstant.whiteA700,
             body: Navigator(
                 key: Get.nestedKey(3),
-                initialRoute:  controller.currentRoute.value,
+                initialRoute: controller.currentRoute.value,
                 onGenerateRoute: (routeSetting) => GetPageRoute(
                     page: () => getCurrentPage(controller.currentRoute.value),
                     transition: Transition.native)),
             bottomNavigationBar:
                 InfluencerBottomBar(onChanged: (BottomBarEnum type) {
-              controller.currentRoute.value=getCurrentRoute(type);
+              controller.currentRoute.value = getCurrentRoute(type);
               Get.toNamed(getCurrentRoute(type), id: 3);
             })));
   }
@@ -39,8 +41,8 @@ String getCurrentRoute(BottomBarEnum type) {
       return AppRoutes.jobsJobsInfluencerTabContainerScreen;
     case BottomBarEnum.Chats:
       return AppRoutes.messagesPage;
-    case BottomBarEnum.Community:
-      return AppRoutes.communityPage;
+    case BottomBarEnum.Earnings:
+      return AppRoutes.earningsScreen;
     default:
       return "/";
   }
@@ -55,8 +57,8 @@ Widget getCurrentPage(String currentRoute) {
       return JobsJobsInfluencerTabContainerScreen();
     case AppRoutes.messagesPage:
       return MessagesPage();
-    case AppRoutes.communityPage:
-      return CommunityPage();
+    case AppRoutes.earningsScreen:
+      return EarningsScreen();
     default:
       return DefaultWidget();
   }
