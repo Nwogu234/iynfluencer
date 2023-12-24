@@ -3,6 +3,8 @@
 import 'package:get/get.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 
+import '../../../data/models/Influencer/influencer_response_model.dart';
+
 class CompleteProfileCreatorModel {
   String? bio;
   List<String>? niches;
@@ -37,6 +39,11 @@ class Social {
       'name': name,
       'followers': followers,
       'url': url,
+<<<<<<< HEAD
     };
   }
 }
+=======
+  };
+}}
+>>>>>>> e508d866d60df130c1ab6a2b4ae705b1aa40234b

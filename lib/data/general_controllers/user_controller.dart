@@ -55,8 +55,14 @@ class UserController extends GetxController {
     if (text == null || text.isEmpty) {
       return '';
     }
-    return text[0].toUpperCase() + text.substring(1);
+    return text.split(' ').map((word) {
+      if (word.isEmpty) {
+        return '';
+      }
+      return word[0].toUpperCase() + word.substring(1);
+    }).join(' ');
   }
+
 
   getUser() async {
     token = await storage.read(key: "token");
