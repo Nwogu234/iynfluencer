@@ -13,10 +13,13 @@ class TrendinghorizonItemWidget extends StatelessWidget {
   final Influencer trendinghorizonItem;
   final controller = Get.find<HomeCreatorController>();
 
+
   TrendinghorizonItemWidget(this.trendinghorizonItem, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String countryCode = controller.user.getCountryCode(controller.user.capitalizeFirstLetter(trendinghorizonItem.user!.first.country!));
+    print(countryCode);
     String? avatarUrl =
         "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg";
     ImageProvider imageProvider;
@@ -71,7 +74,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                         child: Stack(
                           children: [
                             CountryFlag.fromCountryCode(
-                              controller.user.userModelObj.value.countryCode!,
+                              countryCode,
                               height: 48,
                               width: 62,
                               borderRadius: 8,

@@ -19,7 +19,7 @@ class EditProfileDetailsController extends GetxController {
   final apiClient = ApiClient();
 
   Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
-      CompleteProfileCreatorModel(bio: "", niches: [], user: []).obs;
+      CompleteProfileCreatorModel(bio: "", niches: []).obs;
 
   Rxn<File> profileImage = Rxn<File>(); // Add this
   var storage = FlutterSecureStorage();

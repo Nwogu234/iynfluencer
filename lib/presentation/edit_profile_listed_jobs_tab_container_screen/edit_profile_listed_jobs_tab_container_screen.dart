@@ -233,14 +233,14 @@ class EditProfileListedJobsTabContainerScreen
     final influencerController = InfluencerHomeController(
         Rx<InfluencerHomeModel>(InfluencerHomeModel()));
 
-    // Get.back();
-    Get.to(
-      InfluencerDraweritem(
-        controller: influencerController,
-        updatedName: name,
-        updatedProfileImage: profileImageFile,
-      ),
-    );
+    Get.back();
+    // Get.to(
+    //   InfluencerDraweritem(
+    //     controller: influencerController,
+    //     updatedName: name,
+    //     updatedProfileImage: profileImageFile,
+    //   ),
+    // );
   }
 
   /// Navigates to the editProfileDetailsScreen when the action is triggered.
