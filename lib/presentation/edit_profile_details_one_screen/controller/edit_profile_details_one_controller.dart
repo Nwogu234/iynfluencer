@@ -1,376 +1,269 @@
 import 'dart:io';
-import 'dart:convert';
-import 'package:iynfluencer/data/models/use_model/user_model.dart';
-import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/edit_profile_listed_jobs_tab_two_container_screen.dart';
 
-import 'controller/edit_profile_details_one_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:iynfluencer/core/utils/validation_functions.dart';
-import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
-import 'package:iynfluencer/widgets/app_bar/appbar_subtitle_2.dart';
-import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
-import 'package:iynfluencer/widgets/custom_button.dart';
-import 'package:iynfluencer/widgets/custom_text_form_field.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
+import 'package:flutter/material.dart';
 
-// ignore_for_file: must_be_immutable
-class EditProfileDetailsOneScreen
-    extends GetWidget<EditProfileDetailsOneController> {
-  EditProfileDetailsOneScreen({Key? key}) : super(key: key);
+import '../../../data/apiClient/api_client.dart';
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class SocialMediaAccount {
+  SelectionPopupModel platformName;
+  int followersCount;
+  String platformUrl;
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: ColorConstant.whiteA70001,
-            appBar: CustomAppBar(
-                height: getVerticalSize(56),
-                leadingWidth: 50,
-                leading: AppbarImage(
-                    height: getSize(30),
-                    width: getSize(30),
-                    svgPath: ImageConstant.imgArrowleftGray600,
-                    margin: getMargin(left: 20, top: 13, bottom: 13),
-                    onTap: () {
-                      onTapArrowleft18();
-                    }),
-                actions: [
-                  AppbarSubtitle2(
-                      text: "lbl_save".tr,
-                      margin:
-                          getMargin(left: 25, top: 14, right: 25, bottom: 22))
-                ]),
-            body: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                    padding: getPadding(top: 6),
-                    child: Padding(
-                        padding: getPadding(left: 19, right: 20, bottom: 5),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                  padding: getPadding(left: 1),
-                                  child: Text("lbl_edit_profile2".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtH1)),
-                              GestureDetector(
-                                onTap: () async {
-                                  final ImagePicker _picker = ImagePicker();
-                                  try {
-                                    final XFile? image = await _picker
-                                        .pickImage(source: ImageSource.gallery);
-                                    if (image != null) {
-                                      controller.profileImage.value =
-                                          File(image.path);
-                                    }
-                                  } catch (e) {
-                                    Get.snackbar('Error',
-                                        'Failed to pick an image. Please try again.');
-                                  }
-                                },
-                                child: Obx(
-                                  () => controller.profileImage.value == null
-                                      ? CustomImageView(
-                                          svgPath: ImageConstant.imgCheckmark,
-                                          height: getVerticalSize(90),
-                                          width: getHorizontalSize(95),
-                                          margin: getMargin(left: 9, top: 31))
-                                      : CircleAvatar(
-                                          radius: 45.h,
-                                          backgroundImage: FileImage(
-                                              controller.profileImage.value!),
-                                        ),
-                                ),
-                              ),
-                              Padding(
-                                  padding: getPadding(top: 36),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text("lbl_full_name".tr,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        CustomTextFormField(
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Please enter your name";
-                                              }
-                                              return null;
-                                            },
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller
-                                                .frametwelveController,
-                                            hintText: "lbl_john_doe".tr,
-                                            margin: getMargin(top: 7))
-                                      ])),
-                              Padding(
-                                  padding: getPadding(top: 25),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text("lbl_country".tr,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        CustomTextFormField(
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Please enter your country";
-                                              }
-                                              return null;
-                                            },
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller
-                                                .frametwelveoneController,
-                                            hintText: "lbl_eg_nigeria".tr,
-                                            margin: getMargin(top: 6))
-                                      ])),
-                              Padding(
-                                  padding: getPadding(top: 25),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text("msg_what_s_your_primary".tr,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        CustomTextFormField(
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Please enter your niche";
-                                              }
-                                              return null;
-                                            },
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller
-                                                .frametwelvetwoController,
-                                            hintText: "msg_eg_videography".tr,
-                                            margin: getMargin(top: 6),
-                                            padding:
-                                                TextFormFieldPadding.PaddingT14,
-                                            suffix: Container(
-                                                margin: getMargin(
-                                                    left: 30,
-                                                    top: 14,
-                                                    right: 13,
-                                                    bottom: 14),
-                                                child: CustomImageView(
-                                                    svgPath: ImageConstant
-                                                        .imgArrowdownGray600)),
-                                            suffixConstraints: BoxConstraints(
-                                                maxHeight: getVerticalSize(48)))
-                                      ])),
-                              /*   Padding(
-                                  padding: getPadding(top: 25),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            width: getHorizontalSize(266),
-                                            margin: getMargin(right: 68),
-                                            child: Text(
-                                                "msg_which_social_media".tr,
-                                                maxLines: null,
-                                                textAlign: TextAlign.left,
-                                                style: AppStyle
-                                                    .txtSatoshiLight13Gray900)),
-                                        CustomTextFormField(
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller
-                                                .frametwelveController1,
-                                            hintText:
-                                                "msg_eg_tik_tok_twitter".tr,
-                                            margin: getMargin(top: 5),
-                                            padding:
-                                                TextFormFieldPadding.PaddingT14,
-                                            suffix: Container(
-                                                margin: getMargin(
-                                                    left: 30,
-                                                    top: 14,
-                                                    right: 13,
-                                                    bottom: 14),
-                                                child: CustomImageView(
-                                                    svgPath: ImageConstant
-                                                        .imgArrowdownGray600)),
-                                            suffixConstraints: BoxConstraints(
-                                                maxHeight: getVerticalSize(48)))
-                                      ])),
-                              Container(
-                                  margin: getMargin(top: 24),
-                                  padding: getPadding(left: 1, right: 1),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text("lbl_twitter_url".tr,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        Padding(
-                                            padding: getPadding(top: 7),
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                      width: getHorizontalSize(
-                                                          129),
-                                                      padding: getPadding(
-                                                          left: 14,
-                                                          top: 13,
-                                                          right: 14,
-                                                          bottom: 13),
-                                                      decoration: AppDecoration
-                                                          .txtFillGray100
-                                                          .copyWith(
-                                                              borderRadius:
-                                                                  BorderRadiusStyle
-                                                                      .txtRoundedBorder6),
-                                                      child: Text(
-                                                          "lbl_twitter_com".tr,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: AppStyle
-                                                              .txtSatoshiLight14)),
-                                                  CustomTextFormField(
-                                                      width: getHorizontalSize(
-                                                          200),
-                                                      focusNode: FocusNode(),
-                                                      autofocus: true,
-                                                      controller: controller
-                                                          .usernameController,
-                                                      hintText:
-                                                          "lbl_username".tr,
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      validator: (value) {
-                                                        if (!isText(value)) {
-                                                          return "Please enter valid text";
-                                                        }
-                                                        return null;
-                                                      })
-                                                ]))
-                                      ])),
-                              CustomButton(
-                                  height: getVerticalSize(44),
-                                  text: "msg_add_more_social".tr,
-                                  margin: getMargin(top: 24),
-                                  variant: ButtonVariant.OutlineGray300b2,
-                                  padding: ButtonPadding.PaddingT12,
-                                  fontStyle: ButtonFontStyle.SatoshiLight14,
-                                  prefixWidget: Container(
-                                      margin: getMargin(right: 6),
-                                      child: CustomImageView(
-                                          svgPath:
-                                              ImageConstant.imgFrameGray700))), */
-                              Padding(
-                                  padding: getPadding(top: 24),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text("lbl_bio".tr,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900),
-                                        CustomTextFormField(
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Please enter your bio";
-                                              }
-                                              return null;
-                                            },
-                                            focusNode: FocusNode(),
-                                            autofocus: true,
-                                            controller: controller
-                                                .frametwelveController2,
-                                            hintText:
-                                                "msg_brief_intro_about".tr,
-                                            margin: getMargin(top: 7),
-                                            padding:
-                                                TextFormFieldPadding.PaddingT47,
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            maxLines: 5)
-                                      ]))
-                            ])))),
-            bottomNavigationBar: CustomButton(
-                height: getVerticalSize(50),
-                text: "msg_save_and_continue".tr,
-                margin: getMargin(left: 19, right: 20, bottom: 39),
-                padding: ButtonPadding.PaddingAll15,
-                fontStyle: ButtonFontStyle.SatoshiBold14Gray100,
-                onTap: onTapSaveEdit)));
+  SocialMediaAccount(
+      {required this.platformName,
+        required this.followersCount,
+        required this.platformUrl});
+}
+
+class EditProfileDetailsOneController extends GetxController
+    with SingleGetTickerProviderMixin {
+  final formKey = GlobalKey<FormState>();
+  var storage = FlutterSecureStorage();
+  Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
+      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: []).obs;
+
+  RxList<SelectionPopupModel> nicheToDisplay = RxList<SelectionPopupModel>();
+  RxList<SelectionPopupModel> platformToDisplay = RxList<SelectionPopupModel>();
+  RxString errorText = "".obs;
+  final apiClient = ApiClient();
+  late AnimationController animationController;
+  Animation<double>? fadeInAnimation;
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
+  Rx<SelectionPopupModel> selectedNiche =
+      SelectionPopupModel(id: 0, title: "Select Niche").obs;
+  RxList<SelectionPopupModel> selectedNiches = <SelectionPopupModel>[].obs;
+  Rxn<File> profileImage = Rxn<File>();
+
+  final List<SelectionPopupModel> dropdownItems = [
+    SelectionPopupModel(id: 0, title: "Select Niche"),
+    SelectionPopupModel(
+        id: 1, title: "Fashion & Style", value: "Fashion & Style"),
+    SelectionPopupModel(id: 2, title: "Beauty", value: "Beauty"),
+    SelectionPopupModel(
+        id: 3, title: "Health & Fitness", value: "Health & Fitness"),
+    SelectionPopupModel(id: 4, title: "Travel", value: "Travel"),
+    SelectionPopupModel(
+        id: 5, title: "Food & Cooking", value: "Food & Cooking"),
+    SelectionPopupModel(
+        id: 6, title: "Parenting & Family", value: "Parenting & Family"),
+    SelectionPopupModel(id: 7, title: "Tech & Gaming", value: "Tech & Gaming"),
+    SelectionPopupModel(
+        id: 8,
+        title: "Home & Interior Design",
+        value: "Home & Interior Design"),
+    SelectionPopupModel(
+        id: 9, title: "Finance & Investment", value: "Finance & Investment"),
+    SelectionPopupModel(
+        id: 10,
+        title: "Entertainment & Celebrity",
+        value: "Entertainment & Celebrity"),
+    SelectionPopupModel(
+        id: 11, title: "Art & DIY Craft", value: "Art & DIY Craft"),
+    SelectionPopupModel(
+        id: 12,
+        title: "Sustainability & Eco-friendly",
+        value: "Sustainability & Eco-friendly"),
+    SelectionPopupModel(
+        id: 13, title: "Education & Career", value: "Education & Career"),
+    SelectionPopupModel(
+        id: 14, title: "Science & Technology", value: "Science & Technology"),
+    SelectionPopupModel(id: 15, title: "Others", value: "Others"),
+  ];
+
+  //this is to add and remove niches from drop down list
+  void onDropdownItemChanged(SelectionPopupModel value) {
+    selectedNiche.value = value;
+    // Check if the item is not already selected
+    if (!selectedNiches.contains(value) &&
+        value != SelectionPopupModel(id: 0, title: "Select Niche")) {
+      selectedNiches.add(value);
+    }
+    print("onDropdownItemChanged called");
+    print("Added value to selectedDropdownItems: ${value.title}");
+    print("Current selectedValue: ${selectedNiche.value.title}");
+    nicheToDisplay.value =
+        dropdownItems.where((item) => !selectedNiches.contains(item)).toList();
+    print(nicheToDisplay.map((item) => item.toString()).toList());
+    selectedNiche.value = SelectionPopupModel(id: 0, title: "Select Niche");
   }
 
-  void onTapSaveEdit() async {
-    if (_formKey.currentState!.validate()) {
-      final bytes = await controller.profileImage.value!.readAsBytes();
-      final base64Image = base64Encode(bytes);
+  //this is to delete niches clip widget
+  handleNicheDelete(SelectionPopupModel platform) {
+    selectedNiche.value = nicheToDisplay.last;
+    update();
+    print(selectedNiche.value.id);
+    selectedNiches.remove(platform);
+    nicheToDisplay.value = dropdownItems
+        .where((item) => !selectedNiches.value.contains(item))
+        .toList();
+    selectedNiche.value = SelectionPopupModel(id: 0, title: "Select Niche");
+    print(selectedNiche.value.id);
+    update();
+  }
 
-      final args = EditProfileArguments(
-          controller.frametwelveController.text,
-          controller.frametwelveController.text,
-          controller.frametwelveoneController.text,
-          controller.frametwelveController1.text,
-          base64Image);
+  //this part is for social media
 
-      await controller.editProfileTwo();
+  RxList<SelectionPopupModel> socialsToDisplay = RxList<SelectionPopupModel>();
+  var socialMediaAccounts = <SocialMediaAccount>[].obs;
+  RxList<SelectionPopupModel> selectedPlatforms = <SelectionPopupModel>[].obs;
+  var isAddingAccount = false.obs;
 
-      Get.off(
-        EditProfileListedJobsTabTwoContainerScreen(),
-        arguments: args,
-      );
+  void startAddingAccount() {
+    isAddingAccount.value = true;
+  }
+
+  void addAccount(SelectionPopupModel platformName, int followersCount,
+      String platformUrl) {
+    selectedSocialMedia.value = platformName;
+    if (!selectedPlatforms.contains(platformName) &&
+        platformName !=
+            SelectionPopupModel(
+                id: 0, title: "Select Platform", value: "Select Platform")) {
+      selectedPlatforms.add(platformName);
+    }
+    platformToDisplay.value = socialMediaPlatforms
+        .where((item) => !selectedPlatforms.contains(item))
+        .toList();
+    selectedSocialMedia.value = SelectionPopupModel(
+        id: 0, title: "Select Platform", value: "Select Platform");
+
+    socialMediaAccounts.add(SocialMediaAccount(
+        platformName: platformName,
+        followersCount: followersCount,
+        platformUrl: platformUrl));
+    isAddingAccount.value = false;
+  }
+
+  final RxList<SelectionPopupModel> socialMediaPlatforms = [
+    SelectionPopupModel(
+        id: 0, title: "Select Platform", value: "Select Platform"),
+    SelectionPopupModel(id: 1, title: "Facebook", value: "Facebook"),
+    SelectionPopupModel(id: 2, title: "Instagram", value: "Instagram"),
+    SelectionPopupModel(id: 3, title: "Twitter", value: "Twitter"),
+    SelectionPopupModel(id: 4, title: "LinkedIn", value: "LinkedIn"),
+    SelectionPopupModel(id: 5, title: "Pinterest", value: "Pinterest"),
+    SelectionPopupModel(id: 6, title: "Snapchat", value: "Snapchat"),
+    SelectionPopupModel(id: 7, title: "YouTube", value: "YouTube"),
+    SelectionPopupModel(id: 8, title: "TikTok", value: "TikTok"),
+    SelectionPopupModel(id: 9, title: "Reddit", value: "Reddit"),
+    SelectionPopupModel(id: 10, title: "Tumblr", value: "Tumblr"),
+    SelectionPopupModel(id: 11, title: "Flickr", value: "Flickr"),
+    SelectionPopupModel(id: 12, title: "Vimeo", value: "Vimeo"),
+    SelectionPopupModel(id: 13, title: "WhatsApp", value: "WhatsApp"),
+    SelectionPopupModel(id: 14, title: "WeChat", value: "WeChat"),
+    SelectionPopupModel(id: 15, title: "QQ", value: "QQ"),
+    SelectionPopupModel(id: 16, title: "QZone", value: "QZone"),
+    SelectionPopupModel(id: 17, title: "Twitch", value: "Twitch"),
+    SelectionPopupModel(id: 18, title: "Quora", value: "Quora"),
+    SelectionPopupModel(id: 19, title: "Telegram", value: "Telegram"),
+    SelectionPopupModel(id: 20, title: "Viber", value: "Viber"),
+    SelectionPopupModel(id: 21, title: "Line", value: "Line"),
+    SelectionPopupModel(id: 22, title: "SlideShare", value: "SlideShare"),
+    SelectionPopupModel(
+        id: 23, title: "VKontakte (VK)", value: "VKontakte (VK)"),
+    SelectionPopupModel(id: 24, title: "Nextdoor", value: "Nextdoor"),
+  ].obs;
+
+  Rx<SelectionPopupModel> selectedSocialMedia =
+      SelectionPopupModel(title: "Select Platform", value: "Select Platform")
+          .obs;
+
+  handleDelete(
+      SocialMediaAccount platform, SelectionPopupModel socialPlatform) {
+    selectedSocialMedia.value = platformToDisplay.last;
+    update();
+    selectedPlatforms.remove(socialPlatform);
+    platformToDisplay.value = socialMediaPlatforms
+        .where((item) => !selectedPlatforms.contains(item))
+        .toList();
+    selectedSocialMedia.value = SelectionPopupModel(
+        id: 0, title: "Select Platform", value: "Select Platform");
+    update();
+    socialMediaAccounts.remove(platform);
+    update();
+  }
+
+  ///this is the function called to create the creator profile on the backend
+  Future<void> completeProfile() async {
+    completeProfileInfluencerModelObj.update((val) {
+      val?.bio = bioController.text;
+      val?.niches = selectedNiches.value.map((item) => item.title).toList();
+      val?.socials = socialMediaAccounts.value
+          .map((item) => Social(
+          name: item.platformName.title,
+          followers: item.followersCount,
+          url: item.platformUrl))
+          .toList();
+    });
+
+    Get.dialog(
+      Center(child: CircularProgressIndicator()), // showing a loading dialog
+      barrierDismissible: false, // user must not close it manually
+    );
+    var token = await storage.read(key: "token");
+
+    try {
+      Response loginResponse = await apiClient.updateInfluencerProfile(
+          completeProfileInfluencerModelObj.value, token);
+      var headers = loginResponse.headers;
+      Get.back();
+
+      if (loginResponse.statusCode == 200) {
+        Get.snackbar('Success', 'Profile Updated');
+        await storage.write(key: 'activeProfile', value: "Influencer");
+        Get.offNamed(
+          AppRoutes.influencerTabScreen,
+        );
+      } else {
+        print(loginResponse.statusCode);
+        Get.snackbar('Failure',
+            'Profile activation failed! ${loginResponse.body['message']}');
+      }
+    } catch (e) {
+      print(e);
+      Get.snackbar('Error', 'Profile activation failed');
     }
   }
 
-  /// Navigates to the previous screen.
-  ///
-  /// When the action is triggered, this function uses the [Get] library to
-  /// navigate to the previous screen in the navigation stack.
-  onTapArrowleft18() {
-    Get.back();
+  @override
+  void onInit() {
+    // Initialize animation controller
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    animationController.forward();
+
+    // Define fade-in animation
+    fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.easeIn),
+    );
+
+    print('OnInit called');
+    super.onInit();
+    nicheToDisplay.value =
+        dropdownItems.where((item) => !selectedNiches.contains(item)).toList();
+    selectedNiche.value = SelectionPopupModel(id: 0, title: "Select Niche");
+
+    platformToDisplay.value = socialMediaPlatforms
+        .where((item) => !selectedPlatforms.contains(item))
+        .toList();
+    selectedSocialMedia.value = SelectionPopupModel(
+        id: 0, title: "Select Platform", value: "Select Platform");
+
+    print(nicheToDisplay.value);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    animationController.dispose();
+    usernameController.dispose();
+    bioController.dispose();
   }
 }

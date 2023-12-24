@@ -40,6 +40,8 @@ class UserController extends GetxController {
   final storage = new FlutterSecureStorage();
   var token;
   final apiClient = ApiClient();
+  String baseUrl =
+  'https://iynfluencer.s3.us-east-1.amazonaws.com/';
 
   String getCountryCode(String countryName) {
     for (var entry in countries.entries) {
@@ -63,7 +65,8 @@ class UserController extends GetxController {
       if (userModelObj.value.firstName.isEmpty) {
         return ('Something went wrong');
       } else {
-
+        print(userModelObj.value.avatar);
+        userModelObj.value.avatar="$baseUrl${userModelObj.value.avatar}";
         userModelObj.value.countryCode =
             getCountryCode(capitalizeFirstLetter(userModelObj.value.country!));
         return ('Its Ok');
@@ -107,7 +110,13 @@ class UserController extends GetxController {
     if (uploadResponse.statusCode == 200) {
       print('File successfully uploaded');
       String picUrl = presignedUrl.split('?').first;
-      final response = await apiClient.postAvatar(picUrl, token);
+      // Splitting the URL based on '/'
+      List<String> parts = picUrl.split('/');
+
+      // Extracting the desired part
+      String desiredPart = parts.sublist(3).join('/');
+      print(desiredPart);
+      final response = await apiClient.postAvatar(desiredPart, token);
       if (response.isOk) {
         Get.back();
         Get.snackbar('Success', 'Image uploaded');

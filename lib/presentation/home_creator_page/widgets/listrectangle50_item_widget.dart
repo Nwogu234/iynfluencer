@@ -35,7 +35,8 @@ class Listrectangle50ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? avatarUrl =
-        listrectangle50.user?.first.avatar; // Assuming this is a String
+        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${listrectangle50.userId}-avatar.jpeg";
+    // Assuming this is a String
     String imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {

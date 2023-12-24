@@ -15,18 +15,15 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   HomeCreatorController controller;
   final storage = new FlutterSecureStorage();
+  String capitalize(String text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
 
   @override
   Widget build(BuildContext context) {
-    String? capitalize(String? text) {
-      if (text == null || text.isEmpty) {
-        return text;
-      }
-      return text[0].toUpperCase() + text.substring(1);
-    }
-
-    final name =
-        "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}";
     return Drawer(
         child: SingleChildScrollView(
             child: Container(
@@ -37,26 +34,25 @@ class CreatorProfileDraweritem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath: (controller.updatedProfileImage.value
-                                  as String?) ??
-                              controller.user.userModelObj.value.avatar,
-                          height: 48.h,
-                          width: 48.w,
+                          url: controller.user.userModelObj.value.avatar,
+                          height: getSize(50),
+                          width: getSize(50),
                           radius: BorderRadius.circular(24.r),
                           onTap: () {
                             onTapImgFrame901();
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text(controller.updatedName?.value ?? name,
+                          child: Text(
+                              "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
                           child: Text(
-                              //    "@${controller.user.userModelObj.value.firstName}".tr,
-                              controller.updatedName?.value ?? name,
+                              "@${controller.user.userModelObj.value.firstName}"
+                                  .tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125Gray600ab)),
@@ -233,7 +229,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
     if (controller.user.userModelObj.value.influencerId != null) {
       Get.delete<CreatorHireslistTabContainerController>();
       Get.delete<TabController>();
-      storage.write(key: "activeProfile", value: "Creator");
+      storage.write(key: "activeProfile", value: "Influencer");
       Get.offNamed(
         AppRoutes.influencerTabScreen,
       );
