@@ -9,7 +9,7 @@ class SignUpController extends GetxController {
   final lastnameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final countryController = TextEditingController();
+  String countryController = "";
   final apiClient = ApiClient();
 
   final isShowPassword = true.obs;
@@ -40,7 +40,7 @@ class SignUpController extends GetxController {
       val?.lastName = lastnameController.text;
       val?.email = emailController.text;
       val?.password = passwordController.text;
-      val?.country=countryController.text;
+      val?.country=countryController;
       val?.termsAndConditions = isCheckbox.value;
     });
 

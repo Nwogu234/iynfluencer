@@ -1,3 +1,5 @@
+import 'package:country_code_picker/country_code_picker.dart';
+
 import 'controller/sign_up_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -79,13 +81,57 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   }
                                   return null;
                                 }),
-                            CustomTextFormField(
-                                focusNode: FocusNode(),
-                                autofocus: true,
-                                controller: controller
-                                    .countryController,
-                                hintText: "Country",
-                                margin: getMargin(top: 6)),
+                            // CustomTextFormField(
+                            //     focusNode: FocusNode(),
+                            //     autofocus: true,
+                            //     controller: controller
+                            //         .countryController,
+                            //     hintText: "Country",
+                            //     margin: getMargin(top: 6)),
+
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(
+                                  width: 1.0,
+                                  color: Colors.lightBlue.shade50,
+                                ),
+                                right: BorderSide(
+                                  width: 1.0,
+                                  color: Colors.lightBlue.shade50,
+                                ),
+                                bottom: BorderSide(
+                                  width: 1.0,
+                                  color: Colors.lightBlue.shade50,
+                                ),
+                                left: BorderSide(
+                                  width: 1.0,
+                                  color: Colors.lightBlue.shade50,
+                                ),
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                getHorizontalSize(10.0),
+                              ),
+                            ),
+                            child: CountryCodePicker(
+                              onChanged: (value){
+                                controller
+                                    .countryController=value.name!;
+                                print(value.name);
+                              },
+                              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                              initialSelection: 'GB',
+                              favorite: ['+44','GB'],
+                              // optional. Shows only country name and flag
+                              showCountryOnly: true,
+                              // optional. Shows only country name and flag when popup is closed.
+                              showOnlyCountryWhenClosed: true,
+                              // optional. aligns the flag and the Text left
+                              alignLeft: true,
+                            ),
+                          ),),
                             CustomTextFormField(
                                 focusNode: FocusNode(),
                                 autofocus: true,
