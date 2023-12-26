@@ -60,7 +60,8 @@ class EditProfileDetailsOneScreen
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   key: _formKey,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 5.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 19.w, vertical: 5.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -85,19 +86,19 @@ class EditProfileDetailsOneScreen
                             }
                           },
                           child: Obx(
-                                () => controller.profileImage.value == null
+                            () => controller.profileImage.value == null
                                 ? CustomImageView(
-                              svgPath: ImageConstant.imgCheckmark,
-                              height: 90.h,
-                              width: 95.w,
-                              margin:
-                              EdgeInsets.only(left: 8.w, top: 31.h),
-                            )
+                                    svgPath: ImageConstant.imgCheckmark,
+                                    height: 90.h,
+                                    width: 95.w,
+                                    margin:
+                                        EdgeInsets.only(left: 8.w, top: 31.h),
+                                  )
                                 : CircleAvatar(
-                              radius: 45.h,
-                              backgroundImage:
-                              FileImage(controller.profileImage.value!),
-                            ),
+                                    radius: 45.h,
+                                    backgroundImage: FileImage(
+                                        controller.profileImage.value!),
+                                  ),
                           ),
                         ),
                         Padding(
@@ -110,8 +111,9 @@ class EditProfileDetailsOneScreen
                                     padding: getPadding(top: 25),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text("msg_what_s_your_primary".tr,
                                             overflow: TextOverflow.ellipsis,
@@ -119,57 +121,67 @@ class EditProfileDetailsOneScreen
                                             style: AppStyle
                                                 .txtSatoshiLight13Gray900),
                                         Obx(
-                                              () => FormField<SelectionPopupModel>(
+                                          () => FormField<SelectionPopupModel>(
                                             validator: (value) {
-                                              if (value?.value == null || value?.value.isEmpty) {
+                                              if (value?.value == null ||
+                                                  value?.value.isEmpty) {
                                                 return 'Please select at least one option'; // Your validation logic here
                                               }
                                               return null;
                                             },
-                                            initialValue: controller.selectedNiche.value,
-                                            builder: (FormFieldState<SelectionPopupModel> state) {
+                                            initialValue:
+                                                controller.selectedNiche.value,
+                                            builder: (FormFieldState<
+                                                    SelectionPopupModel>
+                                                state) {
                                               return Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   CustoDropDown(
-                                                    value: controller.selectedNiche.value,
+                                                    value: controller
+                                                        .selectedNiche.value,
                                                     hintText: 'Add Niche',
                                                     focusNode: FocusNode(),
                                                     autofocus: true,
-                                                    items: controller.nicheToDisplay,
+                                                    items: controller
+                                                        .nicheToDisplay,
                                                     onChanged: (newValue) {
                                                       if (newValue != null) {
-                                                        controller.onDropdownItemChanged(newValue);
-                                                        state.didChange(newValue); // Trigger validation on change
+                                                        controller
+                                                            .onDropdownItemChanged(
+                                                                newValue);
+                                                        state.didChange(
+                                                            newValue); // Trigger validation on change
                                                       }
                                                     },
                                                   ),
                                                   if (state.hasError)
                                                     Text(
                                                       state.errorText!,
-                                                      style: TextStyle(color: Colors.red),
+                                                      style: TextStyle(
+                                                          color: Colors.red),
                                                     ),
                                                 ],
                                               );
                                             },
                                           ),
                                         ),
-
                                         Obx(() => Wrap(
-                                          spacing: 8.0.w,
-                                          children: controller
-                                              .selectedNiches.value
-                                              .map((niche) {
-                                            return Chip(
-                                              label: Text('${niche.title}'),
-                                              deleteIcon: Icon(
-                                                Icons.close,
-                                              ),
-                                              onDeleted: () => controller
-                                                  .handleNicheDelete(niche),
-                                            );
-                                          }).toList(),
-                                        )),
+                                              spacing: 8.0.w,
+                                              children: controller
+                                                  .selectedNiches.value
+                                                  .map((niche) {
+                                                return Chip(
+                                                  label: Text('${niche.title}'),
+                                                  deleteIcon: Icon(
+                                                    Icons.close,
+                                                  ),
+                                                  onDeleted: () => controller
+                                                      .handleNicheDelete(niche),
+                                                );
+                                              }).toList(),
+                                            )),
                                       ],
                                     ),
                                   ),
@@ -187,8 +199,8 @@ class EditProfileDetailsOneScreen
                                       child: Text("msg_which_social_media".tr,
                                           maxLines: null,
                                           textAlign: TextAlign.left,
-                                          style:
-                                          AppStyle.txtSatoshiLight13Gray900)),
+                                          style: AppStyle
+                                              .txtSatoshiLight13Gray900)),
                                   CustomButton(
                                       height: getVerticalSize(44.h),
                                       text: "Add platforms",
@@ -207,14 +219,15 @@ class EditProfileDetailsOneScreen
                                   Obx(() => controller.isAddingAccount.value
                                       ? _buildAccountForm()
                                       : _buildAccountChips()),
-
                                   if (controller.errorText.value != null)
-                                    Obx(() => Text(
-                                      controller.errorText.value,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 10.sp,
-                                      ),),
+                                    Obx(
+                                      () => Text(
+                                        controller.errorText.value,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
                                     )
                                 ])),
                         // Bio
@@ -226,6 +239,9 @@ class EditProfileDetailsOneScreen
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please enter valid text";
+                              }
+                              if (value != null && value.length < 100) {
+                                return "Bio Must Contain At Least 100 Characters";
                               }
                               return null;
                             },
@@ -259,8 +275,7 @@ class EditProfileDetailsOneScreen
     Get.back();
   }
 
-  void onTapSaveand()async {
-
+  void onTapSaveand() async {
     if (controller.socialMediaAccounts.value.isEmpty) {
       controller.errorText.value = "Please select at least one platform";
       // Return early if validation fails
@@ -275,15 +290,18 @@ class EditProfileDetailsOneScreen
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller.animationController, curve: Curves.easeOut),
+        CurvedAnimation(
+            parent: controller.animationController, curve: Curves.easeOut),
       ),
       child: Wrap(
         spacing: 8.0.w,
         children: accountsCopy.map((account) {
           return Chip(
-            label: Text('${account.platformName.title} - ${account.followersCount} followers'),
+            label: Text(
+                '${account.platformName.title} - ${account.followersCount} followers'),
             deleteIcon: Icon(Icons.close),
-            onDeleted: () => controller.handleDelete(account, account.platformName),
+            onDeleted: () =>
+                controller.handleDelete(account, account.platformName),
           );
         }).toList(),
       ),
@@ -298,14 +316,15 @@ class EditProfileDetailsOneScreen
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller.animationController, curve: Curves.easeIn),
+        CurvedAnimation(
+            parent: controller.animationController, curve: Curves.easeIn),
       ),
       child: Form(
         key: controller.formKey,
         child: Column(
           children: [
             Obx(
-                  () => FormField<SelectionPopupModel>(
+              () => FormField<SelectionPopupModel>(
                 validator: (value) {
                   if (value?.value == null || value?.value.isEmpty) {
                     return 'Please select a platform name';
@@ -345,7 +364,9 @@ class EditProfileDetailsOneScreen
                 controller: followersCountController,
                 hintText: 'Followers count',
                 validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      int.tryParse(value) == null) {
                     return 'Please enter a valid number of followers';
                   }
                   return null;
@@ -359,7 +380,9 @@ class EditProfileDetailsOneScreen
                 controller: platformUrlController,
                 hintText: 'Platform URL',
                 validator: (value) {
-                  if (value == null || value.isEmpty || !Uri.parse(value).isAbsolute) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      !Uri.parse(value).isAbsolute) {
                     return 'Please enter a valid URL';
                   }
                   return null;
@@ -405,5 +428,3 @@ class EditProfileDetailsOneScreen
     );
   }
 }
-
-

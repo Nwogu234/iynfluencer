@@ -14,8 +14,8 @@ class SocialMediaAccount {
 
   SocialMediaAccount(
       {required this.platformName,
-        required this.followersCount,
-        required this.platformUrl});
+      required this.followersCount,
+      required this.platformUrl});
 }
 
 class EditProfileDetailsOneController extends GetxController
@@ -23,7 +23,8 @@ class EditProfileDetailsOneController extends GetxController
   final formKey = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
   Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
-      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: []).obs;
+      CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: [])
+          .obs;
 
   RxList<SelectionPopupModel> nicheToDisplay = RxList<SelectionPopupModel>();
   RxList<SelectionPopupModel> platformToDisplay = RxList<SelectionPopupModel>();
@@ -195,9 +196,9 @@ class EditProfileDetailsOneController extends GetxController
       val?.niches = selectedNiches.value.map((item) => item.title).toList();
       val?.socials = socialMediaAccounts.value
           .map((item) => Social(
-          name: item.platformName.title,
-          followers: item.followersCount,
-          url: item.platformUrl))
+              name: item.platformName.title,
+              followers: item.followersCount,
+              url: item.platformUrl))
           .toList();
     });
 
@@ -221,11 +222,13 @@ class EditProfileDetailsOneController extends GetxController
         );
       } else {
         print(loginResponse.statusCode);
+        Get.back();
         Get.snackbar('Failure',
             'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);
+      Get.back();
       Get.snackbar('Error', 'Profile activation failed');
     }
   }

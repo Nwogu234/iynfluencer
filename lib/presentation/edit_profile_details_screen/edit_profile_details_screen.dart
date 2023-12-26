@@ -14,16 +14,14 @@ import 'package:image_picker/image_picker.dart';
 
 import 'controller/edit_profile_details_controller.dart';
 
-class EditProfileDetailsScreen
-    extends GetWidget<EditProfileDetailsController> {
+class EditProfileDetailsScreen extends GetWidget<EditProfileDetailsController> {
   EditProfileDetailsScreen({Key? key}) : super(key: key);
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final controller2 = Get.put(UserController());
-  String imgPath='';
+  String imgPath = '';
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -46,10 +44,7 @@ class EditProfileDetailsScreen
                 actions: [
                   AppbarSubtitle2(
                     text: "lbl_skip".tr,
-                    margin:
-                    EdgeInsets.fromLTRB(
-                        28.w, 17.h, 28.w, 17.h
-                    ),
+                    margin: EdgeInsets.fromLTRB(28.w, 17.h, 28.w, 17.h),
                   )
                 ]),
             body: LayoutBuilder(
@@ -57,7 +52,7 @@ class EditProfileDetailsScreen
                 return SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints:
-                    BoxConstraints(minHeight: constraints.maxHeight),
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -79,14 +74,15 @@ class EditProfileDetailsScreen
                                     final ImagePicker _picker = ImagePicker();
                                     try {
                                       // Pick an image
-                                      final XFile? image = await _picker
-                                          .pickImage(source: ImageSource.gallery);
+                                      final XFile? image =
+                                          await _picker.pickImage(
+                                              source: ImageSource.gallery);
                                       if (image != null) {
                                         controller.profileImage.value =
                                             File(image.path);
 
-                                        await controller2.uploadUserPic(image.path);
-
+                                        await controller2
+                                            .uploadUserPic(image.path);
                                       }
                                     } catch (e) {
                                       print(e);
@@ -96,21 +92,21 @@ class EditProfileDetailsScreen
                                     }
                                   },
                                   child: Obx(
-                                        () => controller.profileImage.value == null
+                                    () => controller.profileImage.value == null
                                         ? CustomImageView(
-                                      svgPath: ImageConstant.imgCheckmark,
-                                      height: 90.h,
-                                      width: 95.w,
-                                      margin: EdgeInsets.only(
-                                        left: 8.w,
-                                        top: 31.h,
-                                      ),
-                                    )
+                                            svgPath: ImageConstant.imgCheckmark,
+                                            height: 90.h,
+                                            width: 95.w,
+                                            margin: EdgeInsets.only(
+                                              left: 8.w,
+                                              top: 31.h,
+                                            ),
+                                          )
                                         : CircleAvatar(
-                                      radius: 45.h,
-                                      backgroundImage: FileImage(
-                                          controller.profileImage.value!),
-                                    ),
+                                            radius: 45.h,
+                                            backgroundImage: FileImage(
+                                                controller.profileImage.value!),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -127,36 +123,43 @@ class EditProfileDetailsScreen
                                       style: AppStyle.txtSatoshiLight13Gray900,
                                     ),
                                     Obx(
-                                          () => CustoDropDown(
+                                      () => CustoDropDown(
                                         value: controller.selectedValue.value,
                                         hintText: 'Add Niche',
                                         focusNode: FocusNode(),
                                         autofocus: true,
                                         items: controller.itemsToDisplay,
-                                        onChanged: controller.onDropdownItemChanged,
+                                        onChanged:
+                                            controller.onDropdownItemChanged,
                                       ),
                                     ),
 
                                     SizedBox(height: 8.h),
-                                    Obx(() => controller.errorText.value != null
-                                        ? Text(
-                                      controller.errorText.value,
-                                      style: TextStyle(color: Colors.red,fontSize:10.sp),
-                                    )
-                                        : Container(),
+                                    Obx(
+                                      () => controller.errorText.value != null
+                                          ? Text(
+                                              controller.errorText.value,
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 10.sp),
+                                            )
+                                          : Container(),
                                     ),
                                     Obx(() => Wrap(
-                                      spacing: 8.0.w,
-                                      children: controller.selectedDropdownItems.value.map((account) {
-                                        return Chip(
-                                          label: Text('${account.title}'),
-                                          deleteIcon: Icon(
-                                            Icons.close,
-                                          ),
-                                          onDeleted: () => controller.handleDelete(account),
-                                        );
-                                      }).toList(),
-                                    )),
+                                          spacing: 8.0.w,
+                                          children: controller
+                                              .selectedDropdownItems.value
+                                              .map((account) {
+                                            return Chip(
+                                              label: Text('${account.title}'),
+                                              deleteIcon: Icon(
+                                                Icons.close,
+                                              ),
+                                              onDeleted: () => controller
+                                                  .handleDelete(account),
+                                            );
+                                          }).toList(),
+                                        )),
                                     SizedBox(height: 16.h),
                                     // Obx(() => Column(
                                     //       children: List.generate(
@@ -178,8 +181,9 @@ class EditProfileDetailsScreen
                                   padding: EdgeInsets.only(top: 22.h),
                                   child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text("lbl_bio".tr,
                                             overflow: TextOverflow.ellipsis,
@@ -191,19 +195,23 @@ class EditProfileDetailsScreen
                                               if (value == null) {
                                                 return "Please enter valid text";
                                               }
+                                              if (value != null &&
+                                                  value.length < 100) {
+                                                return "Bio Must Contain At Least 100 Characters";
+                                              }
                                               return null;
                                             },
                                             focusNode: FocusNode(),
                                             autofocus: true,
-                                            controller:
-                                            controller.bio,
-                                            hintText: "msg_brief_intro_about".tr,
+                                            controller: controller.bio,
+                                            hintText:
+                                                "msg_brief_intro_about".tr,
                                             margin: EdgeInsets.only(top: 7.h),
                                             // padding:
                                             // TextFormFieldPadding.PaddingT,
-                                            textInputAction: TextInputAction.done,
-                                            maxLines: 5
-                                        )
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            maxLines: 5)
                                       ])),
                               // other widgets
                               CustomButton(
@@ -211,7 +219,8 @@ class EditProfileDetailsScreen
                                   text: "msg_save_and_continue".tr,
                                   margin: EdgeInsets.only(top: 22.h),
                                   padding: ButtonPadding.PaddingAll15,
-                                  fontStyle: ButtonFontStyle.SatoshiBold14Gray100,
+                                  fontStyle:
+                                      ButtonFontStyle.SatoshiBold14Gray100,
                                   onTap: onTapSaveand)
                             ],
                           ),
@@ -224,20 +233,17 @@ class EditProfileDetailsScreen
             )));
   }
 
-  onTapSaveand() async{
-
-
-    if (!_formKey.currentState!.validate()&&controller.selectedDropdownItems.isEmpty) {
-      controller.errorText.value="Please select at least one niche";
+  onTapSaveand() async {
+    if (!_formKey.currentState!.validate() &&
+        controller.selectedDropdownItems.isEmpty) {
+      controller.errorText.value = "Please select at least one niche";
       return;
-    }
-    else if(controller.selectedDropdownItems.isEmpty){
-      controller.errorText.value="Please select at least one niche";
-    }else if(!_formKey.currentState!.validate()){
-      controller.errorText.value="";
+    } else if (controller.selectedDropdownItems.isEmpty) {
+      controller.errorText.value = "Please select at least one niche";
+    } else if (!_formKey.currentState!.validate()) {
+      controller.errorText.value = "";
       return;
-    }
-    else{
+    } else {
       controller.completeProfile();
     }
   }
@@ -245,7 +251,6 @@ class EditProfileDetailsScreen
   onTapArrowleft() {
     Get.back();
   }
-
 }
 
 

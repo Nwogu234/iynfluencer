@@ -43,9 +43,9 @@ class InfluencerDraweritem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath: (controller.updatedProfileImage.value
-                                  as String?) ??
-                              ImageConstant.imgFrame901,
+                          imagePath:
+                              controller.user.userModelObj.value.avatar ??
+                                  ImageConstant.imgFrame901,
                           height: 48.h,
                           width: 48.w,
                           radius: BorderRadius.circular(24.r),
@@ -54,13 +54,15 @@ class InfluencerDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text(controller.updatedName?.value ?? name,
+                          child: Text(
+                              "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text(controller.updatedName?.value ?? name,
+                          child: Text(
+                              "@${controller.user.userModelObj.value.firstName}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight125Gray600ab)),
@@ -71,20 +73,24 @@ class InfluencerDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001,
                               indent: 1.w)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 27.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgBookmarkBlueGray400,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 1.h),
-                                child: Text("msg_saved_influencers".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray900))
-                          ])),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 1.w, top: 27.h),
+                      //   child: Row(
+                      //     children: [
+                      //       CustomImageView(
+                      //           svgPath: ImageConstant.imgBookmarkBlueGray400,
+                      //           height: 24.h,
+                      //           width: 24.w),
+                      //       Padding(
+                      //         padding: EdgeInsets.only(left: 14.w, top: 1.h),
+                      //         child: Text("msg_saved_influencers".tr,
+                      //             overflow: TextOverflow.ellipsis,
+                      //             textAlign: TextAlign.left,
+                      //             style: AppStyle.txtH2Gray900),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       GestureDetector(
                           onTap: () {
                             onTapMenutab03();

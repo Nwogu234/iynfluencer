@@ -122,3 +122,85 @@ class Influencer {
     );
   }
 }
+
+class InfluencerProfile {
+  String? sId;
+  String? userId;
+  List<String>? niche;
+  String? bio;
+  bool? completed;
+  List<Socials>? socials;
+  bool? suspended;
+  String? influencerId;
+  String? createdAt;
+  String? updatedAt;
+
+  InfluencerProfile(
+      {this.sId,
+      this.userId,
+      this.niche,
+      this.bio,
+      this.completed,
+      this.socials,
+      this.suspended,
+      this.influencerId,
+      this.createdAt,
+      this.updatedAt});
+
+  InfluencerProfile.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userId = json['userId'];
+    niche = json['niche'].cast<String>();
+    bio = json['bio'];
+    completed = json['completed'];
+    if (json['socials'] != null) {
+      socials = <Socials>[];
+      json['socials'].forEach((v) {
+        socials!.add(new Socials.fromJson(v));
+      });
+    }
+    suspended = json['suspended'];
+    influencerId = json['influencerId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userId'] = this.userId;
+    data['niche'] = this.niche;
+    data['bio'] = this.bio;
+    data['completed'] = this.completed;
+    if (this.socials != null) {
+      data['socials'] = this.socials!.map((v) => v.toJson()).toList();
+    }
+    data['suspended'] = this.suspended;
+    data['influencerId'] = this.influencerId;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    return data;
+  }
+}
+
+class Socials {
+  String? name;
+  int? followers;
+  String? url;
+
+  Socials({this.name, this.followers, this.url});
+
+  Socials.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    followers = json['followers'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['followers'] = this.followers;
+    data['url'] = this.url;
+    return data;
+  }
+}

@@ -50,10 +50,11 @@ class EditProfileDetailsController extends GetxController {
   Rx<SelectionPopupModel> selectedValue =
       SelectionPopupModel(id: 0, title: "None", value: null, isSelected: false)
           .obs;
-  RxString errorText="".obs;
+  RxString errorText = "".obs;
 
   RxList<SelectionPopupModel> selectedDropdownItems =
       <SelectionPopupModel>[].obs;
+
   ///this is called onChange in the drop down
   void onDropdownItemChanged(SelectionPopupModel value) {
     selectedValue.value = value;
@@ -71,6 +72,7 @@ class EditProfileDetailsController extends GetxController {
     print(itemsToDisplay.map((item) => item.toString()).toList());
     selectedValue.value = SelectionPopupModel(id: 0, title: "Select Niche");
   }
+
   ///this is called when a chip widget is deleted
   handleDelete(SelectionPopupModel platform) {
     selectedValue.value = itemsToDisplay.last;
@@ -113,8 +115,8 @@ class EditProfileDetailsController extends GetxController {
         );
       } else {
         print(loginResponse.statusCode);
-        Get.snackbar(
-            'Failure', 'Profile activation failed! ${loginResponse.body['message']}');
+        Get.snackbar('Failure',
+            'Profile activation failed! ${loginResponse.body['message']}');
       }
     } catch (e) {
       print(e);

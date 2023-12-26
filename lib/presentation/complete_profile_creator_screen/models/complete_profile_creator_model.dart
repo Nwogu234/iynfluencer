@@ -39,11 +39,6 @@ class Social {
       'name': name,
       'followers': followers,
       'url': url,
-<<<<<<< HEAD
     };
   }
 }
-=======
-  };
-}}
->>>>>>> e508d866d60df130c1ab6a2b4ae705b1aa40234b

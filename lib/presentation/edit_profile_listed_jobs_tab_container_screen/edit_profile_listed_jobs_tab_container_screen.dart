@@ -27,7 +27,8 @@ class EditProfileListedJobsTabContainerScreen
     final name =
         "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
     final country = capitalizeFirstLetter(args.userModelObj.value.country);
-    final profileImageFile = args.capitalizeFirstLetter(args.userModelObj.value.avatar);
+    final profileImageFile =
+        args.capitalizeFirstLetter(args.userModelObj.value.avatar);
 
     return SafeArea(
         child: Scaffold(
@@ -66,99 +67,114 @@ class EditProfileListedJobsTabContainerScreen
                                               margin:
                                                   getMargin(left: 15, top: 14),
                                               onTap: () {
-                                                onTapImgArrowleft();
+                                                Get.back();
+                                                // onTapImgArrowleft();
                                               })
                                         ]))),
                             Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                    padding: getPadding(left: 20),
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          CustomImageView(
-                                              imagePath: profileImageFile,
-                                              //ImageConstant.imgGroup947,
-                                              height: getSize(85),
-                                              width: getSize(85),
-                                              radius: BorderRadius.circular(
-                                                  getSize(42.5)),
-                                              margin: getMargin(left: 7)),
-                                          Padding(
-                                              padding: getPadding(top: 11),
-                                              child: Text(
-                                                  name, // "lbl_mark_adebayo".tr,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle
-                                                      .txtSatoshiBold24)),
-                                          Padding(
-                                              padding: getPadding(top: 1),
-                                              child: Row(children: [
-                                                Text(
-                                                    'country', //"lbl_lagos_nigeria".tr,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.left,
-                                                    style: AppStyle
-                                                        .txtSatoshiLight14),
-                                                Card(
-                                                    clipBehavior:
-                                                        Clip.antiAlias,
-                                                    elevation: 0,
-                                                    margin: getMargin(
-                                                        left: 10, bottom: 4),
-                                                    color:
-                                                        ColorConstant.gray20001,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadiusStyle
-                                                                .circleBorder7),
-                                                    child: Container(
-                                                        height: getSize(14),
-                                                        width: getSize(14),
-                                                        decoration: AppDecoration
-                                                            .fillGray20001
-                                                            .copyWith(
-                                                                borderRadius:
-                                                                    BorderRadiusStyle
-                                                                        .circleBorder7),
-                                                        child: Stack(children: [
-                                                          CustomImageView(
-                                                              svgPath:
-                                                                  ImageConstant
-                                                                      .imgContrast,
-                                                              height:
-                                                                  getVerticalSize(
-                                                                      13),
-                                                              width:
-                                                                  getHorizontalSize(
-                                                                      14),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center)
-                                                        ])))
-                                              ])),
-                                          CustomButton(
-                                              height: getVerticalSize(34),
-                                              width: getHorizontalSize(110),
-                                              text: "lbl_edit_profile".tr,
-                                              margin: getMargin(top: 13),
-                                              variant:
-                                                  ButtonVariant.FillGray200ab,
-                                              padding:
-                                                  ButtonPadding.PaddingAll4,
-                                              fontStyle: ButtonFontStyle
-                                                  .SatoshiBold15Gray900,
-                                              onTap: () {
-                                                onTapEditprofile();
-                                              })
-                                        ])))
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: getPadding(left: 20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    CustomImageView(
+                                        imagePath: profileImageFile,
+                                        //ImageConstant.imgGroup947,
+                                        height: getSize(85),
+                                        width: getSize(85),
+                                        radius: BorderRadius.circular(
+                                            getSize(42.5)),
+                                        margin: getMargin(left: 7)),
+                                    Padding(
+                                        padding: getPadding(top: 11),
+                                        child: Text(
+                                            name, // "lbl_mark_adebayo".tr,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
+                                            style: AppStyle.txtSatoshiBold24)),
+                                    Padding(
+                                        padding: getPadding(top: 1),
+                                        child: Row(children: [
+                                          Text(
+                                              args.userModelObj.value
+                                                  .country!, //"lbl_lagos_nigeria".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style:
+                                                  AppStyle.txtSatoshiLight14),
+                                          Card(
+                                            clipBehavior: Clip.antiAlias,
+                                            elevation: 0,
+                                            margin:
+                                                getMargin(left: 10, bottom: 4),
+                                            color: ColorConstant.gray20001,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadiusStyle
+                                                    .circleBorder7),
+                                            child: Container(
+                                              height: getSize(14),
+                                              width: getSize(14),
+                                              decoration: AppDecoration
+                                                  .fillGray20001
+                                                  .copyWith(
+                                                      borderRadius:
+                                                          BorderRadiusStyle
+                                                              .circleBorder7),
+                                              child: Stack(
+                                                children: [
+                                                  CustomImageView(
+                                                    svgPath: ImageConstant
+                                                        .imgContrast,
+                                                    height: getVerticalSize(13),
+                                                    width:
+                                                        getHorizontalSize(14),
+                                                    alignment: Alignment.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ])),
+                                    // CustomButton(
+                                    //   height: getVerticalSize(34),
+                                    //   width: getHorizontalSize(110),
+                                    //   text: "lbl_edit_profile".tr,
+                                    //   margin: getMargin(top: 13),
+                                    //   variant: ButtonVariant.FillGray200ab,
+                                    //   padding: ButtonPadding.PaddingAll4,
+                                    //   fontStyle:
+                                    //       ButtonFontStyle.SatoshiBold15Gray900,
+                                    //   onTap: () {
+                                    //     onTapEditprofile();
+                                    //   },
+                                    // ),
+                                    Padding(
+                                      padding: getPadding(top: 10),
+                                      child: Obx(() {
+                                        if (controller.profileRx.value !=
+                                            null) {
+                                          return Text(truncateWithEllipsis(
+                                            myString: controller
+                                                .profileRx.value!.bio!,
+                                          )); // Displaying profile bio
+                                        } else {
+                                          return SizedBox(
+                                            width: 15,
+                                            height: 15,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 1,
+                                            ),
+                                          ); // Show loading or placeholder
+                                        }
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ])),
                       Container(
                           height: getVerticalSize(44),
@@ -191,7 +207,7 @@ class EditProfileListedJobsTabContainerScreen
                                     child: Text("lbl_listed_jobs".tr,
                                         overflow: TextOverflow.ellipsis)),
                                 Tab(
-                                    child: Text("lbl_community_posts".tr,
+                                    child: Text("Reviews",
                                         overflow: TextOverflow.ellipsis))
                               ])),
                       SizedBox(
@@ -207,6 +223,7 @@ class EditProfileListedJobsTabContainerScreen
                 height: getVerticalSize(34),
                 width: getHorizontalSize(110),
                 text: "lbl_edit".tr,
+                onTap: () => onTapEditprofile(),
                 margin: getMargin(left: 133, right: 132, bottom: 29),
                 variant: ButtonVariant.FillGray20087,
                 shape: ButtonShape.RoundedBorder3,
@@ -219,19 +236,19 @@ class EditProfileListedJobsTabContainerScreen
   /// When the action is triggered, this function uses the [Get] library to
   /// navigate to the previous screen in the navigation stack.
   onTapImgArrowleft() {
-    String? capitalizeFirstLetter(String? text) {
-      if (text == null || text.isEmpty) {
-        return text;
-      }
-      return text[0].toUpperCase() + text.substring(1);
-    }
+    // String? capitalizeFirstLetter(String? text) {
+    //   if (text == null || text.isEmpty) {
+    //     return text;
+    //   }
+    //   return text[0].toUpperCase() + text.substring(1);
+    // }
 
-    final args = Get.arguments as EditProfileArguments;
-    final name =
-        "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
-    final profileImageFile = args.profileImage;
-    final influencerController = InfluencerHomeController(
-        Rx<InfluencerHomeModel>(InfluencerHomeModel()));
+    // final args = Get.arguments as EditProfileArguments;
+    // final name =
+    //     "${capitalizeFirstLetter(args.firstName)} ${capitalizeFirstLetter(args.lastName)}";
+    // final profileImageFile = args.profileImage;
+    // final influencerController = InfluencerHomeController(
+    //     Rx<InfluencerHomeModel>(InfluencerHomeModel()));
 
     Get.back();
     // Get.to(
