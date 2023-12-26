@@ -283,7 +283,11 @@ class ListclientItemWidget extends StatelessWidget {
                             ),
                             child: Text(
                               // "msg_a_game_influencer".tr,
-                              listclientItemModelObj.description!,
+
+                              truncateWithEllipsis(
+                                  myString: listclientItemModelObj.description!,
+                                  textLength: 100),
+
                               maxLines: null,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiLight14Gray900ab,

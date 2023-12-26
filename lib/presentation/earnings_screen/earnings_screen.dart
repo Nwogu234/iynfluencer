@@ -360,7 +360,7 @@ class EarningsScreen extends GetWidget<EarningsController> {
                                   ])),
                               Padding(
                                   padding: getPadding(top: 26, right: 2),
-                                  child: Obx(() => ListView.separated(
+                                  child: ListView.separated(
                                       physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       separatorBuilder: (context, index) {
@@ -376,16 +376,12 @@ class EarningsScreen extends GetWidget<EarningsController> {
                                                     color: ColorConstant
                                                         .indigo50)));
                                       },
-                                      itemCount: controller.earningsModelObj
-                                          .value.earningsItemList.value.length,
+                                      itemCount: 2,
                                       itemBuilder: (context, index) {
-                                        EarningsItemModel model = controller
-                                            .earningsModelObj
-                                            .value
-                                            .earningsItemList
-                                            .value[index];
-                                        return EarningsItemWidget(model);
-                                      }))),
+                                        // EarningsItemModel model = controller
+                                        //     .earningsItemList.value[index];
+                                        return EarningsItemWidget();
+                                      })),
                               Padding(
                                   padding: getPadding(top: 14),
                                   child: Divider(

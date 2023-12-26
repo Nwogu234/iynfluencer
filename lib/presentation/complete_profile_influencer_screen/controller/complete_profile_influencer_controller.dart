@@ -20,7 +20,11 @@ class SocialMediaAccount {
 
 class CompleteProfileInfluencerController extends GetxController
     with SingleGetTickerProviderMixin {
+  late FocusNode followersCountFocusNode;
+  late FocusNode platformUrlFocusNode;
+  late FocusNode bioFocusNode;
   final formKey = GlobalKey<FormState>();
+  final formKey1 = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
   Rx<CompleteProfileInfluencerModel> completeProfileInfluencerModelObj =
       CompleteProfileInfluencerModel(bio: "", niches: [], socials: [], user: []).obs;
@@ -34,6 +38,8 @@ class CompleteProfileInfluencerController extends GetxController
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  late TextEditingController followersCountController;
+  late TextEditingController platformUrlController;
   Rx<SelectionPopupModel> selectedNiche =
       SelectionPopupModel(id: 0, title: "Select Niche").obs;
   RxList<SelectionPopupModel> selectedNiches = <SelectionPopupModel>[].obs;
@@ -246,6 +252,11 @@ class CompleteProfileInfluencerController extends GetxController
 
     print('OnInit called');
     super.onInit();
+    followersCountController = TextEditingController();
+    platformUrlController = TextEditingController();
+    followersCountFocusNode = FocusNode();
+    platformUrlFocusNode = FocusNode();
+    bioFocusNode = FocusNode();
     nicheToDisplay.value =
         dropdownItems.where((item) => !selectedNiches.contains(item)).toList();
     selectedNiche.value = SelectionPopupModel(id: 0, title: "Select Niche");
@@ -262,6 +273,11 @@ class CompleteProfileInfluencerController extends GetxController
   @override
   void onClose() {
     super.onClose();
+    followersCountController.dispose();
+    platformUrlController.dispose();
+    followersCountFocusNode.dispose();
+    platformUrlFocusNode.dispose();
+    bioFocusNode.dispose();
     animationController.dispose();
     usernameController.dispose();
     bioController.dispose();

@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+
 import '../controller/bids_controller.dart';
 import '../models/bids_item_model.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +11,20 @@ class BidsItemWidget extends StatelessWidget {
   BidsItemWidget(
     this.bidsItemModelObj, {
     Key? key,
-    this.onTapViewdetails,
   }) : super(
           key: key,
         );
 
-  BidsItemModel bidsItemModelObj;
+  JobBids bidsItemModelObj;
 
   var controller = Get.find<BidsController>();
-
-  VoidCallback? onTapViewdetails;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.maxFinite,
       child: Container(
+        margin: getMargin(right: 4, left: 4),
         decoration: AppDecoration.outlineIndigo501,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,6 +52,9 @@ class BidsItemWidget extends StatelessWidget {
                         children: [
                           CustomImageView(
                             imagePath: ImageConstant.imgGroup8525,
+                            //                         imagePath:
+                            // bidsItemModelObj.influencer!.user!.avatar!,
+
                             height: getSize(
                               50,
                             ),
@@ -70,13 +73,12 @@ class BidsItemWidget extends StatelessWidget {
                               top: 17,
                               bottom: 12,
                             ),
-                            child: Obx(
-                              () => Text(
-                                bidsItemModelObj.biddernameTxt.value,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold145,
-                              ),
+                            child: Text(
+                              "${bidsItemModelObj.influencer!.user!.firstName!} ${bidsItemModelObj.influencer!.user!.lastName!}",
+                              // bidsItemModelObj..value,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold145,
                             ),
                           ),
                           Spacer(),
@@ -104,7 +106,7 @@ class BidsItemWidget extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "lbl_bid_amount".tr,
+                              text: '',
                               style: TextStyle(
                                 color: ColorConstant.gray600,
                                 fontSize: getFontSize(
@@ -115,7 +117,7 @@ class BidsItemWidget extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: "lbl_200".tr,
+                              text: '\$${bidsItemModelObj.price.toString()}',
                               style: TextStyle(
                                 color: ColorConstant.gray900,
                                 fontSize: getFontSize(
@@ -140,7 +142,7 @@ class BidsItemWidget extends StatelessWidget {
                         right: 20,
                       ),
                       child: Text(
-                        "msg_hello_i_m_interested".tr,
+                        bidsItemModelObj.coverLetter!,
                         maxLines: null,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiLight138,
@@ -168,7 +170,7 @@ class BidsItemWidget extends StatelessWidget {
                     text: "lbl_view_details".tr,
                     fontStyle: ButtonFontStyle.SatoshiBold12,
                     onTap: () {
-                      onTapViewdetails?.call();
+                      onTapViewdetails();
                     },
                   ),
                   CustomButton(
@@ -192,5 +194,9 @@ class BidsItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  onTapViewdetails() {
+    Get.toNamed(AppRoutes.bidRequestScreen, arguments: bidsItemModelObj);
   }
 }

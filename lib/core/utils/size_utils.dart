@@ -118,3 +118,9 @@ EdgeInsetsGeometry getMarginOrPadding({
     ),
   );
 }
+
+String truncateWithEllipsis({required String myString, int? textLength = 170}) {
+  return (myString.length <= textLength!)
+      ? myString
+      : '${myString.substring(0, textLength)}.....';
+}

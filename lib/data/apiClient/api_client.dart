@@ -43,7 +43,7 @@ class ApiClient extends GetConnect {
         throw 'Error occurred pls check internet and retry.';
       case 500:
       default:
-        throw 'Error occurred retry';
+        throw response.body['message'] ?? 'Error occurred Retry';
     }
   }
 
@@ -289,10 +289,10 @@ class ApiClient extends GetConnect {
         print(response.statusCode);
         print(profile.toJson());
         print('Server error: ${response.statusText}');
-        return response;
         throw Exception('Server error');
       }
     } catch (e) {
+      print('$e from updating influencer profile');
       print(e);
       throw Exception('Server error');
     }
@@ -322,7 +322,6 @@ class ApiClient extends GetConnect {
       throw Exception('Server error');
     }
   }
-
   // Get Request to get a list of Influencers
   Future<List<Influencer>> getInfluencers(
       int pageNumber, int limit, var token) async {
@@ -606,8 +605,59 @@ class ApiClient extends GetConnect {
       }
     } catch (e) {
       print('$e from getting list of creator jobs');
-      print(e);
+
       throw Exception('Server error');
+    }
+  }
+
+  Future<Response> getAllBidsForAJob(String jobid, var token) async {
+    Response response = Response();
+    try {
+      response = await get(
+        'influencers/bids?jobId=$jobid',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of influencers');
+      errorHandler(response);
+
+      throw Exception('Server error');
+    }
+  }
+
+  Future<Response> hireInfluencerForAJob(String bidId, var token) async {
+    Response response = Response();
+    try {
+      response = await post(
+        'creators/me/hires/bid/$bidId',
+        null,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        // print(response);
+        // print(response.body);
+        throw response.body['message'];
+      }
+    } catch (e) {
+      print('hireInfluencerForAJob');
+      print(e);
+      errorHandler(response);
+      throw e;
     }
   }
 }

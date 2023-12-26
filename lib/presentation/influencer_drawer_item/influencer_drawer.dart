@@ -233,7 +233,7 @@ class InfluencerDraweritem extends StatelessWidget {
       Get.offNamed(
         AppRoutes.homeCreatorContainerScreen,
       );
-      controller.dispose();
+      // controller.dispose();
     } else {
       Get.offNamed(
         AppRoutes.completeProfileCreatorScreen,
