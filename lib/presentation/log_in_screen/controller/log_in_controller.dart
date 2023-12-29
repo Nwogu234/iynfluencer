@@ -12,8 +12,10 @@ import '../../../data/apiClient/api_client.dart';
 class LogInController extends GetxController {
   var storage = FlutterSecureStorage();
   TextEditingController usernameController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
+
+  var passwordFocusNode= FocusNode();
+  var emailFocusNode=FocusNode();
   final apiClient = ApiClient();
   String message = '';
 
@@ -76,5 +78,8 @@ class LogInController extends GetxController {
     super.onClose();
     usernameController.dispose();
     passwordController.dispose();
+
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
   }
 }

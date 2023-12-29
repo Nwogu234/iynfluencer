@@ -78,6 +78,9 @@ class CompleteProfileInfluencerScreen
                               if (image != null) {
                                 controller.profileImage.value =
                                     File(image.path);
+
+
+                                await controller.user.uploadUserPic(image.path);
                               }
                             } catch (e) {
                               Get.snackbar('Error',

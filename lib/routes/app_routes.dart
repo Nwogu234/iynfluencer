@@ -400,7 +400,7 @@ class AppRoutes {
     ),
     GetPage(
       name: emailCodeScreen,
-      page: () => EmailCodeScreen(email: '', code: ''),
+      page: () => EmailCodeScreen(),
       bindings: [
         EmailCodeBinding(),
       ],

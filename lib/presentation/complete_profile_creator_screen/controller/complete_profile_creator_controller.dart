@@ -6,6 +6,8 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data/general_controllers/user_controller.dart';
+
 /// A controller class for the CompleteProfileCreatorScreen.
 ///
 /// This class manages the state of the CompleteProfileCreatorScreen, including the
@@ -17,7 +19,7 @@ class CompleteProfileCreatorController extends GetxController {
   TextEditingController frametwelvetwoController = TextEditingController();
   TextEditingController frametwelveController1 = TextEditingController();
   final apiClient = ApiClient();
-
+  final user = Get.put(UserController());
   Rx<CompleteProfileCreatorModel> completeProfileCreatorModelObj =
       CompleteProfileCreatorModel(bio: "", niches: []).obs;
 
