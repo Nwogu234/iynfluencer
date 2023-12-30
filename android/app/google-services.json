@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "664145739624",
+    "project_id": "iynfluencer-4261e",
+    "storage_bucket": "iynfluencer-4261e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664145739624:android:7e6a19a67404dcaa7d60dd",
+        "android_client_info": {
+          "package_name": "com.nwogu.iynfluencer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9MM82rL5YooMFrBRDeN_I1z89YedVZnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

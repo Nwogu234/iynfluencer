@@ -1,6 +1,8 @@
-plugins{
+plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -40,9 +42,9 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.iynfluencer.app"
+        applicationId "com.nwogu.iynfluencer"
         minSdkVersion 21
-        targetSdkVersion 31 
+        targetSdkVersion 31
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

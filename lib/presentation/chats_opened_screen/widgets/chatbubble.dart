@@ -30,11 +30,11 @@ class ChatMessageBubble extends StatelessWidget {
         : ColorConstant.cyan300A9; // Retaining your original colors
     return Column(
       crossAxisAlignment:
-      isReceived ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          isReceived ? CrossAxisAlignment.start : CrossAxisAlignment.end,
       children: [
         Row(
           mainAxisAlignment:
-          isReceived ? MainAxisAlignment.start : MainAxisAlignment.end,
+              isReceived ? MainAxisAlignment.start : MainAxisAlignment.end,
           children: [
             // if (isReceived && leadingImagePath != null)
             //   CustomImageView(
@@ -53,12 +53,16 @@ class ChatMessageBubble extends StatelessWidget {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                   bottomLeft:
-                  isReceived ? Radius.circular(0) : Radius.circular(20),
+                      isReceived ? Radius.circular(0) : Radius.circular(20),
                   bottomRight:
-                  isReceived ? Radius.circular(20) : Radius.circular(0),
+                      isReceived ? Radius.circular(20) : Radius.circular(0),
                 ),
               ),
-              child: Text(messageText,style: TextStyle(color: isReceived? Colors.black87:Colors.white),),
+              child: Text(
+                messageText,
+                style: TextStyle(
+                    color: isReceived ? Colors.black87 : Colors.white),
+              ),
             ),
             // if (!isReceived && trailingImagePath != null)
             //   CustomImageView(
