@@ -58,10 +58,11 @@ class ApiClient extends GetConnect {
       if (response.isOk) {
         return response;
       } else {
-        print(response.body);
+        print(response.body['message']);
         print(response.statusCode);
         print(user.toJson());
         print('Server error: ${response.statusText}');
+        return response;
         throw Exception('Server error');
       }
     } catch (e) {

@@ -17,7 +17,7 @@ class CompleteProfileCreatorScreen
     extends GetWidget<CompleteProfileCreatorController> {
   CompleteProfileCreatorScreen({Key? key}) : super(key: key);
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final controller2 = Get.put(UserController());
+
   String imgPath='';
 
   @override
@@ -84,7 +84,7 @@ class CompleteProfileCreatorScreen
                                         controller.profileImage.value =
                                             File(image.path);
 
-                                            await controller2.uploadUserPic(image.path);
+                                            await controller.user.uploadUserPic(image.path);
 
                                       }
                                     } catch (e) {

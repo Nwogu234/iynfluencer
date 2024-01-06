@@ -31,34 +31,34 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      width: 140.w,
-      height: 140.h,
+      width: getHorizontalSize(135),
+      height: getVerticalSize(135),
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      margin: EdgeInsets.all(5.0.w),
+      margin: EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         color: isSelected ? Color(0xff5DC8E0) : Colors.grey[200],
-        borderRadius: BorderRadius.circular(15.0.r),
+        borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3.w,
-            blurRadius: 5.w,
-            offset: Offset(0.w, 3.w),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: Offset(0, 3),
           ),
         ],
       ),
       child: Center(
         child: Padding(
-          padding: EdgeInsets.all(8.0.w),
+          padding: getPadding(all: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 24.sp, color: isSelected ? Colors.white : Colors.black,),
+              Icon(icon, size: getSize(24), color: isSelected ? Colors.white : Colors.black,),
+              SizedBox(height: getVerticalSize(10)),
+              Text(title, style: TextStyle(fontSize: getFontSize(12), color: isSelected ? Colors.white : Colors.black), textAlign: TextAlign.center,),
               SizedBox(height: 10.h),
-              Text(title, style: TextStyle(fontSize: 12.sp, color: isSelected ? Colors.white : Colors.black), textAlign: TextAlign.center,),
-              SizedBox(height: 10.h),
-              Text(description, style: TextStyle(fontSize: 10.sp, color: isSelected ? Colors.white : Colors.black), textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis,),
+              Text(description, style: TextStyle(fontSize: getFontSize(10), color: isSelected ? Colors.white : Colors.black), textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis,),
             ],
           ),
         ),
