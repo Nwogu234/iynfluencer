@@ -176,9 +176,8 @@ class SettingsScreen extends GetWidget<SettingsController> {
                                       style: TextStyle(color: ColorConstant.gray600),
                                     ),
                                     Text(
-                                      user.userModelObj.value.firstName != null && user.userModelObj.value.firstName.isNotEmpty
-                                          ? user.userModelObj.value.firstName
-                                          : "None",
+                                      "${user.userModelObj.value.dob}",
+
                                       style: TextStyle(color: Colors.black87),
                                     ),
                                   ],

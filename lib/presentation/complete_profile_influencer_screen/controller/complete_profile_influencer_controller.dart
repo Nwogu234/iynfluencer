@@ -6,6 +6,7 @@ import 'package:iynfluencer/presentation/complete_profile_influencer_screen/mode
 import 'package:flutter/material.dart';
 
 import '../../../data/apiClient/api_client.dart';
+import '../../../data/general_controllers/user_controller.dart';
 
 class SocialMediaAccount {
   SelectionPopupModel platformName;
@@ -23,6 +24,7 @@ class CompleteProfileInfluencerController extends GetxController
   late FocusNode followersCountFocusNode;
   late FocusNode platformUrlFocusNode;
   late FocusNode bioFocusNode;
+  final user = Get.put(UserController());
   final formKey = GlobalKey<FormState>();
   final formKey1 = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();

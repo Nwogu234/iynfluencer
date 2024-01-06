@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
       builder: (context, widget) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          primaryColor: Colors.cyan,
+
+          primarySwatch: Colors.cyan,
           visualDensity: VisualDensity.standard,
         ),
         translations: AppLocalization(),

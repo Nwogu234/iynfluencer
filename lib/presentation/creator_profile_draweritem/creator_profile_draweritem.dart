@@ -191,6 +191,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           storage.write(key: 'token', value: null);
+                          storage.write(key: 'activeProfile', value: null);
                           Get.offAllNamed(AppRoutes.logInScreen);
                         },
                         child: Padding(
