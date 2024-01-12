@@ -33,9 +33,13 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
                     imagePath: ImageConstant.imgGroup8991,
                     margin: getMargin(left: 20, top: 14, bottom: 14)),
                 title: AppbarSearchview(
-                    margin: getMargin(left: 14),
-                    hintText: "msg_search_creators".tr,
-                    controller: controller.searchController),
+                  margin: getMargin(left: 14),
+                  hintText: "msg_search_creators".tr,
+                  controller: controller.searchController,
+                  onSubmitted: (query) {
+                    controller.onSearchSubmitted(query);
+                  },
+                ),
                 styleType: Style.bgOutlineIndigo50),
             body: SizedBox(
                 height: getVerticalSize(621),
@@ -428,7 +432,7 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
         return InfluencerHomeOneScreen();
       case AppRoutes.jobsJobsInfluencerTabContainerScreen:
         return JobsJobsInfluencerTabContainerScreen();
-      
+
       case AppRoutes.messagesPage:
         return MessagesPage();
       case AppRoutes.communityPage:

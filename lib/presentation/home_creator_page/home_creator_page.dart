@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
+import '../../data/general_controllers/user_controller.dart';
 import '../../data/models/Influencer/influencer_response_model.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_circleimage.dart';
@@ -33,7 +35,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
     with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeCreatorController controller =
-  Get.put(HomeCreatorController(HomeCreatorModel().obs));
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
   late AnimationController animationController;
 
   @override
@@ -53,17 +55,6 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   @override
   Widget build(BuildContext context) {
-    // String? avatarUrl =
-    //     controller.user.userModelObj.value.avatar; // Assuming this is a String
-    // String imageProvider;
-    // print(avatarUrl);
-    // if (avatarUrl !='') {
-    //   imageProvider = avatarUrl;
-    // } else {
-    //   imageProvider = "mypic.wit";
-    // }
-
-    // Initialize screen_util
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
     return SafeArea(
@@ -74,156 +65,125 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
         appBar: CustomAppBar(
           height: getSize(63),
           leadingWidth: getSize(55),
-          leading: Obx(() => AppbarCircleimage(
-            url: controller.avatar.value,
+          leading: AppbarCircleimage(
+            url: controller.user.userModelObj.value.avatar,
             margin: EdgeInsets.only(left: 20, top: 14, bottom: 14),
             onTap: openDrawer,
-          )
           ),
           title: AppbarSearchview(
             margin: EdgeInsets.only(left: 14.w),
             hintText: "msg_search_influncers".tr,
             controller: controller.searchController,
+            onSubmitted: (query) async {
+              Get.to(() => SearchCreatorScreen(
+                    query: query,
+                    trendingInfluencers: controller.trendingInfluencers,
+                  ));
+            },
           ),
           styleType: Style.bgOutlineIndigo50,
         ),
         body: Obx(
-              () {
+          () {
             if (controller.isLoading.value) {
               return CustomLoadingWidget(
                 animationController: animationController,
               );
             } else if (controller.error.value.isNotEmpty) {
-              return RefreshIndicator(
-                onRefresh: controller.refreshItems,
-                child: ResponsiveErrorWidget(
-                  errorMessage: controller.error.value,
-                  onRetry: controller.getUser,
-                  fullPage: true,
-                ),
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: controller.getUser,
+                fullPage: true,
               );
             } else {
-              return RefreshIndicator(
-                onRefresh: controller.refreshItems,
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: ColorConstant.gray90001
-                          ),
-                          height: getVerticalSize(200),
-                          width: getHorizontalSize(350),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(  // Use Expanded here
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "New Faces, New Deals",
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiBold16B.copyWith(fontSize: getFontSize(17)),
-                                          ),
-                                          SizedBox(height: getVerticalSize(5)),
-                                          Text(
-                                            "Explore fresh talent ready to boost your brand, offering special discounts",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            softWrap: true,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiBold16B.copyWith(fontSize: getFontSize(12)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    CustomImageView(
-                                      svgPath: ImageConstant.imgForward,
-                                      height: 20.h,
-                                      width: 20.w,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: getVerticalSize(20)),
-                              Container(
-                                height: getVerticalSize(100),
-                                width: getVerticalSize(400),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: getPadding(left: 10,right: 10),
-                                  itemCount: controller.isTrendLoading.value
-                                      ? 5
-                                      : controller.trendingInfluencers.length,
-                                  itemBuilder: (context, index) {
-                                    if (controller.isTrendLoading.value) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(right: 16.w),
-                                        child: TrendinghorizonItemSkeletonWidget(),
-                                      );
-                                    } else {
-                                      return Padding(
-                                        padding: EdgeInsets.only(right: 16.w),
-                                        child: TrendinghorizonItemWidget(controller.trendingInfluencers[index]),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.w, top: 23.h),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "msg_recommended_influencers".tr,
+              return SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "lbl_trending".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                              style: AppStyle.txtSatoshiBold16
+                                  .copyWith(fontSize: 16.sp),
                             ),
+                            CustomImageView(
+                              svgPath: ImageConstant.imgForward,
+                              height: 20.h,
+                              width: 20.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 21.h),
+                      Container(
+                        height: 133.h,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.only(left: 20.w),
+                          itemCount: controller.isTrendLoading.value
+                              ? 5
+                              : controller.trendingInfluencers.length,
+                          itemBuilder: (context, index) {
+                            if (controller.isTrendLoading.value) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 16.w),
+                                child: TrendinghorizonItemSkeletonWidget(),
+                              );
+                            } else {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 16.w),
+                                child: TrendinghorizonItemWidget(
+                                    controller.trendingInfluencers[index]),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.w, top: 23.h),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "msg_recommended_influencers".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold16
+                                .copyWith(fontSize: 16.sp),
                           ),
                         ),
-                        SizedBox(height: 5.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Column(
-                            children: [
-                              for (var index = 0;
-                              index <
-                                  (controller.isRecommendedLoading.value
-                                      ? 5
-                                      : controller.recommendedInfluencers.length);
-                              index++)
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 24.h),
-                                  child: controller.isRecommendedLoading.value
-                                      ? Listrectangle50ItemSkeletonWidget()
-                                      : Listrectangle50ItemWidget(
-                                      controller.recommendedInfluencers[index]),
-                                ),
-                            ],
-                          ),
+                      ),
+                      SizedBox(height: 5.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          children: [
+                            for (var index = 0;
+                                index <
+                                    (controller.isRecommendedLoading.value
+                                        ? 5
+                                        : controller
+                                            .recommendedInfluencers.length);
+                                index++)
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 24.h),
+                                child: controller.isRecommendedLoading.value
+                                    ? Listrectangle50ItemSkeletonWidget()
+                                    : Listrectangle50ItemWidget(controller
+                                        .recommendedInfluencers[index]),
+                              ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );

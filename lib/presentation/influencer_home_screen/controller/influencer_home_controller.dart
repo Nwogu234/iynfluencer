@@ -96,6 +96,10 @@ class InfluencerHomeController extends GetxController {
     }
   }
 
+  void onSearchSubmitted(String query) {
+    print("Submitted query: $query");
+  }
+
   // Function to update profile data
   void updateProfileData(Map<String, dynamic>? data) {
     if (data != null) {
