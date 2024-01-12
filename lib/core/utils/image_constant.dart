@@ -499,4 +499,6 @@ class ImageConstant {
   static String imgMditwitter = 'assets/images/img_mditwitter.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String infbkgrd = 'assets/images/background.png';
 }

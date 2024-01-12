@@ -25,6 +25,7 @@ class HomeCreatorController extends GetxController {
   final apiClient = ApiClient();
   var error = ''.obs;
   var usePlaceholder = false.obs;
+  RxString avatar = ''.obs;
   List<Influencer> trendingInfluencers = [];
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   TextEditingController searchController = TextEditingController();
@@ -42,6 +43,12 @@ class HomeCreatorController extends GetxController {
     )..repeat();
   }
 
+  Future<void> refreshItems() async {
+    getUser();
+    // Your refresh logic here
+    // For example, fetching data from an API and updating 'items'
+  }
+
 //*animation stops here
   getUser() async {
     isLoading.value = true;
@@ -56,6 +63,7 @@ class HomeCreatorController extends GetxController {
         error('');
         print(user.userModelObj.value.avatar);
         isLoading.value = false;
+        avatar.value = user.userModelObj.value.avatar;
         getInfluencers();
         getRecommended();
       }

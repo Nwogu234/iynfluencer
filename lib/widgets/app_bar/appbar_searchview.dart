@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_search_view.dart';
 
+import '../../presentation/search_filter_bottomsheet/controller/search_filter_controller.dart';
+import '../../presentation/search_filter_bottomsheet/search_filter_bottomsheet.dart';
+
 // ignore: must_be_immutable
 class AppbarSearchview extends StatelessWidget {
   AppbarSearchview({
@@ -21,6 +24,8 @@ class AppbarSearchview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SearchFilterController searchFilterController = Get.put(SearchFilterController());
+
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: CustomSearchView(
@@ -47,15 +52,20 @@ class AppbarSearchview extends StatelessWidget {
             37,
           ),
         ),
-        suffix: Container(
-          margin: getMargin(
-            left: 30,
-            top: 6,
-            right: 12,
-            bottom: 6,
-          ),
-          child: CustomImageView(
-            svgPath: ImageConstant.imgSignal,
+        suffix: GestureDetector(
+          onTap: () {
+            Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
+          },
+          child: Container(
+            margin: getMargin(
+              left: 30,
+              top: 6,
+              right: 12,
+              bottom: 6,
+            ),
+            child: CustomImageView(
+              svgPath: ImageConstant.imgSignal,
+            ),
           ),
         ),
         suffixConstraints: BoxConstraints(

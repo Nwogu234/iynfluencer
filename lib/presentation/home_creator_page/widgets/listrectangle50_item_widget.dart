@@ -60,6 +60,11 @@ class Listrectangle50ItemWidget extends StatelessWidget {
         width: double.maxFinite,
         child: Container(
           decoration: AppDecoration.outlineIndigo50.copyWith(
+            // image: DecorationImage(
+            //   image: AssetImage(ImageConstant.infbkgrd),
+            //   fit: BoxFit.cover,  // Optional, but commonly used to define how the image should fill the space
+            // ),
+            color: Color(0xFFFDE9ED),
             borderRadius: BorderRadiusStyle.roundedBorder10,
           ),
           child: Column(
@@ -77,27 +82,38 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.topRight,
                   children: [
-                    CustomImageView(
-                      url: imageProvider,
-                      height: getVerticalSize(
-                        267,
-                      ),
-                      width: getHorizontalSize(
-                        335,
-                      ),
-                      radius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          getHorizontalSize(
-                            10,
+                    Center(
+                      child: Padding(
+                        padding: getPadding(top: 35),
+                        child: Container(
+                          height: getVerticalSize(210), // Set the height of the container
+                          width: getHorizontalSize(210),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorConstant.cyan300.withOpacity(0.5), // Pink glow effect
+                                spreadRadius: 3,
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: CustomImageView(
+                              fit: BoxFit.cover,
+                              url: imageProvider,
+                              height: getVerticalSize(
+                                200,
+                              ),
+                              width: getHorizontalSize(
+                                180,
+                              ),
+                              radius: BorderRadius.circular(360),
+                              alignment: Alignment.center,
+                            ),
                           ),
                         ),
-                        topRight: Radius.circular(
-                          getHorizontalSize(
-                            10,
-                          ),
-                        ),
                       ),
-                      alignment: Alignment.center,
                     ),
                     Align(
                       alignment: Alignment.topRight,

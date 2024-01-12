@@ -21,13 +21,16 @@ class TrendinghorizonItemWidget extends StatelessWidget {
     String countryCode = controller.user.getCountryCode(controller.user.capitalizeFirstLetter(trendinghorizonItem.user!.first.country!));
     print(countryCode);
     String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg";
-    ImageProvider imageProvider;
+        trendinghorizonItem.user?.first.avatar;
+        // "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg";
+    String imageProvider;
 
-    if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = NetworkImage(avatarUrl);
+    print (avatarUrl);
+    if (avatarUrl!.isNotEmpty) {
+
+      imageProvider = "${controller.user.baseUrl}$avatarUrl";
     } else {
-      imageProvider = NetworkImage('https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
     }
 
     String? capitalizeFirstLetter(String? text) {
@@ -47,9 +50,9 @@ class TrendinghorizonItemWidget extends StatelessWidget {
             children: [
               CustomImageView(
                 fit: BoxFit.cover,
-                url: avatarUrl ?? ImageConstant.imgRectangle5055,
-                height: getSize(90),
-                width: getSize(90),
+                url: imageProvider,
+                height: getSize(70),
+                width: getSize(70),
                 radius: BorderRadius.circular(45),
               ),
               Padding(
@@ -65,38 +68,24 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Container(
-                        height: 14.h,
-                        width: 14.w,
-                        decoration: AppDecoration.fillGray20001.copyWith(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        child: Stack(
-                          children: [
-                            CountryFlag.fromCountryCode(
-                              countryCode,
-                              height: 48,
-                              width: 62,
-                              borderRadius: 8,
-                            ),
-                            // Icon(
-                            //   Icons.local_fire_department_rounded,
-                            //   size: 14.sp,
-                            //   color: Colors.deepOrange,
-                            // ),
-                          ],
-                        ),
+                      child: CountryFlag.fromCountryCode(
+                        countryCode,
+                        height: getVerticalSize(14),
+                        width: getHorizontalSize(14),
+                        borderRadius: 10,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 6.w),
+                      padding: getPadding(left: 6),
                       child: Text(
-                        "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}",
+                        "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}".length > 10
+                            ? "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}".substring(0, 7) + "..."
+                            : "${capitalizeFirstLetter(trendinghorizonItem.user?.first.firstName)} ${capitalizeFirstLetter(trendinghorizonItem.user?.first.lastName)}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold125.copyWith(fontSize: 16.sp),
+                        style: AppStyle.txtSatoshiBold16B.copyWith(fontSize: getFontSize(12)),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
