@@ -9,6 +9,7 @@ class AppbarSearchview extends StatelessWidget {
     this.hintText,
     this.controller,
     this.margin,
+    this.onSubmitted,
   }) : super(
           key: key,
         );
@@ -18,6 +19,8 @@ class AppbarSearchview extends StatelessWidget {
   TextEditingController? controller;
 
   EdgeInsetsGeometry? margin;
+
+  Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {

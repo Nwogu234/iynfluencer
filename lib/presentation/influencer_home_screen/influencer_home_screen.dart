@@ -79,9 +79,13 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                       openDrawer();
                     }),
                 title: AppbarSearchview(
-                    margin: getMargin(left: 14),
-                    hintText: "msg_search_creators".tr,
-                    controller: controller.searchController),
+                  margin: getMargin(left: 14),
+                  hintText: "msg_search_creators".tr,
+                  controller: controller.searchController,
+                  onSubmitted: (query) {
+                    controller.onSearchSubmitted(query);
+                  },
+                ),
                 styleType: Style.bgOutlineIndigo50),
             body: Container(
               width: double.maxFinite,

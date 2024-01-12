@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
+import '../../data/general_controllers/user_controller.dart';
 import '../../data/models/Influencer/influencer_response_model.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_circleimage.dart';
@@ -33,7 +35,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
     with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeCreatorController controller =
-  Get.put(HomeCreatorController(HomeCreatorModel().obs));
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
   late AnimationController animationController;
 
   @override
@@ -53,17 +55,6 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   @override
   Widget build(BuildContext context) {
-    // String? avatarUrl =
-    //     controller.user.userModelObj.value.avatar; // Assuming this is a String
-    // String imageProvider;
-    // print(avatarUrl);
-    // if (avatarUrl !='') {
-    //   imageProvider = avatarUrl;
-    // } else {
-    //   imageProvider = "mypic.wit";
-    // }
-
-    // Initialize screen_util
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
     return SafeArea(
@@ -83,11 +74,17 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
             margin: EdgeInsets.only(left: 14.w),
             hintText: "msg_search_influncers".tr,
             controller: controller.searchController,
+            onSubmitted: (query) async {
+              Get.to(() => SearchCreatorScreen(
+                    query: query,
+                    trendingInfluencers: controller.trendingInfluencers,
+                  ));
+            },
           ),
           styleType: Style.bgOutlineIndigo50,
         ),
         body: Obx(
-              () {
+          () {
             if (controller.isLoading.value) {
               return CustomLoadingWidget(
                 animationController: animationController,
@@ -115,7 +112,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                               "lbl_trending".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                              style: AppStyle.txtSatoshiBold16
+                                  .copyWith(fontSize: 16.sp),
                             ),
                             CustomImageView(
                               svgPath: ImageConstant.imgForward,
@@ -143,13 +141,13 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             } else {
                               return Padding(
                                 padding: EdgeInsets.only(right: 16.w),
-                                child: TrendinghorizonItemWidget(controller.trendingInfluencers[index]),
+                                child: TrendinghorizonItemWidget(
+                                    controller.trendingInfluencers[index]),
                               );
                             }
                           },
                         ),
                       ),
-
                       Padding(
                         padding: EdgeInsets.only(left: 20.w, top: 23.h),
                         child: Align(
@@ -158,7 +156,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             "msg_recommended_influencers".tr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold16.copyWith(fontSize: 16.sp),
+                            style: AppStyle.txtSatoshiBold16
+                                .copyWith(fontSize: 16.sp),
                           ),
                         ),
                       ),
@@ -168,17 +167,18 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                         child: Column(
                           children: [
                             for (var index = 0;
-                            index <
-                                (controller.isRecommendedLoading.value
-                                    ? 5
-                                    : controller.recommendedInfluencers.length);
-                            index++)
+                                index <
+                                    (controller.isRecommendedLoading.value
+                                        ? 5
+                                        : controller
+                                            .recommendedInfluencers.length);
+                                index++)
                               Padding(
                                 padding: EdgeInsets.only(bottom: 24.h),
                                 child: controller.isRecommendedLoading.value
                                     ? Listrectangle50ItemSkeletonWidget()
-                                    : Listrectangle50ItemWidget(
-                                    controller.recommendedInfluencers[index]),
+                                    : Listrectangle50ItemWidget(controller
+                                        .recommendedInfluencers[index]),
                               ),
                           ],
                         ),

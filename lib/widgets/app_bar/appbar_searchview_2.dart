@@ -9,6 +9,7 @@ class AppbarSearchview2 extends StatelessWidget {
     this.hintText,
     this.controller,
     this.margin,
+    this.initialQuery = '',
   }) : super(
           key: key,
         );
@@ -18,6 +19,8 @@ class AppbarSearchview2 extends StatelessWidget {
   TextEditingController? controller;
 
   EdgeInsetsGeometry? margin;
+
+  final String initialQuery;
 
   @override
   Widget build(BuildContext context) {
