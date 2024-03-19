@@ -68,6 +68,7 @@ class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w300,
                     ),
+                    
                     indicatorPadding: getPadding(
                       all: 8.0,
                     ),

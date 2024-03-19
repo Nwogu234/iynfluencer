@@ -13,6 +13,7 @@ class AppbarSearchview extends StatelessWidget {
     this.controller,
     this.margin,
     this.onSubmitted,
+
   }) : super(
           key: key,
         );
@@ -27,53 +28,57 @@ class AppbarSearchview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SearchFilterController searchFilterController = Get.put(SearchFilterController());
+    SearchFilterController searchFilterController =
+        Get.put(SearchFilterController());
 
-    return Padding(
-      padding: margin ?? EdgeInsets.zero,
-      child: CustomSearchView(
-        width: getHorizontalSize(
-          286,
-        ),
-        focusNode: FocusNode(),
-        autofocus: true,
-        controller: controller,
-        hintText: hintText,
-        prefix: Container(
-          margin: getMargin(
-            left: 13,
-            top: 9,
-            right: 5,
-            bottom: 9,
+    return Center(
+      child: Padding(
+        padding: margin ?? EdgeInsets.zero,
+        child: CustomSearchView(
+          width: getHorizontalSize(
+            340,
           ),
-          child: CustomImageView(
-            svgPath: ImageConstant.imgSearch,
-          ),
-        ),
-        prefixConstraints: BoxConstraints(
-          maxHeight: getVerticalSize(
-            37,
-          ),
-        ),
-        suffix: GestureDetector(
-          onTap: () {
-            Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
-          },
-          child: Container(
+          height: getVerticalSize(300),
+          focusNode: FocusNode(),
+          autofocus: true,
+          controller: controller,
+          hintText: hintText,
+          prefix: Container(
             margin: getMargin(
-              left: 30,
-              top: 6,
-              right: 12,
-              bottom: 6,
+              left: 19,
+              top: 9,
+              right: 10,
+              bottom: 9,
             ),
             child: CustomImageView(
-              svgPath: ImageConstant.imgSignal,
+              svgPath: ImageConstant.imgSearch,
             ),
           ),
-        ),
-        suffixConstraints: BoxConstraints(
-          maxHeight: getVerticalSize(
-            37,
+          prefixConstraints: BoxConstraints(
+            maxHeight: getVerticalSize(
+              33,
+            ),
+          ),
+          suffix: GestureDetector(
+            onTap: () {
+              Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
+            },
+            child: Container(
+              margin: getMargin(
+                left: 30,
+                top: 6,
+                right: 12,
+                bottom: 6,
+              ),
+              child: CustomImageView(
+                svgPath: ImageConstant.imgSignal,
+              ),
+            ),
+          ),
+          suffixConstraints: BoxConstraints(
+            maxHeight: getVerticalSize(
+              37,
+            ),
           ),
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-class CustomButton extends StatelessWidget {
-  CustomButton(
+class CustomButtonOne extends StatelessWidget {
+  CustomButtonOne(
       {this.shape,
       this.padding,
       this.variant,
@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
 
   ButtonShape? shape;
 
-  ButtonPadding? padding;
+  ButtonPaddings? padding;
 
   ButtonVariant? variant;
 
@@ -121,43 +121,43 @@ class CustomButton extends StatelessWidget {
 
   _setPadding() {
     switch (padding) {
-      case ButtonPadding.PaddingAll15:
+      case ButtonPaddings.PaddingAll156:
         return getPadding(
           all: 15,
         );
-      case ButtonPadding.PaddingAll12:
+      case ButtonPaddings.PaddingAll12:
         return getPadding(
           all: 12,
         );
-      case ButtonPadding.PaddingT12:
+      case ButtonPaddings.PaddingT12:
         return getPadding(
           top: 12,
           right: 12,
           bottom: 12,
         );
-      case ButtonPadding.PaddingAll4:
+      case ButtonPaddings.PaddingAll4:
         return getPadding(
           all: 4,
         );
-      case ButtonPadding.PaddingT4:
+      case ButtonPaddings.PaddingT4:
         return getPadding(
           top: 4,
           right: 4,
           bottom: 4,
         );
-      case ButtonPadding.PaddingT13:
+      case ButtonPaddings.PaddingT13:
         return getPadding(
           left: 13,
           top: 13,
           bottom: 13,
         );
-      case ButtonPadding.PaddingT8:
+      case ButtonPaddings.PaddingT8:
         return getPadding(
           top: 8,
           right: 8,
           bottom: 8,
         );
-      case ButtonPadding.PaddingT32:
+      case ButtonPaddings.PaddingT32:
         return getPadding(
           left: 30,
           top: 32,
@@ -206,7 +206,7 @@ class CustomButton extends StatelessWidget {
       case ButtonVariant.OutlineIndigo50:
         return null;
       default:
-        return ColorConstant.cyan300;
+        return ColorConstant.cyan100;
     }
   }
 
@@ -310,7 +310,7 @@ class CustomButton extends StatelessWidget {
       default:
         return BorderRadius.circular(
           getHorizontalSize(
-            7.00,
+            30.00,
           ),
         );
     }
@@ -509,7 +509,7 @@ enum ButtonShape {
   RoundedBorder3,
 }
 
-enum ButtonPadding {
+enum ButtonPaddings {
   PaddingAll15,
   PaddingAll12,
   PaddingT12,
@@ -519,6 +519,7 @@ enum ButtonPadding {
   PaddingT13,
   PaddingT8,
   PaddingT32,
+  PaddingAll156
 }
 
 enum ButtonVariant {

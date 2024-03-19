@@ -12,9 +12,17 @@ class ImageConstant {
 
   static String imgFrameCyan300 = 'assets/images/img_frame_cyan_300.svg';
 
+  static String imgFrameBudget = 'assets/images/Imgframe_budget.png';
+
+  static String imgFrameDollar = 'assets/images/Imgframe_dollar.png';
+
+  static String imgFrameDustbin = 'assets/images/image_Dustbin.svg';
+
   static String imgGroup8837 = 'assets/images/img_group883_7.png';
 
   static String imgGroup8834 = 'assets/images/img_group883_4.png';
+
+  static String imgframeBar = 'assets/images/Imgframe_bar.png';
 
   static String imgGroup85234 = 'assets/images/img_group852_34.png';
 

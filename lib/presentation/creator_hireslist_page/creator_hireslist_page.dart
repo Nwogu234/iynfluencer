@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import '../creator_hireslist_page/widgets/hires_item_widget.dart';
 import 'controller/creator_hireslist_controller.dart';
@@ -81,7 +82,7 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                     )
                   ],
                 ),
-                Expanded(
+              /*   Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(top: 15.h),
                     child: Obx(
@@ -92,7 +93,7 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                           return SizedBox(height: 1.h);
                         },
                         itemCount: controller.isTrendLoading.value
-                            ? 5
+                            ? 5  
                             : controller.hiredJobs.length,
                         itemBuilder: (context, index) {
                           if (controller.isTrendLoading.value) {
@@ -110,7 +111,42 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                       ),
                     ),
                   ),
-                ),
+                ), */
+
+                 Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: Obx(() {
+                      if (controller.isTrendLoading.value) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (controller.hiredJobs.isEmpty && !controller.isTrendLoading.value) {
+                         return ResponsiveEmptyWidget(
+                          errorMessage: 'No Hired jobs Available',
+                          buttonText: "Retry Now",
+                          onRetry: () {
+                            controller.getUser();
+                          },
+                          fullPage: true,
+                        ); // Your erro
+                      } else {
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) => SizedBox(height: 1.h),
+                          itemCount: controller.hiredJobs.length,
+                          itemBuilder: (context, index) {
+                            Job model = controller.hiredJobs[index];
+                            return HiresItemWidget(
+                              model,
+                              onTapBidcard: () {
+                                onTapBidcard(model);
+                              },
+                            );
+                          },
+                        );
+                      }
+                    }),
+                  ))
               ],
             ),
           ),
