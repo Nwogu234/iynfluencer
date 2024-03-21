@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-class CustomButton extends StatelessWidget {
-  CustomButton(
+class CustomSmallButton2 extends StatelessWidget {
+  CustomSmallButton2(
       {this.shape,
       this.padding,
       this.variant,
@@ -13,6 +13,7 @@ class CustomButton extends StatelessWidget {
       this.width,
       this.height,
       this.text,
+      this.border,
       this.loading = false,
       this.prefixWidget,
       this.suffixWidget});
@@ -34,7 +35,7 @@ class CustomButton extends StatelessWidget {
   double? width;
 
   double? height;
-  
+
   bool loading;
 
   String? text;
@@ -42,6 +43,8 @@ class CustomButton extends StatelessWidget {
   Widget? prefixWidget;
 
   Widget? suffixWidget;
+
+  BoxBorder? border;
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +125,13 @@ class CustomButton extends StatelessWidget {
 
   _setPadding() {
     switch (padding) {
-      case ButtonPadding.PaddingAll15:
+      case ButtonPadding.PaddingAll156:
         return getPadding(
           all: 15,
+        );
+      case ButtonPadding.PaddingAll157:
+        return getPadding(
+          all: 10,
         );
       case ButtonPadding.PaddingAll12:
         return getPadding(
@@ -207,7 +214,7 @@ class CustomButton extends StatelessWidget {
       case ButtonVariant.OutlineIndigo50:
         return null;
       default:
-        return ColorConstant.cyan300;
+        return ColorConstant.whiteA700;
     }
   }
 
@@ -248,6 +255,13 @@ class CustomButton extends StatelessWidget {
             1.00,
           ),
         );
+      case ButtonVariant.Cyan50_3:
+        return BorderSide(
+          color: ColorConstant.cyan100,
+          width: getHorizontalSize(
+            1.00,
+          ),
+        );
       case ButtonVariant.FillCyan300:
       case ButtonVariant.Neutral:
       case ButtonVariant.FillLime100b2:
@@ -262,7 +276,12 @@ class CustomButton extends StatelessWidget {
       case ButtonVariant.FillCyan30066:
         return null;
       default:
-        return null;
+        return BorderSide(
+          color: ColorConstant.cyan100,
+          width: getHorizontalSize(
+            1.50,
+          ),
+        );
     }
   }
 
@@ -311,7 +330,7 @@ class CustomButton extends StatelessWidget {
       default:
         return BorderRadius.circular(
           getHorizontalSize(
-            7.00,
+            30.00,
           ),
         );
     }
@@ -490,9 +509,18 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
+      case ButtonFontStyle.SatoshiBold13CyanA700:
+        return TextStyle(
+          color: ColorConstant.cyan100,
+          fontSize: getFontSize(
+            14,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
       default:
         return TextStyle(
-          color: ColorConstant.whiteA700,
+          color: ColorConstant.cyan100,
           fontSize: getFontSize(
             14,
           ),
@@ -511,7 +539,7 @@ enum ButtonShape {
 }
 
 enum ButtonPadding {
-  PaddingAll15,
+  PaddingAll157,
   PaddingAll12,
   PaddingT12,
   PaddingAll4,
@@ -520,6 +548,7 @@ enum ButtonPadding {
   PaddingT13,
   PaddingT8,
   PaddingT32,
+  PaddingAll156
 }
 
 enum ButtonVariant {
@@ -540,10 +569,13 @@ enum ButtonVariant {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
-  yellow200
+  yellow200,
+  whiteA700,
+  Cyan50_3
 }
 
 enum ButtonFontStyle {
+  SatoshiBold13CyanA700,
   SatoshiBold14WhiteA700,
   SatoshiBold14,
   SatoshiBold14Gray90002,

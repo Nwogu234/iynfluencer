@@ -46,7 +46,7 @@ void _onScroll() {
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-      controller.loadRecommendedInfluencers(); // Load initial data
+   //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
   }
 

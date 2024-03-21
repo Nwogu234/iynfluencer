@@ -154,22 +154,19 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                     ),
                      Align(
                         alignment: Alignment.centerRight,
-                      child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: CustomImageView(
-                                    svgPath: ImageConstant.imgFrameDustbin,
-                                    height: getSize(
-                                      18,
-                                    ),
-                                    width: getSize(
-                                      18,
-                                    ),
-                                    margin: getMargin(
-                                      bottom: 2,
-                                    ),
-                                  ),
-                                ),
+                      child: CustomImageView(
+                         svgPath: ImageConstant.imgFrameDustbin,
+                         height: getSize(
+                               18,
                             ),
+                          width: getSize(
+                             18,
+                             ),
+                           margin: getMargin(
+                              bottom: 2,
+                          ),
+                          ),
+                       ),
                     ]
                   ),
                 ],
@@ -189,7 +186,12 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                 padding: ButtonPaddings.PaddingAll156,
                 onTap: () {
                   ChatsOpenedScreen();
-                }),              
+                }),   
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(
+                    thickness: 1.2,
+                  ))           
           ]),
         ),
       ),

@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iynfluencer/core/utils/color_constant.dart';
+import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
+import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
+import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
+import 'package:iynfluencer/widgets/skeletons.dart';
 
 class AllInfluencerHomePage extends StatefulWidget {
   const AllInfluencerHomePage({Key? key}) : super(key: key);
+
+
+
 
   @override
   State<AllInfluencerHomePage> createState() => _AllInfluencerHomePageState();
@@ -20,7 +31,7 @@ class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
 
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
-
+  
   
   
 void _onScroll() {
@@ -52,7 +63,10 @@ void _onScroll() {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(body: Obx(() {
+    return SafeArea(
+      child: Scaffold(
+        key:_scaffoldKey,
+        body: Obx(() {
       if (controller.isLoading.value) {
         return Stack(
           children: [
@@ -76,8 +90,76 @@ void _onScroll() {
           ),
         );
       } else {
-        return SingleChildScrollView();
+        return SingleChildScrollView(
+          controller: _scrollController,
+          physics: BouncingScrollPhysics(),
+          child:Padding(
+            padding:  EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+            child: Column(
+              children: <Widget>[
+                 Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            Text(
+                              "Trending Posts".tr,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold16
+                                  .copyWith(
+                                    fontSize: 16.sp,
+                                    color: ColorConstant.black900,
+                                    fontWeight: FontWeight.w600,
+                                    ),
+                            ),
+                            Text(
+                              'View All'.tr,
+                               textAlign: TextAlign.right,
+                               style: AppStyle.txtSatoshiBold16.copyWith(
+                                color:ColorConstant.cyan100,
+                             ),
+                          )
+                          ],
+                        ),
+                     Padding(
+                       padding: getPadding(top: 19),
+                       child: Container(
+                         height: double.maxFinite,
+                         width: double.infinity,
+                         child: Obx(
+                           () => ListView.separated(
+                             physics: BouncingScrollPhysics(),
+                             shrinkWrap: true,
+                             separatorBuilder: (context, index) {
+                               return SizedBox(height: getVerticalSize(16));
+                             },
+                             itemCount: controller.isJobsLoading.value
+                                 ? 5
+                                 : controller.infJobsList.length,
+                             itemBuilder: (context, index) {
+                               if (controller.isJobsLoading.value) {
+                                 return InfluencerHomeItemSkeletonWidget();
+                               } else {
+                                 Job model = controller.infJobsList[index];
+                                 return InfluencerHomeItemWidget(model,
+                                     onTapJobpost: () {
+                                   onTapJobpost(model);
+                                 });
+                               }
+                             },
+                           ),
+                         ),
+                       ),
+                     )
+              ]
+              ),
+          )
+        );
       }
     })));
+  }
+
+   onTapJobpost(model) {
+    Get.to(JobDetailsScreen(
+      selectedJob: model,
+    ));
   }
 }

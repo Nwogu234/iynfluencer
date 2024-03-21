@@ -28,6 +28,17 @@ class _FashionHomePageState extends State<FashionHomePage>
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
   late AnimationController animationController;
 
+ final ScrollController _scrollController = ScrollController();
+
+
+void _onScroll() {
+  if (!controller.isLoading.value &&
+      _scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+    controller.loadRecommendedInfluencers();
+  }
+}
+
   @override
   void initState() {
     super.initState();
@@ -35,27 +46,46 @@ class _FashionHomePageState extends State<FashionHomePage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+   //   controller.loadRecommendedInfluencers(); // Load initial data
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     animationController.dispose();
-
+    _scrollController.dispose();
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(body: Obx(() {
+        return SafeArea(
+      child: Scaffold(
+      body: Obx(() {
       if (controller.isLoading.value) {
-        return CustomLoadingWidget(
-          animationController: animationController,
+        return Stack(
+          children: [
+             PositionedDirectional(
+              top: 150,
+              start:150,
+               child: CustomLoadingWidget(
+                 animationController: animationController,
+              ),
+             ),
+          ],
+         
         );
       } else if (controller.error.value.isNotEmpty) {
-        return ResponsiveErrorWidget(
-          errorMessage: controller.error.value,
-          onRetry: controller.getUser,
-          fullPage: true,
+        return PositionedDirectional(
+           top: 150,
+           start:150,
+          child: ResponsiveErrorWidget(
+            errorMessage: controller.error.value,
+            onRetry: controller.getUser,
+            fullPage: true,
+          ),
         );
       } else {
         return SingleChildScrollView(
@@ -147,8 +177,9 @@ class _FashionHomePageState extends State<FashionHomePage>
                         
                           SizedBox(height: 15.h),
                           SingleChildScrollView(
+                            controller: _scrollController,
                             child: Container(
-                             height:getVerticalSize(1500),
+                             height: double.maxFinite,
                              width: double.infinity,
                               child: Column(
                                  children: [

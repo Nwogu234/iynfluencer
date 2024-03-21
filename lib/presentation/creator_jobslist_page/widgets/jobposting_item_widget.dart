@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import '../controller/creator_jobslist_controller.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class JobpostingItemWidget extends StatelessWidget {
   final Job creatorJobslistModelObj;
@@ -49,7 +50,7 @@ class JobpostingItemWidget extends StatelessWidget {
         onTapDetailcard?.call();
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical:15),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical:5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +58,8 @@ class JobpostingItemWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                 "Posted on $formattedDate",
+                  timeago.format(DateTime.parse(
+                      creatorJobslistModelObj.createdAt!)),
                    overflow: TextOverflow.ellipsis,
                    textAlign: TextAlign.left,
                    style: AppStyle.txtSatoshiBold125Gray900a7.copyWith(
@@ -66,7 +68,6 @@ class JobpostingItemWidget extends StatelessWidget {
                    ),
               ),
             ),
-            SizedBox(height: 5),
              Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
                child: Text(

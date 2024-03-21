@@ -29,6 +29,7 @@ import 'controller/home_creator_controller.dart';
 import 'models/home_creator_model.dart';
 import 'models/listrectangle50_item_model.dart';
 import 'models/trendinghorizon_item_model.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class HomeCreatorPage extends StatefulWidget {
   HomeCreatorPage({Key? key}) : super(key: key);
@@ -99,13 +100,19 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Home'.tr,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                              DefaultTextStyle(                              
+                                 style: AppStyle.txtSatoshiLight135Gray600.copyWith(
                                   fontSize: 24.sp, fontWeight: FontWeight.bold),
-                            ),
+                                  child: AnimatedTextKit(
+                                     repeatForever: true,
+                                     isRepeatingAnimation: true,
+                                     totalRepeatCount: 3,
+                                     animatedTexts: [
+                                       TypewriterAnimatedText('Home'),
+                                  ],
+                                 ),
+                              ),       
+
                             AppbarCircleimage(
                               url: controller.user.userModelObj.value.avatar,
                               margin:
