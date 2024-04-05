@@ -13,5 +13,5 @@ class EditProfileListedJobsTabContainerController extends GetxController
       EditProfileListedJobsTabContainerModel().obs;
 
   late TabController tabviewController =
-      Get.put(TabController(vsync: this, length: 2));
+      Get.put(TabController(vsync: this, length: 3));
 }

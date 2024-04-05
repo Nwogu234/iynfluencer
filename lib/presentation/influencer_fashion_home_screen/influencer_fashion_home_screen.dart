@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/presentation/influencer_fashion_home_screen/controller/influencer_fashion_controller.dart';
+import 'package:iynfluencer/presentation/influencer_fashion_home_screen/model/influencer_fashion_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
@@ -22,8 +24,8 @@ class InfluencerFashionHomePage extends StatefulWidget {
 
 class _InfluencerFashionHomePageState extends State<InfluencerFashionHomePage> 
     with SingleTickerProviderStateMixin {
-    InfluencerHomeController controller =
-      Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
+    InfluencerFashionController controller =
+      Get.put(InfluencerFashionController(InfluencerFashionModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;

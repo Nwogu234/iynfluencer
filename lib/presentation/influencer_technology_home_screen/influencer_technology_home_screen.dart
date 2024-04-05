@@ -7,6 +7,8 @@ import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
+import 'package:iynfluencer/presentation/influencer_technology_home_screen/controller/influencer_technology_controller.dart';
+import 'package:iynfluencer/presentation/influencer_technology_home_screen/model/influencer_technology_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -23,13 +25,39 @@ class InfluencerTechnologyHomePage extends StatefulWidget {
 class _InfluencerTechnologyHomePageState extends State<InfluencerTechnologyHomePage> 
 with SingleTickerProviderStateMixin{
 
-   InfluencerHomeController controller =
-      Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
+   InfluencerTechnologyController controller =
+      Get.put(InfluencerTechnologyController(InfluencerTechnologyModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
   
+  
+void _onScroll() {
+  if (!controller.isLoading.value &&
+      _scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+  //  controller.loadRecommendedInfluencers();
+  }
+}
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+   //   controller.loadRecommendedInfluencers(); // Load initial data
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
 
   @override

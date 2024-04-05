@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
+import 'package:iynfluencer/presentation/influencer_profile_about_page/controller/influencer_profile_about_controller.dart';
+import 'package:iynfluencer/presentation/influencer_profile_about_page/influencer_profile_about_page.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_tab_container_controller.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/influencer_profile_comm_post_tab_container_screen.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
@@ -26,14 +28,10 @@ class Listrectangle50ItemWidget extends StatelessWidget {
   var controller = Get.find<HomeCreatorController>();
 
   onTapprofilecard(Influencer listrectangle50) {
-    final influencerProfileCommPostTabContainerController =
-        Get.put(InfluencerProfileCommPostTabContainerController());
-    influencerProfileCommPostTabContainerController
-        .setSelectedInfluencer(listrectangle50);
 
-    Get.to(
-      InfluencerProfileCommPostTabContainerScreen(
-          listrectangle50: listrectangle50),
+   Get.to(
+      InfluencerProfileAboutPage(
+          selectedInfluencer: listrectangle50),
     );
   }
 

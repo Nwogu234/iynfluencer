@@ -21,9 +21,9 @@ class CustomButtonOne extends StatelessWidget {
 
   ButtonPaddings? padding;
 
-  ButtonVariant? variant;
+  ButtonVariants? variant;
 
-  ButtonFontStyle? fontStyle;
+  ButtonFontStyles? fontStyle;
 
   Alignment? alignment;
 
@@ -174,37 +174,37 @@ class CustomButtonOne extends StatelessWidget {
 
   _setColor() {
     switch (variant) {
-      case ButtonVariant.Neutral:
+      case ButtonVariants.Neutral:
         return ColorConstant.gray200;
-      case ButtonVariant.OutlineGray300b2:
+      case ButtonVariants.OutlineGray300b2:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillLime100b2:
+      case ButtonVariants.FillLime100b2:
         return ColorConstant.lime100B2;
-      case ButtonVariant.OutlineIndigo50_1:
+      case ButtonVariants.OutlineIndigo50_1:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillCyan30083:
+      case ButtonVariants.FillCyan30083:
         return ColorConstant.cyan30083;
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariants.OutlineIndigo50_2:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillGray200ab:
+      case ButtonVariants.FillGray200ab:
         return ColorConstant.gray200Ab;
-      case ButtonVariant.FillGray20087:
+      case ButtonVariants.FillGray20087:
         return ColorConstant.gray20087;
-      case ButtonVariant.FillCyan3005e:
+      case ButtonVariants.FillCyan3005e:
         return ColorConstant.cyan3005e;
-      case ButtonVariant.FillGreenA10099:
+      case ButtonVariants.FillGreenA10099:
         return ColorConstant.greenA10099;
-      case ButtonVariant.FillRed10099:
+      case ButtonVariants.FillRed10099:
         return ColorConstant.red10099;
-      case ButtonVariant.FillGray20003:
+      case ButtonVariants.FillGray20003:
         return ColorConstant.gray20003;
-      case ButtonVariant.FillRedA700:
+      case ButtonVariants.FillRedA700:
         return ColorConstant.redA700;
-      case ButtonVariant.FillCyan30066:
+      case ButtonVariants.FillCyan30066:
         return ColorConstant.cyan30066;
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariants.OutlineIndigo50_3:
         return ColorConstant.whiteA700;
-      case ButtonVariant.OutlineIndigo50:
+      case ButtonVariants.OutlineIndigo50:
         return null;
       default:
         return ColorConstant.cyan100;
@@ -213,53 +213,53 @@ class CustomButtonOne extends StatelessWidget {
 
   _setTextButtonBorder() {
     switch (variant) {
-      case ButtonVariant.OutlineGray300b2:
+      case ButtonVariants.OutlineGray300b2:
         return BorderSide(
           color: ColorConstant.gray300B2,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_1:
+      case ButtonVariants.OutlineIndigo50_1:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariants.OutlineIndigo50_2:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50:
+      case ButtonVariants.OutlineIndigo50:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariants.OutlineIndigo50_3:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.FillCyan300:
-      case ButtonVariant.Neutral:
-      case ButtonVariant.FillLime100b2:
-      case ButtonVariant.FillCyan30083:
-      case ButtonVariant.FillGray200ab:
-      case ButtonVariant.FillGray20087:
-      case ButtonVariant.FillCyan3005e:
-      case ButtonVariant.FillGreenA10099:
-      case ButtonVariant.FillRed10099:
-      case ButtonVariant.FillGray20003:
-      case ButtonVariant.FillRedA700:
-      case ButtonVariant.FillCyan30066:
+      case ButtonVariants.FillCyan300:
+      case ButtonVariants.Neutral:
+      case ButtonVariants.FillLime100b2:
+      case ButtonVariants.FillCyan30083:
+      case ButtonVariants.FillGray200ab:
+      case ButtonVariants.FillGray20087:
+      case ButtonVariants.FillCyan3005e:
+      case ButtonVariants.FillGreenA10099:
+      case ButtonVariants.FillRed10099:
+      case ButtonVariants.FillGray20003:
+      case ButtonVariants.FillRedA700:
+      case ButtonVariants.FillCyan30066:
         return null;
       default:
         return null;
@@ -268,24 +268,24 @@ class CustomButtonOne extends StatelessWidget {
 
   _setTextButtonShadowColor() {
     switch (variant) {
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariants.OutlineIndigo50_2:
         return ColorConstant.gray9000c;
-      case ButtonVariant.FillCyan300:
-      case ButtonVariant.Neutral:
-      case ButtonVariant.OutlineGray300b2:
-      case ButtonVariant.FillLime100b2:
-      case ButtonVariant.OutlineIndigo50_1:
-      case ButtonVariant.FillCyan30083:
-      case ButtonVariant.FillGray200ab:
-      case ButtonVariant.FillGray20087:
-      case ButtonVariant.FillCyan3005e:
-      case ButtonVariant.FillGreenA10099:
-      case ButtonVariant.OutlineIndigo50:
-      case ButtonVariant.FillRed10099:
-      case ButtonVariant.FillGray20003:
-      case ButtonVariant.FillRedA700:
-      case ButtonVariant.FillCyan30066:
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariants.FillCyan300:
+      case ButtonVariants.Neutral:
+      case ButtonVariants.OutlineGray300b2:
+      case ButtonVariants.FillLime100b2:
+      case ButtonVariants.OutlineIndigo50_1:
+      case ButtonVariants.FillCyan30083:
+      case ButtonVariants.FillGray200ab:
+      case ButtonVariants.FillGray20087:
+      case ButtonVariants.FillCyan3005e:
+      case ButtonVariants.FillGreenA10099:
+      case ButtonVariants.OutlineIndigo50:
+      case ButtonVariants.FillRed10099:
+      case ButtonVariants.FillGray20003:
+      case ButtonVariants.FillRedA700:
+      case ButtonVariants.FillCyan30066:
+      case ButtonVariants.OutlineIndigo50_3:
         return null;
       default:
         return null;
@@ -319,7 +319,7 @@ class CustomButtonOne extends StatelessWidget {
 
   _setFontStyle() {
     switch (fontStyle) {
-      case ButtonFontStyle.SatoshiBold14:
+      case ButtonFontStyles.SatoshiBold14:
         return TextStyle(
           color: ColorConstant.gray90001,
           fontSize: getFontSize(
@@ -328,7 +328,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray90002:
+      case ButtonFontStyles.SatoshiBold14Gray90002:
         return TextStyle(
           color: ColorConstant.gray90002,
           fontSize: getFontSize(
@@ -337,7 +337,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray600:
+      case ButtonFontStyles.SatoshiBold14Gray600:
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
@@ -346,7 +346,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray100:
+      case ButtonFontStyles.SatoshiBold14Gray100:
         return TextStyle(
           color: ColorConstant.gray100,
           fontSize: getFontSize(
@@ -355,7 +355,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiLight14:
+      case ButtonFontStyles.SatoshiLight14:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -364,7 +364,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w300,
         );
-      case ButtonFontStyle.SatoshiBold115:
+      case ButtonFontStyles.SatoshiBold115:
         return TextStyle(
           color: ColorConstant.lime900,
           fontSize: getFontSize(
@@ -373,7 +373,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold12:
+      case ButtonFontStyles.SatoshiBold12:
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
@@ -382,7 +382,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold12Gray900ab:
+      case ButtonFontStyles.SatoshiBold12Gray900ab:
         return TextStyle(
           color: ColorConstant.gray900Ab,
           fontSize: getFontSize(
@@ -391,7 +391,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold13:
+      case ButtonFontStyles.SatoshiBold13:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -400,7 +400,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray900:
+      case ButtonFontStyles.SatoshiBold14Gray900:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -409,7 +409,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold15:
+      case ButtonFontStyles.SatoshiBold156:
         return TextStyle(
           color: ColorConstant.gray100,
           fontSize: getFontSize(
@@ -418,7 +418,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold15Gray900:
+      case ButtonFontStyles.SatoshiBold15Gray900:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -427,7 +427,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold115Green700:
+      case ButtonFontStyles.SatoshiBold115Green700:
         return TextStyle(
           color: ColorConstant.green700,
           fontSize: getFontSize(
@@ -436,7 +436,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold135:
+      case ButtonFontStyles.SatoshiBold135:
         return TextStyle(
           color: ColorConstant.gray900B0,
           fontSize: getFontSize(
@@ -445,7 +445,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold115Gray90003:
+      case ButtonFontStyles.SatoshiBold115Gray90003:
         return TextStyle(
           color: ColorConstant.gray90003,
           fontSize: getFontSize(
@@ -454,7 +454,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Black900:
+      case ButtonFontStyles.SatoshiBold14Black900:
         return TextStyle(
           color: ColorConstant.black900,
           fontSize: getFontSize(
@@ -463,7 +463,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray200:
+      case ButtonFontStyles.SatoshiBold14Gray200:
         return TextStyle(
           color: ColorConstant.gray200,
           fontSize: getFontSize(
@@ -472,7 +472,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiLight16:
+      case ButtonFontStyles.SatoshiLight16:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -481,7 +481,7 @@ class CustomButtonOne extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w300,
         );
-      case ButtonFontStyle.SatoshiBold13WhiteA700:
+      case ButtonFontStyles.SatoshiBold13WhiteA700:
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
@@ -523,7 +523,7 @@ enum ButtonPaddings {
   PaddingAll156
 }
 
-enum ButtonVariant {
+enum ButtonVariants {
   FillCyan300,
   Neutral,
   OutlineGray300b2,
@@ -544,7 +544,7 @@ enum ButtonVariant {
   yellow200
 }
 
-enum ButtonFontStyle {
+enum ButtonFontStyles {
   SatoshiBold14WhiteA700,
   SatoshiBold14,
   SatoshiBold14Gray90002,
@@ -556,7 +556,7 @@ enum ButtonFontStyle {
   SatoshiBold12Gray900ab,
   SatoshiBold13,
   SatoshiBold14Gray900,
-  SatoshiBold15,
+  SatoshiBold156,
   SatoshiBold15Gray900,
   SatoshiBold115Green700,
   SatoshiBold135,

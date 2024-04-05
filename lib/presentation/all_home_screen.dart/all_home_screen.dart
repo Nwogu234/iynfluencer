@@ -120,7 +120,7 @@ void _onScroll() {
                           padding: getMargin(top: 20),
                             child: SingleChildScrollView(
                               child: Container(
-                                height: 150.h,
+                                height: 160.h,
                                 child: ListView.builder(
                                    scrollDirection: Axis.horizontal,
                                     itemCount: controller.isTrendLoading.value

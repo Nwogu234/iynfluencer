@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/creator_profile_draweritem/creator_profile_draweritem.dart';
@@ -52,7 +53,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                         alignment: Alignment.topLeft,
                                         children: [
                                           CustomImageView(
-                                              imagePath: ImageConstant.profilecover,
+                                              imagePath: ImageConstant.imgRectangle5059,
                                               height: getVerticalSize(170),
                                               width: getHorizontalSize(375),
                                               alignment: Alignment.center),
@@ -81,6 +82,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                         children: [
                                           CustomImageView(
                                               url: args.userModelObj.value.avatar,
+                                              fit: BoxFit.cover,
                                               height: getSize(85),
                                               width: getSize(85),
                                               radius: BorderRadius.circular(
@@ -97,12 +99,13 @@ class EditProfileListedJobsTabTwoContainerScreen
                                           Padding(
                                               padding: getPadding(top: 1),
                                               child: Row(children: [
-                                                Text(country!,
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
+                                                Text(
+                                                  country!,                                                 overflow: TextOverflow.ellipsis,
                                                     textAlign: TextAlign.left,
-                                                    style: AppStyle
-                                                        .txtSatoshiLight14),
+                                                    style: AppStyle.txtSatoshiBold16.copyWith(
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.normal
+                                                    )),
                                                 Card(
                                                     clipBehavior:
                                                     Clip.antiAlias,
@@ -140,8 +143,43 @@ class EditProfileListedJobsTabTwoContainerScreen
                                                                   .center)
                                                         ])))
                                               ])),
-
-
+                                     Padding(
+                                      padding: EdgeInsets.only(left:7),
+                                      child: Row(
+                                       mainAxisAlignment: MainAxisAlignment.start,
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.only(top:4),
+                                           child: CustomImageView(
+                                            svgPath: ImageConstant.imgFrameBlueGray400,
+                                            height: getSize(
+                                             14,
+                                            ),
+                                            width: getSize(
+                                             14,
+                                             ),
+                                            margin: getMargin(
+                                             bottom: 4,
+                                            ),
+                                           ),
+                                         ),
+                                         Padding(
+                                         padding: getPadding(
+                                          left: 4,
+                                         ),
+                                          child: Text(
+                                           " 0 jobs completed"
+                                            .tr,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: AppStyle.txtSatoshiBold16.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 15
+                                            )),
+                                       ),
+                                       ],
+                                     ),
+                                    ),   
                                     Padding(
                                       padding: getPadding(top: 10),
                                       child: Obx(() {

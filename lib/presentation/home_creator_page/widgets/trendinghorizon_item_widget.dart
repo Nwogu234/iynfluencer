@@ -47,7 +47,7 @@ class TrendinghorizonItemWidget extends StatelessWidget {
 
     return SafeArea(
       child: Card(
-        shadowColor: ColorConstant.cyan100,
+       // shadowColor: ColorConstant.cyan100,
         elevation:10,
         child: Container(
           height: 600,

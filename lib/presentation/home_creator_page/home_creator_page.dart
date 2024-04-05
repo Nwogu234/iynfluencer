@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/presentation/all_home_screen.dart/all_home_screen.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
-import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/binding/model/social_media_home_page.dart';
+import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/theme/app_decoration.dart';
 import '../../core/utils/color_constant.dart';
@@ -105,6 +105,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                   fontSize: 24.sp, fontWeight: FontWeight.bold),
                                   child: AnimatedTextKit(
                                      repeatForever: true,
+                                     pause:Duration(milliseconds: 6000),
                                      isRepeatingAnimation: true,
                                      totalRepeatCount: 3,
                                      animatedTexts: [

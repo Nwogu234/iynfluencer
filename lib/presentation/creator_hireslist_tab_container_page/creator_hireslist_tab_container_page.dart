@@ -2,7 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'controller/creator_hireslist_tab_container_controller.dart';
 import 'models/creator_hireslist_tab_container_model.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +43,19 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
-                            'Jobs'.tr,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                       DefaultTextStyle(                              
+                                 style: AppStyle.txtSatoshiLight135Gray600.copyWith(
                                   fontSize: 24.sp, fontWeight: FontWeight.bold),
-                            ),
+                                  child: AnimatedTextKit(
+                                     repeatForever: true,
+                                     pause:Duration(milliseconds: 6000),
+                                     isRepeatingAnimation: true,
+                                     totalRepeatCount: 3,
+                                     animatedTexts: [
+                                       TypewriterAnimatedText('Jobs'),
+                                  ],
+                                 ),
+                              ),       
                             AppbarCircleimage(
                               url: homeController.user.userModelObj.value.avatar,
                               margin:

@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/presentation/fashion_home_screen.dart/controller/fashion_controller.dart';
+import 'package:iynfluencer/presentation/fashion_home_screen.dart/model/fashion_home_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
@@ -24,10 +26,12 @@ class FashionHomePage extends StatefulWidget {
 
 class _FashionHomePageState extends State<FashionHomePage>
     with SingleTickerProviderStateMixin {
-  HomeCreatorController controller =
-      Get.put(HomeCreatorController(HomeCreatorModel().obs));
-  late AnimationController animationController;
+      
 
+  FashionHomeController controller =
+      Get.put(FashionHomeController(FashionHomeModel().obs));
+      
+  late AnimationController animationController;
  final ScrollController _scrollController = ScrollController();
 
 
@@ -35,7 +39,7 @@ void _onScroll() {
   if (!controller.isLoading.value &&
       _scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-    controller.loadRecommendedInfluencers();
+  //  controller.loadRecommendedInfluencers();
   }
 }
 

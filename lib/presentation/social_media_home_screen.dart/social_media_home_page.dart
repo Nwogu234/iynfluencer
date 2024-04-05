@@ -9,6 +9,8 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/trendinghorizon_item_widget.dart';
+import 'package:iynfluencer/presentation/social_media_home_screen.dart/controller/social_media_controller.dart';
+import 'package:iynfluencer/presentation/social_media_home_screen.dart/model/social_media_home_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -24,10 +26,11 @@ class SocialMediaHomePage extends StatefulWidget {
 
 class _SocialMediaHomePageState extends State<SocialMediaHomePage>
     with SingleTickerProviderStateMixin {
-  HomeCreatorController controller =
-      Get.put(HomeCreatorController(HomeCreatorModel().obs));
-  late AnimationController animationController;
 
+ SocialMediaHomeController controller =
+      Get.put(SocialMediaHomeController(SocialMediaHomeModel().obs));
+
+  late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
 
 
@@ -35,7 +38,7 @@ void _onScroll() {
   if (!controller.isLoading.value &&
       _scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-    controller.loadRecommendedInfluencers();
+   // controller.loadRecommendedInfluencers();
   }
 }
 
@@ -76,7 +79,7 @@ void _onScroll() {
           ],
          
         );
-      } else if (controller.error.value.isNotEmpty) {
+      } else if (controller.error.value.isEmpty) {
         return PositionedDirectional(
            top: 150,
            start:150,

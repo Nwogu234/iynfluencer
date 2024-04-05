@@ -243,11 +243,13 @@ class LogInScreen extends GetWidget<LogInController> {
                                                             getMargin(top: 5))
                                                   ])),
                                           CustomImageView(
-                                              imagePath:
+                                              svgPath:
                                                   ImageConstant.imgFacebook,
                                               height: getSize(32),
                                               width: getSize(32),
-                                              margin: getMargin(left: 34))
+                                              margin: getMargin(left: 34),
+                                              
+                                              alignment: Alignment.topCenter)
                                         ])))
                           ])),
                 ))));

@@ -65,7 +65,10 @@ class MessagesPageItemWidget extends StatelessWidget {
                     "msg_alright_then_will".tr,  // TODO: Make this dynamic
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiLight13,
+                    style:  AppStyle.txtSatoshiLight14Gray900a2.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13
+                    ),
                   ),
                 ],
               ),
@@ -78,13 +81,13 @@ class MessagesPageItemWidget extends StatelessWidget {
                   messagesPageItemModelObj.timeTxt.value,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiLight125Bluegray40001,
+                  style:  AppStyle.txtSatoshiLight14Gray900a2,
                 ),
                 SizedBox(height: 6),
                 Container(
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: ColorConstant.cyan300,
+                    color: ColorConstant.cyan100,
                     shape:BoxShape.circle,// For unread message count background
                   ),
                   child: Text(

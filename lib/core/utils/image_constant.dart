@@ -280,7 +280,15 @@ class ImageConstant {
 
   static String imgGroup85255 = 'assets/images/img_group852_55.png';
 
-  static String imgFacebook = 'assets/images/img_facebook.png';
+  static String imgFacebook = 'assets/images/svg_facebook.svg';
+
+  static String imgInstagram = 'assets/images/Img_Instagram.png';
+
+  static String imgTwitter = 'assets/images/Img_Twitter.png';
+
+  static String imgYoutube = 'assets/images/Img_Youtube.png';
+
+  static String imgTiktok = 'assets/images/Img_Tiktok.png';
 
   static String imgRectangle5066181x335 =
       'assets/images/img_rectangle5066_181x335.png';

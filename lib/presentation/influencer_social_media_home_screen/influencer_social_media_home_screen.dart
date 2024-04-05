@@ -7,6 +7,8 @@ import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
+import 'package:iynfluencer/presentation/influencer_social_media_home_screen/controller/influencer_social-controller.dart';
+import 'package:iynfluencer/presentation/influencer_social_media_home_screen/model/influencer_social_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -23,8 +25,8 @@ class InfluencerSocialMediaHomePage extends StatefulWidget {
 class _InfluencerSocialMediaHomePageState extends State<InfluencerSocialMediaHomePage> 
    with SingleTickerProviderStateMixin {
 
-      InfluencerHomeController controller =
-      Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
+      InfluencerSocialController controller =
+      Get.put(InfluencerSocialController(InfluencerSocialModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;

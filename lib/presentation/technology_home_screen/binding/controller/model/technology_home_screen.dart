@@ -9,6 +9,8 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/trendinghorizon_item_widget.dart';
+import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/controller/technology_home_controller.dart';
+import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/model/technology_home_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -24,8 +26,9 @@ class TechnologyHomePage extends StatefulWidget {
 
 class _TechnologyHomePageState extends State<TechnologyHomePage>
     with SingleTickerProviderStateMixin {
-  HomeCreatorController controller =
-      Get.put(HomeCreatorController(HomeCreatorModel().obs));
+
+   TechnologyHomeController controller =
+      Get.put(TechnologyHomeController(TechnologyHomeModel().obs));
   late AnimationController animationController;
 
    final ScrollController _scrollController = ScrollController();
@@ -35,7 +38,7 @@ void _onScroll() {
   if (!controller.isLoading.value &&
       _scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-    controller.loadRecommendedInfluencers();
+  //  controller.loadRecommendedInfluencers();
   }
 }
 
