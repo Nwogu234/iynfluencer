@@ -24,6 +24,7 @@ dependencies:
   http: ^1.1.0
   image_picker: ^1.0.1
   intl: ^0.18.0
+  jiffy: ^6.2.1
   jwt_decoder: ^2.0.1
   lifecycle: ^0.8.0
   path: ^1.8.1
