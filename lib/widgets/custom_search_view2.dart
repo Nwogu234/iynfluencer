@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-class CustomSearchView extends StatelessWidget {
-  CustomSearchView(
+class CustomSearchView2 extends StatelessWidget {
+  CustomSearchView2(
       {this.shape,
       this.padding,
       this.variant,
@@ -17,8 +17,7 @@ class CustomSearchView extends StatelessWidget {
       this.prefix,
       this.prefixConstraints,
       this.suffix,
-      this.height,
-      this.onTap,
+      this.onSubmitted,
       this.suffixConstraints});
 
   SearchViewShape? shape;
@@ -32,8 +31,6 @@ class CustomSearchView extends StatelessWidget {
   Alignment? alignment;
 
   double? width;
-
-  double? height;
 
   EdgeInsetsGeometry? margin;
 
@@ -53,9 +50,7 @@ class CustomSearchView extends StatelessWidget {
 
   BoxConstraints? suffixConstraints;
 
-  final VoidCallback? onTap; 
-
-  
+  void Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +66,13 @@ class CustomSearchView extends StatelessWidget {
     return Container(
       width: width ?? double.maxFinite,
       margin: margin,
-      child: GestureDetector(
-        onTap:onTap,
-        child: TextFormField(
-          controller: controller,
-          focusNode: focusNode,
-          autofocus: autofocus!,
-          style: _setFontStyle(),
-          decoration: _buildDecoration(),
-        ),
+      child: TextFormField(
+        onFieldSubmitted: onSubmitted,
+        controller: controller,
+        focusNode: focusNode,
+        autofocus: autofocus!,
+        style: _setFontStyle(),
+        decoration: _buildDecoration(),
       ),
     );
   }
@@ -109,7 +102,7 @@ class CustomSearchView extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.black900,
           fontSize: getFontSize(
-            15,
+            13,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w500,
@@ -122,7 +115,7 @@ class CustomSearchView extends StatelessWidget {
       default:
         return BorderRadius.circular(
           getHorizontalSize(
-            20.00,
+            6.00,
           ),
         );
     }
@@ -163,32 +156,30 @@ class CustomSearchView extends StatelessWidget {
           top: 10,
           right: 10,
           bottom: 10,
-        
         );
       default:
         return getPadding(
-          top: 15,
-          bottom: 15,
+          top: 9,
+          bottom: 9,
         );
     }
   }
-
 }
 
 enum SearchViewShape {
   RoundedBorder6,
 }
+
 enum SearchViewPadding {
   PaddingT9,
   PaddingT10,
 }
+
 enum SearchViewVariant {
   None,
   Neutral,
 }
+
 enum SearchViewFontStyle {
   SatoshiLight13,
 }
-
-
-

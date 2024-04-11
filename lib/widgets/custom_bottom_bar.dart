@@ -183,6 +183,7 @@ class DefaultWidget extends StatelessWidget {
     );
   }
 }
+
 class BottomBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
 }

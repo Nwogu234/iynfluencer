@@ -75,7 +75,6 @@ void _onScroll() {
               ),
              ),
           ],
-         
         );
       } else if (controller.error.value.isNotEmpty) {
         return PositionedDirectional(
@@ -177,29 +176,25 @@ void _onScroll() {
                         
                           SizedBox(height: 15.h),
                           SingleChildScrollView(
-                            controller: _scrollController,
-                            child: Container(
-                             height: double.maxFinite,
-                             width: double.infinity,
-                              child: Column(
-                                 children: [
-                               for (var index = 0;
-                                   index <
-                                       (controller.isRecommendedLoading.value
-                                           ? 5
-                                           : controller
-                                               .recommendedInfluencers.length);
-                                   index++)
-                                 Padding(
-                                   padding: EdgeInsets.only(bottom: 24.h),
-                                   child: controller.isRecommendedLoading.value
-                                       ? Listrectangle50ItemSkeletonWidget()
-                                       : Listrectangle50ItemWidget(controller
-                                           .recommendedInfluencers[index]),
-                                 ),
-                                  ],
+                           controller: _scrollController,
+                            child: Column(
+                               children: [
+                             for (var index = 0;
+                                 index <
+                                     (controller.isRecommendedLoading.value
+                                         ? 5
+                                         : controller
+                                             .recommendedInfluencers.length);
+                                 index++)
+                               Padding(
+                                 padding: EdgeInsets.only(bottom: 24.h),
+                                 child: controller.isRecommendedLoading.value
+                                     ? Listrectangle50ItemSkeletonWidget()
+                                     : Listrectangle50ItemWidget(controller
+                                         .recommendedInfluencers[index]),
                                ),
-                            ),
+                                ],
+                             ),
                           ),
               ],
             ),

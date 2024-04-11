@@ -12,6 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.centerTitle,
     this.actions,
+    this.text
   }) : super(
           key: key,
         );
@@ -29,6 +30,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   bool? centerTitle;
 
   List<Widget>? actions;
+
+  String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +99,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         );
+      case Style.bgOutlineIndigo500:
+        return Container(
+          height: getVerticalSize(
+            63,
+          ),
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: ColorConstant.indigo50,
+                width: getHorizontalSize(
+                  1,
+                ),
+              ),
+            ),
+          ),
+          child: Text(
+            text ?? '',
+             overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.left,
+            style: AppStyle.txtSatoshiBold16.copyWith(
+           fontWeight: FontWeight.w600),
+          ),
+        );
       case Style.bgOutlineIndigo50_1:
         return Container(
           height: getVerticalSize(
@@ -124,4 +151,5 @@ enum Style {
   bgShadowGray9000c,
   bgOutlineIndigo50,
   bgOutlineIndigo50_1,
+  bgOutlineIndigo500
 }

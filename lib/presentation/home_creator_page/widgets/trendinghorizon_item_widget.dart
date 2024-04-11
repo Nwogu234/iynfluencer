@@ -26,8 +26,8 @@ class TrendinghorizonItemWidget extends StatelessWidget {
         .capitalizeFirstLetter(trendinghorizonItem.user!.first.country!));
     print(countryCode);
 
-    String? avatarUrl = trendinghorizonItem.user?.first.avatar;
-    // "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg";
+    String? avatarUrl =   trendinghorizonItem.user?.first.avatar;
+   // 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${trendinghorizonItem.userId}-avatar.jpeg';
     String imageProvider;
 
     print(avatarUrl);
@@ -47,8 +47,8 @@ class TrendinghorizonItemWidget extends StatelessWidget {
 
     return SafeArea(
       child: Card(
-       // shadowColor: ColorConstant.cyan100,
-        elevation:10,
+        clipBehavior: Clip.antiAlias,
+        elevation:3,
         child: Container(
           height: 600,
           width: 310,

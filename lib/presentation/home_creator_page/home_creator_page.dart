@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/presentation/all_home_screen.dart/all_home_screen.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
+import 'package:iynfluencer/presentation/search_influncers_screen/search_influncers_screen.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/theme/app_decoration.dart';
@@ -49,8 +50,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   late AnimationController animationController;
   late TabController _tabController;
-   bool isselected = false;
-   int selectedIndex = 0;
+  bool isselected = false;
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -69,7 +70,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
     super.dispose();
   }
 
-  Future<void> _refresh() async { 
+  Future<void> _refresh() async {
     await controller.refreshItems();
   }
 
@@ -96,41 +97,41 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                              DefaultTextStyle(                              
-                                 style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                                  fontSize: 24.sp, fontWeight: FontWeight.bold),
-                                  child: AnimatedTextKit(
-                                     repeatForever: true,
-                                     pause:Duration(milliseconds: 6000),
-                                     isRepeatingAnimation: true,
-                                     totalRepeatCount: 3,
-                                     animatedTexts: [
-                                       TypewriterAnimatedText('Home'),
-                                  ],
-                                 ),
-                              ),       
-
+                            DefaultTextStyle(
+                              style: AppStyle.txtSatoshiLight135Gray600
+                                  .copyWith(
+                                      fontSize: 24.sp,
+                                      fontWeight: FontWeight.bold),
+                              child: AnimatedTextKit(
+                                repeatForever: true,
+                                pause: Duration(milliseconds: 6000),
+                                isRepeatingAnimation: true,
+                                totalRepeatCount: 3,
+                                animatedTexts: [
+                                  TypewriterAnimatedText('Home'),
+                                ],
+                              ),
+                            ),
                             AppbarCircleimage(
                               url: controller.user.userModelObj.value.avatar,
-                              margin:
-                                  EdgeInsets.only(left: 20, top: 14, bottom: 14),
+                              margin: EdgeInsets.only(
+                                  left: 20, top: 14, bottom: 14),
                               onTap: openDrawer,
                             ),
                           ]),
                     ),
-                    AppbarSearchview(
-                      hintText: "Search influencers".tr,
-                      controller: controller.searchController,
-                      onSubmitted: (query) async {
-                        Get.to(() => SearchCreatorScreen(
-                              query: query,
-                              trendingInfluencers: controller.trendingInfluencers,
-                            ));
-                      },
+                    Container(
+                      child: AppbarSearchview(
+                          hintText: "Search influencers".tr,
+                          controller: controller.searchController,
+                          onTap: () {
+                            onTapSubmit();
+                          }),
                     ),
                     SizedBox(height: 10),
                     Container(
@@ -145,7 +146,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             indicator: BoxDecoration(
                                 color: ColorConstant.cyan100,
                                 borderRadius: BorderRadius.circular(20)),
-                                indicatorPadding: EdgeInsets.symmetric(vertical: 7),
+                            indicatorPadding: EdgeInsets.symmetric(vertical: 7),
                             labelColor: ColorConstant.whiteA700,
                             labelStyle: TextStyle(
                               fontSize: getFontSize(
@@ -172,12 +173,15 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                   child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                         color: isselected
+                                        color: isselected
                                             ? ColorConstant.cyan100
-                                            : (selectedIndex == 0 ? ColorConstant.cyan100 :ColorConstant.gray300B2),
-                                          width: isselected ? 0.0 : (selectedIndex == 1 ? 3.0 : 0.0)
-                                        ),
-                                  borderRadius: BorderRadius.circular(20)),
+                                            : (selectedIndex == 0
+                                                ? ColorConstant.cyan100
+                                                : ColorConstant.gray300B2),
+                                        width: isselected
+                                            ? 0.0
+                                            : (selectedIndex == 1 ? 3.0 : 0.0)),
+                                    borderRadius: BorderRadius.circular(20)),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 13, vertical: 2),
@@ -217,11 +221,11 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                           color: isselected
+                                        color: isselected
                                             ? ColorConstant.cyan100
                                             : ColorConstant.gray300B2,
                                         width: isselected ? 0.0 : 3.0,
-                                          ),
+                                      ),
                                       borderRadius: BorderRadius.circular(20)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -240,11 +244,11 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: isselected
+                                        color: isselected
                                             ? ColorConstant.cyan100
                                             : ColorConstant.gray300B2,
                                         width: isselected ? 0.0 : 3.0,
-                                         ),
+                                      ),
                                       borderRadius: BorderRadius.circular(20)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -280,6 +284,9 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
   openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
+
+  onTapSubmit() {
+    print("Search bar tapped");
+    Get.to(() => SearchInfluncersScreen());
+  }
 }
-
-

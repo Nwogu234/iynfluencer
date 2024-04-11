@@ -41,7 +41,9 @@ class UserController extends GetxController {
   var token;
   final apiClient = ApiClient();
   String baseUrl =
-  'https://iynfluencer.s3.us-east-1.amazonaws.com/';
+    'https://iynfluencer.s3.us-east-1.amazonaws.com/';
+
+  // 'https://iynf-kong-akbf9.ondigitalocean.app/';
 
   String getCountryCode(String countryName) {
     for (var entry in countries.entries) {

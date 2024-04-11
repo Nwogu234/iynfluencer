@@ -1,22 +1,47 @@
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+
 import '../controller/messages_controller.dart';
 import '../models/messages_page_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MessagesPageItemWidget extends StatelessWidget {
-  final MessagesPageItemModel messagesPageItemModelObj;
+  final ChatData messagesPageItemModelObj;
+   
 
   MessagesPageItemWidget(this.messagesPageItemModelObj, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final data = messagesPageItemModelObj.unreadByInfluencer;
+    final bool isOnline = false; 
+
+    String? avatarUrl =
+        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${messagesPageItemModelObj.influencerUserId}-avatar.jpeg";
+    // Assuming this is a String
+    String imageProvider;
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = "mypic.wit";
+    }
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
     return InkWell(
+      splashColor: ColorConstant.cyan100,
       onTap: () {
         Get.toNamed(
           AppRoutes.chatsOpenedScreen,
         );
-        // TODO: Add navigation or other tap functionality
       },
       child: Container(
         width: double.maxFinite,
@@ -28,24 +53,24 @@ class MessagesPageItemWidget extends StatelessWidget {
             Stack(
               children: [
                 CustomImageView(
-                  imagePath: ImageConstant.imgGroup883,  // TODO: Replace with dynamic image path
+                  url: imageProvider, 
                   height: getSize(55),
                   width: getSize(55),
                   radius: BorderRadius.circular(getSize(27.5)),
                 ),
-                Positioned(
+                isOnline == true ?  Positioned(
                   right: 0,
                   bottom: 0,
                   child: Container(
                     width: 12,
                     height: 12,
                     decoration: BoxDecoration(
-                      color: Colors.green,  // Assuming green means online
+                      color: Colors.green, 
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                     ),
-                  ),
-                )
+                  ) 
+                ) : SizedBox.shrink()
               ],
             ),
             SizedBox(width: 14),
@@ -55,14 +80,14 @@ class MessagesPageItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    messagesPageItemModelObj.senderTxt.value,
+                   "\$${capitalizeFirstLetter(messagesPageItemModelObj.influencer?.user?.first.firstName)}-\$${capitalizeFirstLetter(messagesPageItemModelObj.influencer?.user?.first.lastName)}",
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiBold14Gray900,
                   ),
                   SizedBox(height: 2),
                   Text(
-                    "msg_alright_then_will".tr,  // TODO: Make this dynamic
+                    messagesPageItemModelObj.messages.last.text ?? 'You are good',
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style:  AppStyle.txtSatoshiLight14Gray900a2.copyWith(
@@ -78,23 +103,26 @@ class MessagesPageItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  messagesPageItemModelObj.timeTxt.value,
+                  timeago.format(messagesPageItemModelObj.createdAt),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style:  AppStyle.txtSatoshiLight14Gray900a2,
                 ),
                 SizedBox(height: 6),
+                data == 0 ?
+                const SizedBox.shrink() :
                 Container(
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: ColorConstant.cyan100,
-                    shape:BoxShape.circle,// For unread message count background
+                    shape:BoxShape.circle,
                   ),
                   child: Text(
-                    '5',  // TODO: Replace with dynamic unread message count
-                    style: TextStyle(color: Colors.white),
+                     "${data > 99 ? '99=' : data.toString()}".tr,
+                     style: TextStyle(color: Colors.white),
                   ),
                 ),
+
               ],
             ),
           ],

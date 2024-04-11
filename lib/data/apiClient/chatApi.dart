@@ -1,11 +1,11 @@
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-class ApiClient extends GetConnect {
+class ApiClients extends GetConnect {
   // Configure the base URL
-  ApiClient() {
+  ApiClients() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-    'https://bv9pfcsd5b.execute-api.us-east-1.amazonaws.com/api/v1/';
+    'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
   }
   dynamic errorHandler(Response response) {
     print(response.toString());
@@ -32,7 +32,7 @@ class ApiClient extends GetConnect {
     }
   }
   ///THIS IS FOR STARTING CHATS
-  Future<Response> createChat(StartChatModel chat, String token) {
+  Future<Response> createChat(ChatData chat, String token) {
     return post(
       'chats/find/create',
       chat.toJson(), // replace with your specific endpoint path
@@ -45,28 +45,78 @@ class ApiClient extends GetConnect {
   }
 
   ///THIS IS FOR GETTING CHATS FOR CREATORS
-  Future<Response> getAllChatsWithInfluencers(String token) {
-    return get(
-      'chats/influencers', // replace with your specific endpoint path
+  Future<Response> getAllChatsWithInfluencers(String token) async {
+    Response response;
+    try {
+      response = await get(
+        'chats/influencers', 
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+       throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of chats of influencers');
+      print(e);
+      throw Exception('Server error');
+    }
+    
+  }
+
+ /// THIS IS FOR GETTING CHATS FOR CREATORS
+  Future<Response> getAllChatsWithCreators(String token) async {
+    Response response;
+        try {
+      response = await get(
+        'chats/creators',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of chats of creators');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+
+  
+  /// THIS IS FOR GETTING MESSAGES WITH INFLUENCERS
+  Future<Response> getAllMessagesWithInfluencer(String chatId, String token) async {
+  try {
+    final response = await get(
+      'chats/$chatId/messages',
       headers: {
         "Content-Type": "application/json",
         'Authorization': token,
       },
-
     );
+    if (response.isOk) {
+      return response;
+    } else {
+      throw Exception('Failed to fetch messages with influencer');
+    }
+  } catch (e) {
+    print('Error fetching messages with influencer: $e');
+    throw Exception('Server error');
   }
-
- /// THIS IS FOR GETTING CHATS FOR INFLUENCERS
-  Future<Response> getAllChatsWithCreators(String token) {
-    return get(
-      'chats/creators', // replace with your specific endpoint path
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': token,
-      },
-
-    );
-  }
+}
 
 
 }

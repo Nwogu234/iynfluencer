@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/modals/hire_modal.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
@@ -226,6 +225,13 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                                       .SatoshiBold15,
                                                 ),
                                                 CustomButton(
+                                                  onTap: (){
+                                                    Get.to(
+                                                      ChatsOpenedScreen(
+                                                        selectedInfluencer: selectedInfluencer,
+                                                        )
+                                                      );
+                                                    },
                                                     height: getVerticalSize(34),
                                                     width:
                                                         getHorizontalSize(110),
@@ -403,4 +409,12 @@ class InfluencerProfileAboutPage extends StatelessWidget {
   onTapArrowleft7() {
     Get.back();
   }
+
+ /*  onTapChatCard(Influencer? selectedInfluencer) {
+    Get.to(
+      ChatsOpenedScreen(
+        selectedInfluencer: selectedInfluencer,
+      )
+    );
+  } */
 }

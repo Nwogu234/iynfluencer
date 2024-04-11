@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/presentation/search_influncers_screen/search_influncers_screen.dart';
 import 'package:iynfluencer/widgets/custom_search_view.dart';
 
 import '../../presentation/search_filter_bottomsheet/controller/search_filter_controller.dart';
@@ -13,6 +14,7 @@ class AppbarSearchview extends StatelessWidget {
     this.controller,
     this.margin,
     this.onSubmitted,
+    this.onTap
 
   }) : super(
           key: key,
@@ -25,6 +27,8 @@ class AppbarSearchview extends StatelessWidget {
   EdgeInsetsGeometry? margin;
 
   Function(String)? onSubmitted;
+
+  final VoidCallback? onTap; 
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +43,26 @@ class AppbarSearchview extends StatelessWidget {
             340,
           ),
           height: getVerticalSize(300),
+          onTap: onTap,
           focusNode: FocusNode(),
           autofocus: true,
           controller: controller,
           hintText: hintText,
-          prefix: Container(
-            margin: getMargin(
-              left: 19,
-              top: 9,
-              right: 10,
-              bottom: 9,
-            ),
-            child: CustomImageView(
-              svgPath: ImageConstant.imgSearch,
+          prefix: GestureDetector(
+            onTap: (() {
+               print("Search bar tapped");
+               Get.to(() => SearchInfluncersScreen());
+            }),
+            child: Container(
+              margin: getMargin(
+                left: 19,
+                top: 9,
+                right: 10,
+                bottom: 9,
+              ),
+              child: CustomImageView(
+                svgPath: ImageConstant.imgSearch,
+              ),
             ),
           ),
           prefixConstraints: BoxConstraints(
