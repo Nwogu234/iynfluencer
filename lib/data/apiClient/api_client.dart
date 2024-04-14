@@ -19,7 +19,7 @@ class ApiClient extends GetConnect {
   ApiClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://bv9pfcsd5b.execute-api.us-east-1.amazonaws.com/api/v1/';
+        'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
   }
 
   dynamic errorHandler(Response response) {

@@ -1,4 +1,8 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
+import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/jobs_my_bids_influencer_page.dart';
+import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 
 import '../jobs_requests_influencer_page/jobs_requests_influencer_page.dart';
 import 'controller/jobs_jobs_influencer_tab_container_controller.dart';
@@ -16,24 +20,60 @@ import 'models/jobs_jobs_influencer_tab_container_model.dart';
 
 // ignore_for_file: must_be_immutable
 class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
-  JobsJobsInfluencerTabContainerScreen({Key? key})
+  final String? profileImage;
+
+  JobsJobsInfluencerTabContainerScreen({
+    Key? key,
+    this.profileImage,
+    })
       : super(
           key: key,
         );
   JobsJobsInfluencerTabContainerController controller = Get.put(
       JobsJobsInfluencerTabContainerController(
           JobsJobsInfluencerTabContainerModel().obs));
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); 
+  InfluencerHomeController influencerController =
+      Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
+      
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+         key: _scaffoldKey,
         backgroundColor: ColorConstant.whiteA700,
-        body: SizedBox(
+        body: Container(
           width: double.maxFinite,
+          decoration: AppDecoration.fillWhiteA700,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                       Text(
+                         'Jobs'.tr,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                              fontSize: 24.sp, fontWeight: FontWeight.bold),
+                            ),
+                        AppbarCircleimage(
+                              url: (influencerController.updatedProfileImage.value
+                                      as String?) ??
+                                  influencerController.user.userModelObj.value.avatar,
+                              margin: EdgeInsets.only(
+                                  left: 20.w, top: 14.h, bottom: 14.h),
+                              onTap: () {
+                                openDrawer();
+                              }
+                            ),
+                    ]
+                    ),
+                ),
                 Container(
                   height: getVerticalSize(
                     60,
@@ -52,11 +92,12 @@ class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
                   ),
                   child: TabBar(
                     controller: controller.tabsviewController,
-                    labelColor: ColorConstant.cyan300,
+                    labelColor: ColorConstant.cyan100,
                     labelStyle: TextStyle(
                       fontSize: getFontSize(
                         14.5,
                       ),
+                      
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w300,
                     ),
@@ -68,13 +109,14 @@ class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w300,
                     ),
+                    
                     indicatorPadding: getPadding(
                       all: 8.0,
                     ),
                     indicator: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: ColorConstant.cyan300,
+                          color: ColorConstant.cyan100,
                           width: getHorizontalSize(
                             2,
                           ),
@@ -170,4 +212,8 @@ class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
   //       return DefaultWidget();
   //   }
   // }
+
+    openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
 }

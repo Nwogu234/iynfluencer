@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_search_view.dart';
+import 'package:iynfluencer/widgets/custom_search_view2.dart';
 
 // ignore: must_be_immutable
 class AppbarSearchview2 extends StatelessWidget {
@@ -10,6 +11,8 @@ class AppbarSearchview2 extends StatelessWidget {
     this.controller,
     this.margin,
     this.initialQuery = '',
+    this.query,
+    this.onTap,
   }) : super(
           key: key,
         );
@@ -22,11 +25,16 @@ class AppbarSearchview2 extends StatelessWidget {
 
   final String initialQuery;
 
+  final String? query;
+
+  final Function(String)? onTap;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
-      child: CustomSearchView(
+      child: CustomSearchView2(
+        onSubmitted: onTap,
         width: getHorizontalSize(
           295,
         ),
@@ -59,6 +67,7 @@ class AppbarSearchview2 extends StatelessWidget {
           ),
           child: CustomImageView(
             svgPath: ImageConstant.imgSignal,
+            color: ColorConstant.black900,
           ),
         ),
         suffixConstraints: BoxConstraints(

@@ -34,6 +34,7 @@ class CustomButton extends StatelessWidget {
   double? width;
 
   double? height;
+  
   bool loading;
 
   String? text;
@@ -539,6 +540,7 @@ enum ButtonVariant {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
+  yellow200
 }
 
 enum ButtonFontStyle {

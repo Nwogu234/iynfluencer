@@ -33,7 +33,7 @@ class InfluencerHomeController extends GetxController {
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
-  late AnimationController animationController;
+  late final AnimationController animationController;
 
   void initializeAnimationController(TickerProvider vsync) {
     animationController = AnimationController(
@@ -112,9 +112,9 @@ class InfluencerHomeController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     print('OnInit called');
     getUser();
-    super.onInit();
   }
 
   @override
@@ -123,4 +123,15 @@ class InfluencerHomeController extends GetxController {
     searchController.dispose();
     animationController.dispose();
   }
+
+  
+  Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+   
+  }
+
 }
+
+
+ 

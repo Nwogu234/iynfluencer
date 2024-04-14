@@ -57,7 +57,7 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: ColorConstant.whiteA700,
         body: SizedBox(
           width: size.width,
           height: size.height,
@@ -70,44 +70,41 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: getPadding(
-                    left: 19,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: getPadding(
-                          top: 8,
-                          bottom: 7,
-                        ),
-                        child: Text(
-                          "lbl_all_bids2".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: getPadding(
+                        top: 8,
+                        bottom: 7,
+                      ),
+                      child: Text(
+                        "lbl_all_bids2".tr,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                             fontWeight: FontWeight.bold
+                             ),
+                            ),
+                    ),
+                    CustomButton(
+                      height: getVerticalSize(
+                        35,
+                      ),
+                      width: getHorizontalSize(
+                        83,
+                      ),
+                      text: "lbl_filter".tr,
+                      variant: ButtonVariant.OutlineIndigo50,
+                      padding: ButtonPadding.PaddingT8,
+                      fontStyle: ButtonFontStyle.SatoshiBold135,
+                      prefixWidget: Container(
+                        child: CustomImageView(
+                          svgPath: ImageConstant.imgSignalBlack900,
                         ),
                       ),
-                      CustomButton(
-                        height: getVerticalSize(
-                          35,
-                        ),
-                        width: getHorizontalSize(
-                          83,
-                        ),
-                        text: "lbl_filter".tr,
-                        variant: ButtonVariant.OutlineIndigo50,
-                        padding: ButtonPadding.PaddingT8,
-                        fontStyle: ButtonFontStyle.SatoshiBold135,
-                        prefixWidget: Container(
-                          child: CustomImageView(
-                            svgPath: ImageConstant.imgSignalBlack900,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: Padding(

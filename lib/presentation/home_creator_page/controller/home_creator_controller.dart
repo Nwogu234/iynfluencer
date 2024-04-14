@@ -33,6 +33,7 @@ class HomeCreatorController extends GetxController {
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
 
+/* 
 //this is for animation
   late AnimationController animationController;
 
@@ -42,12 +43,27 @@ class HomeCreatorController extends GetxController {
       vsync: vsync,
     )..repeat();
   }
+ */
+
 
   Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
     getUser();
-    // Your refresh logic here
-    // For example, fetching data from an API and updating 'items'
+   
   }
+
+  Future<void> loadRecommendedInfluencers() async {
+  try {
+    await Future.delayed(Duration(seconds: 1));
+    
+    recommendedInfluencers.addAll(List.generate(10, (index) => Influencer()));
+  } catch (e) {
+    error.value = e.toString();
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
 //*animation stops here
   getUser() async {

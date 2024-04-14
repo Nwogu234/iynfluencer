@@ -27,7 +27,7 @@ class ChatMessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     Color bubbleColor = isReceived
         ? ColorConstant.gray200
-        : ColorConstant.cyan300A9; // Retaining your original colors
+        : ColorConstant.cyan100; // Retaining your original colors
     return Column(
       crossAxisAlignment:
       isReceived ? CrossAxisAlignment.start : CrossAxisAlignment.end,

@@ -1,39 +1,25 @@
-class StartChatModel {
-  final String creatorId;
-  final String creatorUserId;
-  final String influencerId;
-  final String influencerUserId;
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 
-  StartChatModel({
-    required this.creatorId,
-    required this.creatorUserId,
-    required this.influencerId,
-    required this.influencerUserId,
-  });
+class ChatResponse{
+ final String status;
+  final String message;
+  final ChatData chatData;
 
-  factory StartChatModel.fromJson(Map<String, dynamic> json) {
-    return StartChatModel(
-      creatorId: json['creatorId'],
-      creatorUserId: json['creatorUserId'],
-      influencerId: json['influencerId'],
-      influencerUserId: json['influencerUserId'],
+  ChatResponse({required this.status, required this.message, required this.chatData});
+
+   factory ChatResponse.fromJson(Map<String, dynamic> json) {
+    return ChatResponse(
+      status: json['status'],
+      message: json['message'],
+      chatData: ChatData.fromJson(json['chatData']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'creatorId': creatorId,
-      'creatorUserId': creatorUserId,
-      'influencerId': influencerId,
-      'influencerUserId': influencerUserId,
-    };
   }
 }
 
+
+
 class ChatData {
-  final String status;
-  final String message;
-  final String startChatId;
+  final String id;
   final String creatorId;
   final String creatorUserId;
   final String influencerId;
@@ -45,11 +31,11 @@ class ChatData {
   final String chatId;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<Message> messages;
+  final Influencer? influencer;
 
   ChatData({
-    required this.status,
-    required this.message,
-    required this.startChatId,
+    required this.id,
     required this.creatorId,
     required this.creatorUserId,
     required this.influencerId,
@@ -61,24 +47,90 @@ class ChatData {
     required this.chatId,
     required this.createdAt,
     required this.updatedAt,
+    required this.messages,
+    this.influencer
   });
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
     return ChatData(
-      status: json['status'],
-      message: json['message'],
-      startChatId: json['data']['_id'],
-      creatorId: json['data']['creatorId'],
-      creatorUserId: json['data']['creatorUserId'],
-      influencerId: json['data']['influencerId'],
-      influencerUserId: json['data']['influencerUserId'],
-      unreadByCreator: json['data']['unreadByCreator'],
-      unreadByInfluencer: json['data']['unreadByInfluencer'],
-      blockedByCreator: json['data']['blockedByCreator'],
-      blockedByInfluencer: json['data']['blockedByInfluencer'],
-      chatId: json['data']['chatId'],
-      createdAt: DateTime.parse(json['data']['createdAt']),
-      updatedAt: DateTime.parse(json['data']['updatedAt']),
+      id: json['_id'],
+      creatorId: json['creatorId'],
+      creatorUserId: json['creatorUserId'],
+      influencerId: json['influencerId'],
+      influencerUserId: json['influencerUserId'],
+      unreadByCreator: json['unreadByCreator'],
+      unreadByInfluencer: json['unreadByInfluencer'],
+      blockedByCreator: json['blockedByCreator'],
+      blockedByInfluencer: json['blockedByInfluencer'],
+      chatId: json['chatId'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      messages: List<Message>.from(json['messages'].map((x) => Message.fromJson(x))),
+      influencer: json['influencer'] != null ? new Influencer.fromJson(json['influencer']) : null,
+    );
+  }
+
+   Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'creatorId': creatorId,
+      'creatorUserId': creatorUserId,
+      'influencerId': influencerId,
+      'infleuncerUserId': influencerUserId,
+      'unreadByCreator': unreadByCreator,
+      'unreadByInfluencer': unreadByInfluencer,
+      'blockedByCreator': blockedByCreator,
+      'blockedByInfluencer': blockedByInfluencer,
+      'chatId': chatId,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'messages': messages
+    };
+  }
+}
+
+
+
+class Message {
+  final String id;
+  final String chatId;
+  final String authorId;
+  final String text;
+  final String authorUserId;
+  final bool blockedByRecipient;
+  final String messageId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  //final User? user;
+
+
+  Message({
+    required this.id,
+    required this.chatId,
+    required this.authorId,
+    required this.text,
+    required this.authorUserId,
+    required this.blockedByRecipient,
+    required this.messageId,
+    required this.createdAt,
+    required this.updatedAt,
+   // this.user
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      id: json['_id'],
+      chatId: json['chatId'],
+      authorId: json['authorId'],
+      text: json['text'],
+      authorUserId: json['authorUserId'],
+      blockedByRecipient: json['blockedByRecipient'],
+      messageId: json['messageId'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    //  user: json['user'] != null ? new User.fromJson(json['user']) : null,
+
     );
   }
 }
+

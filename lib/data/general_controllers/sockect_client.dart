@@ -19,7 +19,7 @@ class SocketClient extends GetxService {
 
   void _initSocket(token) {
     // Initialize the socket connection
-    socket = IO.io('ws://iynflu-LoadB-1pJ0mGMH9ZTh-d0b5fad6d49ec68b.elb.us-east-1.amazonaws.com:8000/api/v1/chat-socket', <String, dynamic>{
+    socket = IO.io('https://iynf-kong-akbf9.ondigitalocean.app/api/v1/chat-socket', <String, dynamic>{
       'transports': ['websocket'],
       'extraHeaders': {
         'authorization': token,
