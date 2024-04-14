@@ -21,9 +21,9 @@ class JobsJobsInfluencerController extends GetxController {
 
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();
-  InfluencerBottomBarController bumcont =
+  late InfluencerBottomBarController bumcont =
       Get.put(InfluencerBottomBarController());
-  InfluencerTabsController infTabcont = Get.put(InfluencerTabsController());
+  late InfluencerTabsController infTabcont = Get.put(InfluencerTabsController());
 
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
@@ -35,14 +35,6 @@ class JobsJobsInfluencerController extends GetxController {
   var error = ''.obs;
   List<Job> existingJobs = []; // Existing jobs
 
-  late AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   getUser() async {
     isLoading.value = true;
@@ -108,7 +100,6 @@ class JobsJobsInfluencerController extends GetxController {
   void onClose() {
     bumcont.dispose();
     infTabcont.dispose();
-    animationController.dispose();
     super.onClose();
   }
 }

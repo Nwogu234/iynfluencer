@@ -25,9 +25,9 @@ class CreatorJobslistPage extends StatefulWidget {
 class _CreatorJobslistPageState extends State<CreatorJobslistPage>
     with SingleTickerProviderStateMixin {
   late CreatorJobslistController controller;
-  BottomBarController bumcont=Get.put(BottomBarController());
-  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
-
+  BottomBarController bumcont = Get.put(BottomBarController());
+  HomeCreatorContainerController homcont =
+      Get.put(HomeCreatorContainerController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Initialize creatorJobslistModelObj here
@@ -60,8 +60,8 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
   onTapDetailcard(Job selectedJob) {
     final jobDetailsController = Get.put(CreatorJobDetailsController());
     jobDetailsController.setSelectedJob(selectedJob);
-    Get.to(()=>
-        CreatorJobDetailsScreen(selectedJob: selectedJob),
+    Get.to(
+      () => CreatorJobDetailsScreen(selectedJob: selectedJob),
     );
   }
 
@@ -75,7 +75,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
         key: _scaffoldKey,
         backgroundColor: Colors.transparent,
         body: Obx(
-              () {
+          () {
             if (controller.isTrendLoading.value) {
               return CustomLoadingWidget(
                 animationController: animationController,
@@ -89,31 +89,33 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                 },
                 fullPage: true,
               );
-            }else if(controller.empty) {
+            } else if (controller.empty) {
               return ResponsiveEmptyWidget(
-                errorMessage: 'You have not posed any jobs yet',
+                errorMessage: 'You have not posted any jobs yet',
                 buttonText: "Post job",
                 onRetry: () {
-                  homcont.currentRoute.value=AppRoutes.postPageScreen;
-                   Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.postPageScreen);
-                  bumcont.selectedIndex.value=2;
+                  homcont.currentRoute.value = AppRoutes.postPageScreen;
+                  Navigator.of(Get.nestedKey(1)!.currentState!.context)
+                      .pushReplacementNamed(AppRoutes.postPageScreen);
+                  bumcont.selectedIndex.value = 2;
                 },
                 fullPage: true,
               );
-            }
-            else {
+            } else {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Obx(
-                          () => ListView.separated(
+                      () => ListView.separated(
                         physics: BouncingScrollPhysics(),
                         itemCount: controller.isTrendLoading.value
                             ? 5
                             : controller.existingJobs.length,
                         separatorBuilder: (context, index) {
-                          return SizedBox(height: 20.h);
+                          return Divider(
+                            thickness: 0.1,
+                          );
                         },
                         itemBuilder: (context, index) {
                           if (controller.isTrendLoading.value) {

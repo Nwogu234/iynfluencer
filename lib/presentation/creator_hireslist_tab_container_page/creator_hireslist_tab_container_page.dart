@@ -1,3 +1,9 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
+import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
+import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import '../creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'controller/creator_hireslist_tab_container_controller.dart';
 import 'models/creator_hireslist_tab_container_model.dart';
 import 'package:flutter/material.dart';
@@ -15,21 +21,58 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
       CreatorHireslistTabContainerController(
           CreatorHireslistTabContainerModel().obs));
 
+          
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  HomeCreatorController homeController =
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key:_scaffoldKey,
         backgroundColor: ColorConstant.whiteA700,
+        drawer: CreatorProfileDraweritem(homeController),
         body: Container(
           width: double.maxFinite,
           decoration: AppDecoration.fillWhiteA700,
-          child: SingleChildScrollView(
-            child: Column(
+          child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AppbarCircleimage(
+                        url: homeController.user.userModelObj.value.avatar,
+                        margin:
+                        EdgeInsets.only(top: 10, bottom: 14),
+                        onTap: openDrawer,
+                      ),
+                       Padding(
+                         padding: const EdgeInsets.only(left: 8),
+                         child: DefaultTextStyle(
+                                   style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                                    fontSize: 20.sp, fontWeight: FontWeight.bold),
+                                    child: AnimatedTextKit(
+                                       repeatForever: true,
+                                       pause:Duration(milliseconds: 6000),
+                                       isRepeatingAnimation: true,
+                                       totalRepeatCount: 3,
+                                       animatedTexts: [
+                                         TypewriterAnimatedText('Jobs'),
+                                    ],
+                                   ),
+                                ),
+                       ),
+
+                    ]
+                    ),
+                ),
                 Container(
                   height: getVerticalSize(
-                    60,
+                    50,
                   ),
                   width: double.maxFinite,
                   decoration: BoxDecoration(
@@ -45,7 +88,7 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                   ),
                   child: TabBar(
                     controller: controller.tabiewController,
-                    labelColor: ColorConstant.cyan300,
+                    labelColor: ColorConstant.cyan100,
                     labelStyle: TextStyle(
                       fontSize: getFontSize(
                         14.5,
@@ -53,7 +96,7 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w300,
                     ),
-                    unselectedLabelColor: ColorConstant.gray500,
+                    unselectedLabelColor: ColorConstant.black900,
                     unselectedLabelStyle: TextStyle(
                       fontSize: getFontSize(
                         14.5,
@@ -61,7 +104,7 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                       fontFamily: 'Satoshi',
                       fontWeight: FontWeight.w300,
                     ),
-                    indicatorColor: ColorConstant.cyan300,
+                    indicatorColor: ColorConstant.cyan100,
                     tabs: [
                       Tab(
                         child: Text(
@@ -78,10 +121,7 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: getVerticalSize(
-                    620,
-                  ),
+                Expanded(
                   child: TabBarView(
                     controller: controller.tabiewController,
                     children: [
@@ -92,9 +132,12 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
         ),
       ),
     );
+  }
+  
+  openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
   }
 }

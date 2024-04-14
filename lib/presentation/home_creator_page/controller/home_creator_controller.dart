@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
@@ -8,6 +9,7 @@ import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_m
 import 'package:flutter/material.dart';
 
 import '../../../data/apiClient/api_client.dart';
+import '../../../widgets/staggerd_widget.dart';
 
 /// A controller class for the HomeCreatorPage.
 ///
@@ -24,6 +26,7 @@ class HomeCreatorController extends GetxController {
   var token;
   final apiClient = ApiClient();
   var error = ''.obs;
+  List<Widget> tiles =[];
   var usePlaceholder = false.obs;
   RxString avatar = ''.obs;
   List<Influencer> trendingInfluencers = [];
@@ -33,6 +36,7 @@ class HomeCreatorController extends GetxController {
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
 
+/* 
 //this is for animation
   late AnimationController animationController;
 
@@ -42,12 +46,49 @@ class HomeCreatorController extends GetxController {
       vsync: vsync,
     )..repeat();
   }
+ */
+
 
   Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
     getUser();
-    // Your refresh logic here
-    // For example, fetching data from an API and updating 'items'
+   
   }
+
+  Future<void> loadRecommendedInfluencers() async {
+  try {
+    await Future.delayed(Duration(seconds: 1));
+    
+    recommendedInfluencers.addAll(List.generate(10, (index) => Influencer()));
+  } catch (e) {
+    error.value = e.toString();
+  } finally {
+    isLoading.value = false;
+  }
+}
+  List<Widget> generateTiles(List<Influencer> influencers) {
+
+    return List<Widget>.generate(influencers.length, (index) {
+      Widget card = StaggeredWidget(user: influencers[index]);  // Your custom widget
+
+      // Apply different margins or padding based on the index for visual effect
+      EdgeInsetsGeometry padding = index % 2 == 0 ?
+      EdgeInsets.only(top: 25) :
+      EdgeInsets.only(right: 10);
+
+      return Padding(
+        padding: padding,
+        child: StaggeredGridTile.count(
+          crossAxisCellCount: 1,  // Same width for all tiles
+          mainAxisCellCount: 1,  // Same height for all tiles
+          child: card,
+        ),
+      );
+    });
+  }
+
+
+
 
 //*animation stops here
   getUser() async {
@@ -65,6 +106,7 @@ class HomeCreatorController extends GetxController {
         isLoading.value = false;
         avatar.value = user.userModelObj.value.avatar;
         getInfluencers();
+
         getRecommended();
       }
     } catch (e) {
@@ -84,6 +126,7 @@ class HomeCreatorController extends GetxController {
         isTrendLoading.value = false;
       } else {
         error('');
+        tiles=generateTiles(trendingInfluencers);
         isTrendLoading.value = false;
       }
     } catch (e) {

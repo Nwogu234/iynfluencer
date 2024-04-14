@@ -110,7 +110,7 @@ class InfluencerBottomBar extends StatelessWidget {
                     width: getSize(
                       24,
                     ),
-                    color: ColorConstant.cyan300,
+                    color: ColorConstant.cyan100,
                   ),
                   Padding(
                     padding: getPadding(
@@ -121,7 +121,7 @@ class InfluencerBottomBar extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold105.copyWith(
-                        color: ColorConstant.cyan300,
+                        color: ColorConstant.cyan100,
                       ),
                     ),
                   ),

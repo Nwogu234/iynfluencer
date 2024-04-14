@@ -33,19 +33,24 @@ class InfluencerDraweritem extends StatelessWidget {
     final name =
         "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}";
 
+    final img = controller.user.userModelObj.value.avatar;
     return Drawer(
         child: SingleChildScrollView(
             child: Container(
-                margin: EdgeInsets.only(right: 20.w),
+                 decoration: BoxDecoration(
+                   color:Colors.white
+                  ),
+              //  margin: EdgeInsets.only(right: 20.w),
                 padding: EdgeInsets.only(left: 19.w, top: 74.h, right: 19.w),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath: (controller.updatedProfileImage.value
+                          fit: BoxFit.cover,
+                          url: (controller.updatedProfileImage.value
                                   as String?) ??
-                              ImageConstant.imgFrame901,
+                              img,
                           height: 48.h,
                           width: 48.w,
                           radius: BorderRadius.circular(24.r),
@@ -54,16 +59,18 @@ class InfluencerDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text(controller.updatedName?.value ?? name,
+                          child: Text(name,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
-                      Padding(
+                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text(controller.updatedName?.value ?? name,
+                          child: Text(
+                             "@${controller.user.userModelObj.value.firstName}"
+                                  .tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight125Gray600ab)),
+                              style: AppStyle.txtSatoshiLight125Gray600ab)), 
                       Padding(
                           padding: EdgeInsets.only(top: 27.h),
                           child: Divider(
@@ -227,15 +234,13 @@ class InfluencerDraweritem extends StatelessWidget {
 
   onTapBecomean() {
     if (controller.user.userModelObj.value.creatorId != null) {
-      Get.delete<JobsJobsInfluencerTabContainerController>();
-      Get.delete<TabController>();
       storage.write(key: "activeProfile", value: "Creator");
-      Get.offNamed(
+      Get.offAllNamed(
         AppRoutes.homeCreatorContainerScreen,
       );
       // controller.dispose();
     } else {
-      Get.offNamed(
+      Get.offAllNamed(
         AppRoutes.completeProfileCreatorScreen,
       );
     }

@@ -51,7 +51,9 @@ class InfluencerProfileCommPostTabContainerScreen
                           height: getVerticalSize(361),
                           width: double.maxFinite,
                           child:
-                              Stack(alignment: Alignment.bottomLeft, children: [
+                              Stack(
+                                alignment: Alignment.bottomLeft,
+                                 children: [
                             Align(
                                 alignment: Alignment.topCenter,
                                 child: SizedBox(
@@ -104,7 +106,7 @@ class InfluencerProfileCommPostTabContainerScreen
                                             MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
-                                              imagePath: avatarUrl ??
+                                              url: avatarUrl ??
                                                   ImageConstant
                                                       .imgRectangle5055,
                                               height: getSize(85),

@@ -11,6 +11,8 @@ class SearchFilterBottomsheet extends StatelessWidget {
 
   SearchFilterController controller;
 
+  String searchQuery = '';
+
   @override Widget build(BuildContext context) {
     return SingleChildScrollView(child: SizedBox(width: double.maxFinite,
         child: Container(width: double.maxFinite,
@@ -148,6 +150,6 @@ class SearchFilterBottomsheet extends StatelessWidget {
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the searchResultsScreen.
   onTapApplyfilters() {
-    Get.toNamed(AppRoutes.searchResultsScreen,);
+    Get.toNamed(AppRoutes.searchResultsScreen + "?query=$searchQuery");
   }
 }

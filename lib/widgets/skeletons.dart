@@ -82,25 +82,33 @@ class Listrectangle50ItemSkeletonWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
 
                     // Add more skeleton shapes as needed

@@ -30,7 +30,7 @@ class LogInController extends GetxController {
     });
 
     Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
+      Center(child: CircularProgressIndicator(color: ColorConstant.cyan100,)), // showing a loading dialog
       barrierDismissible: false, // user must not close it manually
     );
 

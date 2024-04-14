@@ -15,6 +15,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   HomeCreatorController controller;
   final storage = new FlutterSecureStorage();
+  
   String capitalize(String text) {
     if (text == null || text.isEmpty) {
       return text;
@@ -25,9 +26,13 @@ class CreatorProfileDraweritem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+        backgroundColor: Colors.white,
         child: SingleChildScrollView(
             child: Container(
-                margin: EdgeInsets.only(right: 20.w),
+              decoration: BoxDecoration(
+                color:Colors.white
+              ),
+              //  margin: EdgeInsets.only(right: 20.w),
                 padding: EdgeInsets.only(left: 19.w, top: 74.h, right: 19.w),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,15 +234,12 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   onTapBecomean() {
     if (controller.user.userModelObj.value.influencerId != null) {
-      Get.delete<CreatorHireslistTabContainerController>();
-      Get.delete<TabController>();
       storage.write(key: "activeProfile", value: "Influencer");
-      Get.offNamed(
+      Get.offAllNamed(
         AppRoutes.influencerTabScreen,
       );
-      controller.dispose();
     } else {
-      Get.offNamed(
+      Get.offAllNamed(
         AppRoutes.completeProfileInfluencerScreen,
       );
     }

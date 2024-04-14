@@ -12,11 +12,12 @@ class HiresItemWidget extends StatelessWidget {
     this.hiresItemlistObj, {
     Key? key,
     this.onTapBidcard,
+
   }) : super(
           key: key,
         );
 
-  Job hiresItemlistObj;
+  Job? hiresItemlistObj;
 
   var controller = Get.find<CreatorHireslistController>();
 
@@ -24,6 +25,69 @@ class HiresItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? parsedDate =
+        DateTime.tryParse(hiresItemlistObj?.createdAt ?? "lbl_mar_18_2023".tr);
+    String formattedDate = parsedDate != null
+        ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}"
+        : 'Unknown Date';
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    if (hiresItemlistObj == null) {
+      return SafeArea(
+        child: Center(
+            child: Container(
+                width: double.maxFinite,
+                padding: getPadding(
+                  left: 20,
+                  top: 23,
+                  right: 20,
+                  bottom: 23,
+                ),
+                child:
+                    Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  CustomImageView(
+                    svgPath: ImageConstant.imgCancel,
+                    height: getSize(
+                      36,
+                    ),
+                    width: getSize(
+                      36,
+                    ),
+                    alignment: Alignment.centerRight,
+                  ),
+                  CustomImageView(
+                    imagePath: ImageConstant.imgIcons8error1,
+                    height: getSize(
+                      54,
+                    ),
+                    width: getSize(
+                      54,
+                    ),
+                    margin: getMargin(
+                      top: 84,
+                    ),
+                  ),
+                  Padding(
+                    padding: getPadding(
+                      top: 35,
+                    ),
+                    child: Text(
+                      "No Hired Jobs Found".tr,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold20,
+                    ),
+                  ),
+                ]))),
+      );
+    }
+
     return SizedBox(
       width: double.maxFinite,
       child: GestureDetector(
@@ -75,7 +139,7 @@ class HiresItemWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "lbl_mark_adebayo".tr,
+                            "\$${capitalizeFirstLetter(hiresItemlistObj?.user?.firstName)}-\$${capitalizeFirstLetter(hiresItemlistObj?.user?.lastName)}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold145,
@@ -104,7 +168,8 @@ class HiresItemWidget extends StatelessWidget {
                                     left: 6,
                                   ),
                                   child: Text(
-                                    "lbl_lagos_nigeria".tr,
+                                    hiresItemlistObj?.user?.country ??
+                                        "lbl_lagos_nigeria".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtSatoshiLight14,
@@ -196,7 +261,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 7,
                             ),
                             child: Text(
-                              "lbl_200".tr,
+                              "\$${capitalizeFirstLetter(hiresItemlistObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(hiresItemlistObj?.budgetTo.toString())}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -224,7 +289,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 9,
                             ),
                             child: Text(
-                              "lbl_mar_18_2023".tr,
+                              "$formattedDate",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold125Gray900a7,

@@ -18,7 +18,7 @@ class InfluencerHomeController extends GetxController {
 
   final UserController user = Get.find();
 
-  TextEditingController searchController = TextEditingController();
+  late TextEditingController searchController2 = TextEditingController();
 
   Rx<InfluencerHomeModel> influencerHomeModelObj = InfluencerHomeModel().obs;
   final storage = new FlutterSecureStorage();
@@ -33,14 +33,6 @@ class InfluencerHomeController extends GetxController {
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
-  late AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   // this is to get user when the jobs page is loaded
   getUser() async {
@@ -112,15 +104,25 @@ class InfluencerHomeController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     print('OnInit called');
     getUser();
-    super.onInit();
   }
 
   @override
   void onClose() {
     super.onClose();
-    searchController.dispose();
-    animationController.dispose();
+    searchController2.dispose();
   }
+
+  
+  Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+   
+  }
+
 }
+
+
+ 

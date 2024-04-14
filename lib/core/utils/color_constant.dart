@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class ColorConstant {
   static Color gray5001 = fromHex('#fcfcfc');
 
+  static Color pink = fromHex('#F74F73');
+
+  static Color trndingblue = fromHex('#FFF0F6F9');
+
   static Color gray90099 = fromHex('#99222222');
 
   static Color gray900Ab = fromHex('#ab222222');
@@ -35,6 +39,8 @@ class ColorConstant {
   static Color whiteA700C1 = fromHex('#c1ffffff');
 
   static Color blueGray100 = fromHex('#cfd4dc');
+
+  static Color cyan100 = fromHex('#5DC8E0');
 
   static Color lime900 = fromHex('#6d3d0a');
 
@@ -72,9 +78,13 @@ class ColorConstant {
 
   static Color gray50 = fromHex('#f8f8f8');
 
+  static Color gray5000 = fromHex('#C4C4C4');
+
   static Color blueGray1007f = fromHex('#7fd9d9d9');
 
   static Color black900 = fromHex('#000000');
+
+  static Color black9000 = fromHex('#222222');
 
   static Color gray900E5 = fromHex('#e5222222');
 
@@ -94,6 +104,8 @@ class ColorConstant {
 
   static Color blueGray400 = fromHex('#8e8e8e');
 
+  static Color blue1000 = fromHex('#F0F6F9');
+
   static Color indigo50 = fromHex('#e0e5ed');
 
   static Color blueGray600 = fromHex('#615e82');
@@ -103,8 +115,6 @@ class ColorConstant {
   static Color gray90001 = fromHex('#001c2f');
 
   static Color gray90001B = fromHex('#30405f');
-
-
 
   static Color cyan300A9 = fromHex('#a95dc8e0');
 
@@ -129,6 +139,8 @@ class ColorConstant {
   static Color blueGray900Ab = fromHex('#ab2a2c2e');
 
   static Color gray300B2 = fromHex('#b2dbdbde');
+
+  static Color yellow200 = fromHex('#F7FF00');
 
   static Color fromHex(String hexString) {
     final buffer = StringBuffer();

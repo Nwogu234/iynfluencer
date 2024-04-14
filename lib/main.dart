@@ -28,9 +28,16 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Colors.cyan,
-
           primarySwatch: Colors.cyan,
           visualDensity: VisualDensity.standard,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.cyan,
+            backgroundColor: Colors.white,
+          ).copyWith(
+            secondary: Colors.cyan,
+            onSecondary: Colors.white,
+            background: Colors.white// Ensuring readable contrast on secondary color elements
+          ),
         ),
         translations: AppLocalization(),
         locale: Get.deviceLocale, //for setting localization strings
