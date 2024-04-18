@@ -82,7 +82,7 @@ class SocialMediaHomeController extends GetxController {
           await apiClient.getInfluencers(1, 15, token);
       // Filter influencers with the fashion niche
       trendingInfluencers = allInfluencers
-          .where((influencer) => influencer.niche!.contains("Entertainment & Celebrity"))
+          .where((influencer) => influencer.niche!.contains("Science & Technology"))
           .toList();
       if (trendingInfluencers.isEmpty) {
         error('No influencers found for the social media niche');
@@ -106,7 +106,7 @@ class SocialMediaHomeController extends GetxController {
           await apiClient.getInfluencers(1, 25, token);
       // Filter recommended influencers with the fashion niche
       recommendedInfluencers.value = allInfluencers
-          .where((influencer) => influencer.niche!.contains("Entertainment & Celebrity"))
+          .where((influencer) => influencer.niche!.contains("Science & Technology"))
           .toList();
       if (recommendedInfluencers.isEmpty) {
         error('No recommended influencers found for the social media niche');

@@ -236,7 +236,7 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonVariant.OutlineIndigo50:
         return BorderSide(
-          color: ColorConstant.indigo50,
+          color: ColorConstant.gray600,
           width: getHorizontalSize(
             1.00,
           ),
@@ -434,7 +434,16 @@ class CustomButton extends StatelessWidget {
             11.5,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w800,
+        );
+      case ButtonFontStyle.SatoshiBold115Red700:
+        return TextStyle(
+          color:  ColorConstant.redA600,
+          fontSize: getFontSize(
+            11.5,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w800,
         );
       case ButtonFontStyle.SatoshiBold135:
         return TextStyle(
@@ -443,7 +452,7 @@ class CustomButton extends StatelessWidget {
             13.5,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.bold,
         );
       case ButtonFontStyle.SatoshiBold115Gray90003:
         return TextStyle(
@@ -564,4 +573,5 @@ enum ButtonFontStyle {
   SatoshiBold14Gray200,
   SatoshiLight16,
   SatoshiBold13WhiteA700,
+  SatoshiBold115Red700
 }

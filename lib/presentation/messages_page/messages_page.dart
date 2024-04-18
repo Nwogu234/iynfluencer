@@ -201,12 +201,13 @@ class _MessagesPageState extends State<MessagesPage>
                                     } else {
                                       ChatData model =
                                           controller.chatList[index];
-                                      return MessagesPageItemWidget(model);
+                                      return MessagesPageItemWidget(
+                                        messagesPageItemModelObj: model);
                                     }
                                   },
                                 ),
                               ),
-                              CustomIconButton(
+                           /*    CustomIconButton(
                                 height: 54,
                                 width: 54,
                                 margin: getMargin(
@@ -216,7 +217,7 @@ class _MessagesPageState extends State<MessagesPage>
                                 child: CustomImageView(
                                   svgPath: ImageConstant.imgFrameWhiteA700,
                                 ),
-                              ),
+                              ), */
                             ],
                           ),
                         ),

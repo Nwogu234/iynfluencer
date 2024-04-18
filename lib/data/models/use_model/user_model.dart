@@ -17,7 +17,8 @@ class UserModel {
   final DateTime updatedAt;
   final String? creatorId;
   final String? country;
-  final String? dob;
+  // String? dob;
+   late String dob;
   final String? influencerId;
   final String? phone;
   String?  countryCode;
@@ -64,7 +65,9 @@ class UserModel {
       userId: json['userId'] ?? '',
       avatar: json['avatar']??'',
       country: json["country"]??null,
-      dob: json['dob'] != null ? json['dob'] : null,      createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
+     // dob: json['dob'] != null ? json['dob'] : null,
+      dob: json['dob'] ?? '',  
+      createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
       updatedAt: DateTime.parse(json['updatedAt'] as String) ?? DateTime.now(),
       creatorId: json['creatorId'] ?? null,
       phone: json['phone']?? null,

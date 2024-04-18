@@ -1,4 +1,6 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 
 import '../controller/messages_controller.dart';
 import '../models/messages_page_item_model.dart';
@@ -8,15 +10,19 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class MessagesPageItemWidget extends StatelessWidget {
   final ChatData messagesPageItemModelObj;
-   
+  final Influencer? influencer;
 
-  MessagesPageItemWidget(this.messagesPageItemModelObj, {Key? key})
+  MessagesPageItemWidget({
+   Key? key,
+     required this.messagesPageItemModelObj,
+     this.influencer
+      })
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final data = messagesPageItemModelObj.unreadByInfluencer;
-    final bool isOnline = false; 
+    final bool isOnline = false;
 
     String? avatarUrl =
         "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${messagesPageItemModelObj.influencerUserId}-avatar.jpeg";
@@ -39,9 +45,10 @@ class MessagesPageItemWidget extends StatelessWidget {
     return InkWell(
       splashColor: ColorConstant.cyan100,
       onTap: () {
-        Get.toNamed(
-          AppRoutes.chatsOpenedScreen,
-        );
+        Get.to(
+          ChatsOpenedScreen(
+            chatData: messagesPageItemModelObj,
+          ));
       },
       child: Container(
         width: double.maxFinite,
@@ -53,24 +60,25 @@ class MessagesPageItemWidget extends StatelessWidget {
             Stack(
               children: [
                 CustomImageView(
-                  url: imageProvider, 
+                  url: imageProvider,
                   height: getSize(55),
                   width: getSize(55),
                   radius: BorderRadius.circular(getSize(27.5)),
                 ),
-                isOnline == true ?  Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: Colors.green, 
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ) 
-                ) : SizedBox.shrink()
+                isOnline == true
+                    ? Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                        ))
+                    : SizedBox.shrink()
               ],
             ),
             SizedBox(width: 14),
@@ -80,20 +88,18 @@ class MessagesPageItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                   "\$${capitalizeFirstLetter(messagesPageItemModelObj.influencer?.user?.first.firstName)}-\$${capitalizeFirstLetter(messagesPageItemModelObj.influencer?.user?.first.lastName)}",
+                    "\$${capitalizeFirstLetter(influencer?.user?.first.firstName)}-\$${capitalizeFirstLetter(influencer?.user?.first.lastName)}",
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiBold14Gray900,
                   ),
                   SizedBox(height: 2),
                   Text(
-                    messagesPageItemModelObj.messages.last.text ?? 'You are good',
+                    messagesPageItemModelObj.messages.last.text,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
-                    style:  AppStyle.txtSatoshiLight14Gray900a2.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13
-                    ),
+                    style: AppStyle.txtSatoshiLight14Gray900a2
+                        .copyWith(fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                 ],
               ),
@@ -106,23 +112,22 @@ class MessagesPageItemWidget extends StatelessWidget {
                   timeago.format(messagesPageItemModelObj.createdAt),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
-                  style:  AppStyle.txtSatoshiLight14Gray900a2,
+                  style: AppStyle.txtSatoshiLight14Gray900a2,
                 ),
                 SizedBox(height: 6),
-                data == 0 ?
-                const SizedBox.shrink() :
-                Container(
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: ColorConstant.cyan100,
-                    shape:BoxShape.circle,
-                  ),
-                  child: Text(
-                     "${data > 99 ? '99=' : data.toString()}".tr,
-                     style: TextStyle(color: Colors.white),
-                  ),
-                ),
-
+                data == 0
+                    ? const SizedBox.shrink()
+                    : Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.cyan100,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          "${data > 99 ? '99=' : data.toString()}".tr,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
               ],
             ),
           ],

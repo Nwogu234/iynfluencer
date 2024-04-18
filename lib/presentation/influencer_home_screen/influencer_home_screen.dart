@@ -254,7 +254,7 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                       ),
                     ),
                     SizedBox(
-                      height: getVerticalSize(890),
+                      height: getVerticalSize(1200),
                       child: TabBarView(
                         controller: _tabController, 
                         children: [

@@ -1,5 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/modals/hire_modal.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
@@ -18,6 +19,21 @@ class InfluencerProfileAboutPage extends StatelessWidget {
   InfluencerProfileAboutPage({required this.selectedInfluencer});
 
   final Influencer? selectedInfluencer;
+
+   ChatData chatData = ChatData(
+      id: 'id',
+      creatorId: 'CreatorId',
+      creatorUserId: 'CreatorUserId',
+      influencerId: 'InfluencerId',
+      influencerUserId: 'defaultInfluencerUserId',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: 'ChatId',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const []);
 
   InfluencerProfileAboutController controller = Get.put(
       InfluencerProfileAboutController(InfluencerProfileAboutModel().obs));
@@ -143,7 +159,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                         top: 4
                                         ),
                                       child: Text(
-                                              "${selectedInfluencer?.user?.first.country}",
+                                              "${capitalizeFirstLetter(selectedInfluencer?.user?.first.country)}",
                                         overflow: TextOverflow.ellipsis,
                                        textAlign: TextAlign.left,
                                        style: AppStyle.txtSatoshiBold16.copyWith(
@@ -228,7 +244,8 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                                   onTap: (){
                                                     Get.to(
                                                       ChatsOpenedScreen(
-                                                        selectedInfluencer: selectedInfluencer,
+                                                        selectedInfluencer: selectedInfluencer!,
+                                                        chatData: chatData,
                                                         )
                                                       );
                                                     },

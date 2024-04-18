@@ -23,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
       this.suffix,
       this.suffixConstraints,
       this.validator,
+      this.height,
       this.onChanged,
       this.label});
 
@@ -37,6 +38,8 @@ class CustomTextFormField extends StatelessWidget {
   Alignment? alignment;
 
   double? width;
+
+  double? height;
 
   EdgeInsetsGeometry? margin;
 
@@ -67,6 +70,7 @@ class CustomTextFormField extends StatelessWidget {
   BoxConstraints? suffixConstraints;
 
   FormFieldValidator<String>? validator;
+
   Function? onChanged;
 
   @override
@@ -138,7 +142,7 @@ class CustomTextFormField extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
-            22,
+            35,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,

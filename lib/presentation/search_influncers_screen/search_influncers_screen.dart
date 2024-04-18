@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/presentation/search_influncers_screen/models/search_influncers_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
+import 'package:iynfluencer/presentation/search_results_screen/models/search_results_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/search_results_screen.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -26,6 +27,8 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
       Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
 
   late AnimationController animationController;
+   late SearchInfluncersController controllers;
+  late SearchResultsController searchResultsController;
 
   @override
   void initState() {
@@ -34,6 +37,9 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+
+     searchResultsController = Get.put(SearchResultsController(SearchResultsModel().obs));
+    controllers = Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
   }
 
   @override
@@ -104,11 +110,13 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold14Gray600),
-                                          CustomImageView(
-                                              svgPath: ImageConstant
-                                                  .imgFrameGray60020x20,
-                                              height: getSize(20),
-                                              width: getSize(20))
+                                           Text(
+                                             'View All'.tr,
+                                             textAlign: TextAlign.right,
+                                             style: AppStyle.txtSatoshiBold16.copyWith(
+                                             color:ColorConstant.cyan100,
+                                              ),
+                                            )
                                         ]))),
                             Align(
                                 alignment: Alignment.centerRight,
@@ -242,14 +250,28 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
     Get.back();
   }
 
-  /* onTapSubmit(String query) {
+
+ void onTapSubmit(String query) {
+    // Get the SearchResultsController instance
+    final searchController = searchResultsController.searchController;
+    searchController.text = query;
+
+   
+    searchResultsController.filterInfluencers(query);
+
+    if (searchResultsController.filteredInfluencers.isEmpty) {
+    Get.snackbar(
+      'No Influencers Found',
+      'There are no influencers matching your search query.',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 10),
+      backgroundColor: ColorConstant.gray300B2,
+      colorText: ColorConstant.black900,
+    );
+  } else {
     Get.to(() => SearchResultsScreen(query:query));
-    final searchController = Get.find<SearchResultsController>().searchController;
-        Get.find<SearchResultsController>().filterInfluencers(searchController.text);
-  } */
-    void onTapSubmit(String query) {
-    Get.to(() => SearchResultsScreen(query: query));
-    Get.find<SearchResultsController>().filterInfluencers(query);
+  }
+
   }
 
 }

@@ -26,7 +26,7 @@ class AppbarSearchview extends StatelessWidget {
 
   EdgeInsetsGeometry? margin;
 
-  Function(String)? onSubmitted;
+   Function(String)? onSubmitted;
 
   final VoidCallback? onTap; 
 
@@ -35,60 +35,63 @@ class AppbarSearchview extends StatelessWidget {
     SearchFilterController searchFilterController =
         Get.put(SearchFilterController());
 
-    return Center(
-      child: Padding(
-        padding: margin ?? EdgeInsets.zero,
-        child: CustomSearchView(
-          width: getHorizontalSize(
-            340,
-          ),
-          height: getVerticalSize(300),
-          onTap: onTap,
-          focusNode: FocusNode(),
-          autofocus: true,
-          controller: controller,
-          hintText: hintText,
-          prefix: GestureDetector(
-            onTap: (() {
-               print("Search bar tapped");
-               Get.to(() => SearchInfluncersScreen());
-            }),
-            child: Container(
-              margin: getMargin(
-                left: 19,
-                top: 9,
-                right: 10,
-                bottom: 9,
-              ),
-              child: CustomImageView(
-                svgPath: ImageConstant.imgSearch,
+    return GestureDetector(
+      onTap: onTap,
+      child: Center(
+        child: Padding(
+          padding: margin ?? EdgeInsets.zero,
+          child: CustomSearchView(
+            width: getHorizontalSize(
+              340,
+            ),
+            height: getVerticalSize(300),
+            onTap: onTap,
+            focusNode: FocusNode(),
+            autofocus: true,
+            controller: controller,
+            hintText: hintText,
+            prefix: GestureDetector(
+              onTap: (() {
+                 print("Search bar tapped");
+                 Get.to(() => SearchInfluncersScreen());
+              }),
+              child: Container(
+                margin: getMargin(
+                  left: 19,
+                  top: 9,
+                  right: 10,
+                  bottom: 9,
+                ),
+                child: CustomImageView(
+                  svgPath: ImageConstant.imgSearch,
+                ),
               ),
             ),
-          ),
-          prefixConstraints: BoxConstraints(
-            maxHeight: getVerticalSize(
-              33,
-            ),
-          ),
-          suffix: GestureDetector(
-            onTap: () {
-              Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
-            },
-            child: Container(
-              margin: getMargin(
-                left: 30,
-                top: 6,
-                right: 12,
-                bottom: 6,
-              ),
-              child: CustomImageView(
-                svgPath: ImageConstant.imgSignal,
+            prefixConstraints: BoxConstraints(
+              maxHeight: getVerticalSize(
+                33,
               ),
             ),
-          ),
-          suffixConstraints: BoxConstraints(
-            maxHeight: getVerticalSize(
-              37,
+            suffix: GestureDetector(
+              onTap: () {
+                Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
+              },
+              child: Container(
+                margin: getMargin(
+                  left: 30,
+                  top: 6,
+                  right: 12,
+                  bottom: 6,
+                ),
+                child: CustomImageView(
+                  svgPath: ImageConstant.imgSignal,
+                ),
+              ),
+            ),
+            suffixConstraints: BoxConstraints(
+              maxHeight: getVerticalSize(
+                37,
+              ),
             ),
           ),
         ),

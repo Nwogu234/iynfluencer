@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
@@ -505,7 +506,22 @@ class AppRoutes {
     ),
     GetPage(
       name: chatsOpenedScreen,
-      page: () => ChatsOpenedScreen(),
+      page: () => ChatsOpenedScreen(
+      chatData:  ChatData(
+      id: 'id',
+      creatorId: 'CreatorId',
+      creatorUserId: 'CreatorUserId',
+      influencerId: 'InfluencerId',
+      influencerUserId: 'defaultInfluencerUserId',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: 'defaultChatId',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const []),
+      ),
       bindings: [
         ChatsOpenedBinding(),
       ],

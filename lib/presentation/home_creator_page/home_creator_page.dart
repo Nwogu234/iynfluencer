@@ -125,14 +125,13 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             ),
                           ]),
                     ),
-                    Container(
-                      child: AppbarSearchview(
-                          hintText: "Search influencers".tr,
-                          controller: controller.searchController,
-                          onTap: () {
-                            onTapSubmit();
-                          }),
-                    ),
+                    AppbarSearchview(
+                        hintText: "Search influencers".tr,
+                        controller: controller.searchController,
+                       // onSubmitted: onTapSubmit(),
+                        onTap: () {
+                          onTapSubmit();
+                        }),
                     SizedBox(height: 10),
                     Container(
                       height: 60,

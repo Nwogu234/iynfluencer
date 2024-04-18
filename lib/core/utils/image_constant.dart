@@ -56,6 +56,8 @@ class ImageConstant {
 
   static String imgFrame1 = 'assets/images/img_frame_1.svg';
 
+  static String imgClock = 'assets/images/Img_Clock.svg';
+
   static String imgGroup85220 = 'assets/images/img_group852_20.png';
 
   static String imgVector = 'assets/images/img_vector.svg';

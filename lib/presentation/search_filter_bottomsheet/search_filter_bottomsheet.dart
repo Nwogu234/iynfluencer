@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/search_results_screen/search_results_screen.dart';
+import 'package:iynfluencer/widgets/custo_dropdown.dart';
+
 import 'controller/search_filter_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -11,17 +14,24 @@ class SearchFilterBottomsheet extends StatelessWidget {
 
   SearchFilterController controller;
 
-  @override Widget build(BuildContext context) {
-    return SingleChildScrollView(child: SizedBox(width: double.maxFinite,
-        child: Container(width: double.maxFinite,
-            padding: getPadding(left: 19, top: 22, right: 19, bottom: 22),
+  @override 
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Container(
+          width: double.maxFinite,
+            padding: getPadding(
+              left: 19, top: 22, right: 19, bottom: 22),
             decoration: AppDecoration.fillWhiteA700.copyWith(
                 borderRadius: BorderRadiusStyle.customBorderTL15),
-            child: Column(mainAxisSize: MainAxisSize.min,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: getPadding(left: 1, right: 2),
+                  Padding(
+                    padding: getPadding(left: 1, right: 2),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -29,31 +39,38 @@ class SearchFilterBottomsheet extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold16),
-                            Padding(padding: getPadding(top: 2),
+                            Padding(
+                              padding: getPadding(top: 2),
                                 child: Text("lbl_clear".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtSatoshiBold14Pink400))
                           ])),
-                  Padding(padding: getPadding(left: 2, top: 23),
-                      child: Text("lbl_availbililty".tr,
+                  Padding(
+                    padding: getPadding(left: 2, top: 23),
+                      child: Text(
+                        "lbl_availbililty".tr,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiLight14Gray900)),
-                  Padding(padding: getPadding(left: 1, top: 16),
+                  Padding(
+                    padding: getPadding(left: 1, top: 16),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text("msg_select_date_range".tr,
+                            Text(
+                              "msg_select_date_range".tr,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiLight13),
-                            Padding(padding: getPadding(top: 5),
+                            Padding(
+                              padding: getPadding(top: 5),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Expanded(child: CustomTextFormField(
+                                      Expanded(
+                                        child: CustomTextFormField(
                                           focusNode: FocusNode(),
                                           autofocus: true,
                                           controller: controller
@@ -62,7 +79,8 @@ class SearchFilterBottomsheet extends StatelessWidget {
                                           margin: getMargin(right: 8),
                                           padding: TextFormFieldPadding
                                               .PaddingT14,
-                                          suffix: Container(margin: getMargin(
+                                          suffix: Container(
+                                            margin: getMargin(
                                               left: 30,
                                               top: 14,
                                               right: 10,
@@ -72,7 +90,8 @@ class SearchFilterBottomsheet extends StatelessWidget {
                                                       .imgArrowdownBlueGray400)),
                                           suffixConstraints: BoxConstraints(
                                               maxHeight: getVerticalSize(48)))),
-                                      Expanded(child: CustomTextFormField(
+                                      Expanded(
+                                        child: CustomTextFormField(
                                           focusNode: FocusNode(),
                                           autofocus: true,
                                           controller: controller
@@ -94,33 +113,39 @@ class SearchFilterBottomsheet extends StatelessWidget {
                                               maxHeight: getVerticalSize(48))))
                                     ]))
                           ])),
-                  CustomDropDown(focusNode: FocusNode(),
+                  CustomDropDown(
+                    focusNode: FocusNode(),
                       autofocus: true,
-                      icon: Container(margin: getMargin(left: 30),
+                      icon: Container(
+                        margin: getMargin(left: 30),
                           child: CustomImageView(
                               svgPath: ImageConstant.imgArrowdownBlueGray400)),
                       hintText: "lbl_country".tr,
                       margin: getMargin(left: 2, top: 23, right: 8),
                       variant: DropDownVariant.None,
                       items: controller.searchFilterModelObj.value
-                          .dropdownItemList.value,
+                          .dropdownItemList1.value,
                       onChanged: (value) {
-                        controller.onSelected(value);
+                        controller.onSelected1(value);
                       }),
-                  CustomDropDown(focusNode: FocusNode(),
+                       CustomDropDown(
+                      focusNode: FocusNode(),
                       autofocus: true,
-                      icon: Container(margin: getMargin(left: 30),
+                      icon: Container(
+                        margin: getMargin(left: 30),
                           child: CustomImageView(
                               svgPath: ImageConstant.imgArrowdownBlueGray400)),
                       hintText: "lbl_category".tr,
                       margin: getMargin(left: 2, top: 32, right: 8),
                       variant: DropDownVariant.None,
                       items: controller.searchFilterModelObj.value
-                          .dropdownItemList1.value,
+                          .dropdownItemList.value,
                       onChanged: (value) {
-                        controller.onSelected1(value);
+                        controller.onSelected(value);
                       }),
-                  CustomDropDown(focusNode: FocusNode(),
+
+/*                      CustomDropDown(
+                      focusNode: FocusNode(),
                       autofocus: true,
                       icon: Container(margin: getMargin(left: 30),
                           child: CustomImageView(
@@ -129,11 +154,12 @@ class SearchFilterBottomsheet extends StatelessWidget {
                       margin: getMargin(left: 2, top: 32, right: 8),
                       variant: DropDownVariant.None,
                       items: controller.searchFilterModelObj.value
-                          .dropdownItemList2.value,
+                          .dropdownItemList.value,
                       onChanged: (value) {
-                        controller.onSelected2(value);
-                      }),
-                  CustomButton(height: getVerticalSize(50),
+                        controller.onSelected(value);
+                      }), */
+                  CustomButton(
+                    height: getVerticalSize(50),
                       text: "lbl_apply_filters".tr,
                       margin: getMargin(left: 1, top: 25, bottom: 14),
                       padding: ButtonPadding.PaddingAll15,
@@ -148,6 +174,7 @@ class SearchFilterBottomsheet extends StatelessWidget {
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the searchResultsScreen.
   onTapApplyfilters() {
-    Get.toNamed(AppRoutes.searchResultsScreen,);
+   // Get.toNamed(AppRoutes.searchResultsScreen,);
+    Get.to(() => SearchResultsScreen());
   }
 }

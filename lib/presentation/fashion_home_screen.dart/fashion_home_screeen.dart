@@ -93,6 +93,7 @@ void _onScroll() {
         );
       } else {
         return SingleChildScrollView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
@@ -111,13 +112,13 @@ void _onScroll() {
                                     fontWeight: FontWeight.w600,
                                     ),
                             ),
-                            Text(
+/*                             Text(
                               'View All'.tr,
                               textAlign: TextAlign.right,
                              style: AppStyle.txtSatoshiBold16.copyWith(
                                 color:ColorConstant.cyan100,
                              ),
-                            )
+                            ) */
                           ],
                         ),
                         Padding(
@@ -180,27 +181,24 @@ void _onScroll() {
                         ),
                         
                           SizedBox(height: 15.h),
-                          SingleChildScrollView(
-                            controller: _scrollController,
-                            child: Column(
-                               children: [
-                             for (var index = 0;
-                                 index <
-                                     (controller.isRecommendedLoading.value
-                                         ? 5
-                                         : controller
-                                             .recommendedInfluencers.length);
-                                 index++)
-                               Padding(
-                                 padding: EdgeInsets.only(bottom: 24.h),
-                                 child: controller.isRecommendedLoading.value
-                                     ? Listrectangle50ItemSkeletonWidget()
-                                     : Listrectangle50ItemWidget(controller
-                                         .recommendedInfluencers[index]),
-                               ),
-                                ],
+                          Column(
+                             children: [
+                           for (var index = 0;
+                               index <
+                                   (controller.isRecommendedLoading.value
+                                       ? 5
+                                       : controller
+                                           .recommendedInfluencers.length);
+                               index++)
+                             Padding(
+                               padding: EdgeInsets.only(bottom: 24.h),
+                               child: controller.isRecommendedLoading.value
+                                   ? Listrectangle50ItemSkeletonWidget()
+                                   : Listrectangle50ItemWidget(controller
+                                       .recommendedInfluencers[index]),
                              ),
-                          ),
+                              ],
+                           ),
               ],
             ),
             ),

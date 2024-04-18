@@ -99,8 +99,9 @@ class ApiClients extends GetConnect {
   
   /// THIS IS FOR GETTING MESSAGES WITH INFLUENCERS
   Future<Response> getAllMessagesWithInfluencer(String chatId, String token) async {
+    Response response = Response();
   try {
-    final response = await get(
+     response = await get(
       'chats/$chatId/messages',
       headers: {
         "Content-Type": "application/json",
