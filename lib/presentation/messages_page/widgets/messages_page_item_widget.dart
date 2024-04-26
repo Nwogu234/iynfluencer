@@ -1,5 +1,6 @@
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/binding/chats_opened_binding.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 
 import '../controller/messages_controller.dart';
@@ -10,19 +11,19 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class MessagesPageItemWidget extends StatelessWidget {
   final ChatData messagesPageItemModelObj;
-  final Influencer? influencer;
 
   MessagesPageItemWidget({
-   Key? key,
-     required this.messagesPageItemModelObj,
-     this.influencer
-      })
-      : super(key: key);
+    Key? key,
+    required this.messagesPageItemModelObj,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final data = messagesPageItemModelObj.unreadByInfluencer;
+    final data = messagesPageItemModelObj.unreadByCreator;  // will change this later
     final bool isOnline = false;
+    String messageText = messagesPageItemModelObj.messages.isNotEmpty
+        ? messagesPageItemModelObj.messages.last.text
+        : " ";
 
     String? avatarUrl =
         "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${messagesPageItemModelObj.influencerUserId}-avatar.jpeg";
@@ -45,10 +46,9 @@ class MessagesPageItemWidget extends StatelessWidget {
     return InkWell(
       splashColor: ColorConstant.cyan100,
       onTap: () {
-        Get.to(
-          ChatsOpenedScreen(
-            chatData: messagesPageItemModelObj,
-          ));
+        Get.to(ChatsOpenedScreen(
+          chatData: messagesPageItemModelObj,
+        ));
       },
       child: Container(
         width: double.maxFinite,
@@ -61,6 +61,7 @@ class MessagesPageItemWidget extends StatelessWidget {
               children: [
                 CustomImageView(
                   url: imageProvider,
+                  fit: BoxFit.cover,
                   height: getSize(55),
                   width: getSize(55),
                   radius: BorderRadius.circular(getSize(27.5)),
@@ -88,14 +89,14 @@ class MessagesPageItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "\$${capitalizeFirstLetter(influencer?.user?.first.firstName)}-\$${capitalizeFirstLetter(influencer?.user?.first.lastName)}",
+                    "${capitalizeFirstLetter(messagesPageItemModelObj.influencerUser?.firstName)}-${capitalizeFirstLetter(messagesPageItemModelObj.influencerUser?.lastName)}",
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiBold14Gray900,
                   ),
-                  SizedBox(height: 2),
+                 messagesPageItemModelObj.messages.isNotEmpty  ? SizedBox(height: 15) :SizedBox.shrink(),
                   Text(
-                    messagesPageItemModelObj.messages.last.text,
+                    messageText,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiLight14Gray900a2
@@ -108,11 +109,16 @@ class MessagesPageItemWidget extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  timeago.format(messagesPageItemModelObj.createdAt),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiLight14Gray900a2,
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom:  messagesPageItemModelObj.messages.isNotEmpty ? 0 : 15,
+                    ),
+                  child: Text(
+                    timeago.format(messagesPageItemModelObj.createdAt),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    style: AppStyle.txtSatoshiLight14Gray900a2,
+                  ),
                 ),
                 SizedBox(height: 6),
                 data == 0

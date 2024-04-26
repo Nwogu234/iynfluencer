@@ -1,57 +1,49 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:iynfluencer/core/utils/color_constant.dart';
+import 'package:iynfluencer/core/utils/image_constant.dart';
+import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
-import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chatbubblez.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
-import 'package:iynfluencer/widgets/custom_loading.dart';
-import 'package:iynfluencer/widgets/datelable.dart';
-import 'package:iynfluencer/widgets/error_widget.dart';
-import 'package:swipe_to/swipe_to.dart';
-export 'package:get/get.dart';
-import 'controller/chats_opened_controller.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_subtitle.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
-import 'package:iynfluencer/widgets/custom_text_form_field.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:iynfluencer/widgets/custom_loading.dart';
+import 'package:iynfluencer/widgets/datelable.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
 
-class ChatsOpenedScreen extends StatefulWidget {
-  ChatsOpenedScreen({
-    Key? key,
-    this.selectedInfluencer,
-    required this.chatData,
-  }) : super(key: key);
+class ChatsInfluencerScreen extends StatefulWidget {
+  ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData})
+      : super(key: key);
 
-  final Influencer? selectedInfluencer;
-  // ChatData chatData;
+  final Job? selectedJob;
   final ChatData chatData;
-  Rx<Message?> replyMessage = Rx<Message?>(null);
+
+  Rx<Message?> replyMessages = Rx<Message?>(null);
 
   @override
-  State<ChatsOpenedScreen> createState() => _ChatsOpenedScreenState();
+  State<ChatsInfluencerScreen> createState() => _ChatsInfluencerScreenState();
 }
 
-class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
+class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // ChatsOpenedController controller = Get.put(ChatsOpenedController());
   late AnimationController animationController;
   late String imageProvider;
   late String titleName;
   final UserController user = Get.find();
   RxBool show = false.obs;
   FocusNode focusNode = FocusNode();
-  late ChatsOpenedController controller;
-  final scrollController = ScrollController();
+  late ChatsInfluencerController controllers;
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -69,13 +61,13 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     )..repeat();
 
     String? avatarUrl;
-    if (widget.selectedInfluencer != null) {
+    if (widget.selectedJob != null) {
       avatarUrl =
-          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedJob?.creator?.userId}-avatar.jpeg";
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg';
     } else if (widget.chatData != null) {
       avatarUrl =
-          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
+          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData.influencerUserId}-avatar.jpeg";
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
     }
 
@@ -86,12 +78,12 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     }
 
     String? name;
-    if (widget.selectedInfluencer != null) {
+    if (widget.selectedJob != null) {
       name =
-          "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+          "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName)}";
     } else if (widget.chatData != null) {
       name =
-          "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
+          "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
     }
 
     if (name != null && name.isNotEmpty) {
@@ -99,16 +91,11 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     } else {
       imageProvider = "Mark Adebayo";
     }
-    controller = ChatsOpenedController(
-      chatData: widget.chatData,
-      selectedInfluencer: widget.selectedInfluencer,
-    );
 
-    controller.getUser(widget.chatData.chatId);
-  }
+    controllers = ChatsInfluencerController(
+        chatData: widget.chatData, selectedJob: widget.selectedJob);
 
-  Future<void> _refresh() async {
-    await controller.refreshItems();
+    controllers.getUser(widget.chatData.chatId);
   }
 
   @override
@@ -119,8 +106,14 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
 
+    final scrollController = ScrollController();
     final String chatId = widget.chatData.chatId;
 
     return SafeArea(
@@ -178,9 +171,9 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
           styleType: Style.bgOutlineIndigo50_1,
         ),
         body: RefreshIndicator(
-          onRefresh: _refresh,
+          onRefresh: controllers.refreshItems,
           child: Obx(() {
-            if (controller.isLoading.value) {
+            if (controllers.isLoading.value) {
               return Stack(
                 children: [
                   PositionedDirectional(
@@ -192,11 +185,11 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   ),
                 ],
               );
-            } else if (controller.error.value.isNotEmpty) {
+            } else if (controllers.error.value.isNotEmpty) {
               return ResponsiveErrorWidget(
-                errorMessage: controller.error.value,
+                errorMessage: controllers.error.value,
                 onRetry: () {
-                  controller.getUser(chatId);
+                  controllers.getUser(chatId);
                 },
                 fullPage: true,
               );
@@ -219,36 +212,39 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                           reverse: true,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.messageModelObj.length,
+                          itemCount: controllers.messageModelObjs.length,
                           itemBuilder: (context, index) {
                             final sortedMessages =
-                                controller.messageModelObj.reversed.toList();
+                                controllers.messageModelObjs.reversed.toList();
                             final reversedIndex =
-                                controller.messageModelObj.length - 1 - index;
+                                controllers.messageModelObjs.length - 1 - index;
                             final message = sortedMessages[reversedIndex];
                             String formattedDateTime = DateFormat.jm('en_US')
                                 .format(message.createdAt);
-                            if (controller.messageModelObj.isEmpty) {
+                            if (index == sortedMessages.length) {
+                              return Container(
+                                height: 70,
+                              );
+                            } else if (sortedMessages.isEmpty) {
                               return SizedBox.shrink();
-                            } //else{
-                            return ChatMessageBubble(
-                                controller: controller,
+                            }
+                            return ChatMessageBubblez(
+                                controller: controllers,
                                 messageText: message.text,
                                 isReceived: message.authorUserId !=
                                     widget.chatData.creatorUserId,
                                 timestamp: formattedDateTime,
                                 leadingImagePath: ImageConstant.imgVector,
                                 trailingImagePath: ImageConstant.imgVector,
-                                messageModelObj: message.messageId,
+                                messageModelObjs: message.messageId,
                                 onSwipedMessage: (message) {
                                   replyToMessage(message);
                                   focusNode.requestFocus();
                                 });
-                            //     }
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 10), // Adjust spacing
                       PopScope(
                         canPop: true,
                         onPopInvoked: (didPop) {
@@ -264,8 +260,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                           top: false,
                           child: Column(
                             children: [
-                              ChatInputBar(
-                                replyMessage: widget.replyMessage,
+                              ChatInputsBar(
+                                replyMessages: widget.replyMessages,
                                 onCancelReply: () {
                                   cancelReply();
                                 },
@@ -277,11 +273,11 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                                   focusNode.canRequestFocus = false;
                                   show.value = !show.value;
                                 },
-                                messageController: controller.messageController,
-                                openedController: controller,
+                                messageController: controllers.messageController,
+                                closedController: controllers,
                               ),
                               show.value
-                                  ? emojiSelect(controller)
+                                  ? emojiSelect(controllers)
                                   : const SizedBox.shrink(),
                             ],
                           ),
@@ -298,7 +294,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     );
   }
 
-  Widget emojiSelect(ChatsOpenedController controller) {
+  Widget emojiSelect(ChatsInfluencerController controller) {
     return EmojiPicker(
       config: const Config(
         bottomActionBarConfig: BottomActionBarConfig(
@@ -314,15 +310,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   }
 
   void replyToMessage(Message message) {
-    widget.replyMessage.value = message;
+    widget.replyMessages.value = message;
   }
 
   void cancelReply() {
-    widget.replyMessage.value = null;
+    widget.replyMessages.value = null;
   }
 
   onTapArrowleft8(ChatData chatData) {
     Get.back();
-    controller.getUser(chatData.chatId);
+    controllers.getUser(chatData.chatId);
   }
 }

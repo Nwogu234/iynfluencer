@@ -36,9 +36,9 @@ class MessagesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Connect to the socket.io server
+    
     socketClient.connect();
-    // Handle incoming messages
+  
     socketClient.socket.on('receive_message', (data) {
       messages.add(data.toString());
       update();
@@ -92,6 +92,7 @@ class MessagesController extends GetxController {
       final Response response =
           await apiClient.getAllChatsWithInfluencers(token);
       List<dynamic> chatJsonList = response.body['data']['docs'];
+      chatList.clear();
       print(chatJsonList.length);
       print(chatJsonList);
       if (chatJsonList.length > 0) {
@@ -117,11 +118,6 @@ class MessagesController extends GetxController {
     }
   }
 
-  void sendMessage(String text) {
-    if (text.isNotEmpty) {
-      socketClient.socket.emit('send_message', text);
-    }
-  }
 
   @override
   void onClose() {

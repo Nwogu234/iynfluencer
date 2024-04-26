@@ -155,11 +155,11 @@ class _MessagesPageState extends State<MessagesPage>
                     ),
                   ],
                   );
-                    } else if (controller.empty) {
+                    } else if (controller.chatModelObj.isEmpty) {
                       return ResponsiveEmptyWidget(
                         errorMessage:
                             'You don\'s have Influencers in your chats',
-                        buttonText: "Send Message",
+                        buttonText: "Go to HomePage",
                         onRetry: () {
                           homeContainerController.currentRoute.value =
                               AppRoutes.homeCreatorPage;
@@ -172,7 +172,7 @@ class _MessagesPageState extends State<MessagesPage>
                     } else {
                       return SizedBox(
                         width: size.width,
-                        height: getVerticalSize(800),
+                        height: MediaQuery.of(context).size.height,
                         child: Padding(
                           padding: getPadding(
                             bottom: 5,

@@ -25,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
       this.validator,
       this.height,
       this.onChanged,
+      this.onSubmitted,
       this.label});
 
   TextFormFieldShape? shape;
@@ -71,7 +72,9 @@ class CustomTextFormField extends StatelessWidget {
 
   FormFieldValidator<String>? validator;
 
-  Function? onChanged;
+  void Function(String)? onChanged;
+
+  void Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +101,18 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines ?? 1,
         decoration: _buildDecoration(),
         validator: validator,
-          onChanged: (text) {
-            if (onChanged != null) {
-              onChanged!(text);
-            }
-          },
+        onChanged: (text) {
+          if (onChanged != null) {
+            onChanged!(text);
+          }
+        },
       ),
     );
   }
 
   _buildDecoration() {
     return InputDecoration(
-      labelText: label??null,
+      labelText: label ?? null,
       hintText: hintText ?? "",
       hintStyle: _setFontStyle(),
       border: _setBorderStyle(),
@@ -333,6 +336,7 @@ enum TextFormFieldShape {
   RoundedBorder6,
   CircleBorder10,
 }
+
 enum TextFormFieldPadding {
   PaddingAll14,
   PaddingT14,
@@ -343,6 +347,7 @@ enum TextFormFieldPadding {
   PaddingT9,
   PaddingAll9,
 }
+
 enum TextFormFieldVariant {
   None,
   FillGray100,
@@ -350,6 +355,7 @@ enum TextFormFieldVariant {
   FillCyan300,
   FillCyan3005e,
 }
+
 enum TextFormFieldFontStyle {
   SatoshiLight14Gray900ab,
   SatoshiLight14,

@@ -251,13 +251,13 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
   }
 
 
- void onTapSubmit(String query) {
+ void onTapSubmit(String? query) {
     // Get the SearchResultsController instance
     final searchController = searchResultsController.searchController;
-    searchController.text = query;
+    searchController.text = query ?? '';
 
    
-    searchResultsController.filterInfluencers(query);
+    searchResultsController.filterInfluencers(query:query);
 
     if (searchResultsController.filteredInfluencers.isEmpty) {
     Get.snackbar(

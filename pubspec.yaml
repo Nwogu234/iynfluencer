@@ -2,19 +2,22 @@ name: iynfluencer
 description: A new Flutter project.
 version: 1.0.0+1
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 dependencies:
   audioplayers: ^5.2.0
   cached_network_image: ^3.2.3
+  camera: ^0.10.5+9
   carousel_slider: ^4.0.0
   connectivity_plus: ^5.0.1
   country_code_picker: ^3.0.0
   country_flags: ^2.1.1
   country_pickers: ^2.0.0
   email_otp: ^2.1.1
+  emoji_picker_flutter: ^2.2.0
   file_picker: ^6.0.0
   flutter:
     sdk: flutter
+  flutter_hooks: ^0.20.5
   flutter_pdfview: ^1.2.2
   flutter_screenutil: ^5.1.1
   flutter_secure_storage: ^9.0.0
@@ -35,13 +38,16 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   sms_autofill: ^2.3.0
   socket_io_client: ^2.0.3+1
+  swipe_to: ^1.0.6
   timeago: ^3.5.0
-  video_player: ^2.5.3
+  uuid: ^4.4.0
+  video_player: ^2.8.6
 
 dev_dependencies:
   animated_text_kit: ^4.2.2
   flutter_test:
     sdk: flutter
+  focused_menu: ^1.0.5
 flutter:
   uses-material-design: true
   assets:

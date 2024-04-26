@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/influencer_profile_about_page/controller/influencer_profile_about_controller.dart';
 import 'package:iynfluencer/presentation/influencer_profile_about_page/influencer_profile_about_page.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_tab_container_controller.dart';
@@ -25,20 +26,71 @@ class Listrectangle50ItemWidget extends StatelessWidget {
         );
 
   Influencer listrectangle50;
-   ChatData chatData = ChatData(
-      id: 'id',
-      creatorId: 'CreatorId',
-      creatorUserId: 'CreatorUserId',
-      influencerId: 'InfluencerId',
-      influencerUserId: 'defaultInfluencerUserId',
-      unreadByCreator: 0,
-      unreadByInfluencer: 0,
-      blockedByCreator: false,
-      blockedByInfluencer: false,
-      chatId: 'defaultChatId',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      messages: const []);
+  ChatData chatData = ChatData(
+    id: 'id',
+    creatorId: 'CreatorId',
+    creatorUserId: 'CreatorUserId',
+    influencerId: 'InfluencerId',
+    influencerUserId: 'defaultInfluencerUserId',
+    unreadByCreator: 0,
+    unreadByInfluencer: 0,
+    blockedByCreator: false,
+    blockedByInfluencer: false,
+    chatId: '',
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    messages: const [],
+    influencerUser: UserModel(
+        id: 'id',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        email: 'email',
+        password: 'password',
+        termsAndConditionsAgreement: false,
+        isNewUser: false,
+        isSocial: false,
+        verified: false,
+        verifiedEmail: false,
+        followers: 0,
+        following: 0,
+        views: 0,
+        userId: 'userId',
+        createdAt: '',
+        updatedAt: '',
+        creatorId: 'creatorId',
+        influencerId: 'influencerId',
+        country: 'country',
+        dob: 'dob',
+        phone: 'phone',
+        username: 'username',
+        avatar: 'avatar',
+        cover: 'cover'),
+    creatorUser: UserModel(
+        id: 'id',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        email: 'email',
+        password: 'password',
+        termsAndConditionsAgreement: false,
+        isNewUser: false,
+        isSocial: false,
+        verified: false,
+        verifiedEmail: false,
+        followers: 0,
+        following: 0,
+        views: 0,
+        userId: 'userId',
+        createdAt: '',
+        updatedAt: '',
+        creatorId: 'creatorId',
+        influencerId: 'influencerId',
+        country: 'country',
+        dob: 'dob',
+        phone: 'phone',
+        username: 'username',
+        avatar: 'avatar',
+        cover: 'cover'),
+  );
 
   var controller = Get.find<HomeCreatorController>();
 
@@ -50,6 +102,9 @@ class Listrectangle50ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChatsOpenedController chatsController = Get.put(ChatsOpenedController(
+        chatData: chatData, selectedInfluencer: listrectangle50));
+
     String? avatarUrl =
         "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${listrectangle50.userId}-avatar.jpeg";
     //  'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${listrectangle50.userId}-avatar.jpeg';
@@ -68,8 +123,6 @@ class Listrectangle50ItemWidget extends StatelessWidget {
       }
       return text[0].toUpperCase() + text.substring(1);
     }
-
-
 
     return GestureDetector(
       onTap: () {
@@ -196,11 +249,11 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                   margin: getMargin(top: 17),
                   padding: ButtonPaddings.PaddingAll156,
                   onTap: () {
-                    Get.to(ChatsOpenedScreen(
-                      selectedInfluencer: listrectangle50,
-                      chatData: chatData,
-                    ));
-                  }),
+                     chatsController.onTapChatCard(
+                      listrectangle50,
+                       chatData
+                       ); 
+                 }),
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),

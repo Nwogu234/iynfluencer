@@ -1,26 +1,28 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/model/chat_influencer_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class ChatsOpenedController extends GetxController {
-  final ChatData chatData;
-  final Influencer? selectedInfluencer;
+class ChatsInfluencerController extends GetxController {
+   final ChatData chatData;
+  final Job? selectedJob;
 
-  ChatsOpenedController({required this.chatData, this.selectedInfluencer}) {
-    messageModelObj = chatData.messages.obs;
+  ChatsInfluencerController({required this.chatData, this.selectedJob}) {
+    messageModelObjs = chatData.messages.obs;
   }
 
   TextEditingController messageController = TextEditingController();
-  Rx<ChatsOpenedModel> chatsOpenedModelObj = ChatsOpenedModel().obs;
+  Rx<ChatsInfluencerModel> chatsinfluencerModelObj = ChatsInfluencerModel().obs;
   var messages = <String>[].obs;
   bool empty = false;
   var token;
@@ -31,7 +33,7 @@ class ChatsOpenedController extends GetxController {
   final storage = FlutterSecureStorage();
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
-  RxList<Message> messageModelObj = <Message>[].obs;
+  RxList<Message> messageModelObjs = <Message>[].obs;
   final message = ''.obs;
   late final RxBool isDeleted = false.obs;
 
@@ -49,24 +51,19 @@ class ChatsOpenedController extends GetxController {
     socketClient.socket.on('error', (errorData) {
       print('Socket Error: $errorData');
     });
-    print('Chat data before getUser: $chatData');
+
 
     final String chatId = chatData.chatId;
-     print('Chat ID: $chatId'); 
-     getUser(chatId); 
-   
+    getUser(chatId);
   }
-
-  
 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     final String chatId = chatData.chatId;
-     getUser(chatId);
-    
+    getUser(chatId);
   }
 
-   Future<void> getUser(String chatId) async {
+  Future<void> getUser(String chatId) async {
     isLoading.value = true;
     error.value = '';
     token = await storage.read(key: "token");
@@ -78,12 +75,12 @@ class ChatsOpenedController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        fetchAllMessagesWithInfluencer(chatId).then((value) {
+      /*   fetchAllMessagesWithCreators(chatId).then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
-        }); 
-      // onTapChatCard(selectedInfluencer, chatData);
+        }); */
+     //  onTapChatCard(selectedInfluencer, chatData);
       }
     } catch (e) {
       print('Error in getUser: $e');
@@ -92,16 +89,16 @@ class ChatsOpenedController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  } 
+  }
 
-  Future<void> fetchAllMessagesWithInfluencer(String chatId) async {
+   Future<void> fetchAllMessagesWithCreators(String chatId) async {
     try {
        error.value = '';
-      isLoading.value = true;
-      error.value = '';
+       isLoading.value = true;
+       error.value = '';
        token = await storage.read(key: "token");
-      print('Fetching messages for chat ID: $chatId'); // Debug log
-      final Response response = await apiClient.getAllMessages(chatId, token);
+      final Response response =
+          await apiClient.getAllMessages(chatId, token);
       if (response.isOk) {
         final responseData = response.body;
         final List<dynamic>? chatDataList = responseData['data']?['docs'];
@@ -111,10 +108,10 @@ class ChatsOpenedController extends GetxController {
         if (chatDataList != null) {
           for (var chatDataJson in chatDataList) {
             final Message message = Message.fromJson(
-                chatDataJson); // Assuming there's a method to parse JSON to Message
+                chatDataJson); 
             messages.add(message);
           }
-          messageModelObj.assignAll(messages);
+          messageModelObjs.assignAll(messages);
         } else {
           error('Failed to fetch messages: Data not available');
         }
@@ -128,7 +125,7 @@ class ChatsOpenedController extends GetxController {
       isTrendLoading.value = false;
     }
   }
-
+ 
   Future<void> deleteIdMessage(String deleteMessage) async {
     try {
       final token = await storage.read(key: "token");
@@ -140,7 +137,7 @@ class ChatsOpenedController extends GetxController {
         print('Message deleted successfully');
         isDeleted.value = true;
         // Remove the deleted message from the list
-        messageModelObj
+        messageModelObjs
             .removeWhere((message) => message.messageId == deleteMessage);
         isDeleted.value = true;
         update();
@@ -153,101 +150,110 @@ class ChatsOpenedController extends GetxController {
         }
       }
     } catch (e) {
+      // Handle any exceptions that occur during the deletion process
       print('Error deleting message: $e');
     }
   }
 
-  void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
-    if (selectedInfluencer == null) {
-      print("selectedInfluencer is null");
-      return;
-    }
 
+
+  void onTapChatCard(Job? selectedJob, ChatData chatData) async {
+  if (selectedJob == null) {
+    print("selectedJob is null");
+    return;
+  }
+
+  isLoading.value = true;
+  error('');
+
+  try {
     isLoading.value = true;
     error('');
-    token = await storage.read(key: "token");
 
-    try {
-      Response existingChatResponse =
-          await apiClient.getAllChatsWithInfluencers(token!);
-      if (existingChatResponse.isOk && existingChatResponse.body != null) {
-        //  final List<dynamic>? responseData = existingChatResponse.body;
-        List<dynamic> chatListMaps = existingChatResponse.body['data']['docs'];
-        List<ChatData> chatList =
-            chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
+    if (token == null) {
+    print("token is null");
+    return;
+  }
 
-        ChatData? existingChat = chatList.firstWhereOrNull(
-            (chat) => chat.influencerId == selectedInfluencer.id);
+   token = await storage.read(key: "token");
+    Response existingsChatResponse = await apiClient.getAllChatsWithCreators(token!);
+    if (existingsChatResponse.isOk && existingsChatResponse.body != null) {
+     //  final List<dynamic>? responseData = existingChatResponse.body;
+        List<dynamic> chatListMaps = existingsChatResponse.body['data']['docs'];
+        List<ChatData> chatList = chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
 
-        if (existingChat != null) {
-          await fetchAllMessagesWithInfluencer(existingChat.chatId);
-          Get.to(ChatsOpenedScreen(
-            selectedInfluencer: selectedInfluencer,
-            chatData: existingChat,
-          ));
-          return;
-        } else {
-          print("No existing chat found for the selected influencer");
-          // No existing chat, proceed to create a new one
-          final now = DateTime.now();
-          final formattedTime = DateFormat('HH:mm').format(now);
-          final createdAt = DateTime(
-            now.year,
-            now.month,
-            now.day,
-            int.parse(formattedTime.substring(0, 2)),
-            int.parse(formattedTime.substring(3)),
-            0,
-          );
+     
+   ChatData? existingsChat = chatList.firstWhereOrNull(
+      (chat) => chat.influencerId == selectedJob.id);
 
-          String chatId = Uuid().v4();
-          String creatorId = user.userModelObj.value.id;
-          String creatorUserId = user.userModelObj.value.userId;
-
-          ChatData newChat = ChatData(
-            id: '',
-            creatorId: creatorId,
-            influencerId: selectedInfluencer.id ?? '',
-            creatorUserId: creatorUserId,
-            influencerUserId: selectedInfluencer.userId ?? '',
-            unreadByCreator: 0,
-            unreadByInfluencer: 0,
-            blockedByCreator: false,
-            blockedByInfluencer: false,
-            chatId: chatId,
-            createdAt: createdAt,
-            updatedAt: createdAt,
-            messages: [],
-          );
-
-          // Create the new chat
-          Response createChatResponse =
-              await apiClient.createChat(newChat, token);
-          if (createChatResponse.isOk) {
-            print('Chat created successfully');
-            Map<String, dynamic> chatDataMap = createChatResponse.body;
-            ChatData createdChat = ChatData.fromJson(chatDataMap);
-
-            // Navigate to the chat screen with the new chat data
-            Get.to(ChatsOpenedScreen(
-              selectedInfluencer: selectedInfluencer,
-              chatData: createdChat,
-            ));
-          } else {
-            print("Failed to create chat: ${createChatResponse.statusCode}");
-          }
-        }
+      if (existingsChat != null) {
+        await fetchAllMessagesWithCreators(existingsChat.chatId);
+        Get.to(ChatsInfluencerScreen(
+          selectedJob: selectedJob,
+          chatData: existingsChat,
+        ));
+        return;
       } else {
-        print(
-            "Failed to fetch existing chats: ${existingChatResponse.statusCode}");
+        print("No existing chat found for the selected creator");
+        // No existing chat, proceed to create a new one
+        final now = DateTime.now();
+        final formattedTime = DateFormat('HH:mm').format(now);
+        final createdAt = DateTime(
+         now.year,
+         now.month,
+         now.day,
+         int.parse(formattedTime.substring(0, 2)),
+         int.parse(formattedTime.substring(3)),
+         0,
+      );
+
+        String chatId = Uuid().v4();
+        String influencerId = user.userModelObj.value.id;
+        String influencerUserId =  user.userModelObj.value.userId;
+
+
+        ChatData newChat = ChatData(
+          id:  '',
+          creatorId:selectedJob.creator?.id ?? '',
+          influencerId: influencerId,
+          creatorUserId: selectedJob.creator?.userId ?? '',
+          influencerUserId: influencerUserId,
+          unreadByCreator: 0,
+          unreadByInfluencer: 0,
+          blockedByCreator: false,
+          blockedByInfluencer: false,
+          chatId: chatId,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+          messages: [],
+        );
+
+        // Create the new chat
+        Response createChatResponse = await apiClient.createChat(newChat, token);
+        if (createChatResponse.isOk) {
+          print('Chat created successfully');
+          Map<String, dynamic> chatDataMap = createChatResponse.body;
+           ChatData createdChat = ChatData.fromJson(chatDataMap);
+
+          // Navigate to the chat screen with the new chat data
+          Get.to(ChatsInfluencerScreen(
+            selectedJob: selectedJob,
+            chatData: createdChat,
+          ));
+        } else {
+          print("Failed to create chat: ${createChatResponse.statusCode}");
+        }
       }
-    } catch (e) {
-      print("Error creating or fetching chat: $e");
-      error(e.toString());
-    } finally {
-      isLoading.value = false;
+    } else {
+      print("Failed to fetch existing chats: ${existingsChatResponse.statusCode}");
     }
-  } 
+  } catch (e) {
+    print("Error creating or fetching chat: $e");
+    error(e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+} 
 
   String formatDateTime(String createdAt) {
     DateTime dateTime = DateTime.parse(createdAt);
@@ -260,5 +266,6 @@ class ChatsOpenedController extends GetxController {
     super.onClose();
     messageController.dispose();
     socketClient.disconnect();
-  }
+  } 
 }
+

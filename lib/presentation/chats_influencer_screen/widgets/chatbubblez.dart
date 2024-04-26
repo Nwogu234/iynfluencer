@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -14,10 +15,10 @@ import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
 import '../../../widgets/custom_image_view.dart';
 
-class ChatMessageBubble extends StatefulWidget {
-  final String messageModelObj;
+class ChatMessageBubblez extends StatefulWidget {
+  final String messageModelObjs;
   final String messageText;
-  final ChatsOpenedController controller;
+  final ChatsInfluencerController controller;
   final bool isReceived;
   final String timestamp;
   final String? leadingImagePath;
@@ -25,8 +26,8 @@ class ChatMessageBubble extends StatefulWidget {
   ChatData? chatData;
   final ValueChanged<Message> onSwipedMessage;
 
-  ChatMessageBubble({
-    required this.messageModelObj,
+  ChatMessageBubblez({
+    required this.messageModelObjs,
     required this.messageText,
     required this.controller,
     required this.isReceived,
@@ -39,15 +40,16 @@ class ChatMessageBubble extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ChatMessageBubble> createState() => _ChatMessageBubbleState();
+  State<ChatMessageBubblez> createState() => _ChatMessageBubbleState();
 }
 
-class _ChatMessageBubbleState extends State<ChatMessageBubble> {
+class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
   late final RxBool isDeleted = false.obs;
 
   @override
   Widget build(BuildContext context) {
-    Color bubbleColor =
+    
+      Color bubbleColor =
         widget.isReceived ? ColorConstant.gray200 : ColorConstant.cyan100;
     if (isDeleted.value == true) {
       return Container(
@@ -194,8 +196,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       ],
     ).then((String? value) {
       if (value == 'Delete') {
-        widget.controller.deleteIdMessage(widget.messageModelObj);
+        widget.controller.deleteIdMessage(widget.messageModelObjs);
       }
     });
   }
-}
+  }

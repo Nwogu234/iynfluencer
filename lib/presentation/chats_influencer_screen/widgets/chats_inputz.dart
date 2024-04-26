@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
-import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
 import 'package:iynfluencer/widgets/reply_message_widget.dart';
 import 'package:uuid/uuid.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -20,160 +20,160 @@ import '../../../theme/app_style.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/custom_text_form_field.dart';
 
-class ChatInputBar extends StatefulWidget {
+class ChatInputsBar extends StatefulWidget {
   final TextEditingController messageController;
   IconData? icon;
   VoidCallback? onPressed;
   final ChatData chatData;
   final FocusNode focusNode;
-  Rx<Message?> replyMessage = Rx<Message?>(null);
+  Rx<Message?> replyMessages = Rx<Message?>(null);
   final VoidCallback onCancelReply;
-  final ChatsOpenedController openedController;
+  final ChatsInfluencerController closedController;
 
-  ChatInputBar(
+  ChatInputsBar(
       {required this.messageController,
       this.icon,
       this.onPressed,
       required this.chatData,
       required this.focusNode,
-      required this.replyMessage,
+      required this.replyMessages,
       required this.onCancelReply,
-      required this.openedController});
+      required this.closedController
+      // this.controller,
+      });
 
   @override
-  State<ChatInputBar> createState() => _ChatInputBarState();
+  State<ChatInputsBar> createState() => _ChatInputsBarState();
 }
 
-class _ChatInputBarState extends State<ChatInputBar> {
+class _ChatInputsBarState extends State<ChatInputsBar> {
   int popTime = 0;
   var sendButton = false.obs;
-  late ChatsInputController controller;
+  late ChatsInputsController controllers;
 
   @override
   void initState() {
     super.initState();
-    controller = ChatsInputController(
+    controllers = ChatsInputsController(
         chatData: widget.chatData,
         messageController: widget.messageController,
         focusNode: widget.focusNode,
         onCancelReply: widget.onCancelReply,
-        openController: widget.openedController);
+        closedController: widget.closedController);
   }
-
-  //  controller.sendMessage(context, widget.messageController.text);
 
   @override
   Widget build(BuildContext context) {
-    final isReplying = widget.replyMessage != null;
-
+    final isReplying = widget.replyMessages != null;
     return SafeArea(
-        child: Container(
-      height: getVerticalSize(58),
-      margin: getMargin(right: 10),
-      decoration: AppDecoration.outlineIndigo505,
-      child: Row(
-        children: [
-          if (isReplying && widget.replyMessage.value != null)
-            BuildReply(
-              replyMessage: widget.replyMessage.value!,
-              onCancelReply: widget.onCancelReply,
-            ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border(
-              right: BorderSide(
-                width: 1,
-                color: ColorConstant.gray600Ab,
+      child: Container(
+        height: getVerticalSize(58),
+        margin: getMargin(right: 10),
+        decoration: AppDecoration.outlineIndigo505,
+        child: Row(
+          children: [
+            if (isReplying && widget.replyMessages.value != null)
+              BuildReply(
+                replyMessage: widget.replyMessages.value!,
+                onCancelReply: widget.onCancelReply,
               ),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                right: 10.0,
-              ),
-              child: IconButton(
-                icon: Icon(
-                  widget.icon,
-                  size: 30,
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                right: BorderSide(
+                  width: 1,
+                  color: ColorConstant.gray600Ab,
                 ),
-                onPressed: widget.onPressed,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5, bottom: 6),
-              child: Center(
-                child: CustomTextFormField(
-                  width: getHorizontalSize(334),
-                  focusNode: widget.focusNode,
-                  autofocus: true,
-                  onChanged: (value) {
-                    sendButton.value = value.isNotEmpty;
-                  },
-                  hintText: "lbl_write_a_message".tr,
-                  onSubmitted: (_) => controller.sendMessage(
-                      context, controller.messageController.text),
-                  padding: TextFormFieldPadding.PaddingT11,
-                  fontStyle: TextFormFieldFontStyle.SatoshiLight14,
-                  textInputAction: TextInputAction.done,
-                  controller: controller.messageController,
-                  alignment: Alignment.center,
-                  suffix: Obx(() {
-                    return Container(
-                      // margin: getMargin(left: 30, top: 10, right: 16, bottom: 10),
-                      child: IconButton(
-                        onPressed: sendButton.value
-                            ? () async {
-                                await controller.sendMessage(
-                                    context, controller.messageController.text);
-                              }
-                            : null,
-                        icon: sendButton.value
-                            ? Icon(
-                                Icons.send,
-                                color: ColorConstant.black900,
-                                size: 24.0,
-                              )
-                            : CustomImageView(
-                                onTap: () {
-                                  popTime = 3;
-                                  Get.to(CameraScreen());
-                                },
-                                height: 24,
-                                width: 24,
-                                svgPath: ImageConstant.imgCamera,
-                                // Add any other necessary properties and styling for CustomImageView
-                              ),
-                      ),
-                    );
-                  }),
-                  suffixConstraints:
-                      BoxConstraints(maxHeight: getVerticalSize(42)),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 10.0,
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    widget.icon,
+                    size: 30,
+                  ),
+                  onPressed: widget.onPressed,
                 ),
               ),
             ),
-          )
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, bottom: 6),
+                child: Center(
+                  child: CustomTextFormField(
+                    width: getHorizontalSize(334),
+                    focusNode: widget.focusNode,
+                    autofocus: true,
+                    onChanged: (value) {
+                      sendButton.value = value.isNotEmpty;
+                    },
+                    hintText: "lbl_write_a_message".tr,
+                    onSubmitted: (_) => controllers.sendMessage(
+                        context, controllers.messageController.text),
+                    padding: TextFormFieldPadding.PaddingT11,
+                    fontStyle: TextFormFieldFontStyle.SatoshiLight14,
+                    textInputAction: TextInputAction.done,
+                    controller: controllers.messageController,
+                    alignment: Alignment.center,
+                    suffix: Obx(() {
+                      return Container(
+                        // margin: getMargin(left: 30, top: 10, right: 16, bottom: 10),
+                        child: IconButton(
+                          onPressed: sendButton.value
+                              ? () async {
+                                  await controllers.sendMessage(context,
+                                      controllers.messageController.text);
+                                }
+                              : null,
+                          icon: sendButton.value
+                              ? Icon(
+                                  Icons.send,
+                                  color: ColorConstant.black900,
+                                  size: 24.0,
+                                )
+                              : CustomImageView(
+                                  onTap: () {
+                                    popTime = 3;
+                                    Get.to(CameraScreen());
+                                  },
+                                  height: 24,
+                                  width: 24,
+                                  svgPath: ImageConstant.imgCamera,
+                                  // Add any other necessary properties and styling for CustomImageView
+                                ),
+                        ),
+                      );
+                    }),
+                    suffixConstraints:
+                        BoxConstraints(maxHeight: getVerticalSize(42)),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
 
-class ChatsInputController extends GetxController {
+class ChatsInputsController extends GetxController {
   final ChatData chatData;
   final TextEditingController messageController;
   final FocusNode focusNode;
   final VoidCallback onCancelReply;
-  final ChatsOpenedController openController;
+  final ChatsInfluencerController closedController;
 
-  ChatsInputController(
+  ChatsInputsController(
       {required this.chatData,
       required this.messageController,
       required this.focusNode,
       required this.onCancelReply,
-      required this.openController});
+      required this.closedController});
 
-  RxList<Message> messageModelObj = <Message>[].obs;
+  RxList<Message> messageModelObjs = <Message>[].obs;
   var message = "".obs;
   bool empty = false;
   var token;
@@ -191,7 +191,7 @@ class ChatsInputController extends GetxController {
     socketClient.connect();
 
     socketClient.socket.on('receive_message', (data) {
-      messageModelObj.add(data);
+      messageModelObjs.add(data);
       update();
     });
 
@@ -243,24 +243,16 @@ class ChatsInputController extends GetxController {
       if (response.isOk) {
         print('Message sent and stored successfully');
 
-        messageModelObj.add(newMessage);
+        messageModelObjs.add(newMessage);
 
         update();
 
-        openController.getUser(chatData.chatId);
+        closedController.getUser(chatData.chatId);
 
         socketClient.socket.emit('send_message', newMessage.toJson());
 
         messageController.clear();
 
-        // Scroll to the bottom of the list
-        /* Future.delayed(Duration(milliseconds: 300), () {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }); */
         if (_scrollController.hasClients) {
           scrollToBottom();
         } else {

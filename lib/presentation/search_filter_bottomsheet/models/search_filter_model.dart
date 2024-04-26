@@ -41,7 +41,7 @@ class SearchFilterModel {
     SelectionPopupModel(id: 15, title: "Others", value: "Others"),  
     ]);
  
-  Rx<List<SelectionPopupModel>> dropdownItemList1 = Rx([
+  Rx<List<SelectionPopupModel>>dropdownItemList1 = Rx([
     SelectionPopupModel(id: 0, title: "Select Country"),
     SelectionPopupModel(id:1, title: 'Afghanistan', code: '+93', flag: '🇦🇫'),
     SelectionPopupModel(id:2, title: 'Algeria', code: '+213', flag: '🇩🇿'),
