@@ -194,19 +194,6 @@ class ChatsInputController extends GetxController {
 
     socketClient.connect();
 
-    socketClient.handleReceivedMessage();
-
-    socketClient.socket.on('connected', (data) {
-      messageModelObj.add(data);
-      isConnected.value = true;
-      update();
-    });
-
-    socketClient.socket.on('error', (errorData) {
-      print('Socket Error: $errorData');
-      isConnected.value = false;
-      update();
-    });
     scrollToBottom();
   }
 
@@ -300,9 +287,11 @@ class ChatsInputController extends GetxController {
 
         messageModelObj.add(newMessage);
 
+        socketClient.sendMessage(chatData, messageText);
+
         update();
 
-        Message newsMessage = Message(
+      /*   Message newsMessage = Message(
           id: chatData.id,
           chatId: chatData.chatId,
           authorId: chatData.creatorId,
@@ -312,15 +301,13 @@ class ChatsInputController extends GetxController {
           messageId: messageId,
           createdAt: createdAt,
           updatedAt: createdAt,
-        );
+        ); */
       //  addMessage(newsMessage, chatData.chatId);
 
      //   openController.getUser(chatData.chatId);
 
-        socketClient.sendMessage(messageText);
-
-        socketClient.socket.emit('message.create', newMessage.toJson());
         update();
+
         messageController.clear();
 
          focusNode.requestFocus();

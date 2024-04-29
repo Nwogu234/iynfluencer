@@ -40,23 +40,9 @@ class ChatsOpenedController extends GetxController {
 
   @override
   void onInit() {
+     _socketClient.connect();
     super.onInit();
 
-    socketClient.connect();
-
-    socketClient.socket.on('connected', (data) {
-      messages.add(data.toString());
-      _socketClient.isConnected.value = true;
-      update();
-    });
-
-    socketClient.socket.on('error', (errorData) {
-      print('Socket Error: $errorData');
-       _socketClient.isConnected.value = false;
-        update();
-    });
-
-    socketClient.handleReceivedMessage();
     print('Chat data before getUser: $chatData');
 
     final String chatId = chatData.chatId;
@@ -86,7 +72,7 @@ class ChatsOpenedController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        loadMessages(chatId);
+       // loadMessages(chatId);
         await fetchAllMessagesWithInfluencer(chatId).then((value) {
           isLoading.value = false;
         }).catchError((err) {
