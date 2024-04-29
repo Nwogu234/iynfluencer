@@ -48,6 +48,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   focused_menu: ^1.0.5
+  rxdart: ^0.27.7
 flutter:
   uses-material-design: true
   assets:

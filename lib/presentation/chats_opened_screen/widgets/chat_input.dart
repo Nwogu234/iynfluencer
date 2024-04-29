@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -12,12 +12,7 @@ import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/camera_screen/camera_scree.dart';
-
-import '../../../core/utils/image_constant.dart';
-import '../../../core/utils/size_utils.dart';
-import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
-import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/custom_text_form_field.dart';
 
 class ChatInputBar extends StatefulWidget {
@@ -48,6 +43,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
   int popTime = 0;
   var sendButton = false.obs;
   late ChatsInputController controller;
+  bool isEmojiWidgetShown = false;
+  bool EmojiWidgetShown = true;   
 
   @override
   void initState() {
@@ -58,6 +55,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
         focusNode: widget.focusNode,
         onCancelReply: widget.onCancelReply,
         openController: widget.openedController);
+
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
+        widget.openedController.hideEmojiWidget();
+      }
+    });
   }
 
   //  controller.sendMessage(context, widget.messageController.text);
@@ -105,7 +108,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
               child: Center(
                 child: CustomTextFormField(
                   width: getHorizontalSize(334),
-                  focusNode: widget.focusNode,
+                  focusNode: EmojiWidgetShown ? null : widget.focusNode,
                   autofocus: true,
                   onChanged: (value) {
                     sendButton.value = value.isNotEmpty;
@@ -183,6 +186,7 @@ class ChatsInputController extends GetxController {
   final ScrollController _scrollController = ScrollController();
   final ApiClients apiClient = ApiClients();
   final SocketClient socketClient = SocketClient.to;
+   RxBool isConnected = false.obs;
 
   @override
   void onInit() {
@@ -190,16 +194,67 @@ class ChatsInputController extends GetxController {
 
     socketClient.connect();
 
-    socketClient.socket.on('receive_message', (data) {
+    socketClient.handleReceivedMessage();
+
+    socketClient.socket.on('connected', (data) {
       messageModelObj.add(data);
+      isConnected.value = true;
       update();
     });
 
     socketClient.socket.on('error', (errorData) {
       print('Socket Error: $errorData');
+      isConnected.value = false;
+      update();
     });
     scrollToBottom();
   }
+
+  Future<void> addMessage(Message message, String chatId) async {
+    List<Message> messages = await loadMessages(chatId);
+    messages.add(message);
+    await saveMessages(messages, chatId);
+  }
+
+  
+ Future<void> saveMessages(List<Message> messages, String chatId) async {
+  try {
+    final List<String> serializedMessages = messages.map((message) => jsonEncode(message.toJson())).toList();
+    final String serializedMessagesString = jsonEncode(serializedMessages);
+    await storage.write(key: 'messages_$chatId', value: serializedMessagesString);
+    print('Messages saved successfully for chat ID: $chatId');
+  } catch (e) {
+    print('Error saving messages: $e');
+    // Handle error as needed
+  }
+}
+   Future<List<Message>> loadMessages(String chatId) async {
+  final serializedMessagesString = await storage.read(key: 'messages_$chatId');
+  
+  if (serializedMessagesString != null && serializedMessagesString.isNotEmpty) {
+    final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
+    
+    // Check if the decoded data is a list
+    if (decodedList is List) {
+      final List<Map<String, dynamic>> serializedMessages =
+          decodedList.cast<Map<String, dynamic>>();
+      
+      // Map each Map<String, dynamic> to a Message object using Message.fromJson
+      final List<Message> messages = serializedMessages
+          .map((map) => Message.fromJson(map))
+          .toList();
+      
+      return messages;
+    } else {
+      print('Invalid JSON format: $serializedMessagesString');
+      return [];
+    }
+  } else {
+    print('No messages found for chatId: $chatId');
+    return [];
+  }
+}
+
 
   Future<void> sendMessage(BuildContext context, String messageText) async {
     FocusScope.of(context).unfocus();
@@ -247,20 +302,29 @@ class ChatsInputController extends GetxController {
 
         update();
 
-        openController.getUser(chatData.chatId);
+        Message newsMessage = Message(
+          id: chatData.id,
+          chatId: chatData.chatId,
+          authorId: chatData.creatorId,
+          text: messageText,
+          authorUserId: chatData.creatorUserId,
+          blockedByRecipient: chatData.blockedByInfluencer,
+          messageId: messageId,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+        );
+      //  addMessage(newsMessage, chatData.chatId);
 
-        socketClient.socket.emit('send_message', newMessage.toJson());
+     //   openController.getUser(chatData.chatId);
 
+        socketClient.sendMessage(messageText);
+
+        socketClient.socket.emit('message.create', newMessage.toJson());
+        update();
         messageController.clear();
 
-        // Scroll to the bottom of the list
-        /* Future.delayed(Duration(milliseconds: 300), () {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }); */
+         focusNode.requestFocus();
+
         if (_scrollController.hasClients) {
           scrollToBottom();
         } else {
@@ -290,6 +354,7 @@ class ChatsInputController extends GetxController {
   @override
   void onClose() {
     _scrollController.dispose();
+     socketClient.disconnect();
     super.onClose();
   }
 }

@@ -1,11 +1,16 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/messages_page.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/datelable.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -42,6 +47,11 @@ class ChatsOpenedScreen extends StatefulWidget {
 
 class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     with SingleTickerProviderStateMixin {
+  final MessagesController messageController =
+      Get.put(MessagesController(MessagesModel().obs));
+
+  BottomBarController bottomBarController = Get.put(BottomBarController());
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // ChatsOpenedController controller = Get.put(ChatsOpenedController());
   late AnimationController animationController;
@@ -104,7 +114,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
       selectedInfluencer: widget.selectedInfluencer,
     );
 
-    controller.getUser(widget.chatData.chatId);
+    // controller.getUser(widget.chatData.chatId);
+    controller.onInit();
   }
 
   Future<void> _refresh() async {
@@ -114,6 +125,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   @override
   void dispose() {
     animationController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -137,11 +149,11 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
             svgPath: ImageConstant.imgArrowleftGray600,
             margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
             onTap: () {
-              onTapArrowleft8(widget.chatData);
+              onTapArrowleft8();
             },
           ),
           title: Padding(
-            padding: getPadding(left: 2, bottom: 2, top: 2),
+            padding: getPadding(left: 2, top: 3),
             child: Row(
               children: [
                 AppbarCircleimage(
@@ -151,30 +163,10 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                 AppbarSubtitle(
                   text: titleName.tr,
                   margin: getMargin(left: 14, top: 5, bottom: 20),
-                )
+                ),
               ],
             ),
           ),
-          actions: [
-            AppbarImage(
-              height: getSize(18),
-              width: getSize(18),
-              svgPath: ImageConstant.imgFrame18x18,
-              margin: getMargin(left: 23, right: 8, bottom: 10),
-              onTap: () {
-                Get.back();
-              },
-            ),
-            AppbarImage(
-              height: getSize(20),
-              width: getSize(20),
-              svgPath: ImageConstant.imgFrame20x20,
-              margin: getMargin(left: 23, right: 22, bottom: 10),
-              onTap: () {
-                Get.back();
-              },
-            )
-          ],
           styleType: Style.bgOutlineIndigo50_1,
         ),
         body: RefreshIndicator(
@@ -207,7 +199,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   padding: getPadding(left: 19, right: 19),
                   child: Column(
                     children: [
-                      //  SizedBox(height: 16), Adjust spacing
                       SizedBox(height: 16),
                       DateLable(
                         dateTime: widget.chatData.createdAt,
@@ -217,15 +208,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                         child: ListView.builder(
                           controller: scrollController,
                           reverse: true,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          //  shrinkWrap: true,
+                          //  physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.messageModelObj.length,
                           itemBuilder: (context, index) {
-                            final sortedMessages =
+                            /*  final sortedMessages =
                                 controller.messageModelObj.reversed.toList();
                             final reversedIndex =
-                                controller.messageModelObj.length - 1 - index;
-                            final message = sortedMessages[reversedIndex];
+                                controller.messageModelObj.length - 1 - index; */
+                            final message = controller.messageModelObj[index];
                             String formattedDateTime = DateFormat.jm('en_US')
                                 .format(message.createdAt);
                             if (controller.messageModelObj.isEmpty) {
@@ -273,6 +264,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                                 chatData: widget.chatData,
                                 icon: Icons.emoji_emotions_outlined,
                                 onPressed: () {
+                                  controller.hideEmojiWidget();
                                   focusNode.unfocus();
                                   focusNode.canRequestFocus = false;
                                   show.value = !show.value;
@@ -321,8 +313,9 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     widget.replyMessage.value = null;
   }
 
-  onTapArrowleft8(ChatData chatData) {
-    Get.back();
-    controller.getUser(chatData.chatId);
+  onTapArrowleft8() {
+    messageController.getUser();
+    messageController.setUnreadCreator(0);
+    Get.back(result: true);
   }
 }

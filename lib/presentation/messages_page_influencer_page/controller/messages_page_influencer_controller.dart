@@ -29,6 +29,7 @@ var messages = <String>[].obs;
   List<ChatData> chatList = <ChatData>[].obs;
   late RxList<ChatData> chatModelObj = <ChatData>[].obs;
   Rx<ChatData?> lastMessage = Rx<ChatData?>(null);
+  RxInt unreadInfluencer = 0.obs;
 
   
 
@@ -38,7 +39,7 @@ var messages = <String>[].obs;
 
     socketClient.connect();
 
-    socketClient.socket.on('receive_message', (data) {
+    socketClient.socket.on('connected', (data) {
       messages.add(data.toString());
       update();
     });
@@ -56,6 +57,10 @@ var messages = <String>[].obs;
     getUser();
   }
 
+  
+  void setUnreadInfluencer(int value) {
+    unreadInfluencer.value = value;
+  }
 
     
   getUser() async {
@@ -101,8 +106,7 @@ var messages = <String>[].obs;
         });
       }
       if (chatList.isEmpty) {
-        error('');
-        isTrendLoading.value = false;
+        error( 'You don\'s have Creators in your chats');
         empty = true;
         print('No chat data available.');
       } else {

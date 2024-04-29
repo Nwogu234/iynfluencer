@@ -31,6 +31,8 @@ class MessagesController extends GetxController {
   List<ChatData> chatList = <ChatData>[].obs;
   late RxList<ChatData> chatModelObj = <ChatData>[].obs;
   Rx<ChatData?> lastMessage = Rx<ChatData?>(null);
+  RxInt unreadCreator = 0.obs;
+
 
 
   @override
@@ -39,7 +41,7 @@ class MessagesController extends GetxController {
     
     socketClient.connect();
   
-    socketClient.socket.on('receive_message', (data) {
+    socketClient.socket.on('connected', (data) {
       messages.add(data.toString());
       update();
     });
@@ -54,7 +56,6 @@ class MessagesController extends GetxController {
   
   getUser() async {
     isLoading.value = true;
-    error('');
     token = await storage.read(key: "token");
     try {
       await user.getUser();
@@ -62,7 +63,6 @@ class MessagesController extends GetxController {
         error('Something went wrong');
         isLoading.value = false;
       } else {
-        error('');
         getInfluencersChat().then((value) {
           isLoading.value = false;
         }).catchError((err) {
@@ -86,7 +86,6 @@ class MessagesController extends GetxController {
 
   Future<void> getInfluencersChat() async {
     try {
-      error('');
       isTrendLoading.value = true;
       token = await storage.read(key: "token");
       final Response response =
@@ -101,8 +100,7 @@ class MessagesController extends GetxController {
         });
       }
       if (chatList.isEmpty) {
-        error('');
-        isTrendLoading.value = false;
+        error('You don\'s have Influencers in your chats');
         empty = true;
         print('No chat data available.');
       } else {
@@ -116,6 +114,10 @@ class MessagesController extends GetxController {
       error('Something went wrong');
       isTrendLoading.value = false;
     }
+  }
+
+  void setUnreadCreator(int value) {
+    unreadCreator.value = value;
   }
 
 

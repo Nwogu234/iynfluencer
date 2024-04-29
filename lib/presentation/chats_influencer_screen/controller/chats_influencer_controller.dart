@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
@@ -75,11 +77,12 @@ class ChatsInfluencerController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-      /*   fetchAllMessagesWithCreators(chatId).then((value) {
+         loadMessages(chatId);
+        fetchAllMessagesWithCreators(chatId).then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
-        }); */
+        }); 
      //  onTapChatCard(selectedInfluencer, chatData);
       }
     } catch (e) {
@@ -112,6 +115,7 @@ class ChatsInfluencerController extends GetxController {
             messages.add(message);
           }
           messageModelObjs.assignAll(messages);
+          saveMessages(messages, chatId);
         } else {
           error('Failed to fetch messages: Data not available');
         }
@@ -125,6 +129,45 @@ class ChatsInfluencerController extends GetxController {
       isTrendLoading.value = false;
     }
   }
+
+  
+ Future<void> saveMessages(List<Message> messages, String chatId) async {
+  try {
+    final List<String> serializedMessages = messages.map((message) => jsonEncode(message.toJson())).toList();
+    final String serializedMessagesString = jsonEncode(serializedMessages);
+    await storage.write(key: 'messages_$chatId', value: serializedMessagesString);
+    print('Messages saved successfully for chat ID: $chatId');
+  } catch (e) {
+    print('Error saving messages: $e');
+    // Handle error as needed
+  }
+}
+   Future<List<Message>> loadMessages(String chatId) async {
+  final serializedMessagesString = await storage.read(key: 'messages_$chatId');
+  
+  if (serializedMessagesString != null && serializedMessagesString.isNotEmpty) {
+    final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
+    
+    // Check if the decoded data is a list
+    if (decodedList is List) {
+      final List<Map<String, dynamic>> serializedMessages =
+          decodedList.cast<Map<String, dynamic>>();
+      
+      // Map each Map<String, dynamic> to a Message object using Message.fromJson
+      final List<Message> messages = serializedMessages
+          .map((map) => Message.fromJson(map))
+          .toList();
+      
+      return messages;
+    } else {
+      print('Invalid JSON format: $serializedMessagesString');
+      return [];
+    }
+  } else {
+    print('No messages found for chatId: $chatId');
+    return [];
+  }
+}
  
   Future<void> deleteIdMessage(String deleteMessage) async {
     try {
@@ -254,6 +297,26 @@ class ChatsInfluencerController extends GetxController {
     isLoading.value = false;
   }
 } 
+
+/* 
+void saveMessages(List<Message> messages) async {
+  final List<String> serializedMessages = messages.map((message) => jsonEncode(message.toJson())).toList();
+  final String serializedMessagesString = jsonEncode(serializedMessages);
+  await storage.write(key: 'messages_${chatData.chatId}', value: serializedMessagesString);
+}
+ */
+/* 
+Future<List<Message>> loadMessages() async {
+  final String? serializedMessagesString = await storage.read(key: 'messages_${widget.chatData.chatId}');
+  if (serializedMessagesString != null) {
+    final List<dynamic> serializedMessages = jsonDecode(serializedMessagesString);
+    return serializedMessages.map((json) => Message.fromJson(json)).toList();
+  } else {
+    return [];
+  }
+} */
+
+
 
   String formatDateTime(String createdAt) {
     DateTime dateTime = DateTime.parse(createdAt);

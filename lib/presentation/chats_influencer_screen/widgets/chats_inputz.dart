@@ -223,10 +223,10 @@ class ChatsInputsController extends GetxController {
       final newMessage = Message(
         id: chatData.id,
         chatId: chatData.chatId,
-        authorId: chatData.creatorId,
+        authorId: chatData.influencerId,
         text: messageText,
-        authorUserId: chatData.creatorUserId,
-        blockedByRecipient: chatData.blockedByInfluencer,
+        authorUserId: chatData.influencerUserId,
+        blockedByRecipient: chatData.blockedByCreator,
         messageId: messageId,
         createdAt: createdAt,
         updatedAt: createdAt,
@@ -249,7 +249,7 @@ class ChatsInputsController extends GetxController {
 
         closedController.getUser(chatData.chatId);
 
-        socketClient.socket.emit('send_message', newMessage.toJson());
+        socketClient.socket.emit('message.create', newMessage.toJson());
 
         messageController.clear();
 
@@ -270,6 +270,8 @@ class ChatsInputsController extends GetxController {
       print('Error sending message: $e');
     }
   }
+
+  
 
   void scrollToBottom() {
     _scrollController.animateTo(

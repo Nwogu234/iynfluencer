@@ -26,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
       this.height,
       this.onChanged,
       this.onSubmitted,
+      this.onPressed,
       this.label});
 
   TextFormFieldShape? shape;
@@ -75,6 +76,8 @@ class CustomTextFormField extends StatelessWidget {
   void Function(String)? onChanged;
 
   void Function(String)? onSubmitted;
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

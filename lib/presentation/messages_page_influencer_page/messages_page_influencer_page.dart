@@ -159,23 +159,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                   ),
                                 ],
                               );
-                            } else if (controller.chatModelObj.isEmpty) {
-                              return ResponsiveEmptyWidget(
-                                errorMessage:
-                                    'You don\'s have Creators in your chats',
-                                buttonText: "Go to HomePage",
-                                onRetry: () {
-                                  influencerOneController.currentRoute.value =
-                                      AppRoutes.influencerHomeScreen;
-                                  Navigator.of(
-                                          Get.nestedKey(1)!.currentState!.context)
-                                      .pushReplacementNamed(
-                                          AppRoutes.influencerHomeScreen);
-                                  bottomBarController.selectedIndex.value = 3;
-                                },
-                                fullPage: true,
-                              );
-                            } else {
+                            }  else {
                                return SizedBox(
                           width: size.width,
                           height: getVerticalSize(800),

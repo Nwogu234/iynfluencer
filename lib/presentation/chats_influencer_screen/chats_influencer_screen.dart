@@ -13,6 +13,9 @@ import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chatbub
 import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_subtitle.dart';
@@ -36,6 +39,10 @@ class ChatsInfluencerScreen extends StatefulWidget {
 
 class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     with SingleTickerProviderStateMixin {
+
+  MessagesPageInfluencerController messageInfluencerController = Get.put(
+      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
   late String imageProvider;
@@ -101,6 +108,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
   @override
   void dispose() {
     animationController.dispose();
+   
     super.dispose();
   }
 
@@ -130,7 +138,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
             svgPath: ImageConstant.imgArrowleftGray600,
             margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
             onTap: () {
-              onTapArrowleft8(widget.chatData);
+              onTapArrowleft8();
             },
           ),
           title: Padding(
@@ -148,26 +156,6 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
               ],
             ),
           ),
-          actions: [
-            AppbarImage(
-              height: getSize(18),
-              width: getSize(18),
-              svgPath: ImageConstant.imgFrame18x18,
-              margin: getMargin(left: 23, right: 8, bottom: 10),
-              onTap: () {
-                Get.back();
-              },
-            ),
-            AppbarImage(
-              height: getSize(20),
-              width: getSize(20),
-              svgPath: ImageConstant.imgFrame20x20,
-              margin: getMargin(left: 23, right: 22, bottom: 10),
-              onTap: () {
-                Get.back();
-              },
-            )
-          ],
           styleType: Style.bgOutlineIndigo50_1,
         ),
         body: RefreshIndicator(
@@ -210,29 +198,23 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                         child: ListView.builder(
                           controller: scrollController,
                           reverse: true,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
                           itemCount: controllers.messageModelObjs.length,
                           itemBuilder: (context, index) {
-                            final sortedMessages =
+/*                             final sortedMessages =
                                 controllers.messageModelObjs.reversed.toList();
                             final reversedIndex =
-                                controllers.messageModelObjs.length - 1 - index;
-                            final message = sortedMessages[reversedIndex];
+                                controllers.messageModelObjs.length - 1 - index; */
+                            final message = controllers.messageModelObjs[index];
                             String formattedDateTime = DateFormat.jm('en_US')
                                 .format(message.createdAt);
-                            if (index == sortedMessages.length) {
-                              return Container(
-                                height: 70,
-                              );
-                            } else if (sortedMessages.isEmpty) {
+                            if (controllers.messageModelObjs.isEmpty) {
                               return SizedBox.shrink();
                             }
                             return ChatMessageBubblez(
                                 controller: controllers,
                                 messageText: message.text,
                                 isReceived: message.authorUserId !=
-                                    widget.chatData.creatorUserId,
+                                    widget.chatData.influencerUserId,
                                 timestamp: formattedDateTime,
                                 leadingImagePath: ImageConstant.imgVector,
                                 trailingImagePath: ImageConstant.imgVector,
@@ -273,7 +255,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                   focusNode.canRequestFocus = false;
                                   show.value = !show.value;
                                 },
-                                messageController: controllers.messageController,
+                                messageController:
+                                    controllers.messageController,
                                 closedController: controllers,
                               ),
                               show.value
@@ -317,8 +300,11 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     widget.replyMessages.value = null;
   }
 
-  onTapArrowleft8(ChatData chatData) {
-    Get.back();
-    controllers.getUser(chatData.chatId);
+ onTapArrowleft8() {
+    messageInfluencerController.getUser();
+    messageInfluencerController.setUnreadInfluencer(0);
+    Get.back(result: true);
   }
 }
+
+
