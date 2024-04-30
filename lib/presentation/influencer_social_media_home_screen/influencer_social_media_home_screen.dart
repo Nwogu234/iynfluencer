@@ -121,7 +121,7 @@ void _onScroll() {
                      Padding(
                        padding: getPadding(top: 19),
                        child: Container(
-                         height: double.maxFinite,
+                       //  height: double.maxFinite,
                          width: double.infinity,
                          child: Obx(
                            () => ListView.separated(

@@ -31,15 +31,17 @@ class MessagesController extends GetxController {
   List<ChatData> chatList = <ChatData>[].obs;
   late RxList<ChatData> chatModelObj = <ChatData>[].obs;
   Rx<ChatData?> lastMessage = Rx<ChatData?>(null);
+  RxInt unreadCreator = 0.obs;
+
 
 
   @override
   void onInit() {
     super.onInit();
-    // Connect to the socket.io server
+    
     socketClient.connect();
-    // Handle incoming messages
-    socketClient.socket.on('receive_message', (data) {
+  
+    socketClient.socket.on('connected', (data) {
       messages.add(data.toString());
       update();
     });
@@ -54,7 +56,6 @@ class MessagesController extends GetxController {
   
   getUser() async {
     isLoading.value = true;
-    error('');
     token = await storage.read(key: "token");
     try {
       await user.getUser();
@@ -62,7 +63,6 @@ class MessagesController extends GetxController {
         error('Something went wrong');
         isLoading.value = false;
       } else {
-        error('');
         getInfluencersChat().then((value) {
           isLoading.value = false;
         }).catchError((err) {
@@ -86,12 +86,12 @@ class MessagesController extends GetxController {
 
   Future<void> getInfluencersChat() async {
     try {
-      error('');
       isTrendLoading.value = true;
       token = await storage.read(key: "token");
       final Response response =
           await apiClient.getAllChatsWithInfluencers(token);
       List<dynamic> chatJsonList = response.body['data']['docs'];
+      chatList.clear();
       print(chatJsonList.length);
       print(chatJsonList);
       if (chatJsonList.length > 0) {
@@ -100,8 +100,7 @@ class MessagesController extends GetxController {
         });
       }
       if (chatList.isEmpty) {
-        error('');
-        isTrendLoading.value = false;
+        error('You don\'s have Influencers in your chats');
         empty = true;
         print('No chat data available.');
       } else {
@@ -117,11 +116,10 @@ class MessagesController extends GetxController {
     }
   }
 
-  void sendMessage(String text) {
-    if (text.isNotEmpty) {
-      socketClient.socket.emit('send_message', text);
-    }
+  void setUnreadCreator(int value) {
+    unreadCreator.value = value;
   }
+
 
   @override
   void onClose() {

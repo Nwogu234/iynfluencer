@@ -251,15 +251,30 @@ class PostPageScreen extends GetWidget {
                             ],
                             ),
                           ),       
-                       AppbarCircleimage(
-                         url: homeController.user.userModelObj.value.avatar,
-                         margin: EdgeInsets.only(left: 20, top: 14, bottom: 14),
-                           onTap: openDrawer,
+                       AppbarImage(
+                          onTap: () {
+                          print("AppbarImage onTap triggered");
+                          controller.homcont.currentRoute.value=AppRoutes.homeCreatorPage;
+                          Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
+                          controller.bumcont.selectedIndex.value = 0;
+                         },
+                         height: getSize(
+                             60,
+                           ),
+                         width: getSize(
+                           60,
+                           ),
+                         svgPath: ImageConstant.imgCancel,
+                         margin: getMargin(
+                          left: 8,
+                          top: 17,
+                          bottom: 16,
+                         ),
                         ),
                     ],
                   ),
                 ),
-                Padding(
+   /*              Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Container(
                     height: getVerticalSize(87),
@@ -319,13 +334,13 @@ class PostPageScreen extends GetWidget {
                       ],
                     ),
                   ),
-                ),
+                ), */
              SizedBox(
               width: size.width,
               child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               padding: getPadding(
-                top: 35,
+                top: 15,
               ),
               child: Form(
                 key: controller.formKeyMain,
@@ -341,7 +356,7 @@ class PostPageScreen extends GetWidget {
                     children: [
                       CustomTextFormField(
                         width: getHorizontalSize(
-                          216,
+                          316,
                         ),
                         focusNode: FocusNode(),
                         autofocus: true,
@@ -792,7 +807,24 @@ class PostPageScreen extends GetWidget {
                        ],
                      ),
                    ),
-                         
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical:10
+                      ),
+                      child: Center(
+                        child: AppbarButton(
+                              margin: getMargin(
+                              left: 21,
+                              top: 13,
+                              right: 21,
+                              bottom: 12,
+                             ),
+                                           onTap: () {
+                        controller.submitForm(context, fromHire, fromHireInfluencerId);
+                                          },
+                                          ),
+                      ),
+                    ),
                     ],
                   ),
                 ),

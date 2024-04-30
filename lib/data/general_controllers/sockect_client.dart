@@ -1,76 +1,120 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
+import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketClient extends GetxService {
   late IO.Socket socket;
-  final _isConnected = false.obs;
+  RxBool isConnected = false.obs;
+  Rx<Message?> receivedMessage = Rx<Message?>(null);
+  var sentMessages = <Message>[].obs;
+  UserController user = Get.find<UserController>();
 
   // Make SocketClient a singleton
   static SocketClient get to => Get.find();
+  var messages = <String>[].obs;
 
   @override
   void onInit() {
-    var storage =  FlutterSecureStorage();
-    var token = storage.read(key: 'token');
     super.onInit();
-    _initSocket(token);
+    _initSocket();
   }
 
-  void _initSocket(token) {
+  void _initSocket() async {
     // Initialize the socket connection
-    socket = IO.io('https://iynf-kong-akbf9.ondigitalocean.app/api/v1/chat-socket', <String, dynamic>{
-      'transports': ['websocket'],
-      'extraHeaders': {
-        'authorization': token,
-      },
-      'autoConnect': false,
-    });
+    var storage = FlutterSecureStorage();
+    var token = await storage.read(key: 'token');
+    socket = IO.io(
+        // 'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/chat-socket:5046',
+        'wss://iynf-chat-hgkkb.ondigitalocean.app',
+        <String, dynamic>{
+          'transports': ['websocket'],
+          'extraHeaders': {
+           'authorization': token,
+          },
+          'autoConnect': false,
+        });
 
     // Handle different socket events
-    socket.onConnect((_) => _isConnected.value = true);
-    socket.onDisconnect((_) => _isConnected.value = false);
+    socket.onConnect((_) => isConnected.value = true);
+    socket.onDisconnect((_) => isConnected.value = false);
+
+    //userJoin event
     socket.on('userJoin', (data) {
-      print('user joined');
+      var chatId = data['chatId'];
+      var userFirstName = user.userModelObj().firstName;
+      if (chatId != null && userFirstName != null) {
+        print('User $userFirstName has joined the chat with chat ID: $chatId');
+        socket.emit('userJoin', '$userFirstName has joined the chat');
+      } else {
+        print('Incomplete data received for userJoin event');
+      }
     });
 
+    //userLeave event
     socket.on('userLeave', (data) {
-      print('user left');
+      var chatId = data['chatId'];
+      var userFirstName = user.userModelObj().firstName;
+      if (chatId != null && userFirstName != null) {
+        print('User $userFirstName has left the chat with chat ID: $chatId');
+        socket.emit('userLeave', '$userFirstName has left the chat');
+      } else {
+        print('Incomplete data received for userLeave event');
+      }
     });
 
-    socket.on('onMessageCreate', (data) {
-
-    });
-      // setState(() {
-      //   messages.add(data);
-      // })};
-    // ... Other event handlers
+    
   }
 
-  bool get isConnected => _isConnected.value;
+  bool get hasConnected => isConnected.value;
 
   // Method to connect to the socket
   void connect() {
-    if (!_isConnected.value) {
+    if (!isConnected.value) {
       socket.connect();
-      _isConnected.value=true;
+      print(socket.connected);
+      isConnected.value = true;
+      print('connected');
     }
   }
 
   // Method to disconnect from the socket
   void disconnect() {
-    if (_isConnected.value) {
+    if (isConnected.value) {
       socket.disconnect();
-      _isConnected.value=false;
+      isConnected.value = false;
     }
   }
 
+  void sendMessage(ChatData chatData, String messageText) {
+    // Emit the onMessageCreate event with payload containing text, userId, and chat details
+    socket.emit('onMessageCreate', {
+      'text': messageText,
+      'userId': user.userModelObj().userId,
+      'chat': {
+        'chatId': chatData.chatId,
+        'creatorUserId': chatData.creatorUserId,
+        'influencerUserId': chatData.influencerUserId,
+      },
+    });
+  }
 
+  // listen to connection status
+  void listenToConnectionStatus() {
+    socket.onConnect((_) {
+      // WebSocket connected
+      isConnected.value = true;
+    });
 
-
-  //this is to listen for messages
-
-
-// Send and receive message logic goes here
-// ...
+    socket.onDisconnect((_) {
+      // WebSocket disconnected
+      isConnected.value = false;
+    });
+  }
 }

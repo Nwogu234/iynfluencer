@@ -67,30 +67,28 @@ void _onScroll() {
       child: Scaffold(
       body: Obx(() {
       if (controller.isLoading.value) {
-        return Stack(
-          children: [
-             PositionedDirectional(
-              top: 150,
-              start:150,
+        return Center(
+          child: Stack(
+            children: [
+             Positioned(
+                top: 150,
+                left:150,
                child: CustomLoadingWidget(
-                 animationController: animationController,
-              ),
+                animationController: animationController,
+                       ),
              ),
-          ],
-         
+            ],
+          ),
         );
       } else if (controller.error.value.isEmpty) {
-        return PositionedDirectional(
-           top: 150,
-           start:150,
-          child: ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: controller.getUser,
-            fullPage: true,
-          ),
+        return ResponsiveErrorWidget(
+          errorMessage: controller.error.value,
+          onRetry: controller.getUser,
+          fullPage: true,
         );
       } else {
         return SingleChildScrollView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
@@ -109,13 +107,6 @@ void _onScroll() {
                                     fontWeight: FontWeight.w600,
                                     ),
                             ),
-                            Text(
-                              'View All'.tr,
-                              textAlign: TextAlign.right,
-                             style: AppStyle.txtSatoshiBold16.copyWith(
-                                color:ColorConstant.cyan100,
-                             ),
-                            )
                           ],
                         ),
                         Padding(
@@ -178,27 +169,24 @@ void _onScroll() {
                         ),
                         
                           SizedBox(height: 15.h),
-                          SingleChildScrollView(
-                            controller: _scrollController,
-                            child: Column(
-                               children: [
-                             for (var index = 0;
-                                 index <
-                                     (controller.isRecommendedLoading.value
-                                         ? 5
-                                         : controller
-                                             .recommendedInfluencers.length);
-                                 index++)
-                               Padding(
-                                 padding: EdgeInsets.only(bottom: 24.h),
-                                 child: controller.isRecommendedLoading.value
-                                     ? Listrectangle50ItemSkeletonWidget()
-                                     : Listrectangle50ItemWidget(controller
-                                         .recommendedInfluencers[index]),
-                               ),
-                                ],
+                          Column(
+                             children: [
+                           for (var index = 0;
+                               index <
+                                   (controller.isRecommendedLoading.value
+                                       ? 5
+                                       : controller
+                                           .recommendedInfluencers.length);
+                               index++)
+                             Padding(
+                               padding: EdgeInsets.only(bottom: 24.h),
+                               child: controller.isRecommendedLoading.value
+                                   ? Listrectangle50ItemSkeletonWidget()
+                                   : Listrectangle50ItemWidget(controller
+                                       .recommendedInfluencers[index]),
                              ),
-                          ),
+                              ],
+                           ),
               ],
             ),
             ),

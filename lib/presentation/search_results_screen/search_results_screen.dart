@@ -18,8 +18,18 @@ import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   final String? query;
+  final String? fromDate;
+  final String? toDate;
+  final SelectionPopupModel? selectedNiche;
+  final SelectionPopupModel? selectedCountry;
 
-  const SearchResultsScreen({Key? key, this.query}) : super(key: key);
+  const SearchResultsScreen({
+    Key? key, 
+    this.fromDate,
+    this.toDate,
+    this.selectedNiche,
+    this.selectedCountry,
+    this.query}) : super(key: key);
 
   @override
   State<SearchResultsScreen> createState() => _SearchResultsScreenState();

@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import '../creator_hireslist_page/widgets/hires_item_widget.dart';
@@ -76,10 +77,23 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                         style: AppStyle.txtSatoshiBold14Gray900.copyWith(fontSize: 14.sp),
                       ),
                     ),
-                    CustomDropDown(
-                      width: 120.w,
-                      // ... [rest of the CustomDropDown properties]
-                    )
+                      CustomButton(
+                      height: getVerticalSize(
+                        35,
+                      ),
+                      width: getHorizontalSize(
+                        83,
+                      ),
+                      text: "lbl_filter".tr,
+                      variant: ButtonVariant.OutlineIndigo50,
+                      padding: ButtonPadding.PaddingT8,
+                      fontStyle: ButtonFontStyle.SatoshiBold135,
+                      prefixWidget: Container(
+                        child: CustomImageView(
+                          svgPath: ImageConstant.imgSignalBlack900,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               /*   Expanded(

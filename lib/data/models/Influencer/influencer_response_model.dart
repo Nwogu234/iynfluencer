@@ -121,4 +121,20 @@ class Influencer {
           .toList(),
     );
   }
+
+    Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'niche': niche,
+      'bio': bio,
+      'completed': completed,
+      'socials': socials,
+      'suspended': suspended,
+      'influencerId': influencerId,
+      'jobsDone': jobsDone,
+      'user': user,
+      'jobs': jobs,
+    };
+  }
 }

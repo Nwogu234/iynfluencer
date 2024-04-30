@@ -223,7 +223,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                             width: getHorizontalSize(
                               94,
                             ),
-                            text: listmediainflueItemModelObj.status!,
+                            text:  capitalizeFirstLetter(listmediainflueItemModelObj.status!),
                             // text: "lbl_accepted".tr,
                             margin: getMargin(
                               top: 5,
@@ -234,13 +234,17 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                     : ButtonVariant.FillGreenA10099,
                             shape: ButtonShape.RoundedBorder12,
                             padding: ButtonPadding.PaddingT4,
-                            fontStyle: ButtonFontStyle.SatoshiBold115Green700,
+                            fontStyle:  listmediainflueItemModelObj.status! == 'pending' ?
+                             ButtonFontStyle.SatoshiBold115Red700 :
+                            ButtonFontStyle.SatoshiBold115Green700,
                             prefixWidget: Container(
                               margin: getMargin(
                                 right: 4,
                               ),
                               child: CustomImageView(
-                                svgPath: ImageConstant.imgSearchGreen700,
+                                svgPath:  listmediainflueItemModelObj.status! == 'pending' ? 
+                                ImageConstant.imgClock :
+                                ImageConstant.imgSearchGreen700,
                               ),
                             ),
                           ),

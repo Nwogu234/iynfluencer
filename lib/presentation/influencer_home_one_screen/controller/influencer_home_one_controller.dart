@@ -13,6 +13,8 @@ class InfluencerHomeOneController extends GetxController {
 
   Rx<InfluencerHomeOneModel> influencerHomeOneModelObj =
       InfluencerHomeOneModel().obs;
+      
+      var currentRoute = AppRoutes.influencerHomeScreen.obs;
 
   void onSearchSubmitted(String query) {
     print("Submitted query: $query");

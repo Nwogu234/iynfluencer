@@ -348,7 +348,7 @@ class InfluencerProfileCommPostTabContainerScreen
                                             children: [
                                               InfluencerProfileAboutPage(
                                                   selectedInfluencer:
-                                                      listrectangle50),
+                                                      listrectangle50!),
                                               InfluencerProfileCommPostPage(),
                                               InfluencerProfileJobsPage(
                                                   selectedInfluencer:

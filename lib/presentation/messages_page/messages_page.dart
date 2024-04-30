@@ -3,14 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
-import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 import 'package:iynfluencer/widgets/custom_icon_button.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -32,6 +30,7 @@ class MessagesPage extends StatefulWidget {
 
 class _MessagesPageState extends State<MessagesPage>
     with SingleTickerProviderStateMixin {
+      
   final MessagesController controller =
       Get.put(MessagesController(MessagesModel().obs));
 
@@ -40,11 +39,8 @@ class _MessagesPageState extends State<MessagesPage>
   final HomeCreatorController homeController =
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
-  BottomBarController bottomBarController = Get.put(BottomBarController());
-
   late AnimationController animationController;
-  HomeCreatorContainerController homeContainerController =
-      Get.put(HomeCreatorContainerController());
+ 
 
   @override
   void initState() {
@@ -155,24 +151,10 @@ class _MessagesPageState extends State<MessagesPage>
                     ),
                   ],
                   );
-                    } else if (controller.empty) {
-                      return ResponsiveEmptyWidget(
-                        errorMessage:
-                            'You don\'s have Influencers in your chats',
-                        buttonText: "Send Message",
-                        onRetry: () {
-                          homeContainerController.currentRoute.value =
-                              AppRoutes.homeCreatorPage;
-                          Navigator.of(Get.nestedKey(1)!.currentState!.context)
-                              .pushReplacementNamed(AppRoutes.homeCreatorPage);
-                          bottomBarController.selectedIndex.value = 3;
-                        },
-                        fullPage: true,
-                      );
-                    } else {
+                    }  else {
                       return SizedBox(
                         width: size.width,
-                        height: getVerticalSize(800),
+                        height: MediaQuery.of(context).size.height,
                         child: Padding(
                           padding: getPadding(
                             bottom: 5,
@@ -201,12 +183,13 @@ class _MessagesPageState extends State<MessagesPage>
                                     } else {
                                       ChatData model =
                                           controller.chatList[index];
-                                      return MessagesPageItemWidget(model);
+                                      return MessagesPageItemWidget(
+                                        messagesPageItemModelObj: model);
                                     }
                                   },
                                 ),
                               ),
-                              CustomIconButton(
+                           /*    CustomIconButton(
                                 height: 54,
                                 width: 54,
                                 margin: getMargin(
@@ -216,7 +199,7 @@ class _MessagesPageState extends State<MessagesPage>
                                 child: CustomImageView(
                                   svgPath: ImageConstant.imgFrameWhiteA700,
                                 ),
-                              ),
+                              ), */
                             ],
                           ),
                         ),
