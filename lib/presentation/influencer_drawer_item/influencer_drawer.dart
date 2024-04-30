@@ -13,24 +13,44 @@ import '../influencer_home_screen/controller/influencer_home_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class InfluencerDraweritem extends StatelessWidget {
-  InfluencerDraweritem(this.controller, {Key? key}) : super(key: key);
+  final InfluencerHomeController controller;
+  final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  InfluencerHomeController controller;
-  final storage = new FlutterSecureStorage();
+  InfluencerDraweritem({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String? capitalize(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    final name =
+        "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}";
+
+    final img = controller.user.userModelObj.value.avatar;
     return Drawer(
         child: SingleChildScrollView(
             child: Container(
-                margin: EdgeInsets.only(right: 20.w),
+                 decoration: BoxDecoration(
+                   color:Colors.white
+                  ),
+              //  margin: EdgeInsets.only(right: 20.w),
                 padding: EdgeInsets.only(left: 19.w, top: 74.h, right: 19.w),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomImageView(
-                          imagePath: ImageConstant.imgFrame901,
+                          fit: BoxFit.cover,
+                          url: (controller.updatedProfileImage.value
+                                  as String?) ??
+                              img,
                           height: 48.h,
                           width: 48.w,
                           radius: BorderRadius.circular(24.r),
@@ -39,16 +59,18 @@ class InfluencerDraweritem extends StatelessWidget {
                           }),
                       Padding(
                           padding: EdgeInsets.only(top: 8.h),
-                          child: Text("lbl_emma_williams".tr,
+                          child: Text(name,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
-                      Padding(
+                       Padding(
                           padding: EdgeInsets.only(left: 1.w),
-                          child: Text("lbl_emmawlm".tr,
+                          child: Text(
+                             "@${controller.user.userModelObj.value.firstName}"
+                                  .tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight125Gray600ab)),
+                              style: AppStyle.txtSatoshiLight125Gray600ab)), 
                       Padding(
                           padding: EdgeInsets.only(top: 27.h),
                           child: Divider(
@@ -75,15 +97,17 @@ class InfluencerDraweritem extends StatelessWidget {
                             onTapMenutab03();
                           },
                           child: Padding(
-                              padding: EdgeInsets.only(left: 1.w, top: 20.h, right: 8.w),
+                              padding: EdgeInsets.only(
+                                  left: 1.w, top: 20.h, right: 8.w),
                               child: Row(children: [
                                 CustomImageView(
                                     svgPath:
-                                    ImageConstant.imgFrameBlueGray40024x24,
+                                        ImageConstant.imgFrameBlueGray40024x24,
                                     height: 24.h,
                                     width: 24.w),
                                 Padding(
-                                    padding: EdgeInsets.only(left: 14.w, top: 1.h),
+                                    padding:
+                                        EdgeInsets.only(left: 14.w, top: 1.h),
                                     child: Text("lbl_notifications".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
@@ -91,13 +115,17 @@ class InfluencerDraweritem extends StatelessWidget {
                                 Spacer(),
                                 Container(
                                     width: 20.w,
-                                    margin: EdgeInsets.only(top: 3.h, bottom: 1.h),
+                                    margin:
+                                        EdgeInsets.only(top: 3.h, bottom: 1.h),
                                     padding: EdgeInsets.only(
-                                        left: 4.w, top: 1.h, right: 4.w, bottom: 1.h),
+                                        left: 4.w,
+                                        top: 1.h,
+                                        right: 4.w,
+                                        bottom: 1.h),
                                     decoration: AppDecoration.txtFillRed500
                                         .copyWith(
-                                        borderRadius: BorderRadius.circular(
-                                            11.r)),
+                                            borderRadius:
+                                                BorderRadius.circular(11.r)),
                                     child: Text("lbl_9".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
@@ -152,13 +180,12 @@ class InfluencerDraweritem extends StatelessWidget {
                               margin: EdgeInsets.only(left: 25.w),
                               decoration: BoxDecoration(
                                   color: ColorConstant.cyan300,
-                                  borderRadius: BorderRadius.circular(
-                                      8.r)),
+                                  borderRadius: BorderRadius.circular(8.r)),
                               child: CustomImageView(
                                   height: 20.h,
                                   width: 15.w,
                                   svgPath:
-                                  ImageConstant.imgFrameWhiteA70014x14)),
+                                      ImageConstant.imgFrameWhiteA70014x14)),
                           onTap: () {
                             onTapBecomean();
                           }),
@@ -169,19 +196,21 @@ class InfluencerDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001)),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           storage.write(key: 'token', value: null);
                           Get.offAllNamed(AppRoutes.logInScreen);
                         },
                         child: Padding(
-                            padding: EdgeInsets.only(left: 1.w, top: 22.h, bottom: 121.h),
+                            padding: EdgeInsets.only(
+                                left: 1.w, top: 22.h, bottom: 121.h),
                             child: Row(children: [
                               CustomImageView(
                                   svgPath: ImageConstant.imgQuestion,
                                   height: 24.h,
                                   width: 24.w),
                               Padding(
-                                  padding: EdgeInsets.only(left: 14.w, top: 2.h),
+                                  padding:
+                                      EdgeInsets.only(left: 14.w, top: 2.h),
                                   child: Text("lbl_sign_out".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
@@ -204,22 +233,18 @@ class InfluencerDraweritem extends StatelessWidget {
   }
 
   onTapBecomean() {
-    if(controller.user.userModelObj.value.creatorId!=null){
+    if (controller.user.userModelObj.value.creatorId != null) {
       Get.delete<JobsJobsInfluencerTabContainerController>();
       Get.delete<TabController>();
       storage.write(key: "activeProfile", value: "Creator");
       Get.offNamed(
         AppRoutes.homeCreatorContainerScreen,
       );
-      controller.dispose();
+      // controller.dispose();
+    } else {
+      Get.offNamed(
+        AppRoutes.completeProfileCreatorScreen,
+      );
     }
-    else{
-    Get.offNamed(
-    AppRoutes.completeProfileCreatorScreen,
-    );
-    }
-
-
   }
 }
-

@@ -15,6 +15,8 @@ class LogInScreen extends GetWidget<LogInController> {
 
   @override
   Widget build(BuildContext context) {
+    final space = MediaQuery.of(context).viewInsets.bottom;
+
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -24,8 +26,7 @@ class LogInScreen extends GetWidget<LogInController> {
                 child: SingleChildScrollView(
                   child: Container(
                       width: double.maxFinite,
-                      padding:
-                          getPadding(left: 20, top: 12, right: 20, bottom: 12),
+                      padding: EdgeInsets.fromLTRB(20, 12, 20, space + 15),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -51,7 +52,7 @@ class LogInScreen extends GetWidget<LogInController> {
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtH2Gray600)),
                             CustomTextFormField(
-                                focusNode: FocusNode(),
+                                focusNode: controller.emailFocusNode,
                                 autofocus: true,
                                 controller: controller.usernameController,
                                 hintText: "lbl_email_username".tr,
@@ -75,7 +76,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Obx(() => CustomTextFormField(
-                                          focusNode: FocusNode(),
+                                          focusNode:
+                                              controller.passwordFocusNode,
                                           autofocus: true,
                                           controller:
                                               controller.passwordController,
@@ -158,7 +160,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                               recognizer: TapGestureRecognizer()
                                                 ..onTap = () {
                                                   // Handle the tap event here
-                                                  Get.toNamed(AppRoutes.signUpScreen);
+                                                  Get.toNamed(
+                                                      AppRoutes.signUpScreen);
                                                 },
                                               text: "lbl_create_account".tr,
                                               style: TextStyle(
@@ -168,38 +171,40 @@ class LogInScreen extends GetWidget<LogInController> {
                                                   fontWeight: FontWeight.w700))
                                         ]),
                                         textAlign: TextAlign.left))),
-                            Padding(
-                                padding: getPadding(top: 68),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                          padding:
-                                              getPadding(top: 12, bottom: 7),
-                                          child: SizedBox(
-                                              width: getHorizontalSize(99),
-                                              child: Divider(
-                                                  height: getVerticalSize(1),
-                                                  thickness: getVerticalSize(1),
-                                                  color:
-                                                      ColorConstant.gray200))),
-                                      Text("msg_or_continue_with".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtOutfitMedium16),
-                                      Padding(
-                                          padding:
-                                              getPadding(top: 12, bottom: 7),
-                                          child: SizedBox(
-                                              width: getHorizontalSize(99),
-                                              child: Divider(
-                                                  height: getVerticalSize(1),
-                                                  thickness: getVerticalSize(1),
-                                                  color:
-                                                      ColorConstant.gray200)))
-                                    ])),
+
+                            ///This commented code id for the sign authentication with google for when we decide to implement it.
+                            // Padding(
+                            //     padding: getPadding(top: 68),
+                            //     child: Row(
+                            //         mainAxisAlignment:
+                            //             MainAxisAlignment.spaceBetween,
+                            //         crossAxisAlignment: CrossAxisAlignment.end,
+                            //         children: [
+                            //           Padding(
+                            //               padding:
+                            //                   getPadding(top: 12, bottom: 7),
+                            //               child: SizedBox(
+                            //                   width: getHorizontalSize(99),
+                            //                   child: Divider(
+                            //                       height: getVerticalSize(1),
+                            //                       thickness: getVerticalSize(1),
+                            //                       color:
+                            //                           ColorConstant.gray200))),
+                            //           Text("msg_or_continue_with".tr,
+                            //               overflow: TextOverflow.ellipsis,
+                            //               textAlign: TextAlign.left,
+                            //               style: AppStyle.txtOutfitMedium16),
+                            //           Padding(
+                            //               padding:
+                            //                   getPadding(top: 12, bottom: 7),
+                            //               child: SizedBox(
+                            //                   width: getHorizontalSize(99),
+                            //                   child: Divider(
+                            //                       height: getVerticalSize(1),
+                            //                       thickness: getVerticalSize(1),
+                            //                       color:
+                            //                           ColorConstant.gray200)))
+                            //         ])),
                             Align(
                                 alignment: Alignment.center,
                                 child: Padding(
@@ -242,11 +247,12 @@ class LogInScreen extends GetWidget<LogInController> {
                                                             getMargin(top: 5))
                                                   ])),
                                           CustomImageView(
-                                              imagePath:
+                                              svgPath:
                                                   ImageConstant.imgFacebook,
                                               height: getSize(32),
                                               width: getSize(32),
-                                              margin: getMargin(left: 34))
+                                              margin: getMargin(left: 34),
+                                              alignment: Alignment.topCenter)
                                         ])))
                           ])),
                 ))));

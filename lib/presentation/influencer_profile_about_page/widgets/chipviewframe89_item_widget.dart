@@ -21,6 +21,7 @@ class Chipviewframe89ItemWidget extends StatelessWidget {
         left: 10,
         right: 10,
       ),
+      elevation: 0,
       showCheckmark: false,
       labelPadding: EdgeInsets.zero,
       label: Text(
@@ -32,7 +33,7 @@ class Chipviewframe89ItemWidget extends StatelessWidget {
             14,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.normal,
         ),
       ),
       selected: chipviewframe89ItemModelObj.isSelected.value,
@@ -40,12 +41,7 @@ class Chipviewframe89ItemWidget extends StatelessWidget {
       selectedColor: ColorConstant.gray200E5,
       shape: chipviewframe89ItemModelObj.isSelected.value
           ? RoundedRectangleBorder(
-        side: BorderSide(
-          color: ColorConstant.gray90099,
-          width: getHorizontalSize(
-            1,
-          ),
-        ),
+        side: BorderSide.none,
         borderRadius: BorderRadius.circular(
           getHorizontalSize(
             6,

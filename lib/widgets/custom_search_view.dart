@@ -17,6 +17,8 @@ class CustomSearchView extends StatelessWidget {
       this.prefix,
       this.prefixConstraints,
       this.suffix,
+      this.height,
+      this.onTap,
       this.suffixConstraints});
 
   SearchViewShape? shape;
@@ -30,6 +32,8 @@ class CustomSearchView extends StatelessWidget {
   Alignment? alignment;
 
   double? width;
+
+  double? height;
 
   EdgeInsetsGeometry? margin;
 
@@ -49,6 +53,10 @@ class CustomSearchView extends StatelessWidget {
 
   BoxConstraints? suffixConstraints;
 
+  final VoidCallback? onTap; 
+
+  
+
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -60,15 +68,18 @@ class CustomSearchView extends StatelessWidget {
   }
 
   _buildSearchViewWidget() {
-    return Container(
-      width: width ?? double.maxFinite,
-      margin: margin,
-      child: TextFormField(
-        controller: controller,
-        focusNode: focusNode,
-        autofocus: autofocus!,
-        style: _setFontStyle(),
-        decoration: _buildDecoration(),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width ?? double.maxFinite,
+        margin: margin,
+        child: TextFormField(
+          controller: controller,
+          focusNode: focusNode,
+          autofocus: autofocus!,
+          style: _setFontStyle(),
+          decoration: _buildDecoration(),
+        ),
       ),
     );
   }
@@ -96,12 +107,12 @@ class CustomSearchView extends StatelessWidget {
     switch (fontStyle) {
       default:
         return TextStyle(
-          color: ColorConstant.gray600,
+          color: ColorConstant.black900,
           fontSize: getFontSize(
-            13,
+            15,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         );
     }
   }
@@ -111,7 +122,7 @@ class CustomSearchView extends StatelessWidget {
       default:
         return BorderRadius.circular(
           getHorizontalSize(
-            6.00,
+            20.00,
           ),
         );
     }
@@ -152,14 +163,16 @@ class CustomSearchView extends StatelessWidget {
           top: 10,
           right: 10,
           bottom: 10,
+        
         );
       default:
         return getPadding(
-          top: 9,
-          bottom: 9,
+          top: 15,
+          bottom: 15,
         );
     }
   }
+
 }
 
 enum SearchViewShape {
@@ -176,3 +189,6 @@ enum SearchViewVariant {
 enum SearchViewFontStyle {
   SatoshiLight13,
 }
+
+
+

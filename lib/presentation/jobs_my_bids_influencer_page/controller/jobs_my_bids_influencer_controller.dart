@@ -15,9 +15,9 @@ import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/lis
 class JobsMyBidsInfluencerController extends GetxController {
   JobsMyBidsInfluencerController();
 
-  late RxList<JobsMyBidsInfluencerModel> jobsMyBidsInfluencerModelObj =
+ late RxList<JobsMyBidsInfluencerModel> jobsMyBidsInfluencerModelObj =
       <JobsMyBidsInfluencerModel>[].obs;
-
+ 
   final UserController user = Get.find();
 
   Rx<bool> isLoading = false.obs;
@@ -45,6 +45,7 @@ class JobsMyBidsInfluencerController extends GetxController {
   }
 
 //*animation stops here
+
   getUser() async {
     isLoading.value = true;
     error('');

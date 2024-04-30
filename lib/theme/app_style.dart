@@ -188,7 +188,7 @@ class AppStyle {
       13.5,
     ),
     fontFamily: 'Satoshi',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.bold,
   );
 
   static TextStyle txtSatoshiLight12Bluegray600 = TextStyle(
@@ -400,6 +400,15 @@ class AppStyle {
 
   static TextStyle txtSatoshiBold16 = TextStyle(
     color: ColorConstant.gray900,
+    fontSize: getFontSize(
+      16,
+    ),
+    fontFamily: 'Satoshi',
+    fontWeight: FontWeight.bold,
+  );
+
+  static TextStyle txtSatoshiBold16B = TextStyle(
+    color: ColorConstant.whiteA700,
     fontSize: getFontSize(
       16,
     ),

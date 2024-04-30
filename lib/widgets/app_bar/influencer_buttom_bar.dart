@@ -6,10 +6,12 @@ class InfluencerBottomBar extends StatelessWidget {
     Key? key,
     this.onChanged,
   }) : super(
-    key: key,
-  );
+          key: key,
+        );
 
   RxInt selectedIndex = 0.obs;
+  final InfluencerBottomBarController controller =
+      Get.put(InfluencerBottomBarController());
 
   List<BottomMenuModel> bottomMenuList = [
     BottomMenuModel(
@@ -34,8 +36,8 @@ class InfluencerBottomBar extends StatelessWidget {
     ),
     BottomMenuModel(
       icon: ImageConstant.imgUser,
-      title: "lbl_community".tr,
-      type: BottomBarEnum.Community,
+      title: 'Earnings',
+      type: BottomBarEnum.Earnings,
     )
   ];
 
@@ -56,12 +58,12 @@ class InfluencerBottomBar extends StatelessWidget {
         ),
       ),
       child: Obx(
-            () => BottomNavigationBar(
+        () => BottomNavigationBar(
           backgroundColor: Colors.transparent,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           elevation: 0,
-          currentIndex: selectedIndex.value,
+          currentIndex: controller.selectedIndex.value,
           type: BottomNavigationBarType.fixed,
           items: List.generate(bottomMenuList.length, (index) {
             return BottomNavigationBarItem(
@@ -108,7 +110,7 @@ class InfluencerBottomBar extends StatelessWidget {
                     width: getSize(
                       24,
                     ),
-                    color: ColorConstant.cyan300,
+                    color: ColorConstant.cyan100,
                   ),
                   Padding(
                     padding: getPadding(
@@ -119,7 +121,7 @@ class InfluencerBottomBar extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold105.copyWith(
-                        color: ColorConstant.cyan300,
+                        color: ColorConstant.cyan100,
                       ),
                     ),
                   ),
@@ -129,7 +131,7 @@ class InfluencerBottomBar extends StatelessWidget {
             );
           }),
           onTap: (index) {
-            selectedIndex.value = index;
+            controller.selectedIndex.value = index;
             onChanged?.call(bottomMenuList[index].type);
           },
         ),
@@ -142,7 +144,7 @@ enum BottomBarEnum {
   Home,
   Job,
   Chats,
-  Community,
+  Earnings,
 }
 
 class BottomMenuModel {
@@ -181,4 +183,8 @@ class DefaultWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class InfluencerBottomBarController extends GetxController {
+  RxInt selectedIndex = 0.obs;
 }

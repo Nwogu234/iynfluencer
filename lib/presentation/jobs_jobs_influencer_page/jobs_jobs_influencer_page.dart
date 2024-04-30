@@ -3,6 +3,7 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
+import '../../widgets/app_bar/influencer_buttom_bar.dart';
 import '../jobs_jobs_influencer_page/widgets/listclient_item_widget.dart';
 import 'controller/jobs_jobs_influencer_controller.dart';
 import 'models/jobs_jobs_influencer_model.dart';
@@ -21,6 +22,8 @@ class JobsJobsInfluencerPage extends StatelessWidget {
       JobsJobsInfluencerController(
           JobsJobsInfluencerModel().listclientItemList));
   late AnimationController animationController;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +75,7 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                         prefixWidget: Container(
                           child: CustomImageView(
                             svgPath: ImageConstant.imgSignalBlack900,
+                            color: ColorConstant.black900,
                           ),
                         ),
                       ),
@@ -115,12 +119,15 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                             },
                             fullPage: true,
                           ); // Your error widget
-                        } else if (controller
-                                .jobsJobsInfluencerModelObj.value.isEmpty &&
-                            !controller.isTrendLoading.value) {
+                        } else if (controller.isEpty.value) {
                           return ResponsiveEmptyWidget(
-                            errorMessage: 'No Influencers Job Available',
-                            onRetry: () {},
+                            errorMessage: 'You have not gotten any jobs',
+                            buttonText: "Bid on jobs now!",
+                            onRetry: () {
+                              controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;
+                              Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
+                              controller.bumcont.selectedIndex.value=0;
+                            },
                             fullPage: true,
                           ); //
                         } else {

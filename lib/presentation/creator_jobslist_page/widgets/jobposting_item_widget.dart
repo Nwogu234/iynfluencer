@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import '../controller/creator_jobslist_controller.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class JobpostingItemWidget extends StatelessWidget {
   final Job creatorJobslistModelObj;
@@ -27,7 +28,8 @@ class JobpostingItemWidget extends StatelessWidget {
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       imageProvider = NetworkImage(avatarUrl);
     } else {
-      imageProvider = NetworkImage('https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
+      imageProvider = NetworkImage(
+          'https://cdn-icons-png.flaticon.com/512/6915/6915987.png');
     }
 
     String? capitalizeFirstLetter(String? text) {
@@ -37,7 +39,8 @@ class JobpostingItemWidget extends StatelessWidget {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    DateTime? parsedDate = DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
+    DateTime? parsedDate =
+        DateTime.tryParse(creatorJobslistModelObj.createdAt ?? '');
     String formattedDate = parsedDate != null
         ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}"
         : 'Unknown Date';
@@ -46,134 +49,186 @@ class JobpostingItemWidget extends StatelessWidget {
       onTap: () {
         onTapDetailcard?.call();
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: EdgeInsets.only(left: 19.w, right: 26.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 15.h),
-                    child: Text(
-                      "${creatorJobslistModelObj.title}",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold125Gray900a7,
-                    ),
-                  ),
-                  Spacer(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15.h),
-                    child: Text(
-                      "$formattedDate",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiLight135Gray600,
-                    ),
-                  ),
-                  CustomImageView(
-                    svgPath: ImageConstant.imgVector,
-                    height: 1.h,
-                    width: 13.w,
-                    margin: EdgeInsets.only(top: 22.h, bottom: 21.h),
-                  ),
-                ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical:5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                  timeago.format(DateTime.parse(
+                      creatorJobslistModelObj.createdAt!)),
+                   overflow: TextOverflow.ellipsis,
+                   textAlign: TextAlign.left,
+                   style: AppStyle.txtSatoshiBold125Gray900a7.copyWith(
+                    fontSize: 12.5.sp,
+                    fontWeight: FontWeight.w500
+                   ),
               ),
             ),
-          ),
-          Container(
-            width: 321.w,
-            margin: EdgeInsets.only(left: 20.w, top: 8.h, right: 33.w),
-            child: Text(
-              "${creatorJobslistModelObj.description}",
-              maxLines: null,
-              textAlign: TextAlign.left,
-              style: AppStyle.txtSatoshiLight135Gray600,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 19.w, top: 14.h, right: 88.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "lbl_budget".tr,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold125Gray900a7,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 3.h),
-                      child: Text(
-                        "\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetFrom.toString())}-\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetTo.toString())}",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "msg_project_duration".tr,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold125Gray900a7,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 3.h),
-                      child: Text(
-                        "${creatorJobslistModelObj.duration} days",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: double.maxFinite,
-            child: Container(
-              margin: EdgeInsets.only(top: 18.h),
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              decoration: AppDecoration.outlineIndigo501,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgRectangle5066,
-                    height: 181.h,
-                    width: 335.w,
-                    radius: BorderRadius.circular(7.r),
+             Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+               child: Text(
+                   "${creatorJobslistModelObj.title}",
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                   style: AppStyle.txtSatoshiBold16.copyWith(
+                    fontSize: 14
+                   )
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 2.w, top: 14.h, right: 5.w, bottom: 14.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        RichText(
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                 child: Text(
+                   truncateWithEllipsis(
+                  myString: creatorJobslistModelObj.description!),
+                  maxLines: null,
+                  textAlign: TextAlign.left,
+                  style: AppStyle.txtSatoshiBold125Gray900a7,
+                ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color: ColorConstant.blue1000,
+                          shape: BoxShape.circle
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: CustomImageView(
+                             imagePath: ImageConstant.imgFrameDollar,
+                              height: getSize(25),
+                              width: getSize(25),
+                               margin: getMargin(
+                                bottom: 4
+                                ),
+                                color: ColorConstant.cyan100,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:EdgeInsets.only(left:10, bottom: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                "lbl_budget".tr,
+                             textAlign: TextAlign.left,
+                             style: AppStyle.txtSatoshiBold125Gray900a7.copyWith(
+                             fontSize: 12.5.sp,
+                             fontWeight: FontWeight.w500)
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 2
+                              ),
+                              child: Text(
+                                 "\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetFrom.toString())}-\$${capitalizeFirstLetter(creatorJobslistModelObj.budgetTo.toString())}",
+                                 overflow: TextOverflow.ellipsis,
+                                 textAlign: TextAlign.left,
+                                 style: AppStyle.txtSatoshiBold16.copyWith(
+                                  fontSize: 12.5.sp
+                                 )
+                              ),
+                            ),
+                          ]),
+                      ),
+                      SizedBox(width: 35),
+                       Container(
+                        decoration: BoxDecoration(
+                          color: ColorConstant.blue1000,
+                          shape: BoxShape.circle
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: CustomImageView(
+                             imagePath: ImageConstant.imgFrameBudget,
+                              height: getSize(25),
+                              width: getSize(25),
+                               margin: getMargin(
+                                bottom: 4
+                                ),
+                                color: ColorConstant.cyan100,
+                          ),
+                        ),
+                      ),
+                         Padding(
+                        padding:EdgeInsets.only(left:10, bottom: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                "Project Duration".tr,
+                             textAlign: TextAlign.left,
+                             style: AppStyle.txtSatoshiBold125Gray900a7.copyWith(
+                             fontSize: 12.5.sp,
+                             fontWeight: FontWeight.w500)
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 2
+                              ),
+                              child: Text(
+                                  "${creatorJobslistModelObj.duration} days",
+                                 overflow: TextOverflow.ellipsis,
+                                 textAlign: TextAlign.left,
+                                 style: AppStyle.txtSatoshiBold16.copyWith(
+                                  fontSize: 12.5.sp
+                                 )
+                              ),
+                            ),
+                          ]),
+                      ),
+                    ],
+                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                       CustomImageView(
+                          imagePath: ImageConstant.imgframeBar,
+                          height: 18.h,
+                          width: 18.w,
+                          color: ColorConstant.gray900A7,  
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 6.w, bottom: 1.h),
+                          child: Text(
+                          "${creatorJobslistModelObj.version}".tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style:  AppStyle.txtSatoshiBold125Gray900a7.copyWith(
+                             fontSize: 12.5.sp,
+                             fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                         RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "${creatorJobslistModelObj.bidsCount ?? 0}",
+                                text:
+                                    "${creatorJobslistModelObj.bidsCount ?? 0}",
                                 style: TextStyle(
                                   color: ColorConstant.gray900E5,
                                   fontSize: 13.sp,
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                               TextSpan(
+                                text: "  ",
+                                style: TextStyle(
+                                  color: ColorConstant.cyan300,
+                                  fontSize: 11.5.sp,
                                   fontFamily: 'Satoshi',
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -187,24 +242,32 @@ class JobpostingItemWidget extends StatelessWidget {
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              TextSpan(
-                                text: " ",
-                                style: TextStyle(
-                                  color: ColorConstant.cyan300,
-                                  fontSize: 11.5.sp,
-                                  fontFamily: 'Satoshi',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
                             ],
                           ),
                           textAlign: TextAlign.left,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 13.w),
-                          child: RichText(
+                        SizedBox(width: 15),
+                         RichText(
                             text: TextSpan(
                               children: [
+                                    TextSpan(
+                                  text: "${creatorJobslistModelObj.hired}",
+                                  style: TextStyle(
+                                    color: ColorConstant.gray900E5,
+                                    fontSize: 13.sp,
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                               TextSpan(
+                                  text: "  ",
+                                  style: TextStyle(
+                                    color: ColorConstant.cyan300,
+                                    fontSize: 11.5.sp,
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                                 TextSpan(
                                   text: "Hired".tr,
                                   style: TextStyle(
@@ -214,54 +277,17 @@ class JobpostingItemWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
-                                TextSpan(
-                                  text: " ",
-                                  style: TextStyle(
-                                    color: ColorConstant.cyan300,
-                                    fontSize: 11.5.sp,
-                                    fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "${creatorJobslistModelObj.hired}",
-                                  style: TextStyle(
-                                    color: ColorConstant.gray900E5,
-                                    fontSize: 13.sp,
-                                    fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Spacer(),
-                        CustomImageView(
-                          svgPath: ImageConstant.imgEyeGray600,
-                          height: 18.h,
-                          width: 18.w,
-                          margin: EdgeInsets.only(left: 13.w),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 6.w, bottom: 1.h),
-                          child: Text(
-                            "lbl_865".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold115Gray600,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ]
                   ),
-                ],
-              ),
-            ),
-          ),
-        ],
+                )
+              
+          ],
+        ),
       ),
+       Divider()
+          ]
+        ))
     );
   }
 }
+

@@ -78,6 +78,9 @@ class CompleteProfileInfluencerScreen
                               if (image != null) {
                                 controller.profileImage.value =
                                     File(image.path);
+
+
+                                await controller.user.uploadUserPic(image.path);
                               }
                             } catch (e) {
                               Get.snackbar('Error',
@@ -229,7 +232,7 @@ class CompleteProfileInfluencerScreen
                               }
                               return null;
                             },
-                            focusNode: FocusNode(),
+                            focusNode: controller.bioFocusNode,
                             autofocus: true,
                             controller: controller.bioController,
                             hintText: "msg_brief_intro_about".tr,
@@ -292,9 +295,7 @@ void onTapArrowleft1() {
 
   // Rest of the methods...
   Widget _buildAccountForm() {
-    var platformNameController = TextEditingController();
-    var followersCountController = TextEditingController();
-    var platformUrlController = TextEditingController();
+
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -341,8 +342,9 @@ void onTapArrowleft1() {
             Padding(
               padding: EdgeInsets.all(8.h),
               child: CustomTextFormField(
-                autofocus: true,
-                controller: followersCountController,
+                autofocus: false,
+                focusNode: controller.followersCountFocusNode,
+                controller: controller.followersCountController,
                 hintText: 'Followers count',
                 validator: (value) {
                   if (value == null || value.isEmpty || int.tryParse(value) == null) {
@@ -355,8 +357,9 @@ void onTapArrowleft1() {
             Padding(
               padding: EdgeInsets.all(8.h),
               child: CustomTextFormField(
-                autofocus: true,
-                controller: platformUrlController,
+                autofocus: false,
+                focusNode: controller.platformUrlFocusNode,
+                controller: controller.platformUrlController,
                 hintText: 'Platform URL',
                 validator: (value) {
                   if (value == null || value.isEmpty || !Uri.parse(value).isAbsolute) {
@@ -385,12 +388,16 @@ void onTapArrowleft1() {
                     child: CustomButton(
                       text: 'Add',
                       onTap: () {
+                        if (controller.selectedSocialMedia.value.title =='Select Platform') {
+                          controller.errorText.value = "Please select at least one platform";
+                          // Return early if validation fails
+                        }
                         if (controller.formKey.currentState!.validate()) {
                           controller.errorText.value = "";
                           controller.addAccount(
                               controller.selectedSocialMedia.value,
-                              int.parse(followersCountController.text),
-                              platformUrlController.text);
+                              int.parse(controller.followersCountController.text),
+                              controller.platformUrlController.text);
                           // controller.animationController.reverse();
                         }
                       },
@@ -405,4 +412,5 @@ void onTapArrowleft1() {
     );
   }
 }
+
 

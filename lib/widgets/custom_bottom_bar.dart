@@ -108,7 +108,7 @@ class CustomBottomBar extends StatelessWidget {
                     width: getSize(
                       24,
                     ),
-                    color: ColorConstant.cyan300,
+                    color: ColorConstant.cyan100,
                   ),
                   Padding(
                     padding: getPadding(
@@ -119,7 +119,7 @@ class CustomBottomBar extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold105.copyWith(
-                        color: ColorConstant.cyan300,
+                        color: ColorConstant.cyan100,
                       ),
                     ),
                   ),
@@ -183,6 +183,7 @@ class DefaultWidget extends StatelessWidget {
     );
   }
 }
+
 class BottomBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
 }

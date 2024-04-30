@@ -82,25 +82,33 @@ class Listrectangle50ItemSkeletonWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                    Container(
-                      width: 100.w, // Adjust as needed
-                      height: 15.h, // Adjust as needed
-                      color: Colors.grey.shade300,
+                    Expanded(
+                      child: Container(
+                        width: 100.w, // Adjust as needed
+                        height: 15.h, // Adjust as needed
+                        color: Colors.grey.shade300,
+                      ),
                     ),
 
                     // Add more skeleton shapes as needed
@@ -459,6 +467,86 @@ class InfluencerJobBidItemSkeletonWidget extends StatelessWidget {
               //         ),
               //       ),
               //     ],
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InfluencerHireJobSkeletonWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 13.h),
+          margin: EdgeInsets.symmetric(horizontal: 13.h),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.r),
+            color: Colors.grey.shade300,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                height: 14.h,
+                width: 200.w,
+                color: Colors.grey.shade300,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 15.h, right: 13.w),
+                child: Container(
+                  height: 14.h,
+                  width: 321.w,
+                  color: Colors.grey.shade300,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 14.h, right: 67.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                            height: 13.h,
+                            width: 100.w,
+                            color: Colors.grey.shade300),
+                        Container(
+                            height: 12.h,
+                            width: 100.w,
+                            color: Colors.grey.shade300),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                            height: 13.h,
+                            width: 100.w,
+                            color: Colors.grey.shade300),
+                        Container(
+                            height: 12.h,
+                            width: 100.w,
+                            color: Colors.grey.shade300),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Container(
+              //   height: 10.h,
+              //   width: 335.w,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(7.r),
+              //     color: Colors.grey.shade300,
               //   ),
               // ),
             ],

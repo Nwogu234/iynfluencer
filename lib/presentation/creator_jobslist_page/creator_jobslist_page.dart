@@ -4,9 +4,11 @@ import 'package:iynfluencer/presentation/job_details_screen/controller/job_detai
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
+import '../../widgets/custom_bottom_bar.dart';
 import '../creator_job_details/controller/creator_job_detail_controller.dart';
 import '../creator_job_details/creator_job_details_screen.dart';
 import '../creator_jobslist_page/widgets/jobposting_item_widget.dart';
+import '../home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'controller/creator_jobslist_controller.dart';
 import 'models/creator_jobslist_model.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,9 @@ class CreatorJobslistPage extends StatefulWidget {
 class _CreatorJobslistPageState extends State<CreatorJobslistPage>
     with SingleTickerProviderStateMixin {
   late CreatorJobslistController controller;
+  BottomBarController bumcont=Get.put(BottomBarController());
+  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
+
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Initialize creatorJobslistModelObj here
@@ -47,6 +52,8 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
   @override
   void dispose() {
     animationController.dispose();
+    bumcont.dispose();
+    homcont.dispose();
     super.dispose();
   }
 
@@ -69,7 +76,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
         backgroundColor: Colors.transparent,
         body: Obx(
               () {
-            if (controller.isLoading.value) {
+            if (controller.isTrendLoading.value) {
               return CustomLoadingWidget(
                 animationController: animationController,
               );
@@ -77,11 +84,24 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
               return ResponsiveErrorWidget(
                 errorMessage: controller.error.value,
                 onRetry: () {
+                  controller.getJobs();
                   // ... [rest of the error handling code]
                 },
                 fullPage: true,
               );
-            } else {
+            }else if(controller.empty) {
+              return ResponsiveEmptyWidget(
+                errorMessage: 'You have not posed any jobs yet',
+                buttonText: "Post job",
+                onRetry: () {
+                  homcont.currentRoute.value=AppRoutes.postPageScreen;
+                   Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.postPageScreen);
+                  bumcont.selectedIndex.value=2;
+                },
+                fullPage: true,
+              );
+            }
+            else {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

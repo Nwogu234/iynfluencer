@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -6,8 +8,6 @@ import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_m
 import 'package:flutter/material.dart';
 
 import '../../../data/apiClient/api_client.dart';
-import '../../../data/models/use_model/user_model.dart';
-import '../widgets/trendinghorizon_item_widget.dart';
 
 /// A controller class for the HomeCreatorPage.
 ///
@@ -25,12 +25,15 @@ class HomeCreatorController extends GetxController {
   final apiClient = ApiClient();
   var error = ''.obs;
   var usePlaceholder = false.obs;
+  RxString avatar = ''.obs;
   List<Influencer> trendingInfluencers = [];
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   TextEditingController searchController = TextEditingController();
-
+  RxString? updatedName = ''.obs;
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
 
+/* 
 //this is for animation
   late AnimationController animationController;
 
@@ -40,6 +43,27 @@ class HomeCreatorController extends GetxController {
       vsync: vsync,
     )..repeat();
   }
+ */
+
+
+  Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+   
+  }
+
+  Future<void> loadRecommendedInfluencers() async {
+  try {
+    await Future.delayed(Duration(seconds: 1));
+    
+    recommendedInfluencers.addAll(List.generate(10, (index) => Influencer()));
+  } catch (e) {
+    error.value = e.toString();
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
 //*animation stops here
   getUser() async {
@@ -53,7 +77,9 @@ class HomeCreatorController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
+        print(user.userModelObj.value.avatar);
         isLoading.value = false;
+        avatar.value = user.userModelObj.value.avatar;
         getInfluencers();
         getRecommended();
       }
@@ -88,7 +114,7 @@ class HomeCreatorController extends GetxController {
     try {
       error('');
       recommendedInfluencers.value =
-      await apiClient.getInfluencers(1, 25, token);
+          await apiClient.getInfluencers(1, 25, token);
       if (recommendedInfluencers.isEmpty) {
         error('Something went wrong');
         isRecommendedLoading.value = false;
@@ -100,6 +126,16 @@ class HomeCreatorController extends GetxController {
       error('Something went wrong');
       print(e);
       isRecommendedLoading.value = false;
+    }
+  }
+
+  // Function to update profile data
+  void updateProfileData(Map<String, dynamic>? data) {
+    if (data != null) {
+      updatedName?.value = data['profileDetails']['firstName'] +
+          ' ' +
+          data['profileDetails']['lastName'];
+      updatedProfileImage.value = File(data['profileImagePath']);
     }
   }
 
