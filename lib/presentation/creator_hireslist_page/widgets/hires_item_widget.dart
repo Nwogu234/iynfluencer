@@ -8,16 +8,13 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 
 // ignore: must_be_immutable
 class HiresItemWidget extends StatelessWidget {
-  HiresItemWidget(
-    this.hiresItemlistObj, {
-    Key? key,
+   final Job? hiresItemlistObj;
+
+  HiresItemWidget({
+     this.hiresItemlistObj,
     this.onTapBidcard,
+  });
 
-  }) : super(
-          key: key,
-        );
-
-  Job? hiresItemlistObj;
 
   var controller = Get.find<CreatorHireslistController>();
 
@@ -38,55 +35,18 @@ class HiresItemWidget extends StatelessWidget {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    if (hiresItemlistObj == null) {
-      return SafeArea(
-        child: Center(
-            child: Container(
-                width: double.maxFinite,
-                padding: getPadding(
-                  left: 20,
-                  top: 23,
-                  right: 20,
-                  bottom: 23,
-                ),
-                child:
-                    Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  CustomImageView(
-                    svgPath: ImageConstant.imgCancel,
-                    height: getSize(
-                      36,
-                    ),
-                    width: getSize(
-                      36,
-                    ),
-                    alignment: Alignment.centerRight,
-                  ),
-                  CustomImageView(
-                    imagePath: ImageConstant.imgIcons8error1,
-                    height: getSize(
-                      54,
-                    ),
-                    width: getSize(
-                      54,
-                    ),
-                    margin: getMargin(
-                      top: 84,
-                    ),
-                  ),
-                  Padding(
-                    padding: getPadding(
-                      top: 35,
-                    ),
-                    child: Text(
-                      "No Hired Jobs Found".tr,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold20,
-                    ),
-                  ),
-                ]))),
-      );
+    String? avatarUrl = 
+   'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${hiresItemlistObj?.creator?.userId}-avatar.jpeg' ?? ImageConstant.imgGroup85235x35;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = "${controller.user.baseUrl}$avatarUrl";
+    } else {
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
     }
+
 
     return SizedBox(
       width: double.maxFinite,
@@ -116,7 +76,7 @@ class HiresItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomImageView(
-                      imagePath: ImageConstant.imgGroup85250x50,
+                      url: imageProvider,
                       height: getSize(
                         50,
                       ),
@@ -137,6 +97,7 @@ class HiresItemWidget extends StatelessWidget {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "\$${capitalizeFirstLetter(hiresItemlistObj?.user?.firstName)}-\$${capitalizeFirstLetter(hiresItemlistObj?.user?.lastName)}",
@@ -165,7 +126,7 @@ class HiresItemWidget extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: getPadding(
-                                    left: 6,
+                                    left: 3,
                                   ),
                                   child: Text(
                                     hiresItemlistObj?.user?.country ??
@@ -216,11 +177,17 @@ class HiresItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            "lbl_project_status".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight135Gray600,
+                          Padding(
+                            padding: getPadding(
+                            top: 1,
+                            bottom: 4,
+                            ),
+                            child: Text(
+                              "lbl_project_status".tr,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiLight135Gray600,
+                            ),
                           ),
                           CustomButton(
                             height: getVerticalSize(
@@ -256,6 +223,7 @@ class HiresItemWidget extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight135Gray600,
                           ),
+                          SizedBox(height: 15),
                           Padding(
                             padding: getPadding(
                               top: 7,
@@ -284,6 +252,7 @@ class HiresItemWidget extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight135Gray600,
                           ),
+                          SizedBox(height: 15),
                           Padding(
                             padding: getPadding(
                               top: 9,
