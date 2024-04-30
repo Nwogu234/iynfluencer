@@ -29,8 +29,9 @@ class CreatorHireslistController extends GetxController {
   var token;
   final apiClient = ApiClient();
   var error = ''.obs;
+  bool empty = false;
 
-  RxList<Job> allJobs = <Job>[].obs;
+//  RxList<Job> allJobs = <Job>[].obs;
   RxList<Job> hiredJobs = <Job>[].obs;
 
   SelectionPopupModel? selectedDropDownValue;
@@ -56,6 +57,11 @@ class CreatorHireslistController extends GetxController {
     )..repeat();
   }
 
+  Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+  }
+
 //*animation stops here
   getUser() async {
     isLoading.value = true;
@@ -78,27 +84,41 @@ class CreatorHireslistController extends GetxController {
     }
   }
 
-  // Fetch all jobs
+
   Future<void> fetchHiredJobs() async {
     try {
       error('');
+      token = await storage.read(key: "token");
       isTrendLoading.value = true;
-      final Response response = await apiClient.getAllJobs(1, 15, token);
-      if (response.isOk) {
-        final List<Job> jobs = (response.body as List)
-            .map((jobJson) => Job.fromJson(jobJson))
-            .toList();
-        allJobs.assignAll(jobs);
+      Response response = await apiClient.getCreatorJobs(token);
 
-        // Filter hired jobs
-        hiredJobs.assignAll(allJobs.where((job) => job.hired == true));
+      if (response.isOk) {
+        final responseJson = response.body;
+        final jobResponse = JobResponse.fromJson(responseJson);
+        final jobResponseData = responseJson['data']['docs'];
+        print(jobResponseData);
+
+        // Filter the jobs based on the hired status
+        final List<Job> hiredJob =
+            jobResponse.data.docs.where((job) => job.hired == true).toList();
+
+        if (hiredJob.isEmpty) {
+          print('No hired jobs found.');
+          error('No hired jobs found.');
+          empty = true;
+        } else {
+          // Convert List<Job> to RxList<Job>
+          hiredJobs.assignAll(hiredJob);
+          error('');
+        }
       } else {
-        error('');
-        isTrendLoading.value = false;
+        print('Error: ${response.statusText}');
+        error('Something went wrong: ${response.statusText}');
       }
     } catch (e) {
-      print(e);
-      error('Something went wrong');
+      print('Error: $e');
+      error('Something went wrong: $e');
+    } finally {
       isTrendLoading.value = false;
     }
   }

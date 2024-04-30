@@ -212,13 +212,14 @@ class ChatsInfluencerController extends GetxController {
   try {
     isLoading.value = true;
     error('');
+    token = await storage.read(key: "token");
 
     if (token == null) {
     print("token is null");
     return;
   }
 
-   token = await storage.read(key: "token");
+
     Response existingsChatResponse = await apiClient.getAllChatsWithCreators(token!);
     if (existingsChatResponse.isOk && existingsChatResponse.body != null) {
      //  final List<dynamic>? responseData = existingChatResponse.body;

@@ -200,10 +200,6 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                           reverse: true,
                           itemCount: controllers.messageModelObjs.length,
                           itemBuilder: (context, index) {
-/*                             final sortedMessages =
-                                controllers.messageModelObjs.reversed.toList();
-                            final reversedIndex =
-                                controllers.messageModelObjs.length - 1 - index; */
                             final message = controllers.messageModelObjs[index];
                             String formattedDateTime = DateFormat.jm('en_US')
                                 .format(message.createdAt);

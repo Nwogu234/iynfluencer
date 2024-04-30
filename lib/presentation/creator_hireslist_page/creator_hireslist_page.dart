@@ -2,6 +2,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
+import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import '../creator_hireslist_page/widgets/hires_item_widget.dart';
@@ -47,6 +48,9 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     super.dispose();
   }
 
+   Future<void> _refresh() async {
+    await controller.refreshItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,101 +61,76 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.transparent,
-        body: SizedBox(
-          width: 1.sw,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.h),
-                      child: Text(
-                        "lbl_all_hires".tr,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold14Gray900.copyWith(fontSize: 14.sp),
-                      ),
-                    ),
-                      CustomButton(
-                      height: getVerticalSize(
-                        35,
-                      ),
-                      width: getHorizontalSize(
-                        83,
-                      ),
-                      text: "lbl_filter".tr,
-                      variant: ButtonVariant.OutlineIndigo50,
-                      padding: ButtonPadding.PaddingT8,
-                      fontStyle: ButtonFontStyle.SatoshiBold135,
-                      prefixWidget: Container(
-                        child: CustomImageView(
-                          svgPath: ImageConstant.imgSignalBlack900,
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: SizedBox(
+            width: 1.sw,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        child: Text(
+                          "lbl_all_hires".tr,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiBold14Gray900
+                              .copyWith(fontSize: 14.sp),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              /*   Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 15.h),
-                    child: Obx(
-                          () => ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: 1.h);
-                        },
-                        itemCount: controller.isTrendLoading.value
-                            ? 5  
-                            : controller.hiredJobs.length,
-                        itemBuilder: (context, index) {
-                          if (controller.isTrendLoading.value) {
-                            return TrendinghorizonItemSkeletonWidget();
-                          } else {
-                            Job model = controller.hiredJobs[index];
-                            return HiresItemWidget(
-                              model,
-                              onTapBidcard: () {
-                                onTapBidcard(model);
-                              },
-                            );
-                          }
-                        },
+                      CustomButton(
+                        height: getVerticalSize(
+                          35,
+                        ),
+                        width: getHorizontalSize(
+                          83,
+                        ),
+                        text: "lbl_filter".tr,
+                        variant: ButtonVariant.OutlineIndigo50,
+                        padding: ButtonPadding.PaddingT8,
+                        fontStyle: ButtonFontStyle.SatoshiBold135,
+                        prefixWidget: Container(
+                          child: CustomImageView(
+                            svgPath: ImageConstant.imgSignalBlack900,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ), */
-
-                 Expanded(
-                  child: Padding(
+                  Expanded(
+                      child: Padding(
                     padding: EdgeInsets.only(top: 15.h),
                     child: Obx(() {
                       if (controller.isTrendLoading.value) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (controller.hiredJobs.isEmpty && !controller.isTrendLoading.value) {
-                         return ResponsiveEmptyWidget(
-                          errorMessage: 'No Hired jobs Available',
-                          buttonText: "Retry Now",
+                        return Center(
+                          child: CustomLoadingWidget(
+                          animationController: animationController,
+                             ),);
+                      } else if (controller.error.value.isNotEmpty) {
+                        return ResponsiveErrorWidget(
+                          errorMessage: controller.error.value,
                           onRetry: () {
                             controller.getUser();
                           },
                           fullPage: true,
-                        ); // Your erro
+                        );
                       } else {
                         return ListView.separated(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          separatorBuilder: (context, index) => SizedBox(height: 1.h),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 1.h),
                           itemCount: controller.hiredJobs.length,
                           itemBuilder: (context, index) {
                             Job model = controller.hiredJobs[index];
                             return HiresItemWidget(
-                              model,
+                             hiresItemlistObj: model,
                               onTapBidcard: () {
                                 onTapBidcard(model);
                               },
@@ -161,7 +140,8 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                       }
                     }),
                   ))
-              ],
+                ],
+              ),
             ),
           ),
         ),
