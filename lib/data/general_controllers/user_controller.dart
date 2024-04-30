@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,10 @@ import '../apiClient/api_client.dart';
 ///
 /// This class manages the state of the InfluencerHomeScreen, including the
 /// current influencerHomeModelObj
+
+//final DateFormat dateFormat = DateFormat('E dd MMM yy');
+//dateFormat.format(DateTime.now()),
+
 class UserController extends GetxController {
   Rx<UserModel> userModelObj = UserModel(
           firstName: "",
@@ -41,7 +46,7 @@ class UserController extends GetxController {
   var token;
   final apiClient = ApiClient();
   String baseUrl =
-    'https://iynfluencer.s3.us-east-1.amazonaws.com/';
+   'https://iynfluencer.s3.us-east-1.amazonaws.com/';
 
   // 'https://iynf-kong-akbf9.ondigitalocean.app/';
 
@@ -73,10 +78,14 @@ class UserController extends GetxController {
       if (userModelObj.value.firstName.isEmpty) {
         return ('Something went wrong');
       } else {
+        print('Original dob: ${userModelObj.value.dob}');
         print(userModelObj.value.avatar);
         userModelObj.value.avatar="$baseUrl${userModelObj.value.avatar}";
         userModelObj.value.countryCode =
             getCountryCode(capitalizeFirstLetter(userModelObj.value.country!));
+
+        userModelObj.value.dob = formatDob(userModelObj.value.dob);
+         print('Formatted dob: ${userModelObj.value.dob}');
         return ('Its Ok');
       }
     } catch (e) {
@@ -106,7 +115,7 @@ class UserController extends GetxController {
     final file = File(filePath);
     final List<int> fileBytes = file.readAsBytesSync();
 
-    final uploadResponse = await http.put(
+    final uploadResponse = await http.post(
       Uri.parse(presignedUrl),
       headers: {
         'Content-Type':
@@ -141,6 +150,29 @@ class UserController extends GetxController {
       print('File upload failed');
     }
   }
+
+
+String formatDob(String? dob) {
+  if (dob == null) {
+    return ''; 
+  }
+
+  // Define the input date format
+  final DateFormat inputFormat = DateFormat('EEE MMM dd yyyy HH:mm:ss \'GMT\'Z (z)');
+
+  // Define the output date format
+  final DateFormat outputFormat = DateFormat('E dd MMM yy');
+
+  try {
+    // Parse the input date string
+    final DateTime parsedDate = inputFormat.parse(dob);
+
+    return outputFormat.format(parsedDate);
+  } catch (e) {
+    return dob;
+  }
+}
+
 
   ///the list of countries
   Map<String, String> countries = {

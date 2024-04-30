@@ -1,11 +1,25 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/messages_page.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/datelable.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
+import 'package:swipe_to/swipe_to.dart';
 export 'package:get/get.dart';
 import 'controller/chats_opened_controller.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
@@ -17,31 +31,63 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class ChatsOpenedScreen extends StatefulWidget {
   ChatsOpenedScreen({
-    Key? key, 
-  this.selectedInfluencer,
-  this.chatData,
+    Key? key,
+    this.selectedInfluencer,
+    required this.chatData,
   }) : super(key: key);
 
   final Influencer? selectedInfluencer;
-  final ChatData?  chatData;
- 
-
+  // ChatData chatData;
+  final ChatData chatData;
+  Rx<Message?> replyMessage = Rx<Message?>(null);
 
   @override
   State<ChatsOpenedScreen> createState() => _ChatsOpenedScreenState();
 }
 
-class _ChatsOpenedScreenState extends State<ChatsOpenedScreen> {
+class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
+    with SingleTickerProviderStateMixin {
+  final MessagesController messageController =
+      Get.put(MessagesController(MessagesModel().obs));
+
+  BottomBarController bottomBarController = Get.put(BottomBarController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-   ChatsOpenedController controller = Get.put(ChatsOpenedController());
+  // ChatsOpenedController controller = Get.put(ChatsOpenedController());
+  late AnimationController animationController;
+  late String imageProvider;
+  late String titleName;
+  final UserController user = Get.find();
+  RxBool show = false.obs;
+  FocusNode focusNode = FocusNode();
+  late ChatsOpenedController controller;
+  final scrollController = ScrollController();
+
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
 
-     String? avatarUrl =
-       "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer!.userId}-avatar.jpeg";
-    String imageProvider;
+    String? avatarUrl;
+    if (widget.selectedInfluencer != null) {
+      avatarUrl =
+          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg';
+    } else if (widget.chatData != null) {
+      avatarUrl =
+          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
+      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
+    }
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       imageProvider = avatarUrl;
@@ -49,127 +95,227 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen> {
       imageProvider = "mypic.wit";
     }
 
-    String? capitalizeFirstLetter(String? text) {
-      if (text == null || text.isEmpty) {
-        return text;
-      }
-      return text[0].toUpperCase() + text.substring(1);
+    String? name;
+    if (widget.selectedInfluencer != null) {
+      name =
+          "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+    } else if (widget.chatData != null) {
+      name =
+          "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
     }
 
+    if (name != null && name.isNotEmpty) {
+      titleName = name;
+    } else {
+      imageProvider = "Mark Adebayo";
+    }
+    controller = ChatsOpenedController(
+      chatData: widget.chatData,
+      selectedInfluencer: widget.selectedInfluencer,
+    );
+
+    // controller.getUser(widget.chatData.chatId);
+    controller.onInit();
+  }
+
+  Future<void> _refresh() async {
+    await controller.refreshItems();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final scrollController = ScrollController();
+
+    final String chatId = widget.chatData.chatId;
 
     return SafeArea(
       child: Scaffold(
-        key:_scaffoldKey,
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorConstant.gray5001,
         appBar: CustomAppBar(
-            height: getVerticalSize(64),
-            leadingWidth: 52,
-            leading: AppbarImage(
-                height: getSize(30),
-                width: getSize(30),
-                svgPath: ImageConstant.imgArrowleftGray600,
-                margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
-                onTap: () {
-                  onTapArrowleft8();
-                }),
-            title: Padding(
-                padding: getPadding(left: 2, bottom: 2, top: 2),
-                child: Row(children: [
-                  AppbarCircleimage(
-                    url: imageProvider,
-                    margin: getMargin(
-                      left: 10,
-                      top: 5,
-                      bottom: 20,
+          height: getVerticalSize(54),
+          leadingWidth: 52,
+          leading: AppbarImage(
+            height: getSize(30),
+            width: getSize(30),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
+            onTap: () {
+              onTapArrowleft8();
+            },
+          ),
+          title: Padding(
+            padding: getPadding(left: 2, top: 3),
+            child: Row(
+              children: [
+                AppbarCircleimage(
+                  url: imageProvider,
+                  margin: getMargin(left: 10, top: 5, bottom: 20),
+                ),
+                AppbarSubtitle(
+                  text: titleName.tr,
+                  margin: getMargin(left: 14, top: 5, bottom: 20),
+                ),
+              ],
+            ),
+          ),
+          styleType: Style.bgOutlineIndigo50_1,
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Stack(
+                children: [
+                  PositionedDirectional(
+                    top: 150,
+                    start: 150,
+                    child: CustomLoadingWidget(
+                      animationController: animationController,
                     ),
                   ),
-                  AppbarSubtitle(
-                    text:"${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}".tr,
-                    margin: getMargin(left: 14, top: 5, bottom: 20),
-                  )
-                ])),
-            actions: [
-              AppbarImage(
-                height: getSize(18),
-                width: getSize(18),
-                svgPath: ImageConstant.imgFrame18x18,
-                margin: getMargin(left: 23, right: 8, bottom: 10),
-                onTap: () {
-                  Get.back();
+                ],
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  controller.getUser(chatId);
                 },
-              ),
-              AppbarImage(
-                height: getSize(20),
-                width: getSize(20),
-                svgPath: ImageConstant.imgFrame20x20,
-                margin: getMargin(left: 23, right: 22, bottom: 10),
-                onTap: () {
-                  Get.back();
-                },
-              )
-            ],
-            styleType: Style.bgOutlineIndigo50_1),
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Padding(
-                padding: getPadding(
-                    left: 19,
-                    top: 5,
-                    right: 19,
-                    bottom:
-                        10), // give some bottom padding to account for ChatInputBar
-                child: SingleChildScrollView(
-                  controller: scrollController,
+                fullPage: true,
+              );
+            } else {
+              return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       DateLable(
-                        dateTime: widget.chatData?.createdAt ?? DateTime.now(),
-                        ), 
-                      ChatMessageBubble(
-                        messageText: "msg_hey_favour_how".tr,
-                        isReceived: false,
-                        timestamp: "lbl_7_13_pm".tr,
-                        leadingImagePath: ImageConstant.imgTrashCyan300,
-                        trailingImagePath: ImageConstant.imgFile,
+                      SizedBox(height: 16),
+                      DateLable(
+                        dateTime: widget.chatData.createdAt,
                       ),
-                      ChatMessageBubble(
-                        messageText: "msg_just_rounded_up".tr,
-                        isReceived: true,
-                        timestamp: "lbl_7_13_pm".tr,
-                        leadingImagePath: ImageConstant.imgTrashGray20003,
-                        trailingImagePath: ImageConstant.imgFrame2,
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                          controller: scrollController,
+                          reverse: true,
+                          //  shrinkWrap: true,
+                          //  physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.messageModelObj.length,
+                          itemBuilder: (context, index) {
+                            /*  final sortedMessages =
+                                controller.messageModelObj.reversed.toList();
+                            final reversedIndex =
+                                controller.messageModelObj.length - 1 - index; */
+                            final message = controller.messageModelObj[index];
+                            String formattedDateTime = DateFormat.jm('en_US')
+                                .format(message.createdAt);
+                            if (controller.messageModelObj.isEmpty) {
+                              return SizedBox.shrink();
+                            } //else{
+                            return ChatMessageBubble(
+                                controller: controller,
+                                messageText: message.text,
+                                isReceived: message.authorUserId !=
+                                    widget.chatData.creatorUserId,
+                                timestamp: formattedDateTime,
+                                leadingImagePath: ImageConstant.imgVector,
+                                trailingImagePath: ImageConstant.imgVector,
+                                messageModelObj: message.messageId,
+                                onSwipedMessage: (message) {
+                                  replyToMessage(message);
+                                  focusNode.requestFocus();
+                                });
+                            //     }
+                          },
+                        ),
                       ),
-                      ChatMessageBubble(
-                        messageText: "msg_i_will_most_certainly".tr,
-                        isReceived: true,
-                        timestamp: "lbl_8_12_pm".tr,
-                        leadingImagePath: ImageConstant.imgBookmarkGray20003,
-                        trailingImagePath: ImageConstant.imgFrame2,
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            // if show is true
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                              ChatInputBar(
+                                replyMessage: widget.replyMessage,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  controller.hideEmojiWidget();
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController: controller.messageController,
+                                openedController: controller,
+                              ),
+                              show.value
+                                  ? emojiSelect(controller)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: ChatInputBar(
-                messageController: controller.messageController,
-              ),
-            ),
-          ],
+              );
+            }
+          }),
         ),
       ),
     );
   }
 
+  Widget emojiSelect(ChatsOpenedController controller) {
+    return EmojiPicker(
+      config: const Config(
+        bottomActionBarConfig: BottomActionBarConfig(
+          showBackspaceButton: false,
+          showSearchViewButton: false,
+        ),
+      ),
+      onEmojiSelected: (category, emoji) {
+        controller.messageController.text =
+            controller.messageController.text + emoji.emoji;
+      },
+    );
+  }
+
+  void replyToMessage(Message message) {
+    widget.replyMessage.value = message;
+  }
+
+  void cancelReply() {
+    widget.replyMessage.value = null;
+  }
+
   onTapArrowleft8() {
-    Get.back();
+    messageController.getUser();
+    messageController.setUnreadCreator(0);
+    Get.back(result: true);
   }
 }

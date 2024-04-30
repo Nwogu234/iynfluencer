@@ -28,7 +28,7 @@ class CustoDropDown extends StatelessWidget {
 
   DropDownShape? shape;
 
-  DropDownVariant? variant;
+  DropDownVariants? variant;
 
   DropDownFontStyle? fontStyle;
 
@@ -176,7 +176,7 @@ class CustoDropDown extends StatelessWidget {
 
   _setBorderStyle() {
     switch (variant) {
-      case DropDownVariant.OutlineIndigo50:
+      case DropDownVariants.OutlineIndigo50:
         return OutlineInputBorder(
           borderRadius: _setOutlineBorderRadius(),
           borderSide: BorderSide(
@@ -184,7 +184,7 @@ class CustoDropDown extends StatelessWidget {
             width: 1,
           ),
         );
-      case DropDownVariant.None:
+      case DropDownVariants.None:
         return InputBorder.none;
       default:
         return OutlineInputBorder(
@@ -203,9 +203,9 @@ class CustoDropDown extends StatelessWidget {
 
   _setFilled() {
     switch (variant) {
-      case DropDownVariant.OutlineIndigo50:
+      case DropDownVariants.OutlineIndigo50:
         return false;
-      case DropDownVariant.None:
+      case DropDownVariants.None:
         return false;
       default:
         return true;
@@ -237,7 +237,7 @@ enum DropDownPadding {
 enum DropDownShape {
   RoundedBorder6,
 }
-enum DropDownVariant {
+enum DropDownVariants {
   None,
   Neutral,
   OutlineIndigo50,

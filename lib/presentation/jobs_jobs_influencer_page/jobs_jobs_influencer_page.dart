@@ -75,6 +75,7 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                         prefixWidget: Container(
                           child: CustomImageView(
                             svgPath: ImageConstant.imgSignalBlack900,
+                            color: ColorConstant.black900,
                           ),
                         ),
                       ),

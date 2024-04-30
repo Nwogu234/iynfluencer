@@ -23,7 +23,10 @@ class CustomTextFormField extends StatelessWidget {
       this.suffix,
       this.suffixConstraints,
       this.validator,
+      this.height,
       this.onChanged,
+      this.onSubmitted,
+      this.onPressed,
       this.label});
 
   TextFormFieldShape? shape;
@@ -37,6 +40,8 @@ class CustomTextFormField extends StatelessWidget {
   Alignment? alignment;
 
   double? width;
+
+  double? height;
 
   EdgeInsetsGeometry? margin;
 
@@ -67,7 +72,12 @@ class CustomTextFormField extends StatelessWidget {
   BoxConstraints? suffixConstraints;
 
   FormFieldValidator<String>? validator;
-  Function? onChanged;
+
+  void Function(String)? onChanged;
+
+  void Function(String)? onSubmitted;
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -94,18 +104,18 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines ?? 1,
         decoration: _buildDecoration(),
         validator: validator,
-          onChanged: (text) {
-            if (onChanged != null) {
-              onChanged!(text);
-            }
-          },
+        onChanged: (text) {
+          if (onChanged != null) {
+            onChanged!(text);
+          }
+        },
       ),
     );
   }
 
   _buildDecoration() {
     return InputDecoration(
-      labelText: label??null,
+      labelText: label ?? null,
       hintText: hintText ?? "",
       hintStyle: _setFontStyle(),
       border: _setBorderStyle(),
@@ -138,7 +148,7 @@ class CustomTextFormField extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
-            22,
+            35,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
@@ -329,6 +339,7 @@ enum TextFormFieldShape {
   RoundedBorder6,
   CircleBorder10,
 }
+
 enum TextFormFieldPadding {
   PaddingAll14,
   PaddingT14,
@@ -339,6 +350,7 @@ enum TextFormFieldPadding {
   PaddingT9,
   PaddingAll9,
 }
+
 enum TextFormFieldVariant {
   None,
   FillGray100,
@@ -346,6 +358,7 @@ enum TextFormFieldVariant {
   FillCyan300,
   FillCyan3005e,
 }
+
 enum TextFormFieldFontStyle {
   SatoshiLight14Gray900ab,
   SatoshiLight14,

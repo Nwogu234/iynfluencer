@@ -1,6 +1,11 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Socials/social.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/presentation/splash_screen/splash_screen.dart';
 import 'package:iynfluencer/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:iynfluencer/presentation/onboarding_screen_one_screen/onboarding_screen_one_screen.dart';
@@ -505,9 +510,77 @@ class AppRoutes {
     ),
     GetPage(
       name: chatsOpenedScreen,
-      page: () => ChatsOpenedScreen(),
+      page: () => ChatsOpenedScreen(
+      chatData:  ChatData(
+      id: 'id',
+      creatorId: 'CreatorId',
+      creatorUserId: 'CreatorUserId',
+      influencerId: 'InfluencerId',
+      influencerUserId: 'defaultInfluencerUserId',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: 'defaultChatId',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: UserModel(
+        id: 'id',
+        firstName: 'firstName', 
+        lastName: 'lastName', 
+        email: 'email', 
+        password: 'password',
+        termsAndConditionsAgreement: false,
+        isNewUser: false,
+        isSocial: false,
+        verified: false,
+        verifiedEmail: false,
+        followers: 0,
+        following: 0,
+        views: 0, 
+        userId: 'userId', 
+        createdAt: '', 
+        updatedAt: '',
+        creatorId: 'creatorId', 
+        influencerId: 'influencerId', 
+        country: 'country', 
+        dob: 'dob',
+        phone: 'phone', 
+        username: 'username',
+         avatar: 'avatar', 
+         cover: 'cover'),
+      creatorUser: UserModel(
+        id: 'id',
+        firstName: 'firstName', 
+        lastName: 'lastName', 
+        email: 'email', 
+        password: 'password',
+        termsAndConditionsAgreement: false,
+        isNewUser: false,
+        isSocial: false,
+        verified: false,
+        verifiedEmail: false,
+        followers: 0,
+        following: 0,
+        views: 0, 
+        userId: 'userId', 
+        createdAt: '', 
+        updatedAt: '',
+        creatorId: 'creatorId', 
+        influencerId: 'influencerId', 
+        country: 'country', 
+        dob: 'dob',
+        phone: 'phone', 
+        username: 'username',
+         avatar: 'avatar', 
+         cover: 'cover'),
+      
+      ),
+
+      ),
       bindings: [
-        ChatsOpenedBinding(),
+        ChatsOpenedBinding()
       ],
     ),
     GetPage(

@@ -202,7 +202,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                                 top: 2
                               ),
                               child: Text(
-                                  "${_job.duration} weeks".tr,
+                                  "${_job.duration} days".tr,
                                  overflow: TextOverflow.ellipsis,
                                  textAlign: TextAlign.left,
                                  style: AppStyle.txtSatoshiBold16.copyWith(
