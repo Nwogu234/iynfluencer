@@ -1,5 +1,6 @@
-import 'dart:convert';
-
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
@@ -128,29 +129,32 @@ class ApiClient extends GetConnect {
   }
 
   //this is for getting url to upload user pic
-  Future<Response> getPicUrl(var token) async {
-    Response response = Response();
-    try {
-      response = await get(
-        'users/me/upload_media_url?contentType=image/jpeg&field=avatar',
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        // print(response.body);
-        return response;
-      } else {
-        print(response);
-        // print(response.body);
-        throw Exception('error getting url');
-      }
-    } catch (e) {
-      errorHandler(response);
-      throw Exception('error getting url');
-    }
+  Future<Response> getPicUrl(String filePath, String token) async {
+  try {
+    final file = File(filePath);
+    final List<int> fileBytes = await file.readAsBytesSync();
+    final formData = FormData({
+      'image': MultipartFile(
+       fileBytes,
+       filename: 'avatar.jpg',
+      contentType: 'image/jpeg',
+  ),
+});
+    return post(
+      'users/me/upload_media_url',
+      formData,
+      headers: {
+        'Authorization': token,
+      },
+    );
+  } catch (e) {
+    print(e);
+    throw Exception('Error uploading image');
   }
+}
+
+
+  
 
   // this is for updating profile pic url
   Future<Response> postAvatar(String avatarUrl, String token) {

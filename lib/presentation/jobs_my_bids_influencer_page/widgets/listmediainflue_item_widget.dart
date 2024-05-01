@@ -55,7 +55,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      listmediainflueItemModelObj.job!.title!,
+                      listmediainflueItemModelObj.job?.title ?? '',
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold16,
@@ -160,7 +160,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 child: Text(
                                   timeago.format(DateTime.parse(
                                       listmediainflueItemModelObj
-                                          .job!.createdAt!)),
+                                          .job?.createdAt ?? '')),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.txtSatoshiLight125.copyWith(
@@ -182,7 +182,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                           child: Text(
                             truncateWithEllipsis(
                               myString:
-                                  listmediainflueItemModelObj.job!.description!.tr,
+                                  listmediainflueItemModelObj.job?.description?.tr ?? '',
                             ),
                             maxLines: null,
                             textAlign: TextAlign.left,
@@ -229,12 +229,12 @@ class ListmediainflueItemWidget extends StatelessWidget {
                               top: 5,
                             ),
                             variant:
-                                listmediainflueItemModelObj.status! == 'pending'
+                                listmediainflueItemModelObj.status == 'pending'
                                     ? ButtonVariant.FillRed10099
                                     : ButtonVariant.FillGreenA10099,
                             shape: ButtonShape.RoundedBorder12,
                             padding: ButtonPadding.PaddingT4,
-                            fontStyle:  listmediainflueItemModelObj.status! == 'pending' ?
+                            fontStyle:  listmediainflueItemModelObj.status == 'pending' ?
                              ButtonFontStyle.SatoshiBold115Red700 :
                             ButtonFontStyle.SatoshiBold115Green700,
                             prefixWidget: Container(
@@ -242,7 +242,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 right: 4,
                               ),
                               child: CustomImageView(
-                                svgPath:  listmediainflueItemModelObj.status! == 'pending' ? 
+                                svgPath:  listmediainflueItemModelObj.status == 'pending' ? 
                                 ImageConstant.imgClock :
                                 ImageConstant.imgSearchGreen700,
                               ),
@@ -274,7 +274,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 bottom: 20
                               ),
                               child: Text(
-                                '\$${listmediainflueItemModelObj.price!.toString()}',
+                                '\$${listmediainflueItemModelObj.price?.toString()}',
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold125Gray900a7,

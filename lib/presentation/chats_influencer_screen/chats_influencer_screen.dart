@@ -39,7 +39,6 @@ class ChatsInfluencerScreen extends StatefulWidget {
 
 class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     with SingleTickerProviderStateMixin {
-
   MessagesPageInfluencerController messageInfluencerController = Get.put(
       MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
 
@@ -87,7 +86,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     String? name;
     if (widget.selectedJob != null) {
       name =
-          "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName)}";
+          "${widget.selectedJob?.creator?.userId}"; /* ${capitalizeFirstLetter(widget.selectedJob?.creator?.userId)}"; */
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
@@ -102,25 +101,19 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     controllers = ChatsInfluencerController(
         chatData: widget.chatData, selectedJob: widget.selectedJob);
 
-    controllers.getUser(widget.chatData.chatId);
+    // controllers.getUser(widget.chatData.chatId);
+    controllers.onInit();
   }
 
   @override
   void dispose() {
     animationController.dispose();
-   
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    String? capitalizeFirstLetter(String? text) {
-      if (text == null || text.isEmpty) {
-        return text;
-      }
-      return text[0].toUpperCase() + text.substring(1);
-    }
-
     final scrollController = ScrollController();
     final String chatId = widget.chatData.chatId;
 
@@ -296,11 +289,9 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     widget.replyMessages.value = null;
   }
 
- onTapArrowleft8() {
+  onTapArrowleft8() {
     messageInfluencerController.getUser();
     messageInfluencerController.setUnreadInfluencer(0);
     Get.back(result: true);
   }
 }
-
-

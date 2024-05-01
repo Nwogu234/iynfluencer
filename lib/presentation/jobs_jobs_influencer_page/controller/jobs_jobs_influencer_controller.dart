@@ -47,7 +47,7 @@ class JobsJobsInfluencerController extends GetxController {
         isLoading.value = false;
       } else {
         error('');
-        getInfluencerJobJobs(user.userModelObj.value.influencerId!)
+        getInfluencerJobJobs(user.userModelObj.value.influencerId ?? '')
             .then((value) {
           isLoading.value = false;
         }).catchError((err) {

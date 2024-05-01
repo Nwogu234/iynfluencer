@@ -50,7 +50,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   final MessagesController messageController =
       Get.put(MessagesController(MessagesModel().obs));
 
-  BottomBarController bottomBarController = Get.put(BottomBarController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // ChatsOpenedController controller = Get.put(ChatsOpenedController());

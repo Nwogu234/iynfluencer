@@ -46,9 +46,9 @@ class UserController extends GetxController {
   var token;
   final apiClient = ApiClient();
   String baseUrl =
-   'https://iynfluencer.s3.us-east-1.amazonaws.com/';
+  // 'https://iynfluencer.s3.us-east-1.amazonaws.com/';
 
-  // 'https://iynf-kong-akbf9.ondigitalocean.app/';
+  'https://iynf-kong-akbf9.ondigitalocean.app/';
 
   String getCountryCode(String countryName) {
     for (var entry in countries.entries) {
@@ -92,7 +92,7 @@ class UserController extends GetxController {
       print(e);
     }
   }
-
+/* 
   Future<void> uploadUserPic(String filePath) async {
     Get.dialog(
       Center(child: CircularProgressIndicator()), // showing a loading dialog
@@ -100,7 +100,7 @@ class UserController extends GetxController {
     );
     token = await storage.read(key: "token");
     // 1. Get the pre-signed URL from your backend
-    final response = await apiClient.getPicUrl(token);
+    final response = await apiClient.getPicUrl(token,filePath);
 
     if (!response.isOk) {
       Get.back();
@@ -111,7 +111,7 @@ class UserController extends GetxController {
     print(response.body);
     String presignedUrl = response.body['data']['uploadUrl'];
 
-    // 2. Upload the file using the pre-signed URL
+    /* // 2. Upload the file using the pre-signed URL
     final file = File(filePath);
     final List<int> fileBytes = file.readAsBytesSync();
 
@@ -122,7 +122,7 @@ class UserController extends GetxController {
             'image/jpeg', // This should match what you set in the backend
       },
       body: fileBytes,
-    );
+    ); */
 
     if (uploadResponse.statusCode == 200) {
       print('File successfully uploaded');
@@ -130,7 +130,7 @@ class UserController extends GetxController {
       // Splitting the URL based on '/'
       List<String> parts = picUrl.split('/');
 
-      // Extracting the desired part
+      // 3 Extracting the desired part
       String desiredPart = parts.sublist(3).join('/');
       print(desiredPart);
       final response = await apiClient.postAvatar(desiredPart, token);
@@ -149,7 +149,54 @@ class UserController extends GetxController {
       Get.snackbar('Error', 'Failed to upload image. Please try again.');
       print('File upload failed');
     }
+  } */
+
+  Future<void> uploadUserPic(String filePath) async {
+  try {
+    Get.dialog(
+      Center(child: CircularProgressIndicator()), 
+      barrierDismissible: false, 
+    );
+
+    final token = await storage.read(key: "token");
+
+    // 1. Get the pre-signed URL from your backend
+    final response = await apiClient.getPicUrl(filePath, token!);
+
+    if (!response.isOk) {
+      Get.back();
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
+      print('Failed to obtain pre-signed URL');
+      return;
+    }
+
+    print(response.body);
+    String presignedUrl = response.body['data']['uploadUrl'];
+
+    // Extracting the desired part directly from the filePath
+    String picUrl = presignedUrl.split('?').first;
+      // Splitting the URL based on '/'
+      List<String> parts = picUrl.split('/');
+    String desiredPart = parts.sublist(3).join('/');;
+    print(desiredPart);
+
+    // Posting the desired part directly to the API
+    final postResponse = await apiClient.postAvatar(desiredPart, token);
+    if (postResponse.isOk) {
+      Get.back();
+      Get.snackbar('Success', 'Image uploaded');
+      print('Success: ${postResponse.body}');
+    } else {
+      Get.back();
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
+      print('Error: ${postResponse.body}');
+    }
+  } catch (e) {
+    print(e);
+    Get.back();
+    Get.snackbar('Error', 'Failed to upload image. Please try again.');
   }
+}
 
 
 String formatDob(String? dob) {

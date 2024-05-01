@@ -16,34 +16,43 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_search_view.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 
-class SearchResultsScreen extends StatefulWidget {
 
+
+class SearchResultsScreen extends StatefulWidget {
+  final String? query;
+  final String? fromDate;
+  final String? toDate;
+  final SelectionPopupModel? selectedNiche;
+  final SelectionPopupModel? selectedCountry;
+
+  const SearchResultsScreen({
+    Key? key, 
+    this.fromDate,
+    this.toDate,
+    this.selectedNiche,
+    this.selectedCountry,
+    this.query}) : super(key: key);
 
   @override
   State<SearchResultsScreen> createState() => _SearchResultsScreenState();
 }
-
 class _SearchResultsScreenState extends State<SearchResultsScreen>
     with SingleTickerProviderStateMixin {
   SearchResultsController controller =
       Get.put(SearchResultsController(SearchResultsModel().obs));
-
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
-
   
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
-
   void _onScroll() {
     if (!controller.isLoading.value &&
         _scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
-      controller.loadRecommendedInfluencers();
+     // controller.loadRecommendedInfluencers();
     }
   }
-
   @override
   void initState() {
     super.initState();
@@ -52,21 +61,18 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
       vsync: this,
     )..repeat();
     //   controller.loadRecommendedInfluencers();
-    controller.searchController.text = Get.parameters['query'] ?? '';
+    controller.searchController.text = widget.query ?? '';
     _scrollController.addListener(_onScroll);
   }
-
   @override
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
-    String? query = Get.parameters['query'];
-
+    String? query = widget.query;
     return RefreshIndicator(
       onRefresh: _refresh,
       child: SafeArea(
@@ -134,7 +140,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                                       }),
                     )
                     
-
                   );
                 }
                 
@@ -143,7 +148,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
               ))),
     );
   }
-
   /// Navigates to the previous screen.
   ///
   /// When the action is triggered, this function uses the [Get] library to

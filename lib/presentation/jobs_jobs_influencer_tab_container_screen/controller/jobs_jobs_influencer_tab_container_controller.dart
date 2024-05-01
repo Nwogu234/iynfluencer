@@ -17,4 +17,11 @@ class JobsJobsInfluencerTabContainerController extends GetxController
 
   late TabController tabsviewController =
       Get.put(TabController(vsync: this, length: 3));
+      
+   @override
+  void onClose() {
+    tabsviewController.dispose();
+    super.onClose();
+  }
+
 }
