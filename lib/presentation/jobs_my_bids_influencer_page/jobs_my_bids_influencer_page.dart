@@ -151,7 +151,7 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                             errorMessage: 'No Job Bids Available',
                             buttonText: "Bid on jobs now!",
                             onRetry: () {
-                              Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
+                              Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context).pushReplacementNamed(AppRoutes.influencerHomeScreen) ;
                               bumcont.selectedIndex.value=0;
                             },
                             fullPage: true,

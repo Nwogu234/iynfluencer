@@ -121,7 +121,7 @@ void _onScroll() {
                      Padding(
                        padding: getPadding(top: 19),
                        child: Container(
-                       //  height: double.maxFinite,
+                        height: MediaQuery.of(context).size.height,
                          width: double.infinity,
                          child: Obx(
                            () => ListView.separated(

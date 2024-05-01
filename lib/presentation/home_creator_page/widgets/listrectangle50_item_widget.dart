@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/influencer_profile_about_page/controller/influencer_profile_about_controller.dart';
 import 'package:iynfluencer/presentation/influencer_profile_about_page/influencer_profile_about_page.dart';
@@ -24,6 +25,21 @@ class Listrectangle50ItemWidget extends StatelessWidget {
         );
 
   Influencer listrectangle50;
+  ChatData chatData = ChatData(
+    id: '',
+    creatorId: 'creatorId',
+    influencerId: 'influencerId',
+    creatorUserId: 'creatorUserId',
+    influencerUserId: 'influencerUserId',
+    unreadByCreator: 0,
+    unreadByInfluencer: 0,
+    blockedByCreator: false,
+    blockedByInfluencer: false,
+    chatId: 'chatId',
+    createdAt: DateTime.now(),
+    updatedAt : DateTime.now(),
+    messages: [],
+      );
 
   var controller = Get.find<HomeCreatorController>();
 
@@ -97,7 +113,7 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width:170,
+                                width: 170,
                                 child: Text(
                                   "${capitalizeFirstLetter(listrectangle50.user?.first.firstName)} ${capitalizeFirstLetter(listrectangle50.user?.first.lastName)}",
                                   overflow: TextOverflow.ellipsis,
@@ -114,7 +130,8 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CustomImageView(
-                                      svgPath: ImageConstant.imgFrameBlueGray400,
+                                      svgPath:
+                                          ImageConstant.imgFrameBlueGray400,
                                       height: getSize(
                                         13,
                                       ),
@@ -134,9 +151,10 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                                               .tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiMedium.copyWith(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 10.sp)),
+                                          style: AppStyle.txtSatoshiMedium
+                                              .copyWith(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 10.sp)),
                                     ),
                                   ],
                                 ),
@@ -147,17 +165,15 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding:getPadding(left: 30),
+                      padding: getPadding(left: 30),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius:
-                          BorderRadiusStyle.txtRoundedBorder6.copyWith(
-
-                          ),
+                              BorderRadiusStyle.txtRoundedBorder6.copyWith(),
                           color: ColorConstant.pink,
                         ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         // Ribbon color
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +219,10 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                       margin: getMargin(top: 17),
                       padding: ButtonPaddings.PaddingAll15,
                       onTap: () {
-                        ChatsOpenedScreen();
+                        ChatsOpenedScreen(
+                          selectedInfluencer: listrectangle50,
+                          chatData: chatData,
+                        );
                       }),
                 ),
               ),

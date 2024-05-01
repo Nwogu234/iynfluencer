@@ -97,10 +97,19 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
               if (controller.isLoading.value)
                 return Container();
               else
-                return AppbarCircleimage(
-                  url: controller.user.userModelObj.value.avatar,
-                  margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
-                  onTap: openDrawer,
+                return Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle
+                  ),
+                  child: AppbarCircleimage(
+                    fit: BoxFit.cover,
+                    url: controller.user.userModelObj.value.avatar,
+                    margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
+                    onTap: openDrawer,
+                     radius: BorderRadius.circular(
+                       getSize(25.0),
+                        ),
+                  ),
                 );
             }),
             leadingWidth: 50,

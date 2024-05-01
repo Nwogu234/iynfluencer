@@ -152,7 +152,7 @@ class _AllHomePageState extends State<AllHomePage>
                         ),
                       ),
                       Container(
-                        height: 220.h,
+                        height: 225.h,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: controller.isTrendLoading.value
@@ -217,7 +217,11 @@ class _AllHomePageState extends State<AllHomePage>
                           child: controller.isRecommendedLoading.value
                               ? Listrectangle50ItemSkeletonWidget()
                               : Listrectangle50ItemWidget(
-                                  controller.recommendedInfluencers[index]),
+                                  controller.recommendedInfluencers[index],
+                                  
+
+                                  
+                                  ),
                         ),
                     ],
                   ),

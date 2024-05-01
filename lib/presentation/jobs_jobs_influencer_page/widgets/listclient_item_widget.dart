@@ -93,7 +93,7 @@ class ListclientItemWidget extends StatelessWidget {
                           child: Text(
                             truncateWithEllipsis(
                               myString:
-                                  '${listclientItemModelObj.description!.substring(0, 90)}.....',
+                                  '${listclientItemModelObj.description?.substring(0, 90)}.....',
                             ),
                              maxLines: null,
                             textAlign: TextAlign.left,

@@ -26,33 +26,27 @@ class SearchFilterController extends GetxController {
     frametwelveoneController.dispose();
   }
 
-  onSelected(dynamic value) {
-    for (var element in searchFilterModelObj.value.dropdownItemList.value) {
-      element.isSelected = false;
-      if (element.id == value.id) {
-        element.isSelected = true;
-      }
+  onSelected(SelectionPopupModel value) {
+  selectedDropDownValue = value; 
+  for (var element in searchFilterModelObj.value.dropdownItemList.value) {
+    element.isSelected = false;
+    if (element.id == value.id) {
+      element.isSelected = true;
     }
-    searchFilterModelObj.value.dropdownItemList.refresh();
   }
+  searchFilterModelObj.value.dropdownItemList.refresh();
+}
 
-  onSelected1(dynamic value) {
-    for (var element in searchFilterModelObj.value.dropdownItemList1.value) {
-      element.isSelected = false;
-      if (element.id == value.id) {
-        element.isSelected = true;
-      }
+  onSelected1(SelectionPopupModel value) {
+  selectedDropDownValue1 = value; 
+  for (var element in searchFilterModelObj.value.dropdownItemList1.value) {
+    element.isSelected = false;
+    if (element.id == value.id) {
+      element.isSelected = true;
     }
-    searchFilterModelObj.value.dropdownItemList1.refresh();
   }
+  searchFilterModelObj.value.dropdownItemList1.refresh();
+}
 
-  onSelected2(dynamic value) {
-    for (var element in searchFilterModelObj.value.dropdownItemList2.value) {
-      element.isSelected = false;
-      if (element.id == value.id) {
-        element.isSelected = true;
-      }
-    }
-    searchFilterModelObj.value.dropdownItemList2.refresh();
-  }
+
 }

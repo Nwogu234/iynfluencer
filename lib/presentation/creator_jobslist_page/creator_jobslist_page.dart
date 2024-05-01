@@ -95,7 +95,7 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                 buttonText: "Post job",
                 onRetry: () {
                   homcont.currentRoute.value = AppRoutes.postPageScreen;
-                  Navigator.of(Get.nestedKey(1)!.currentState!.context)
+                  Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context)
                       .pushReplacementNamed(AppRoutes.postPageScreen);
                   bumcont.selectedIndex.value = 2;
                 },

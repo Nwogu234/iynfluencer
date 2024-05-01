@@ -9,7 +9,9 @@ class AppbarCircleimage extends StatelessWidget {
     this.svgPath,
     this.margin,
     this.onTap,
-    this.url
+    this.url,
+    this.fit,
+    this.radius
   }) : super(
           key: key,
         );
@@ -22,6 +24,10 @@ class AppbarCircleimage extends StatelessWidget {
   EdgeInsetsGeometry? margin;
 
   Function? onTap;
+
+  BoxFit? fit;
+
+  BorderRadius? radius;
 
   @override
   Widget build(BuildContext context) {

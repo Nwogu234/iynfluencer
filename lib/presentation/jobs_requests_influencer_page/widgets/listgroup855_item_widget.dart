@@ -152,7 +152,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                 top: 20,
               ),
               child: Text(
-                listgroup855ItemModelObj.job!.title!,
+                listgroup855ItemModelObj.job?.title ?? '',
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiBold14Gray900ab,
@@ -168,7 +168,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                 right: 9,
               ),
               child: Text(
-                listgroup855ItemModelObj.job!.description!,
+                listgroup855ItemModelObj.job?.description ?? '',
                 maxLines: null,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiLight14Gray900ab,
@@ -197,7 +197,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                           top: 3,
                         ),
                         child: Text(
-                          '${listgroup855ItemModelObj.job!.budgetFrom!} ${listgroup855ItemModelObj.job!.budgetTo}',
+                          '${listgroup855ItemModelObj.job?.budgetFrom} ${listgroup855ItemModelObj.job?.budgetTo}',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold125Gray900a7,
