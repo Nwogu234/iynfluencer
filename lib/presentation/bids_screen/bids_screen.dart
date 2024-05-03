@@ -116,13 +116,16 @@ class BidsScreen extends GetWidget<BidsController> {
                           ); // Your error widget
                         } else if (controller.allJobBids.isEmpty &&
                             !controller.isLoading.value) {
-                          return ResponsiveEmptyWidget(
-                            errorMessage: 'No Job Bids Available',
-                            buttonText: "Refresh now!",
-                            onRetry: () {
-                              controller.getUser(jobId);
-                            },
-                            fullPage: true,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: ResponsiveEmptyWidget(
+                              errorMessage: 'No Job Bids Available',
+                              buttonText: "Refresh now!",
+                              onRetry: () {
+                                controller.getUser(jobId);
+                              },
+                              fullPage: true,
+                            ),
                           );
                         } // Your error widget
                         else {

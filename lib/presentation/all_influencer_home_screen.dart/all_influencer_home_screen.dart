@@ -83,10 +83,13 @@ void _onScroll() {
         return PositionedDirectional(
           top: 150,
           start: 150,
-          child: ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: controller.getUser,
-            fullPage: true,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: ResponsiveErrorWidget(
+              errorMessage: controller.error.value,
+              onRetry: controller.getUser,
+              fullPage: true,
+            ),
           ),
         );
       } else {

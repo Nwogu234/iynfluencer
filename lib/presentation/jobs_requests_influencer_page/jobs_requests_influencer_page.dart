@@ -93,13 +93,16 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                       } else if (controller
                               .jobsRequestsInfluencerModelObj.isEmpty &&
                           !controller.isTrendLoading.value) {
-                        return ResponsiveEmptyWidget(
-                          errorMessage: 'No Job Request Available',
-                          buttonText: "Retry Now",
-                          onRetry: () {
-                            controller.getUser();
-                          },
-                          fullPage: true,
+                        return Center(
+                          child: ResponsiveEmptyWidget(
+                            errorMessage: 'You have (0) Jobs Requests',
+                            smallMessage: 'Your past Requests will appear here',
+                            buttonText: "Retry Now",
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ),
                         ); // Your error widget
                       } else {
                         return ListView.separated(

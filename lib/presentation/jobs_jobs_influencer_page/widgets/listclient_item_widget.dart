@@ -42,7 +42,9 @@ class ListclientItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${listclientItemModelObj.title!.length > 25 ? listclientItemModelObj.title!.substring(0, 25) : listclientItemModelObj.title!}',
+                          '${listclientItemModelObj.title!.length > 25 ? 
+                          listclientItemModelObj.title!.substring(0, 25) 
+                          : listclientItemModelObj.title!}',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold16.copyWith(
@@ -192,7 +194,7 @@ class ListclientItemWidget extends StatelessWidget {
                                  top: 3,
                                ),
                                variant: ButtonVariant.FillGreenA10099,
-                               shape: ButtonShape.RoundedBorder12,
+                               shape: ButtonShapes.RoundedBorder12,
                                padding: ButtonPadding.PaddingAll4,
                                fontStyle:
                                    ButtonFontStyle.SatoshiBold115Green700,

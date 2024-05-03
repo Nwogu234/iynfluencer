@@ -115,6 +115,8 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                       } else if (controller.error.value.isNotEmpty) {
                         return ResponsiveErrorWidget(
                           errorMessage: controller.error.value,
+                          smallMessage: controller.hiredJobs.isEmpty ? 'Your past and current hires will appear here'
+                           : '',
                           onRetry: () {
                             controller.getUser();
                           },

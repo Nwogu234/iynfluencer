@@ -232,7 +232,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 listmediainflueItemModelObj.status == 'pending'
                                     ? ButtonVariant.FillRed10099
                                     : ButtonVariant.FillGreenA10099,
-                            shape: ButtonShape.RoundedBorder12,
+                            shape: ButtonShapes.RoundedBorder12,
                             padding: ButtonPadding.PaddingT4,
                             fontStyle:  listmediainflueItemModelObj.status == 'pending' ?
                              ButtonFontStyle.SatoshiBold115Red700 :

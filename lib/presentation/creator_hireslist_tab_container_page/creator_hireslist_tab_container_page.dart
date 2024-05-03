@@ -35,98 +35,101 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
           width: double.maxFinite,
           decoration: AppDecoration.fillWhiteA700,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  AppbarCircleimage(
-                    url: homeController.user.userModelObj.value.avatar,
-                    margin: EdgeInsets.only(top: 10, bottom: 14),
-                    onTap: openDrawer,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AppbarCircleimage(
+                        url: homeController.user.userModelObj.value.avatar,
+                        margin:
+                        EdgeInsets.only(top: 10, bottom: 14),
+                        onTap: openDrawer,
+                      ),
+                       Padding(
+                         padding: const EdgeInsets.only(left: 8),
+                         child: DefaultTextStyle(
+                                   style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                                    fontSize: 20.sp, fontWeight: FontWeight.bold),
+                                    child: AnimatedTextKit(
+                                       repeatForever: true,
+                                       pause:Duration(milliseconds: 6000),
+                                       isRepeatingAnimation: true,
+                                       totalRepeatCount: 3,
+                                       animatedTexts: [
+                                         TypewriterAnimatedText('Jobs'),
+                                    ],
+                                   ),
+                                ),
+                       ),
+
+                    ]
+                    ),
+                ),
+                Container(
+                  height: getVerticalSize(
+                    50,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: DefaultTextStyle(
-                      style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                          fontSize: 20.sp, fontWeight: FontWeight.bold),
-                      child: AnimatedTextKit(
-                        repeatForever: true,
-                        pause: Duration(milliseconds: 6000),
-                        isRepeatingAnimation: true,
-                        totalRepeatCount: 3,
-                        animatedTexts: [
-                          TypewriterAnimatedText('Jobs'),
-                        ],
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    color: ColorConstant.whiteA700,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: ColorConstant.indigo50,
+                        width: getHorizontalSize(
+                          1,
+                        ),
                       ),
                     ),
                   ),
-                ]),
-              ),
-              Container(
-                height: getVerticalSize(
-                  50,
-                ),
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  color: ColorConstant.whiteA700,
-                  border: Border(
-                    bottom: BorderSide(
-                      color: ColorConstant.indigo50,
-                      width: getHorizontalSize(
-                        1,
+                  child: TabBar(
+                    controller: controller.tabiewController,
+                    labelColor: ColorConstant.cyan100,
+                    labelStyle: TextStyle(
+                      fontSize: getFontSize(
+                        14.5,
                       ),
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w300,
                     ),
+                    unselectedLabelColor: ColorConstant.black900,
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: getFontSize(
+                        14.5,
+                      ),
+                      fontFamily: 'Satoshi',
+                      fontWeight: FontWeight.w300,
+                    ),
+                    indicatorColor: ColorConstant.cyan100,
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          "lbl_my_posting".tr,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "lbl_hires2".tr,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: TabBar(
-                  controller: controller.tabiewController,
-                  labelColor: ColorConstant.cyan100,
-                  labelStyle: TextStyle(
-                    fontSize: getFontSize(
-                      14.5,
-                    ),
-                    fontFamily: 'Satoshi',
-                    fontWeight: FontWeight.w300,
+                Expanded(
+                  child: TabBarView(
+                    controller: controller.tabiewController,
+                    children: [
+                      CreatorJobslistPage(),
+                      CreatorHireslistPage(),
+                    ],
                   ),
-                  unselectedLabelColor: ColorConstant.black900,
-                  unselectedLabelStyle: TextStyle(
-                    fontSize: getFontSize(
-                      14.5,
-                    ),
-                    fontFamily: 'Satoshi',
-                    fontWeight: FontWeight.w300,
-                  ),
-                  indicatorColor: ColorConstant.cyan100,
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        "lbl_my_posting".tr,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        "lbl_hires2".tr,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: controller.tabiewController??controller.tabiewController,
-                  children: [
-                    CreatorJobslistPage(),
-                    CreatorHireslistPage(),
-                  ],
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ),
       ),
     );

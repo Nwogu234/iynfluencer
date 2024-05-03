@@ -205,7 +205,7 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
                                               text: "lbl_earnings".tr,
                                               margin:
                                                   getMargin(left: 2, top: 20),
-                                              shape: ButtonShape.Square,
+                                              shape: ButtonShapes.Square,
                                               fontStyle: ButtonFontStyle
                                                   .SatoshiLight16,
                                               prefixWidget: Container(

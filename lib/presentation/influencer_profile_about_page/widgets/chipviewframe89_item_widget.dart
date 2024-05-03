@@ -44,7 +44,7 @@ class Chipviewframe89ItemWidget extends StatelessWidget {
         side: BorderSide.none,
         borderRadius: BorderRadius.circular(
           getHorizontalSize(
-            6,
+            25,
           ),
         ),
       )
@@ -52,7 +52,7 @@ class Chipviewframe89ItemWidget extends StatelessWidget {
         side: BorderSide.none,
         borderRadius: BorderRadius.circular(
           getHorizontalSize(
-            6,
+            25,
           ),
         ),
       ),
