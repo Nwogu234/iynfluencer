@@ -69,20 +69,22 @@ class HomeCreatorController extends GetxController {
   List<Widget> generateTiles(List<Influencer> influencers) {
 
     return List<Widget>.generate(influencers.length, (index) {
-      Widget card = StaggeredWidget(user: influencers[index]);  // Your custom widget
+      EdgeInsetsGeometry padding = index % 2 == 0 ?
+      EdgeInsets.all(0):
+      EdgeInsets.only(top: 0);
+
+      Widget card = Padding(
+        padding: padding,
+        child: StaggeredWidget(user: influencers[index]),
+      );  // Your custom widget
 
       // Apply different margins or padding based on the index for visual effect
-      EdgeInsetsGeometry padding = index % 2 == 0 ?
-      EdgeInsets.only(top: 25) :
-      EdgeInsets.only(right: 10);
 
-      return Padding(
-        padding: padding,
-        child: StaggeredGridTile.count(
-          crossAxisCellCount: 1,  // Same width for all tiles
-          mainAxisCellCount: 1,  // Same height for all tiles
-          child: card,
-        ),
+
+      return StaggeredGridTile.count(
+        crossAxisCellCount: 1, // Same width for all tiles
+        mainAxisCellCount: index % 2 == 0 ? 1.2:1,  // Same height for all tiles
+        child: card,
       );
     });
   }

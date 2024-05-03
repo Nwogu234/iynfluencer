@@ -17,12 +17,10 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
           key: key,
         );
 
-  CreatorHireslistTabContainerController controller = Get.put(
-      CreatorHireslistTabContainerController(
-          CreatorHireslistTabContainerModel().obs));
+  final controller = Get.put(CreatorHireslistTabContainerController(
+      CreatorHireslistTabContainerModel().obs));
 
-          
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey1 = GlobalKey<ScaffoldState>();
   HomeCreatorController homeController =
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
@@ -30,9 +28,9 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key:_scaffoldKey,
+        key: _scaffoldKey1,
         backgroundColor: ColorConstant.whiteA700,
-        drawer: CreatorProfileDraweritem(homeController),
+        drawer: CreatorProfileDraweritem(),
         body: Container(
           width: double.maxFinite,
           decoration: AppDecoration.fillWhiteA700,
@@ -42,9 +40,15 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                        Padding(
+                      AppbarCircleimage(
+                        url: homeController.user.userModelObj.value.avatar,
+                        margin:
+                        EdgeInsets.only(top: 10, bottom: 14),
+                        onTap: openDrawer,
+                      ),
+                       Padding(
                          padding: const EdgeInsets.only(left: 8),
                          child: DefaultTextStyle(
                                    style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -60,12 +64,6 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                                    ),
                                 ),
                        ),
-                      AppbarCircleimage(
-                        url: homeController.user.userModelObj.value.avatar,
-                        margin:
-                        EdgeInsets.only(top: 10, bottom: 14),
-                        onTap: openDrawer,
-                      ),
 
                     ]
                     ),
@@ -136,8 +134,8 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
       ),
     );
   }
-  
+
   openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
+    _scaffoldKey1.currentState?.openDrawer();
   }
 }

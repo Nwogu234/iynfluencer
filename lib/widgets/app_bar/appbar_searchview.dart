@@ -8,15 +8,14 @@ import '../../presentation/search_filter_bottomsheet/search_filter_bottomsheet.d
 
 // ignore: must_be_immutable
 class AppbarSearchview extends StatelessWidget {
-  AppbarSearchview({
-    Key? key,
-    this.hintText,
-    this.controller,
-    this.margin,
-    this.onSubmitted,
-    this.onTap
-
-  }) : super(
+  AppbarSearchview(
+      {Key? key,
+      this.hintText,
+      this.controller,
+      this.margin,
+      this.onSubmitted,
+      this.onTap})
+      : super(
           key: key,
         );
 
@@ -30,40 +29,33 @@ class AppbarSearchview extends StatelessWidget {
 
   final VoidCallback? onTap;
 
-
   @override
   Widget build(BuildContext context) {
-    SearchFilterController searchFilterController =
-        Get.put(SearchFilterController());
-
     return Center(
       child: Padding(
-        padding: margin ?? getPadding(top: 5,right: 10),
+        padding: margin ?? getPadding(top: 5, right: 10),
         child: CustomSearchView(
           width: getHorizontalSize(
             300,
           ),
           height: getVerticalSize(45),
-          onTap: onTap,
+          onTap: (() {
+            print("Search bar tapped");
+            Get.to(() => SearchInfluncersScreen());
+          }),
           focusNode: FocusNode(),
           autofocus: true,
           controller: controller,
           hintText: hintText,
-          prefix: GestureDetector(
-            onTap: (() {
-               print("Search bar tapped");
-               Get.to(() => SearchInfluncersScreen());
-            }),
-            child: Container(
-              margin: getMargin(
-                left: 19,
-                top: 9,
-                right: 10,
-                bottom: 9,
-              ),
-              child: CustomImageView(
-                svgPath: ImageConstant.imgSearch,
-              ),
+          prefix: Container(
+            margin: getMargin(
+              left: 19,
+              top: 9,
+              right: 10,
+              bottom: 9,
+            ),
+            child: CustomImageView(
+              svgPath: ImageConstant.imgSearch,
             ),
           ),
           prefixConstraints: BoxConstraints(
@@ -73,7 +65,7 @@ class AppbarSearchview extends StatelessWidget {
           ),
           suffix: GestureDetector(
             onTap: () {
-              Get.bottomSheet(SearchFilterBottomsheet(searchFilterController));
+              Get.bottomSheet(SearchFilterBottomsheet());
             },
             child: Container(
               margin: getMargin(

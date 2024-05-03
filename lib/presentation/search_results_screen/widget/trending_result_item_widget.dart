@@ -275,7 +275,7 @@ class TrendingResultItemWidget extends StatelessWidget {
                                                 left: 13,
                                               ),
                                               child: Text(
-                                                  "${capitalizeFirstLetter(influencer.user?.first.country)}"
+                                                  "${influencer.user?.first.country}"
                                                       .tr,
                                                   overflow:
                                                       TextOverflow.ellipsis,

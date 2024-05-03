@@ -20,7 +20,7 @@ class MessagesPageItemWidget extends StatelessWidget {
   }) : super(key: key);
 
   final MessagesController messageController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
 
   final storage = new FlutterSecureStorage();
 

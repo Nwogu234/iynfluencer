@@ -115,7 +115,7 @@ class CustomTextFormField extends StatelessWidget {
 
   _buildDecoration() {
     return InputDecoration(
-      labelText: label ?? null,
+      labelText: label??null,
       hintText: hintText ?? "",
       hintStyle: _setFontStyle(),
       border: _setBorderStyle(),
@@ -148,7 +148,7 @@ class CustomTextFormField extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
-            35,
+            22,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
@@ -339,7 +339,6 @@ enum TextFormFieldShape {
   RoundedBorder6,
   CircleBorder10,
 }
-
 enum TextFormFieldPadding {
   PaddingAll14,
   PaddingT14,
@@ -350,7 +349,6 @@ enum TextFormFieldPadding {
   PaddingT9,
   PaddingAll9,
 }
-
 enum TextFormFieldVariant {
   None,
   FillGray100,
@@ -358,7 +356,6 @@ enum TextFormFieldVariant {
   FillCyan300,
   FillCyan3005e,
 }
-
 enum TextFormFieldFontStyle {
   SatoshiLight14Gray900ab,
   SatoshiLight14,

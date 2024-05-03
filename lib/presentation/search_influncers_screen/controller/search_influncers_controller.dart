@@ -35,9 +35,13 @@ class SearchInfluncersController extends GetxController {
 
   RxString avatar = ''.obs;
 
+  String query='';
+
   @override
   void onInit() {
     super.onInit();
+    query= searchController.value.toString();
+
     getUser();
   }
 

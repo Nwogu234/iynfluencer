@@ -22,7 +22,7 @@ class JobsJobsInfluencerController extends GetxController {
   Rx<List<Job>> jobsJobsInfluencerModelObj;
   final UserController user = Get.find();
   late InfluencerBottomBarController bumcont =
-      Get.put(InfluencerBottomBarController());
+      Get.find<InfluencerBottomBarController>();
   late InfluencerTabsController infTabcont = Get.put(InfluencerTabsController());
 
   Rx<bool> isLoading = false.obs;

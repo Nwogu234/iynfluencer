@@ -22,7 +22,7 @@ class CreatorHireslistPage extends StatefulWidget {
 
 class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     with SingleTickerProviderStateMixin {
-  late CreatorHireslistController controller;
+  final controller = Get.put(CreatorHireslistController(CreatorHireslistModel()));
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Initialize creatorJobslistModelObj here
@@ -39,7 +39,7 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-    controller = Get.put(CreatorHireslistController(creatorHireslistModelObj));
+
   }
 
   @override

@@ -12,6 +12,7 @@ import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import '../messages_page_influencer_page/widgets/listgroup883_item_widget.dart';
 import 'controller/messages_page_influencer_controller.dart';
+import 'models/listgroup883_item_model.dart';
 import 'models/messages_page_influencer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -62,7 +63,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     super.dispose();
   }
 
-  
+
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
@@ -155,7 +156,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                     top: 150,
                                     start: 150,
                                     child:
-                                        SizedBox(), 
+                                        SizedBox(),
                                   ),
                                 ],
                               );
@@ -212,9 +213,9 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     _scaffoldKey.currentState?.openDrawer();
   }
 }
- 
 
- /* 
+
+ /*
  class MessagesPageInfluencerPage extends StatelessWidget {
   MessagesPageInfluencerPage({Key? key})
       : super(

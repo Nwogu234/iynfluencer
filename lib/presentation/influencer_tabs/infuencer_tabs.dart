@@ -1,5 +1,4 @@
 import 'package:iynfluencer/presentation/earnings_screen/earnings_screen.dart';
-import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
 
 import '../../widgets/app_bar/influencer_buttom_bar.dart';
 import '../community_page/community_page.dart';
@@ -24,7 +23,7 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
                 initialRoute: controller.currentRoute.value,
                 onGenerateRoute: (routeSetting) => GetPageRoute(
                     page: () => getCurrentPage(controller.currentRoute.value),
-                    transition: Transition.native)),
+                    transition: Transition.fadeIn)),
             bottomNavigationBar:
                 InfluencerBottomBar(onChanged: (BottomBarEnum type) {
               controller.currentRoute.value = getCurrentRoute(type);
@@ -41,7 +40,7 @@ String getCurrentRoute(BottomBarEnum type) {
     case BottomBarEnum.Job:
       return AppRoutes.jobsJobsInfluencerTabContainerScreen;
     case BottomBarEnum.Chats:
-      return AppRoutes.messagesPageInfluencerPage;
+      return AppRoutes.messagesPage;
     case BottomBarEnum.Earnings:
       return AppRoutes.earningsScreen;
     default:
@@ -56,8 +55,8 @@ Widget getCurrentPage(String currentRoute) {
       return InfluencerHomeScreen();
     case AppRoutes.jobsJobsInfluencerTabContainerScreen:
       return JobsJobsInfluencerTabContainerScreen();
-    case AppRoutes.messagesPageInfluencerPage:
-      return MessagesPageInfluencerPage();
+    case AppRoutes.messagesPage:
+      return MessagesPage();
     case AppRoutes.earningsScreen:
       return EarningsScreen();
     default:

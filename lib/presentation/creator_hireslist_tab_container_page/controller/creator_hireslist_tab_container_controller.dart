@@ -16,8 +16,7 @@ class CreatorHireslistTabContainerController extends GetxController
   late TabController tabiewController =
       Get.put(TabController(vsync: this, length: 2));
 
-          
-   @override
+  @override
   void onClose() {
     tabiewController.dispose();
     super.onClose();

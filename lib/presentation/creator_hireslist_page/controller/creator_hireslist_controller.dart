@@ -48,14 +48,6 @@ class CreatorHireslistController extends GetxController {
   }
 
 //this is for animation
-  late AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));

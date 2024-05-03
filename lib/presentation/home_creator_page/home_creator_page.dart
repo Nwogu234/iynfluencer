@@ -90,7 +90,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
       child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: ColorConstant.whiteA700,
-          drawer: CreatorProfileDraweritem(controller),
+          drawer: CreatorProfileDraweritem(),
           appBar: CustomAppBar(
             height: getVerticalSize(70),
             leading: Obx(() {

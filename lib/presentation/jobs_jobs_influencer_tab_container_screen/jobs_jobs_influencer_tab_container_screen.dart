@@ -35,13 +35,13 @@ class JobsJobsInfluencerTabContainerScreen extends StatefulWidget {
 }
 
 class _JobsJobsInfluencerTabContainerScreenState extends State<JobsJobsInfluencerTabContainerScreen> {
-  JobsJobsInfluencerTabContainerController controller = Get.put(
+  final controller = Get.put(
       JobsJobsInfluencerTabContainerController(
           JobsJobsInfluencerTabContainerModel().obs));
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); 
 
-  InfluencerHomeController influencerController =
+  final influencerController =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
 
   @override

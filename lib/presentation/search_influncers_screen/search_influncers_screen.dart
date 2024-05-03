@@ -34,7 +34,7 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-     searchResultsController = Get.put(SearchResultsController(SearchResultsModel().obs));
+     searchResultsController = Get.put(SearchResultsController());
     controllers = Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
   }
   @override
