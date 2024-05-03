@@ -148,7 +148,8 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                                 .jobsMyBidsInfluencerModelObj.isEmpty &&
                             !controller.isTrendLoading.value) {
                           return ResponsiveEmptyWidget(
-                            errorMessage: 'No Job Bids Available',
+                            errorMessage: 'You have submitted (0) bids',
+                            smallMessage: 'Your past bids will appear here',
                             buttonText: "Bid on jobs now!",
                             onRetry: () {
                               Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context).pushReplacementNamed(AppRoutes.influencerHomeScreen) ;

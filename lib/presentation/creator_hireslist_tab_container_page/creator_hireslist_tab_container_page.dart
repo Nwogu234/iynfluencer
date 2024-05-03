@@ -42,15 +42,9 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AppbarCircleimage(
-                        url: homeController.user.userModelObj.value.avatar,
-                        margin:
-                        EdgeInsets.only(top: 10, bottom: 14),
-                        onTap: openDrawer,
-                      ),
-                       Padding(
+                        Padding(
                          padding: const EdgeInsets.only(left: 8),
                          child: DefaultTextStyle(
                                    style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -66,6 +60,12 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                                    ),
                                 ),
                        ),
+                      AppbarCircleimage(
+                        url: homeController.user.userModelObj.value.avatar,
+                        margin:
+                        EdgeInsets.only(top: 10, bottom: 14),
+                        onTap: openDrawer,
+                      ),
 
                     ]
                     ),

@@ -91,8 +91,9 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
               );
             } else if (controller.empty) {
               return ResponsiveEmptyWidget(
-                errorMessage: 'You have not posted any jobs yet',
-                buttonText: "Post job",
+                errorMessage: 'You have no posts yet',
+                smallMessage: 'Your past posts will appear here',
+                buttonText: "Post a new job",
                 onRetry: () {
                   homcont.currentRoute.value = AppRoutes.postPageScreen;
                   Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context)

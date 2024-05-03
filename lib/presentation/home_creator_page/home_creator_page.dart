@@ -151,7 +151,8 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                               totalRepeatCount: 3,
                               animatedTexts: [
                                 TypewriterAnimatedText(
-                                    'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',textStyle: AppStyle.txtSatoshiBold16
+                                    'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
+                                    textStyle: AppStyle.txtSatoshiBold16
                                     .copyWith(
                                   fontSize: 16.sp,
                                   color: ColorConstant.black900,

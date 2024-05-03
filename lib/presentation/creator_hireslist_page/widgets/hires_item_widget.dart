@@ -201,7 +201,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 3,
                             ),
                             variant: ButtonVariant.FillLime100b2,
-                            shape: ButtonShape.RoundedBorder12,
+                            shape: ButtonShapes.RoundedBorder12,
                             padding: ButtonPadding.PaddingAll4,
                             fontStyle: ButtonFontStyle.SatoshiBold115,
                           ),

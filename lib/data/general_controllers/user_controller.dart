@@ -92,64 +92,6 @@ class UserController extends GetxController {
       print(e);
     }
   }
-/* 
-  Future<void> uploadUserPic(String filePath) async {
-    Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
-      barrierDismissible: false, // user must not close it manually
-    );
-    token = await storage.read(key: "token");
-    // 1. Get the pre-signed URL from your backend
-    final response = await apiClient.getPicUrl(token,filePath);
-
-    if (!response.isOk) {
-      Get.back();
-      Get.snackbar('Error', 'Failed to upload image. Please try again.');
-      print('Failed to obtain pre-signed URL');
-      return;
-    }
-    print(response.body);
-    String presignedUrl = response.body['data']['uploadUrl'];
-
-    /* // 2. Upload the file using the pre-signed URL
-    final file = File(filePath);
-    final List<int> fileBytes = file.readAsBytesSync();
-
-    final uploadResponse = await http.post(
-      Uri.parse(presignedUrl),
-      headers: {
-        'Content-Type':
-            'image/jpeg', // This should match what you set in the backend
-      },
-      body: fileBytes,
-    ); */
-
-    if (uploadResponse.statusCode == 200) {
-      print('File successfully uploaded');
-      String picUrl = presignedUrl.split('?').first;
-      // Splitting the URL based on '/'
-      List<String> parts = picUrl.split('/');
-
-      // 3 Extracting the desired part
-      String desiredPart = parts.sublist(3).join('/');
-      print(desiredPart);
-      final response = await apiClient.postAvatar(desiredPart, token);
-      if (response.isOk) {
-        Get.back();
-        Get.snackbar('Success', 'Image uploaded');
-        print('Success: ${response.body}');
-      } else {
-        Get.back();
-        Get.snackbar('Error', 'Failed to upload image. Please try again.');
-        print('Error: ${response.body}');
-      }
-      print(uploadResponse.body);
-    } else {
-      Get.back();
-      Get.snackbar('Error', 'Failed to upload image. Please try again.');
-      print('File upload failed');
-    }
-  } */
 
   Future<void> uploadUserPic(String filePath) async {
   try {

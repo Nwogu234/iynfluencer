@@ -121,7 +121,8 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                           ); // Your error widget
                         } else if (controller.isEpty.value) {
                           return ResponsiveEmptyWidget(
-                            errorMessage: 'You have not gotten any jobs',
+                            errorMessage: 'You have no current Jobs ',
+                              smallMessage: 'Your past and present Jobs will appear here',
                             buttonText: "Bid on jobs now!",
                             onRetry: () {
                               controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;

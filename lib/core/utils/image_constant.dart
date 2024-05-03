@@ -8,6 +8,8 @@ class ImageConstant {
 
   static String imgGroup85256 = 'assets/images/img_group852_56.png';
 
+  static String imgLocation = 'assets/images/img_location_marker.svg';
+
   static String imgGroup85222 = 'assets/images/img_group852_22.png';
 
   static String imgFrameCyan300 = 'assets/images/img_frame_cyan_300.svg';
@@ -49,6 +51,9 @@ class ImageConstant {
 
   static String imgArrowdownGray600 =
       'assets/images/img_arrowdown_gray_600.svg';
+
+  static String imgArrowMark =
+      'assets/images/img_mark.svg';
 
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
 
@@ -92,6 +97,8 @@ class ImageConstant {
   static String imgEye2 = 'assets/images/img_eye_2.svg';
 
   static String imgArrowup = 'assets/images/img_arrowup.svg';
+
+  static String imgCalenders = 'assets/images/img_calendar.svg';
 
   static String imgGroup94785x85 = 'assets/images/img_group947_85x85.png';
 

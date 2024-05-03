@@ -294,10 +294,10 @@ class CustomButtonTwo extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShape.RoundedBorder12:
+      case ButtonShape.RoundedBorderz12:
         return BorderRadius.circular(
           getHorizontalSize(
-            12.00,
+            25.00,
           ),
         );
       case ButtonShape.RoundedBorder3:
@@ -316,6 +316,8 @@ class CustomButtonTwo extends StatelessWidget {
         );
     }
   }
+
+ 
 
   _setFontStyle() {
     switch (fontStyle) {
@@ -506,7 +508,7 @@ class CustomButtonTwo extends StatelessWidget {
 enum ButtonShape {
   Square,
   RoundedBorder7,
-  RoundedBorder12,
+  RoundedBorderz12,
   RoundedBorder3,
 }
 

@@ -17,7 +17,7 @@ class CustomButtonOne extends StatelessWidget {
       this.prefixWidget,
       this.suffixWidget});
 
-  ButtonShape? shape;
+  ButtonShapez? shape;
 
   ButtonPaddings? padding;
 
@@ -297,19 +297,19 @@ class CustomButtonOne extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShape.RoundedBorder12:
+      case ButtonShapez.RoundedBorder12:
         return BorderRadius.circular(
           getHorizontalSize(
             12.00,
           ),
         );
-      case ButtonShape.RoundedBorder3:
+      case ButtonShapez.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
             3.00,
           ),
         );
-      case ButtonShape.Square:
+      case ButtonShapez.Square:
         return BorderRadius.circular(0);
       default:
         return BorderRadius.circular(
@@ -506,7 +506,7 @@ class CustomButtonOne extends StatelessWidget {
   }
 }
 
-enum ButtonShape {
+enum ButtonShapez {
   Square,
   RoundedBorder7,
   RoundedBorder12,
