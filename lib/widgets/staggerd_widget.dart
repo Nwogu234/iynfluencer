@@ -165,7 +165,7 @@ class StaggeredWidget extends StatelessWidget {
         ),
       ),
       Positioned(
-        right: 90.w,
+        right: 100.w,
         top: 15,
         child: Container(
           decoration: BoxDecoration(

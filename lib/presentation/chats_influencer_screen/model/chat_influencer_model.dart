@@ -6,7 +6,7 @@ import 'package:iynfluencer/presentation/chats_influencer_screen/model/stem_item
 
 class ChatsInfluencerModel {
   Rx<List<StemItemModel>> trendinghorizonItemList =
-      Rx(List.generate(4, (index) => StemItemModel()));
+  Rx(List.generate(4, (index) => StemItemModel()));
 
 
 }

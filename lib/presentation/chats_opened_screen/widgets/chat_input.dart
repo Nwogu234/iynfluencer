@@ -17,6 +17,7 @@ import '../../../widgets/custom_text_form_field.dart';
 
 class ChatInputBar extends StatefulWidget {
   final TextEditingController messageController;
+  final RxList<Message> messageModelObj;
   IconData? icon;
   VoidCallback? onPressed;
   final ChatData chatData;
@@ -29,6 +30,7 @@ class ChatInputBar extends StatefulWidget {
       {required this.messageController,
       this.icon,
       this.onPressed,
+      required this.messageModelObj,
       required this.chatData,
       required this.focusNode,
       required this.replyMessage,
@@ -44,17 +46,18 @@ class _ChatInputBarState extends State<ChatInputBar> {
   var sendButton = false.obs;
   late ChatsInputController controller;
   bool isEmojiWidgetShown = false;
-  bool EmojiWidgetShown = true;   
+  bool EmojiWidgetShown = true;
 
   @override
   void initState() {
     super.initState();
     controller = ChatsInputController(
         chatData: widget.chatData,
+        messageModelObj: widget.messageModelObj,
         messageController: widget.messageController,
         focusNode: widget.focusNode,
         onCancelReply: widget.onCancelReply,
-        openController: widget.openedController);
+        openController:  Get.find());
 
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
@@ -114,8 +117,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     sendButton.value = value.isNotEmpty;
                   },
                   hintText: "lbl_write_a_message".tr,
-                  onSubmitted: (_) => controller.sendMessage(
-                      context, controller.messageController.text),
+                  onSubmitted: (_) => widget.openedController.sendMessage(
+                      context, widget.messageController.text),
                   padding: TextFormFieldPadding.PaddingT11,
                   fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                   textInputAction: TextInputAction.done,
@@ -127,8 +130,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                       child: IconButton(
                         onPressed: sendButton.value
                             ? () async {
-                                await controller.sendMessage(
-                                    context, controller.messageController.text);
+                                await widget.openedController.sendMessage(
+                                    context, widget.messageController.text);
                               }
                             : null,
                         icon: sendButton.value
@@ -162,8 +165,11 @@ class _ChatInputBarState extends State<ChatInputBar> {
   }
 }
 
+
+
 class ChatsInputController extends GetxController {
   final ChatData chatData;
+  final RxList<Message>messageModelObj;
   final TextEditingController messageController;
   final FocusNode focusNode;
   final VoidCallback onCancelReply;
@@ -171,12 +177,12 @@ class ChatsInputController extends GetxController {
 
   ChatsInputController(
       {required this.chatData,
+      required this.messageModelObj,
       required this.messageController,
       required this.focusNode,
       required this.onCancelReply,
       required this.openController});
 
-  RxList<Message> messageModelObj = <Message>[].obs;
   var message = "".obs;
   bool empty = false;
   var token;
@@ -186,7 +192,7 @@ class ChatsInputController extends GetxController {
   final ScrollController _scrollController = ScrollController();
   final ApiClients apiClient = ApiClients();
   final SocketClient socketClient = SocketClient.to;
-   RxBool isConnected = false.obs;
+  RxBool isConnected = false.obs;
 
   @override
   void onInit() {
@@ -203,132 +209,49 @@ class ChatsInputController extends GetxController {
     await saveMessages(messages, chatId);
   }
 
-  
- Future<void> saveMessages(List<Message> messages, String chatId) async {
-  try {
-    final List<String> serializedMessages = messages.map((message) => jsonEncode(message.toJson())).toList();
-    final String serializedMessagesString = jsonEncode(serializedMessages);
-    await storage.write(key: 'messages_$chatId', value: serializedMessagesString);
-    print('Messages saved successfully for chat ID: $chatId');
-  } catch (e) {
-    print('Error saving messages: $e');
-    // Handle error as needed
+  Future<void> saveMessages(List<Message> messages, String chatId) async {
+    try {
+      final List<String> serializedMessages =
+          messages.map((message) => jsonEncode(message.toJson())).toList();
+      final String serializedMessagesString = jsonEncode(serializedMessages);
+      await storage.write(
+          key: 'messages_$chatId', value: serializedMessagesString);
+      print('Messages saved successfully for chat ID: $chatId');
+    } catch (e) {
+      print('Error saving messages: $e');
+      // Handle error as needed
+    }
   }
-}
-   Future<List<Message>> loadMessages(String chatId) async {
-  final serializedMessagesString = await storage.read(key: 'messages_$chatId');
-  
-  if (serializedMessagesString != null && serializedMessagesString.isNotEmpty) {
-    final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
-    
-    // Check if the decoded data is a list
-    if (decodedList is List) {
-      final List<Map<String, dynamic>> serializedMessages =
-          decodedList.cast<Map<String, dynamic>>();
-      
-      // Map each Map<String, dynamic> to a Message object using Message.fromJson
-      final List<Message> messages = serializedMessages
-          .map((map) => Message.fromJson(map))
-          .toList();
-      
-      return messages;
+
+  Future<List<Message>> loadMessages(String chatId) async {
+    final serializedMessagesString =
+        await storage.read(key: 'messages_$chatId');
+
+    if (serializedMessagesString != null &&
+        serializedMessagesString.isNotEmpty) {
+      final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
+
+      // Check if the decoded data is a list
+      if (decodedList is List) {
+        final List<Map<String, dynamic>> serializedMessages =
+            decodedList.cast<Map<String, dynamic>>();
+
+        // Map each Map<String, dynamic> to a Message object using Message.fromJson
+        final List<Message> messages =
+            serializedMessages.map((map) => Message.fromJson(map)).toList();
+
+        return messages;
+      } else {
+        print('Invalid JSON format: $serializedMessagesString');
+        return [];
+      }
     } else {
-      print('Invalid JSON format: $serializedMessagesString');
+      print('No messages found for chatId: $chatId');
       return [];
     }
-  } else {
-    print('No messages found for chatId: $chatId');
-    return [];
   }
-}
 
 
-  Future<void> sendMessage(BuildContext context, String messageText) async {
-    FocusScope.of(context).unfocus();
-    onCancelReply();
-    try {
-      messageText = messageText.trim();
-
-      final now = DateTime.now();
-      final formattedTime = DateFormat('HH:mm').format(now);
-      final createdAt = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        int.parse(formattedTime.substring(0, 2)),
-        int.parse(formattedTime.substring(3)),
-        0,
-      );
-
-      final messageId = Uuid().v4();
-
-      final newMessage = Message(
-        id: chatData.id,
-        chatId: chatData.chatId,
-        authorId: chatData.creatorId,
-        text: messageText,
-        authorUserId: chatData.creatorUserId,
-        blockedByRecipient: chatData.blockedByInfluencer,
-        messageId: messageId,
-        createdAt: createdAt,
-        updatedAt: createdAt,
-      );
-
-      final token = await storage.read(key: "token");
-
-      if (token == null) {
-        print("Authorization token is not available");
-        return;
-      }
-      final response = await apiClient.sendMessage(newMessage, token);
-
-      if (response.isOk) {
-        print('Message sent and stored successfully');
-
-        messageModelObj.add(newMessage);
-
-        socketClient.sendMessage(chatData, messageText);
-
-        update();
-
-      /*   Message newsMessage = Message(
-          id: chatData.id,
-          chatId: chatData.chatId,
-          authorId: chatData.creatorId,
-          text: messageText,
-          authorUserId: chatData.creatorUserId,
-          blockedByRecipient: chatData.blockedByInfluencer,
-          messageId: messageId,
-          createdAt: createdAt,
-          updatedAt: createdAt,
-        ); */
-      //  addMessage(newsMessage, chatData.chatId);
-
-     //   openController.getUser(chatData.chatId);
-
-        update();
-
-        messageController.clear();
-
-         focusNode.requestFocus();
-
-        if (_scrollController.hasClients) {
-          scrollToBottom();
-        } else {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_scrollController.hasClients) {
-              scrollToBottom();
-            }
-          });
-        }
-      } else {
-        print('Failed to send message: ${response.statusText}');
-        print('Sent Message: $messageText');
-      }
-    } catch (e) {
-      print('Error sending message: $e');
-    }
-  }
 
   void scrollToBottom() {
     _scrollController.animateTo(
@@ -341,7 +264,7 @@ class ChatsInputController extends GetxController {
   @override
   void onClose() {
     _scrollController.dispose();
-     socketClient.disconnect();
+    socketClient.disconnect();
     super.onClose();
   }
 }

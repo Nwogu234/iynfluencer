@@ -1,24 +1,18 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
-import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';
-import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
-import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketClient extends GetxService {
   late IO.Socket socket;
   RxBool isConnected = false.obs;
+  RxBool isConnecting = false.obs;
   Rx<Message?> receivedMessage = Rx<Message?>(null);
   var sentMessages = <Message>[].obs;
   UserController user = Get.find<UserController>();
 
-  // Make SocketClient a singleton
-  static SocketClient get to => Get.find();
-  var messages = <String>[].obs;
+  static SocketClient get to => Get.find();  // Singleton pattern for easy access
 
   @override
   void onInit() {
@@ -27,94 +21,105 @@ class SocketClient extends GetxService {
   }
 
   void _initSocket() async {
-    // Initialize the socket connection
     var storage = FlutterSecureStorage();
     var token = await storage.read(key: 'token');
-    socket = IO.io(
-        // 'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/chat-socket:5046',
-        'wss://iynf-chat-hgkkb.ondigitalocean.app',
-        <String, dynamic>{
-          'transports': ['websocket'],
-          'extraHeaders': {
-           'authorization': token,
-          },
-          'autoConnect': false,
-        });
-
-    // Handle different socket events
-    socket.onConnect((_) => isConnected.value = true);
-    socket.onDisconnect((_) => isConnected.value = false);
-
-    //userJoin event
-    socket.on('userJoin', (data) {
-      var chatId = data['chatId'];
-      var userFirstName = user.userModelObj().firstName;
-      if (chatId != null && userFirstName != null) {
-        print('User $userFirstName has joined the chat with chat ID: $chatId');
-        socket.emit('userJoin', '$userFirstName has joined the chat');
-      } else {
-        print('Incomplete data received for userJoin event');
-      }
-    });
-
-    //userLeave event
-    socket.on('userLeave', (data) {
-      var chatId = data['chatId'];
-      var userFirstName = user.userModelObj().firstName;
-      if (chatId != null && userFirstName != null) {
-        print('User $userFirstName has left the chat with chat ID: $chatId');
-        socket.emit('userLeave', '$userFirstName has left the chat');
-      } else {
-        print('Incomplete data received for userLeave event');
-      }
-    });
-
-    
-  }
-
-  bool get hasConnected => isConnected.value;
-
-  // Method to connect to the socket
-  void connect() {
-    if (!isConnected.value) {
+    print('socket has been called');
+   try {
+      socket = IO.io('wss://iynf-chat-hgkkb.ondigitalocean.app', <String, dynamic>{
+        'transports': ['websocket'],
+        'extraHeaders': {'authorization': token},
+        'autoConnect': true,
+        'reconnection': true,
+        'reconnectionAttempts': 10000,
+        'path': '/chat-socket',
+        'timeout': 30000,
+      });
       socket.connect();
+      connect();
       print(socket.connected);
-      isConnected.value = true;
-      print('connected');
+    } catch (e) {
+      Get.log('Socket initialization failed: $e', isError: true);
     }
   }
 
-  // Method to disconnect from the socket
-  void disconnect() {
-    if (isConnected.value) {
-      socket.disconnect();
+  void connect() {
+    if (!isConnected.value && !isConnecting.value) {
+      isConnecting.value = true;
+      socket.connect();
+      _setupSocketListeners();
+    }
+  }
+
+  void _setupSocketListeners() {
+    socket.onConnect((_) {
+      isConnected.value = true;
+      isConnecting.value = false;
+      print('WEB SOCKET CONNECTED');
+      Get.log('WebSocket connected');
+    });
+
+    socket.onDisconnect((_) {
       isConnected.value = false;
+      print('WEB SOCKET DISCONNECTED');
+      Get.log('WebSocket disconnected');
+    });
+
+    socket.onError((data) {
+      isConnected.value = false;
+      isConnecting.value = false;
+    });
+
+    socket.onConnectTimeout((data) {
+      isConnected.value = false;
+      isConnecting.value = false;
+      print('WEB SOCKET TIMEOUT');
+      Get.log('Socket error: $data', isError: true);
+    });
+    socket.on('userJoin', (data) => _handleUserEvent(data, "joined"));
+    socket.on('userLeave', (data) => _handleUserEvent(data, "left"));
+  }
+
+  void _handleNewMessage(dynamic data) {
+    Message newMessage = Message.fromJson(data);
+    receivedMessage.value = newMessage;
+    sentMessages.add(newMessage);
+    Get.log('New message received: $data');
+  }
+
+  void _handleUserEvent(dynamic data, String eventType) {
+    var chatId = data['chatId'];
+    var userFirstName = user.userModelObj().firstName;
+    if (chatId != null && userFirstName != null) {
+      Get.log('User $userFirstName has $eventType the chat with chat ID: $chatId');
+    } else {
+      Get.log('Incomplete data received for $eventType event', isError: true);
     }
   }
 
   void sendMessage(ChatData chatData, String messageText) {
-    // Emit the onMessageCreate event with payload containing text, userId, and chat details
-    socket.emit('onMessageCreate', {
-      'text': messageText,
-      'userId': user.userModelObj().userId,
-      'chat': {
-        'chatId': chatData.chatId,
-        'creatorUserId': chatData.creatorUserId,
-        'influencerUserId': chatData.influencerUserId,
-      },
-    });
+    if (isConnected.value) {
+      try {
+        socket.emit('onMessageCreate', {
+          'text': messageText,
+          'userId': user.userModelObj().userId,
+          'chat': {
+            'chatId': chatData.chatId,
+            'creatorUserId': chatData.creatorUserId,
+            'influencerUserId': chatData.influencerUserId,
+          },
+        });
+        Get.log('Message sent: $messageText');
+      } catch (e) {
+        Get.log('Error sending message: $e', isError: true);
+      }
+    }
   }
 
-  // listen to connection status
-  void listenToConnectionStatus() {
-    socket.onConnect((_) {
-      // WebSocket connected
-      isConnected.value = true;
-    });
-
-    socket.onDisconnect((_) {
-      // WebSocket disconnected
+  void disconnect() {
+    if (isConnected.value) {
+      socket.disconnect();
       isConnected.value = false;
-    });
+      Get.log('Disconnected');
+    }
   }
 }

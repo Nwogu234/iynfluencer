@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
+import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -27,7 +28,6 @@ class ChatsOpenedController extends GetxController {
   var error = ''.obs;
   final UserController user = Get.find();
   final ApiClients apiClient = ApiClients();
-  final SocketClient socketClient = SocketClient.to;
   final SocketClient _socketClient = Get.find();
   final storage = FlutterSecureStorage();
   Rx<bool> isLoading = false.obs;
@@ -38,20 +38,27 @@ class ChatsOpenedController extends GetxController {
   RxBool isEmojiWidgetShown = false.obs;
   RxBool isConnected = false.obs;
 
-  @override
-  void onInit() {
-     _socketClient.connect();
-    super.onInit();
-
-    print('Chat data before getUser: $chatData');
-
-    final String chatId = chatData.chatId;
-    print('Chat ID: $chatId');
-    getUser(chatId);
-  }
-
   void hideEmojiWidget() {
     isEmojiWidgetShown.value = !isEmojiWidgetShown.value;
+  }
+
+  void listenToNewMessages() {
+    _socketClient.socket.on('onMessageCreate', (data) {
+      _handleNewMessage(data);
+    });
+    _socketClient.socket.on('error', (errorData) {
+      error.value = 'Socket Error: $errorData';
+      update(); // Trigger UI update if necessary
+    });
+  }
+
+  void _handleNewMessage(dynamic data) {
+    print('this is working');
+    print(data);
+    Message newMessage = Message.fromJson(data);
+
+    print(newMessage);
+     // Notify listeners for UI update
   }
 
   Future<void> refreshItems() async {
@@ -65,21 +72,13 @@ class ChatsOpenedController extends GetxController {
     error.value = '';
     token = await storage.read(key: "token");
     try {
-      await user.getUser();
-      print('User data: ${user.userModelObj.value}');
-      if (user.userModelObj.value.firstName.isEmpty) {
-        error('Something went wrong');
-        isLoading.value = false;
-      } else {
-        error('');
-       // loadMessages(chatId);
+        // loadMessages(chatId);
         await fetchAllMessagesWithInfluencer(chatId).then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
         });
-        // onTapChatCard(selectedInfluencer, chatData);
-      }
+
     } catch (e) {
       print('Error in getUser: $e');
       error.value = 'Failed to fetch messages';
@@ -92,11 +91,17 @@ class ChatsOpenedController extends GetxController {
   Future<void> fetchAllMessagesWithInfluencer(String chatId) async {
     try {
       error.value = '';
+
       isLoading.value = true;
+
       error.value = '';
+
       token = await storage.read(key: "token");
-      print('Fetching messages for chat ID: $chatId'); // Debug log
+
+      print('Fetching messages for chat ID: $chatId');
+      // Debug log
       final Response response = await apiClient.getAllMessages(chatId, token);
+
       if (response.isOk) {
         final responseData = response.body;
         final List<dynamic>? chatDataList = responseData['data']?['docs'];
@@ -110,14 +115,7 @@ class ChatsOpenedController extends GetxController {
             messages.add(message);
           }
 
-          /*    final List<Message> storedMessages = await loadMessages(chatId) ?? [];
-
-        final List<Message> mergedMessages = [...storedMessages, ...messages];
-        messageModelObj.assignAll(mergedMessages);
-        saveMessages(mergedMessages, chatId); */
-
           messageModelObj.assignAll(messages);
-
           saveMessages(messages, chatId);
         } else {
           error('Failed to fetch messages: Data not available');
@@ -131,6 +129,65 @@ class ChatsOpenedController extends GetxController {
     } finally {
       isTrendLoading.value = false;
     }
+  }
+
+  Future<void> sendMessage(BuildContext context, String messageText) async {
+    FocusScope.of(context).unfocus();
+    try {
+      messageText = messageText.trim();
+
+      final now = DateTime.now();
+      final formattedTime = DateFormat('HH:mm').format(now);
+      final createdAt = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(formattedTime.substring(0, 2)),
+        int.parse(formattedTime.substring(3)),
+        0,
+      );
+
+      final messageId = Uuid().v4();
+
+      final newMessage = Message(
+        id: chatData.id,
+        chatId: chatData.chatId,
+        authorId: chatData.creatorId,
+        text: messageText,
+        authorUserId: chatData.creatorUserId,
+        blockedByRecipient: chatData.blockedByInfluencer,
+        messageId: messageId,
+        createdAt: createdAt,
+        updatedAt: createdAt,
+      );
+
+      final token = await storage.read(key: "token");
+
+      if (token == null) {
+        print("Authorization token is not available");
+        return;
+      }
+      // socketClient.sendMessage(chatData, messageText);
+      final response = await apiClient.sendMessage(newMessage, token);
+
+      if (response.isOk) {
+        UpdateList(newMessage);
+        print('Message sent and stored successfully');
+
+        messageController.clear();
+
+      } else {
+        print('Failed to send message: ${response.statusText}');
+        print('Sent Message: $messageText');
+      }
+    } catch (e) {
+      print('Error sending message: $e');
+    }
+  }
+
+  void UpdateList(Message message){
+    messageModelObj.insert(0, message);
+    update();
   }
 
   Future<void> deleteIdMessage(String deleteMessage) async {
@@ -276,20 +333,15 @@ class ChatsOpenedController extends GetxController {
       final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
 
       // Check if the decoded data is a list
-      if (decodedList is List) {
-        final List<Map<String, dynamic>> serializedMessages =
-            decodedList.cast<Map<String, dynamic>>();
+      final List<Map<String, dynamic>> serializedMessages =
+          decodedList.cast<Map<String, dynamic>>();
 
-        // Map each Map<String, dynamic> to a Message object using Message.fromJson
-        final List<Message> messages =
-            serializedMessages.map((map) => Message.fromJson(map)).toList();
+      // Map each Map<String, dynamic> to a Message object using Message.fromJson
+      final List<Message> messages =
+          serializedMessages.map((map) => Message.fromJson(map)).toList();
 
-        return messages;
-      } else {
-        print('Invalid JSON format: $serializedMessagesString');
-        return [];
-      }
-    } else {
+      return messages;
+        } else {
       print('No messages found for chatId: $chatId');
       return [];
     }
@@ -302,9 +354,30 @@ class ChatsOpenedController extends GetxController {
   }
 
   @override
+  void onInit() {
+    print(_socketClient.isConnected);
+    _socketClient.socket.emit('userJoin', {'message': 'user just joined'});
+    _socketClient.socket.on('error', (errorData) {
+      print('this error is from chat open');
+      print('Socket Error: $errorData');
+    });
+    listenToNewMessages();
+    super.onInit();
+
+    print('Chat data before getUser: $chatData');
+
+    final String chatId = chatData.chatId;
+    print('Chat ID: $chatId');
+    getUser(chatId);
+  }
+
+  @override
   void onClose() {
     super.onClose();
+    _socketClient.socket.off('newMessage');
+    _socketClient.socket.off('error');
+    _socketClient.disconnect();
     messageController.dispose();
-    socketClient.disconnect();
+    _socketClient.disconnect();
   }
 }

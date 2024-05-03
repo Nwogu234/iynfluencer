@@ -1,6 +1,4 @@
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
-import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
 import '../job_details_screen/widgets/job_details_item_widget.dart';
@@ -22,97 +20,11 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
   final Job? selectedJob;
   final bool? fromBids;
 
-   ChatData chatData = ChatData(
-    id: 'id',
-    creatorId: 'CreatorId',
-    creatorUserId: 'CreatorUserId',
-    influencerId: 'InfluencerId',
-    influencerUserId: 'defaultInfluencerUserId',
-    unreadByCreator: 0,
-    unreadByInfluencer: 0,
-    blockedByCreator: false,
-    blockedByInfluencer: false,
-    chatId: ' ',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    messages: const [],
-    influencerUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-    creatorUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-  );
-
-
   @override
   Widget build(BuildContext context) {
     // final List<Job> jobDetailsItemList = [
     //   selectedJob,
     // ];
-
-    ChatsInfluencerController chatController =
-      Get.put(ChatsInfluencerController(
-        chatData: chatData,
-        selectedJob: selectedJob
-        ));
- 
-    
-    String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${selectedJob?.creator?.userId}-avatar.jpeg";
-    // Assuming this is a String
-    String imageProvider;
-
-    if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = avatarUrl;
-    } else {
-      imageProvider = "mypic.wit";
-    }
-
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
         return text;
@@ -301,8 +213,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                               padding: getPadding(left: 20, top: 13, right: 53),
                               child: Row(children: [
                                 CustomImageView(
-                                    url: imageProvider,
-                                    fit: BoxFit.cover,
+                                    imagePath: ImageConstant.imgGroup85229,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -364,11 +275,6 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                         ])),
                                 Spacer(),
                                 CustomButton(
-                                   onTap:() {
-                                        chatController.onTapChatCard(
-                                          selectedJob,
-                                          chatData); 
-                                   },
                                     height: getVerticalSize(30),
                                     width: getHorizontalSize(86),
                                     text: "lbl_message".tr,

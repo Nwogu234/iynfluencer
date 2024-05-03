@@ -1,25 +1,23 @@
+import '../../widgets/custom_drop_down.dart';
 import 'controller/search_filter_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
-import 'package:iynfluencer/widgets/custom_drop_down.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
 import 'package:iynfluencer/presentation/search_results_screen/models/search_results_model.dart';
-import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
-import 'package:iynfluencer/presentation/search_results_screen/models/search_results_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/search_results_screen.dart';
-import 'package:iynfluencer/widgets/custo_dropdown.dart';
 
  class SearchFilterBottomsheet extends StatelessWidget {
-  SearchFilterBottomsheet(this.controller, {Key? key}) : super(key: key);
 
-  SearchFilterController controller;
-  late SearchResultsController searchResultsController;
+  // SearchFilterController controller;
+  // late SearchResultsController searchResultsController;
+  SearchFilterController searchFilterController =
+  Get.put(SearchFilterController());
 
   @override
   Widget build(BuildContext context) {
-     searchResultsController = Get.put(SearchResultsController(SearchResultsModel().obs));
+
 
     return SingleChildScrollView(
           child: SizedBox(
@@ -77,7 +75,7 @@ import 'package:iynfluencer/widgets/custo_dropdown.dart';
                                               child: CustomTextFormField(
                                                   focusNode: FocusNode(),
                                                   autofocus: true,
-                                                  controller: controller
+                                                  controller: searchFilterController
                                                       .frametwelveController,
                                                   hintText: "lbl_from2".tr,
                                                   margin: getMargin(right: 8),
@@ -101,7 +99,7 @@ import 'package:iynfluencer/widgets/custo_dropdown.dart';
                                               child: CustomTextFormField(
                                                   focusNode: FocusNode(),
                                                   autofocus: true,
-                                                  controller: controller
+                                                  controller: searchFilterController
                                                       .frametwelveoneController,
                                                   hintText: "lbl_to2".tr,
                                                   margin: getMargin(left: 8),
@@ -135,11 +133,11 @@ import 'package:iynfluencer/widgets/custo_dropdown.dart';
                                       ImageConstant.imgArrowdownBlueGray400)),
                           hintText: "lbl_country".tr,
                           margin: getMargin(left: 2, top: 23, right: 8),
-                          variant: DropDownVariant.None,
-                          items: controller.searchFilterModelObj.value
+                          variant:DropDownVariant.None,
+                          items: searchFilterController.searchFilterModelObj.value
                               .dropdownItemList1.value,
                           onChanged: (value) {
-                            controller.onSelected1(value);
+                            searchFilterController.onSelected1(value);
                           }),
                       CustomDropDown(
                           focusNode: FocusNode(),
@@ -152,10 +150,10 @@ import 'package:iynfluencer/widgets/custo_dropdown.dart';
                           hintText: "lbl_category".tr,
                           margin: getMargin(left: 2, top: 32, right: 8),
                           variant: DropDownVariant.None,
-                          items: controller.searchFilterModelObj.value
+                          items: searchFilterController.searchFilterModelObj.value
                               .dropdownItemList.value,
                           onChanged: (value) {
-                            controller.onSelected(value);
+                            searchFilterController.onSelected(value);
                           }),
                       CustomButton(
                           height: getVerticalSize(50),
@@ -173,20 +171,20 @@ import 'package:iynfluencer/widgets/custo_dropdown.dart';
   /// push the named route for the searchResultsScreen.
   onTapApplyfilters() {
   
-    final String? fromDate = controller.frametwelveController.text;
-    final String? toDate = controller.frametwelveoneController.text;
-    final SelectionPopupModel? selectedNiche = controller.selectedDropDownValue;
+    final String? fromDate = searchFilterController.frametwelveController.text;
+    final String? toDate = searchFilterController.frametwelveoneController.text;
+    final SelectionPopupModel? selectedNiche = searchFilterController.selectedDropDownValue;
     final SelectionPopupModel? selectedCountry =
-        controller.selectedDropDownValue1;
+        searchFilterController.selectedDropDownValue1;
 
-    searchResultsController.filterInfluencers(
+    searchFilterController.searchResultController.filterInfluencers(
       fromDate: fromDate,
       toDate: toDate,
       selectedNiche: selectedNiche,
       selectedCountry: selectedCountry,
     );
 
-      if (searchResultsController.filteredInfluencers.isEmpty) {
+      if (searchFilterController.searchResultController.filteredInfluencers.isEmpty) {
     Get.snackbar(
       'No Influencers Found',
       'There are no influencers matching your filter.',

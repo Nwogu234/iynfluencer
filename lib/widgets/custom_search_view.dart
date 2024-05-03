@@ -73,7 +73,9 @@ class CustomSearchView extends StatelessWidget {
       width: width ?? double.maxFinite,
       margin: margin,
       child: GestureDetector(
-        onTap:onTap,
+        onTap:(){
+         onTap;
+      },
         child: TextFormField(
           controller: controller ?? TextEditingController(),
           focusNode: focusNode,
