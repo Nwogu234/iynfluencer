@@ -1,15 +1,16 @@
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/search_filter_bottomsheet/models/search_filter_model.dart';
 import 'package:flutter/material.dart';
+import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
 
 /// A controller class for the SearchFilterBottomsheet.
 ///
 /// This class manages the state of the SearchFilterBottomsheet, including the
 /// current searchFilterModelObj
 class SearchFilterController extends GetxController {
-  TextEditingController frametwelveController = TextEditingController();
+  late TextEditingController frametwelveController = TextEditingController();
 
-  TextEditingController frametwelveoneController = TextEditingController();
+  late TextEditingController frametwelveoneController = TextEditingController();
 
   Rx<SearchFilterModel> searchFilterModelObj = SearchFilterModel().obs;
 
@@ -18,6 +19,8 @@ class SearchFilterController extends GetxController {
   SelectionPopupModel? selectedDropDownValue1;
 
   SelectionPopupModel? selectedDropDownValue2;
+  SearchResultsController searchResultController =
+  Get.put(SearchResultsController());
 
   @override
   void onClose() {

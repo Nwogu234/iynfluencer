@@ -4,7 +4,6 @@ import '../../data/general_controllers/user_controller.dart';
 import 'controller/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
@@ -23,7 +22,6 @@ class SettingsScreen extends GetWidget<SettingsController> {
     }
     final UserController user = Get.find();
 
-   
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -179,7 +177,7 @@ class SettingsScreen extends GetWidget<SettingsController> {
                                     ),
                                     Text(
                                       "${user.userModelObj.value.dob}",
-                                      // formattedDob,
+
                                       style: TextStyle(color: Colors.black87),
                                     ),
                                   ],

@@ -1,8 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/presentation/creator_hireslist_page/models/creator_hireslist_model.dart';
+import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 
 import '../../data/general_controllers/user_controller.dart';
 import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
+import '../creator_hireslist_tab_container_page/models/creator_hireslist_tab_container_model.dart';
 import '../home_creator_page/controller/home_creator_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -11,9 +15,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore_for_file: must_be_immutable
 class CreatorProfileDraweritem extends StatelessWidget {
-  CreatorProfileDraweritem(this.controller, {Key? key}) : super(key: key);
 
-  HomeCreatorController controller;
+
+  HomeCreatorController controller = Get.put(HomeCreatorController(HomeCreatorModel().obs));
+  final tabcontroller = Get.put(CreatorHireslistTabContainerController(CreatorHireslistTabContainerModel().obs));
+  final bomcnt = Get.put(BottomBarController());
   final storage = new FlutterSecureStorage();
   
   String capitalize(String text) {
@@ -235,6 +241,8 @@ class CreatorProfileDraweritem extends StatelessWidget {
   onTapBecomean() {
     if (controller.user.userModelObj.value.influencerId != null) {
       storage.write(key: "activeProfile", value: "Influencer");
+      Get.delete<CreatorHireslistTabContainerController>();
+      Get.delete<TabController>();
       Get.offAllNamed(
         AppRoutes.influencerTabScreen,
       );

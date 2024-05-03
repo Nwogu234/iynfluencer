@@ -47,9 +47,7 @@ class ChatsOpenedScreen extends StatefulWidget {
 
 class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     with SingleTickerProviderStateMixin {
-  final MessagesController messageController =
-      Get.put(MessagesController(MessagesModel().obs));
-
+  final MessagesController messageController = Get.put(MessagesController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // ChatsOpenedController controller = Get.put(ChatsOpenedController());
@@ -108,10 +106,12 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     } else {
       imageProvider = "Mark Adebayo";
     }
-    controller = ChatsOpenedController(
+
+
+    controller = Get.put(ChatsOpenedController(
       chatData: widget.chatData,
       selectedInfluencer: widget.selectedInfluencer,
-    );
+    ));
 
     // controller.getUser(widget.chatData.chatId);
     controller.onInit();
@@ -125,13 +125,12 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   void dispose() {
     animationController.dispose();
     scrollController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-
     final String chatId = widget.chatData.chatId;
 
     return SafeArea(
@@ -199,43 +198,51 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   child: Column(
                     children: [
                       SizedBox(height: 16),
-                      DateLable(
-                        dateTime: widget.chatData.createdAt,
-                      ),
-                      SizedBox(height: 16),
                       Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          reverse: true,
-                          //  shrinkWrap: true,
-                          //  physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.messageModelObj.length,
-                          itemBuilder: (context, index) {
-                            /*  final sortedMessages =
-                                controller.messageModelObj.reversed.toList();
-                            final reversedIndex =
-                                controller.messageModelObj.length - 1 - index; */
-                            final message = controller.messageModelObj[index];
-                            String formattedDateTime = DateFormat.jm('en_US')
-                                .format(message.createdAt);
-                            if (controller.messageModelObj.isEmpty) {
-                              return SizedBox.shrink();
-                            } //else{
-                            return ChatMessageBubble(
-                                controller: controller,
-                                messageText: message.text,
-                                isReceived: message.authorUserId !=
-                                    widget.chatData.creatorUserId,
-                                timestamp: formattedDateTime,
-                                leadingImagePath: ImageConstant.imgVector,
-                                trailingImagePath: ImageConstant.imgVector,
-                                messageModelObj: message.messageId,
-                                onSwipedMessage: (message) {
-                                  replyToMessage(message);
-                                  focusNode.requestFocus();
-                                });
-                            //     }
-                          },
+                        child: Obx(() {
+                          return ListView.builder(
+                            //key: PageStorageKey<String>('messagesList'),
+                            controller: scrollController,
+                             reverse: true,
+                            //  shrinkWrap: true,
+                            //  physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.messageModelObj.length,
+                            itemBuilder: (context, index) {
+                              /*  final sortedMessages =
+                                  controller.messageModelObj.reversed.toList();
+                              final reversedIndex =
+                                  controller.messageModelObj.length - 1 - index; */
+                              final message = controller.messageModelObj[index];
+                              String formattedDateTime = DateFormat.jm('en_US')
+                                  .format(message.createdAt);
+                              if (controller.messageModelObj.isEmpty) {
+                                return SizedBox.shrink();
+                              } //else{
+                              return Column(
+                                children: [
+                                  SizedBox(height: 16),
+                                  DateLable(
+                                    dateTime: message.createdAt,
+                                  ),
+                                  ChatMessageBubble(
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath: ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (message) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      }),
+                                ],
+                              );
+                              //     }
+                            },
+                          );
+                        }
                         ),
                       ),
                       SizedBox(height: 10),
@@ -255,6 +262,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                           child: Column(
                             children: [
                               ChatInputBar(
+                                messageModelObj: controller.messageModelObj,
                                 replyMessage: widget.replyMessage,
                                 onCancelReply: () {
                                   cancelReply();

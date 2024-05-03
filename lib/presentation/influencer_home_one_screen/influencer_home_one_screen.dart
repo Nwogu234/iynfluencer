@@ -417,7 +417,7 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
         return AppRoutes.jobsJobsInfluencerPage;
 
       case BottomBarEnum.Chats:
-        return AppRoutes.messagesPageInfluencerPage;
+        return AppRoutes.messagesPage;
       case BottomBarEnum.Community:
         return AppRoutes.communityPage;
       default:
@@ -433,8 +433,8 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
       case AppRoutes.jobsJobsInfluencerTabContainerScreen:
         return JobsJobsInfluencerTabContainerScreen();
 
-      case AppRoutes.messagesPageInfluencerPage:
-        return MessagesPageInfluencerPage();
+      case AppRoutes.messagesPage:
+        return MessagesPage();
       case AppRoutes.communityPage:
         return CommunityPage();
       default:

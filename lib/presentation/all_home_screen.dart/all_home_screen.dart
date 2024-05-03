@@ -119,15 +119,12 @@ class _AllHomePageState extends State<AllHomePage>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: StaggeredGrid.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                      children: controller.tiles,
-                    ),
+                SingleChildScrollView(
+                  child: StaggeredGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 5,
+                    children: controller.tiles,
                   ),
                 ),
                 Padding(

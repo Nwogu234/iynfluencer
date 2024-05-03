@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// This class manages the state of the SearchResultsScreen, including the
 /// current searchResultsModelObj
 class SearchResultsController extends GetxController {
-  SearchResultsController(this.searchResultModelObj);
+  // SearchResultsController(this.searchResultModelObj);
 
   final UserController user = Get.find();
 
@@ -28,7 +28,7 @@ class SearchResultsController extends GetxController {
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
-  Rx<SearchResultsModel> searchResultModelObj;
+  Rx<SearchResultsModel> searchResultModelObj = SearchResultsModel().obs;
   RxList<Influencer> filteredInfluencers = <Influencer>[].obs;
   late String? query = '';
   late String? fromDate = '';

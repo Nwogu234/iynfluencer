@@ -5,6 +5,7 @@ import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
 import '../../widgets/app_bar/influencer_buttom_bar.dart';
+import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
 import '../jobs_my_bids_influencer_page/widgets/listmediainflue_item_widget.dart';
 import 'controller/jobs_my_bids_influencer_controller.dart';
 import 'models/jobs_my_bids_influencer_model.dart';
@@ -26,10 +27,11 @@ class JobsMyBidsInfluencerPage extends StatefulWidget {
 
 class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
     with SingleTickerProviderStateMixin {
-  late JobsMyBidsInfluencerController controller;
-  InfluencerBottomBarController bumcont=Get.put(InfluencerBottomBarController());
+  final controller = Get.put(JobsMyBidsInfluencerController());
 
-  // Get.put(JobsMyBidsInfluencerController(JobsMyBidsInfluencerModel().obs));
+  final bumcont =
+      Get.put(InfluencerBottomBarController());
+
   final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
   late AnimationController animationController;
 
@@ -40,13 +42,8 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    controller = Get.put(JobsMyBidsInfluencerController(
-        // jobsMyBidsInfluencerModelObj.listmediainflueItemList,
-        ));
   }
+
   @override
   void dispose() {
     animationController.dispose();
@@ -82,10 +79,9 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                         "lbl_all_bids2".tr,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                             fontWeight: FontWeight.bold
-                             ),
-                            ),
+                        style: AppStyle.txtSatoshiLight135Gray600
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     CustomButton(
                       height: getVerticalSize(
@@ -151,8 +147,12 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                             errorMessage: 'No Job Bids Available',
                             buttonText: "Bid on jobs now!",
                             onRetry: () {
-                              Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context).pushReplacementNamed(AppRoutes.influencerHomeScreen) ;
-                              bumcont.selectedIndex.value=0;
+                              Navigator.of(
+                                      Get.nestedKey(1)?.currentState?.context ??
+                                          context)
+                                  .pushReplacementNamed(
+                                      AppRoutes.influencerHomeScreen);
+                              bumcont.selectedIndex.value = 0;
                             },
                             fullPage: true,
                           ); // Your error widget
