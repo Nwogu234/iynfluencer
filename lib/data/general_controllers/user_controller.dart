@@ -80,7 +80,7 @@ class UserController extends GetxController {
       } else {
         print('Original dob: ${userModelObj.value.dob}');
         print(userModelObj.value.avatar);
-        userModelObj.value.avatar="$baseUrl${userModelObj.value.avatar}";
+      //  userModelObj.value.avatar="$baseUrl${userModelObj.value.avatar}";
         userModelObj.value.countryCode =
             getCountryCode(capitalizeFirstLetter(userModelObj.value.country!));
 
@@ -173,15 +173,16 @@ class UserController extends GetxController {
     print(response.body);
     String presignedUrl = response.body['data']['uploadUrl'];
 
-    // Extracting the desired part directly from the filePath
+   /*  // Extracting the desired part directly from the filePath
     String picUrl = presignedUrl.split('?').first;
       // Splitting the URL based on '/'
       List<String> parts = picUrl.split('/');
     String desiredPart = parts.sublist(3).join('/');;
-    print(desiredPart);
+    print(desiredPart); */
+    print(presignedUrl);
 
     // Posting the desired part directly to the API
-    final postResponse = await apiClient.postAvatar(desiredPart, token);
+    final postResponse = await apiClient.postAvatar(presignedUrl, token);
     if (postResponse.isOk) {
       Get.back();
       Get.snackbar('Success', 'Image uploaded');
