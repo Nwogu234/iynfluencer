@@ -43,7 +43,6 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
       vsync: this,
     )..repeat();
     // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
     controller = Get.put(CreatorJobslistController(
       creatorJobslistModelObj.jobpostingItemList,
     ));

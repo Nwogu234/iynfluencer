@@ -3,6 +3,7 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bids_screen/models/bids_model.dart';
 
 /// A controller class for the BidsScreen.
@@ -83,7 +84,8 @@ class BidsController extends GetxController {
   @override
   void onInit() {
     print('OnInit called');
-    getUser(Get.parameters['id']);
+     final Job selectedJob = Get.arguments as Job;
+    getUser(selectedJob.jobId);
     super.onInit();
   }
 

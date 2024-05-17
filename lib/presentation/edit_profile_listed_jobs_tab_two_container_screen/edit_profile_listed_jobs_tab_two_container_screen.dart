@@ -40,7 +40,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                       SizedBox(
-                          height: getVerticalSize(325),
+                          height: getVerticalSize(365),
                           width: double.maxFinite,
                           child:
                               Stack(alignment: Alignment.bottomLeft, children: [

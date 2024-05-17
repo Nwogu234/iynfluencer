@@ -62,8 +62,8 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
                       onTapArrowleft5();
                     }),
                 title: AppbarSearchview2(
-                    onTap: (query) async {
-                      onTapSubmit(query);
+                    onTap: (String? query) async {
+                    //  onTapSubmit(query);
                     },
                     margin: getMargin(left: 9),
                     hintText: "msg_search_influncers".tr,

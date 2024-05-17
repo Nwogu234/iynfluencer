@@ -1,0 +1,11 @@
+/* const stripePublishableKey =
+    'pk_test_51PCjgT08jEBjxNSBvgRnh1EbrYtIMlUiH0IMDSJhWYFA2qmZbZuAtaVDRTgVy98az7I0X3y59MhicX0Bvg47LeMn000baiMERm';
+// const stripeSecretKey = 'sk_test_51PCjgT08jEBjxNSBagaqp4g6rGKm0agdqbjZnbAQuBruFe84o0SpjBYDudVVs2qCm5TZ6lFa6F2Y3zxW1BLbqJDZ00lGjlsUpN';
+const stripeSecretKey =
+   'sk_test_51ONc6lDB4UoLMG6RBRLPkB27ET5mgM9vZK159EA9ZT1SEBrSbU9b4f2mo0pHniPnYnXUxKwqKwI42Tk7BUypdA8300JFoLlgY2';
+ */
+
+const stripeSecretKey =
+    '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';
+
+const stripePublishableKey = 'pk_live_51PCjgT08jEBjxNSB6X9ckOyaHswgeoIzuM061Dy8UPgUMzu5znkSiIow5Y6mQctl75BKsLaGvs2vOM2bva3Cf4Cd00yFRz9LwI';

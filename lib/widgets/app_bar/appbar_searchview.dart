@@ -39,10 +39,10 @@ class AppbarSearchview extends StatelessWidget {
             300,
           ),
           height: getVerticalSize(45),
-          onTap: (() {
+          /* onTap: (() {
             print("Search bar tapped");
             Get.to(() => SearchInfluncersScreen());
-          }),
+          }), */
           focusNode: FocusNode(),
           autofocus: true,
           controller: controller,

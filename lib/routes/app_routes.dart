@@ -1,11 +1,19 @@
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/Socials/social.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/all_home_screen.dart/all_home_screen.dart';
+import 'package:iynfluencer/presentation/all_home_screen.dart/binding/all_home_page_binding.dart';
+import 'package:iynfluencer/presentation/bid_accepted_screen/bid_accepted_screen.dart';
+import 'package:iynfluencer/presentation/bid_accepted_screen/binding/bid_accepted_binding.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
+import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashion_home_screen_binding.dart';
+import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
+import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/social_media_home_page_binding.dart';
+import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/splash_screen/splash_screen.dart';
 import 'package:iynfluencer/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:iynfluencer/presentation/onboarding_screen_one_screen/onboarding_screen_one_screen.dart';
@@ -102,6 +110,8 @@ import 'package:iynfluencer/presentation/payment_transfer_screen/payment_transfe
 import 'package:iynfluencer/presentation/payment_transfer_screen/binding/payment_transfer_binding.dart';
 import 'package:iynfluencer/presentation/dispute_screen/dispute_screen.dart';
 import 'package:iynfluencer/presentation/dispute_screen/binding/dispute_binding.dart';
+import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/binding/technology_home_screen_binding.dart';
+import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/withdrawal_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/binding/withdrawal_binding.dart';
 import 'package:iynfluencer/presentation/withdrawal_successful_screen/withdrawal_successful_screen.dart';
@@ -318,7 +328,17 @@ class AppRoutes {
 
   static const String requestAcceptedScreen = '/request_accepted_screen';
 
+  static const String bidAcceptedScreen = '/bid_accepted_screen';
+
   static const String communityPostScreen = '/community_post_screen';
+
+  static const String allHomePage = '/all_home_screen';
+
+  static const String fashionHomePage = '/fashion_home_screen';
+
+  static const String technologyHomePage = '/technology_home_screen';
+
+  static const String socialMediaHomePage = '/social_media_home_screen';
 
   static const String messagesPageOneScreen = '/messages_page_one_screen';
 
@@ -396,6 +416,14 @@ class AppRoutes {
         SettingsBinding(),
       ],
     ),
+
+    GetPage(
+      name: bidAcceptedScreen,
+      page: () => BidAcceptedScreen(),
+      bindings: [
+        BidAcceptedBinding(),
+      ],
+    ),
     GetPage(
       name: onboardingScreenThreeScreen,
       page: () => OnboardingScreenThreeScreen(),
@@ -452,6 +480,49 @@ class AppRoutes {
         CompleteProfileInfluencerBinding(),
       ],
     ),
+/* 
+    GetPage(
+      name: allHomePage,
+      page: () => AllHomePage(),
+      bindings: [
+        AllHomePageBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: fashionHomePage,
+      page: () => FashionHomePage(),
+      bindings: [
+        FashionHomePageBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: technologyHomePage,
+      page: () => TechnologyHomePage(),
+      bindings: [
+        TechnologyHomePageBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: technologyHomePage,
+      page: () => TechnologyHomePage(),
+      bindings: [
+        TechnologyHomePageBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: socialMediaHomePage,
+      page: () => SocialMediaHomePage(),
+      bindings: [
+        SocialMediaHomePageBinding(),
+      ],
+    ),
+
+ */
+
     GetPage(
       name: forgotPasswordScreen,
       page: () => ForgotPasswordScreen(),
@@ -890,19 +961,19 @@ class AppRoutes {
     // SplashBinding(),
     // ]),
 
-    // GetPage(
-    //   name: initialRoute,
-    //   page: () => AppNavigationScreen(),
-    //   bindings: [
-    //     AppNavigationBinding(),
-    //   ],
-    // )
-    GetPage(
+   //  GetPage(
+   //   name: initialRoute,
+   //   page: () => AppNavigationScreen(),
+   //   bindings: [
+   //     AppNavigationBinding(),
+   //    ],
+   //  )
+   GetPage(
       name: initialRoute,
       page: () => SplashScreen(),
       bindings: [
         SplashBinding(),
-      ],
+     ],
     )
   ];
 }

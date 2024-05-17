@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../data/models/Influencer/influencer_response_model.dart';
 import '../../influencer_profile_about_page/influencer_profile_about_page.dart';
 import '../controller/home_creator_controller.dart';

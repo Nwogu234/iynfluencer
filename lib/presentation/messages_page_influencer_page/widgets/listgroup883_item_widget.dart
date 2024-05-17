@@ -37,7 +37,7 @@ class Listgroup883ItemWidget extends StatelessWidget {
         : " ";
 
     String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${listgroup883ItemModelObj.creatorUserId}-avatar.jpeg";
+        listgroup883ItemModelObj.creatorUser!.avatar;
     // Assuming this is a String
     String imageProvider;
 

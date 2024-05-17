@@ -20,70 +20,67 @@ class ResponsiveErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Stack(
-      children: [
-        Positioned(
-          top: 70,
-          child: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: ColorConstant.gray100,
-              ),
-              width: 330.w,
-              height: 230.h, 
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          errorMessage,
-                          textAlign: TextAlign.center,
-                          style: AppStyle.txtSatoshiBold16
-                                    .copyWith(
-                                  fontSize: 16.sp,
-                                  color: ColorConstant.black900,
-                                  fontWeight: FontWeight.w600,
-                                )
-                        ),
-                      ),
-                       SizedBox(height: 20.h),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          smallMessage ?? '',
-                          textAlign: TextAlign.center,
-                          style:TextStyle(
-                           fontSize: getFontSize(
-                               13,
-                             ),
-                           fontFamily: 'Satoshi',
-                           fontWeight: FontWeight.w300,
-                           color: ColorConstant.gray600
+    return  Center(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          color: ColorConstant.gray100,
+        ),
+        width: 330.w,
+        height: 230.h, 
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 300.w,
+                    child: Text(
+                      errorMessage,
+                      textAlign: TextAlign.center,
+                      style: AppStyle.txtSatoshiBold16
+                                .copyWith(
+                              fontSize: 16.sp,
+                              color: ColorConstant.black900,
+                              fontWeight: FontWeight.w600,
+                            )
                     ),
-                        ),
-                      ),
-                      SizedBox(height: 20.h), // Responsive height
-                      CustomButtonTwo(
-                        height: getVerticalSize(45),
-                        width: getHorizontalSize(120),
-                        text: buttonText,
-                        onTap: onRetry,
-                        padding: ButtonPaddingz.PaddingAll4,
-                        fontStyle: ButtonFontStylez.SatoshiBold15,
-                      )
-                    ],
                   ),
                 ),
+                 SizedBox(height: 20.h),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    smallMessage ?? '',
+                    textAlign: TextAlign.center,
+                    style:TextStyle(
+                     fontSize: getFontSize(
+                         13,
+                       ),
+                     fontFamily: 'Satoshi',
+                     fontWeight: FontWeight.w300,
+                     color: ColorConstant.gray600
               ),
+                  ),
+                ),
+                SizedBox(height: 20.h), // Responsive height
+                CustomButtonTwo(
+                  height: getVerticalSize(45),
+                  width: getHorizontalSize(120),
+                  text: buttonText,
+                  onTap: onRetry,
+                  padding: ButtonPaddingz.PaddingAll4,
+                  fontStyle: ButtonFontStylez.SatoshiBold15,
+                )
+              ],
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -105,64 +102,57 @@ class ResponsiveEmptyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          top: 70,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: ColorConstant.gray100,
-            ),
-            width: 330.w,
-            height: 230.h, 
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        errorMessage,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16.sp), 
-                      ),
-                    ),
-                     SizedBox(height: 20.h),
-                      Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        smallMessage ?? '',
-                        textAlign: TextAlign.center,
-                        style:TextStyle(
-                         fontSize: getFontSize(
-                             13,
-                           ),
-                         fontFamily: 'Satoshi',
-                         fontWeight: FontWeight.w300,
-                         color: ColorConstant.gray600
-                  ),
-                      ),
-                    ),
-                    SizedBox(height: 20.h), // Responsive height
-                    CustomButtonTwo(
-                      height: getVerticalSize(45),
-                      width: getHorizontalSize(120),
-                      text: buttonText,
-                      onTap: onRetry,
-                      padding: ButtonPaddingz.PaddingAll4,
-                      fontStyle: ButtonFontStylez.SatoshiBold15,
-                    )
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: ColorConstant.gray100,
+      ),
+      width: 330.w,
+      height: 230.h, 
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  errorMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16.sp), 
                 ),
               ),
+               SizedBox(height: 20.h),
+                Align(
+                alignment: Alignment.center,
+                child: Text(
+                  smallMessage ?? '',
+                  textAlign: TextAlign.center,
+                  style:TextStyle(
+                   fontSize: getFontSize(
+                       13,
+                     ),
+                   fontFamily: 'Satoshi',
+                   fontWeight: FontWeight.w300,
+                   color: ColorConstant.gray600
             ),
+                ),
+              ),
+              SizedBox(height: 20.h), // Responsive height
+              CustomButtonTwo(
+                height: getVerticalSize(45),
+                width: getHorizontalSize(120),
+                text: buttonText,
+                onTap: onRetry,
+                padding: ButtonPaddingz.PaddingAll4,
+                fontStyle: ButtonFontStylez.SatoshiBold15,
+              )
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

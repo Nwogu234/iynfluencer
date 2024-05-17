@@ -15,8 +15,6 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
-import '../../widgets/custom_bottom_bar.dart';
-import '../home_creator_container_screen/controller/home_creator_container_controller.dart';
 import '../messages_page/widgets/messages_page_item_widget.dart';
 import 'controller/messages_controller.dart';
 import 'models/messages_model.dart';
@@ -33,18 +31,14 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage>
     with SingleTickerProviderStateMixin {
   final MessagesController controller =
-      Get.put(MessagesController());
+      Get.put(MessagesController(MessagesModel().obs));
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
- // final HomeCreatorController homeController =
-     // Get.put(HomeCreatorController(HomeCreatorModel().obs));
-
-  //BottomBarController bottomBarController = Get.put(BottomBarController());
+  final HomeCreatorController homeController =
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
   late AnimationController animationController;
-  //HomeCreatorContainerController homeContainerController =
-     // Get.put(HomeCreatorContainerController());
 
   @override
   void initState() {
@@ -102,7 +96,7 @@ class _MessagesPageState extends State<MessagesPage>
                           ),
                         ),
                         AppbarCircleimage(
-                          url: controller.user.userModelObj.value.avatar,
+                          url: homeController.user.userModelObj.value.avatar,
                           margin:
                               EdgeInsets.only(left: 20, top: 14, bottom: 14),
                           onTap: openDrawer,
@@ -110,52 +104,34 @@ class _MessagesPageState extends State<MessagesPage>
                       ],
                     ),
                   ),
-                  // AppbarSearchview(
-                  //   hintText: "Search Chats".tr,
-                  //   controller: controller.searchController,
-                  //   onSubmitted: (query) async {
-                  //     Get.to(() => SearchCreatorScreen(
-                  //           query: query,
-                  //           trendingInfluencers:
-                  //               homeController.trendingInfluencers,
-                  //         ));
-                  //   },
-                  // ),
+                  AppbarSearchview(
+                    hintText: "Search Chats".tr,
+                    controller: controller.searchController,
+                    onSubmitted: (query) async {
+                      Get.to(() => SearchCreatorScreen(
+                            query: query,
+                            trendingInfluencers:
+                                homeController.trendingInfluencers,
+                          ));
+                    },
+                  ),
                   SizedBox(height: 10),
                   Divider(),
                   SizedBox(height: 10),
                   Obx(() {
                     if (controller.isTrendLoading.value) {
-                       return Stack(
-                        children: [
-                         CustomLoadingWidget(
-                          animationController: animationController,
-                             ),
-                          PositionedDirectional(
-                           bottom: 100,
-                           start: 150,
-                           child: SizedBox(), // You can replace SizedBox with your loading widget
-                          ),
-                         ],
-                       );
+                      return CustomLoadingWidget(
+                        animationController: animationController,
+                      );
                     } else if (controller.error.value.isNotEmpty) {
-                     return Stack(
-                     children: [
-                      ResponsiveErrorWidget(
+                      return ResponsiveErrorWidget(
                         errorMessage: controller.error.value,
                         onRetry: () {
-                         controller.getUser();
+                          controller.getUser();
                         },
-                      fullPage: true,
-                      ),
-                     PositionedDirectional(
-                      top: 150,
-                      start: 150,
-                     child: SizedBox(), // You can replace SizedBox with your error widget
-                    ),
-                  ],
-                  );
-                    }  else {
+                        fullPage: true,
+                      );
+                    } else {
                       return SizedBox(
                         width: size.width,
                         height: MediaQuery.of(context).size.height,
@@ -188,12 +164,12 @@ class _MessagesPageState extends State<MessagesPage>
                                       ChatData model =
                                           controller.chatList[index];
                                       return MessagesPageItemWidget(
-                                        messagesPageItemModelObj: model);
+                                          messagesPageItemModelObj: model);
                                     }
                                   },
                                 ),
                               ),
-                           /*    CustomIconButton(
+                              /*    CustomIconButton(
                                 height: 54,
                                 width: 54,
                                 margin: getMargin(

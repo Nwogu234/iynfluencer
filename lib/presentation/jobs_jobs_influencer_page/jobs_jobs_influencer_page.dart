@@ -122,7 +122,7 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                           return ResponsiveEmptyWidget(
                             errorMessage: 'You have no current Jobs ',
                               smallMessage: 'Your past and present Jobs will appear here',
-                            buttonText: "Bid on jobs now!",
+                            buttonText: "Bid jobs!",
                             onRetry: () {
                               controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;
                               Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);

@@ -9,6 +9,8 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/trendinghorizon_item_widget.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/controller/technology_home_controller.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/model/technology_home_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
@@ -26,21 +28,26 @@ class TechnologyHomePage extends StatefulWidget {
 
 class _TechnologyHomePageState extends State<TechnologyHomePage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-   TechnologyHomeController controller =
+  TechnologyHomeController controller =
       Get.put(TechnologyHomeController(TechnologyHomeModel().obs));
   late AnimationController animationController;
 
-   final ScrollController _scrollController = ScrollController();
+  // final MessagesController messagesController = Get.find<MessagesController>();
 
+  final ScrollController _scrollController = ScrollController();
 
-void _onScroll() {
-  if (!controller.isLoading.value &&
-      _scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-  //  controller.loadRecommendedInfluencers();
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
+
+  void _onScroll() {
+    if (!controller.isLoading.value &&
+        _scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+      //  controller.loadRecommendedInfluencers();
+    }
   }
-}
 
   @override
   void initState() {
@@ -49,44 +56,35 @@ void _onScroll() {
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-   //   controller.loadRecommendedInfluencers(); // Load initial data
+    //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
+    messagesController.dispose();
   }
 
   @override
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
+    messagesController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-        return SafeArea(
-      child: Scaffold(
-      body: Obx(() {
+    // final messagesController = Get.find<MessagesController>();
+
+    return SafeArea(child: Scaffold(
+        // key: _scaffoldKey,
+        body: Obx(() {
       if (controller.isLoading.value) {
-        return Stack(
-          children: [
-             PositionedDirectional(
-              top: 150,
-              start:150,
-               child: CustomLoadingWidget(
-                 animationController: animationController,
-              ),
-             ),
-          ],
-         
+        return CustomLoadingWidget(
+          animationController: animationController,
         );
       } else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-           top: 150,
-           start:150,
-          child: ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: controller.getUser,
-            fullPage: true,
-          ),
+        return ResponsiveErrorWidget(
+          errorMessage: controller.error.value,
+          onRetry: controller.getUser,
+          fullPage: true,
         );
       } else {
         return SingleChildScrollView(
@@ -95,112 +93,107 @@ void _onScroll() {
             padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
             child: Column(
               children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                            Text(
-                              "Featured Influencers".tr,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold16
-                                  .copyWith(
-                                    fontSize: 16.sp,
-                                    color: ColorConstant.black900,
-                                    fontWeight: FontWeight.w600,
-                                    ),
-                            ),
-                            Text(
-                              'View All'.tr,
-                              textAlign: TextAlign.right,
-                             style: AppStyle.txtSatoshiBold16.copyWith(
-                                color:ColorConstant.cyan100,
-                             ),
-                            )
-                          ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Featured Influencers".tr,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiBold16.copyWith(
+                        fontSize: 16.sp,
+                        color: ColorConstant.black900,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      'View All'.tr,
+                      textAlign: TextAlign.right,
+                      style: AppStyle.txtSatoshiBold16.copyWith(
+                        color: ColorConstant.cyan100,
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: getMargin(top: 20),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      height: 150.h,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.isTrendLoading.value
+                            ? 5
+                            : controller.trendingInfluencers.length,
+                        itemBuilder: (context, index) {
+                          if (controller.isTrendLoading.value) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.w),
+                              child: TrendinghorizonItemSkeletonWidget(),
+                            );
+                          } else {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 10.w),
+                              child: TrendinghorizonItemWidget(
+                                  controller.trendingInfluencers[index]),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: getPadding(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Best Match',
+                        textAlign: TextAlign.left,
+                        style: AppStyle.txtSatoshiBold16.copyWith(
+                          fontSize: 16.sp,
+                          color: ColorConstant.black900,
+                          fontWeight: FontWeight.w600,
                         ),
+                      ),
+                      Text(
+                        'View All'.tr,
+                        textAlign: TextAlign.right,
+                        style: AppStyle.txtSatoshiBold16.copyWith(
+                          color: ColorConstant.cyan100,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15.h),
+                SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      for (var index = 0;
+                          index <
+                              (controller.isRecommendedLoading.value
+                                  ? 5
+                                  : controller.recommendedInfluencers.length);
+                          index++)
                         Padding(
-                          padding: getMargin(top: 20),
-                            child: SingleChildScrollView(
-                              child: Container(
-                                height: 150.h,
-                                child: ListView.builder(
-                                   scrollDirection: Axis.horizontal,
-                                    itemCount: controller.isTrendLoading.value
-                                          ? 5
-                                          : controller
-                                              .trendingInfluencers.length,
-                                      itemBuilder: (context, index) {
-                                        if (controller.isTrendLoading.value) {
-                                          return Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 10.w),
-                                            child:
-                                                TrendinghorizonItemSkeletonWidget(),
-                                          );
-                                        } else {
-                                          return Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 10.w),
-                                            child: TrendinghorizonItemWidget(
-                                                controller.trendingInfluencers[
-                                                    index]),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ),
+                          padding: EdgeInsets.only(bottom: 24.h),
+                          child: controller.isRecommendedLoading.value
+                              ? Listrectangle50ItemSkeletonWidget()
+                              : Listrectangle50ItemWidget(
+                                  controller.recommendedInfluencers[index],
+                                  index < messagesController.chatList.length
+                                      ? messagesController.chatList[index]
+                                      : null,
                                 ),
-                              ),
-                        Padding(
-                          padding: getPadding(top:20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                'Best Match',
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold16
-                                  .copyWith(
-                                    fontSize: 16.sp,
-                                    color: ColorConstant.black900,
-                                    fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                              Text(
-                                 'View All'.tr,
-                              textAlign: TextAlign.right,
-                               style: AppStyle.txtSatoshiBold16.copyWith(
-                                color:ColorConstant.cyan100,
-                             ),
-                            ),     
-                            ],
-                          ),
                         ),
-                        
-                          SizedBox(height: 15.h),
-                          SingleChildScrollView(
-                            controller: _scrollController,
-                            child: Column(
-                               children: [
-                             for (var index = 0;
-                                 index <
-                                     (controller.isRecommendedLoading.value
-                                         ? 5
-                                         : controller
-                                             .recommendedInfluencers.length);
-                                 index++)
-                               Padding(
-                                 padding: EdgeInsets.only(bottom: 24.h),
-                                 child: controller.isRecommendedLoading.value
-                                     ? Listrectangle50ItemSkeletonWidget()
-                                     : Listrectangle50ItemWidget(controller
-                                         .recommendedInfluencers[index]),
-                               ),
-                                ],
-                             ),
-                          ),
+                    ],
+                  ),
+                ),
               ],
             ),
-            ),
+          ),
         );
       }
     })));

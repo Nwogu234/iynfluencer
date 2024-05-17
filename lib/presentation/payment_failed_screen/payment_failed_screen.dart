@@ -84,6 +84,9 @@ class PaymentFailedScreen extends GetWidget<PaymentFailedController> {
                 padding: ButtonPadding.PaddingAll15,
               ),
               CustomButton(
+                onTap: () {
+                  onTapHome();
+                },
                 height: getVerticalSize(
                   19,
                 ),
@@ -102,5 +105,9 @@ class PaymentFailedScreen extends GetWidget<PaymentFailedController> {
         ),
       ),
     );
+  }
+
+  onTapHome() {
+    Get.back();
   }
 }

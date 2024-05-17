@@ -130,6 +130,7 @@ class PostPageController extends GetxController
     print(responsibility);
     isAddingResponsibility.value = false;
   }
+
   ///VALIDTAE RESPONSIBILITY LIST
   bool validateResponsibilities() {
     if (responsibilities.isEmpty) {
@@ -159,9 +160,15 @@ class PostPageController extends GetxController
     selectedMediaFiles.add(mediaFile);
   }
 
+  void UpdateMediaList(MediaFile mediafile) {
+    selectedMediaFiles.insert(0, mediafile);
+    update();
+  }
+
   // Method to remove a selected media file
   void removeSelectedMediaFile(MediaFile mediaFile) {
     selectedMediaFiles.remove(mediaFile);
+    update();
   }
 
   bool validateMediaFiles(List<MediaFile> mediaFiles) {
@@ -201,7 +208,7 @@ class PostPageController extends GetxController
       );
       print("media validated");
     }
-    if (formKeyMain.currentState!.validate()&&validateResponsibilities()) {
+    if (formKeyMain.currentState!.validate() && validateResponsibilities()) {
       final JobRequest jobRequest = JobRequest(
         title: inputController.text,
         description: frametwelveoneController.text,

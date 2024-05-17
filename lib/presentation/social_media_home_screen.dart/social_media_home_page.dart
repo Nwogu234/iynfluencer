@@ -9,6 +9,8 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/trendinghorizon_item_widget.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/controller/social_media_controller.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/model/social_media_home_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
@@ -26,21 +28,24 @@ class SocialMediaHomePage extends StatefulWidget {
 
 class _SocialMediaHomePageState extends State<SocialMediaHomePage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
- SocialMediaHomeController controller =
+  SocialMediaHomeController controller =
       Get.put(SocialMediaHomeController(SocialMediaHomeModel().obs));
 
   late AnimationController animationController;
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
+  // final MessagesController messagesController = Get.find<MessagesController>();
   final ScrollController _scrollController = ScrollController();
 
-
-void _onScroll() {
-  if (!controller.isLoading.value &&
-      _scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-   // controller.loadRecommendedInfluencers();
+  void _onScroll() {
+    if (!controller.isLoading.value &&
+        _scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+      // controller.loadRecommendedInfluencers();
+    }
   }
-}
 
   @override
   void initState() {
@@ -49,8 +54,9 @@ void _onScroll() {
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-   //   controller.loadRecommendedInfluencers(); // Load initial data
+    //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
+    messagesController.dispose();
   }
 
   @override
@@ -60,30 +66,24 @@ void _onScroll() {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-     return SafeArea(
-      child: Scaffold(
-      body: Obx(() {
+    return SafeArea(child: Scaffold(
+        // key: _scaffoldKey,
+        body: Obx(() {
       if (controller.isLoading.value) {
-        return Stack(
-          children: [
-             PositionedDirectional(
-              top: 150,
-              start:150,
-               child: CustomLoadingWidget(
-                 animationController: animationController,
-              ),
-             ),
-          ],
-         
+        return CustomLoadingWidget(
+          animationController: animationController,
         );
-      } if (!controller.error.value.isEmpty) {
-        return ResponsiveErrorWidget(
-          errorMessage: controller.error.value,
-          onRetry: controller.getUser,
-          fullPage: true,
+      }
+      if (!controller.error.value.isEmpty) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: ResponsiveErrorWidget(
+            errorMessage: controller.error.value,
+            onRetry: controller.getUser,
+            fullPage: true,
+          ),
         );
       } else {
         return SingleChildScrollView(
@@ -98,8 +98,7 @@ void _onScroll() {
                     Text(
                       "Featured Influencers".tr,
                       textAlign: TextAlign.left,
-                      style: AppStyle.txtSatoshiBold16
-                          .copyWith(
+                      style: AppStyle.txtSatoshiBold16.copyWith(
                         fontSize: 16.sp,
                         color: ColorConstant.black900,
                         fontWeight: FontWeight.w600,
@@ -116,23 +115,18 @@ void _onScroll() {
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.isTrendLoading.value
                             ? 5
-                            : controller
-                            .trendingInfluencers.length,
+                            : controller.trendingInfluencers.length,
                         itemBuilder: (context, index) {
                           if (controller.isTrendLoading.value) {
                             return Padding(
-                              padding:
-                              EdgeInsets.only(right: 10.w),
-                              child:
-                              TrendinghorizonItemSkeletonWidget(),
+                              padding: EdgeInsets.only(right: 10.w),
+                              child: TrendinghorizonItemSkeletonWidget(),
                             );
                           } else {
                             return Padding(
-                              padding:
-                              EdgeInsets.only(right: 10.w),
+                              padding: EdgeInsets.only(right: 10.w),
                               child: TrendinghorizonItemWidget(
-                                  controller.trendingInfluencers[
-                                  index]),
+                                  controller.trendingInfluencers[index]),
                             );
                           }
                         },
@@ -141,15 +135,14 @@ void _onScroll() {
                   ),
                 ),
                 Padding(
-                  padding: getPadding(top:20),
+                  padding: getPadding(top: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         'For You',
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold16
-                            .copyWith(
+                        style: AppStyle.txtSatoshiBold16.copyWith(
                           fontSize: 16.sp,
                           color: ColorConstant.black900,
                           fontWeight: FontWeight.w600,
@@ -159,31 +152,33 @@ void _onScroll() {
                         'View All'.tr,
                         textAlign: TextAlign.right,
                         style: AppStyle.txtSatoshiBold16.copyWith(
-                          color:ColorConstant.cyan100,
+                          color: ColorConstant.cyan100,
                         ),
                       ),
                     ],
                   ),
                 ),
-
                 SizedBox(height: 15.h),
                 SingleChildScrollView(
                   controller: _scrollController,
                   child: Column(
                     children: [
                       for (var index = 0;
-                      index <
-                          (controller.isRecommendedLoading.value
-                              ? 5
-                              : controller
-                              .recommendedInfluencers.length);
-                      index++)
+                          index <
+                              (controller.isRecommendedLoading.value
+                                  ? 5
+                                  : controller.recommendedInfluencers.length);
+                          index++)
                         Padding(
                           padding: EdgeInsets.only(bottom: 24.h),
                           child: controller.isRecommendedLoading.value
                               ? Listrectangle50ItemSkeletonWidget()
-                              : Listrectangle50ItemWidget(controller
-                              .recommendedInfluencers[index]),
+                              : Listrectangle50ItemWidget(
+                                  controller.recommendedInfluencers[index],
+                                  index < messagesController.chatList.length
+                                      ? messagesController.chatList[index]
+                                      : null,
+                                ),
                         ),
                     ],
                   ),

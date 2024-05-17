@@ -1,3 +1,5 @@
+import 'package:country_flags/country_flags.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -19,6 +21,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
 
   final Job? selectedJob;
   final bool? fromBids;
+  final UserController user = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,11 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
       }
       return text[0].toUpperCase() + text.substring(1);
     }
+
+    String countryCode = user.getCountryCode(
+      user
+        .capitalizeFirstLetter(selectedJob?.user?.country!));
+    print(countryCode);
 
     return SafeArea(
       child: Scaffold(
@@ -211,9 +219,11 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                   style: AppStyle.txtSatoshiBold14Gray900)),
                           Padding(
                               padding: getPadding(left: 20, top: 13, right: 53),
-                              child: Row(children: [
+                              child: Row(
+                                children: [
                                 CustomImageView(
-                                    imagePath: ImageConstant.imgGroup85229,
+                                   fit:BoxFit.cover,
+                                   url: selectedJob?.user?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -258,19 +268,20 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                                             borderRadius:
                                                                 BorderRadiusStyle
                                                                     .circleBorder7),
-                                                    child: Stack(children: [
-                                                      CustomImageView(
-                                                          svgPath: ImageConstant
-                                                              .imgContrast,
-                                                          height:
-                                                              getVerticalSize(
-                                                                  13),
-                                                          width:
-                                                              getHorizontalSize(
-                                                                  14),
-                                                          alignment:
-                                                              Alignment.center)
-                                                    ])))
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(
+                                                        top:5.0
+                                                      ),
+                                                      child: Stack(
+                                                        children: [
+                                                         CountryFlag.fromCountryCode(
+                                                            countryCode,
+                                                            height: 15,
+                                                            width: 13,
+                                                            borderRadius: 10,
+                                                          ),
+                                                      ]),
+                                                    )))
                                           ])
                                         ])),
                                 Spacer(),

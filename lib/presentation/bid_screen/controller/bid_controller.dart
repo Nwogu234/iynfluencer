@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 ///
 /// This class manages the state of the BidScreen, including the
 /// current bidModelObj
-class BidController extends GetxController with SingleGetTickerProviderMixin {
+class BidController extends GetxController with GetSingleTickerProviderStateMixin {
   BidController(this.postPageModelObj);
   Rx<BidModel> postPageModelObj = BidModel().obs;
   var storage = FlutterSecureStorage();
@@ -52,18 +52,23 @@ class BidController extends GetxController with SingleGetTickerProviderMixin {
         final bidData = BidModel(
           coverLetter: frametwelveController.text,
           jobId: jobId,
-          price: int.tryParse(priceController.text),
+          //price: int.tryParse(priceController.text),
+          price: (int.tryParse(priceController.text) ?? 0) * 100,
           terms: termsAndConditions,
         );
         try {
           Response res = await apiClient.bidAJob(bidData, token);
+          final price = int.tryParse(priceController.text);
+          final bidPrice = (int.tryParse(priceController.text) ?? 0) * 100;
+          print(price);
+          print(bidPrice);
 
           // print(res.statusCode);
           // print('----- statuscode---');
           // print(res.body['message']);
           if (res.isOk) {
             Get.snackbar('Success', 'Bid Posted Successfully');
-            Get.back();
+            Get.toNamed(AppRoutes.bidAcceptedScreen, parameters: {'jobId': jobId});
             // Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
           } else if (res.statusCode == 400) {
             // Handles bad request errors

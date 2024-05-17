@@ -117,12 +117,13 @@ class TrendingResultItemWidget extends StatelessWidget {
                                                                    ),
                                   SizedBox(width: 39),
                                    CustomButtonTwo(
+                                     shape: ButtonShape.RoundedBorderz12,
                                      height: getVerticalSize(42),
                                      width: getHorizontalSize(120),
                                      text: 'Message'.tr,
                                      onTap: onTapEditprofile,
-                   padding: ButtonPaddingz.PaddingAll4,
-                   fontStyle: ButtonFontStylez.SatoshiBold15,
+                                      padding: ButtonPaddingz.PaddingAll12,
+                                     fontStyle: ButtonFontStylez.SatoshiBold15,
                                     )
                                  ]),
                            )

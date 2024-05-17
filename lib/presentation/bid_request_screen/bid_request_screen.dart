@@ -1,5 +1,7 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:intl/intl.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'controller/bid_request_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -10,10 +12,16 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 
 class BidRequestScreen extends GetWidget<BidRequestController> {
   BidRequestScreen({Key? key}) : super(key: key);
-  late JobBids? data = Get.arguments;
+ // late JobBids? data = Get.arguments;
+ // late Job? selectedJob = Get.arguments;
+ final args = Get.arguments as BidsArguments;
+ 
 
   @override
   Widget build(BuildContext context) {
+    final JobBids? data = args.jobBid;
+  //  final Job? selectedJob = args.job;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -42,7 +50,8 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                       padding: getPadding(right: 5),
                       child: Row(children: [
                         CustomImageView(
-                            imagePath: ImageConstant.imgGroup8528,
+                            url: data!.influencer!.user!.avatar,
+                            fit: BoxFit.cover,
                             height: getSize(45),
                             width: getSize(45),
                             radius: BorderRadius.circular(getSize(22.5))),
@@ -114,7 +123,8 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                                       Padding(
                                           padding: getPadding(top: 3),
                                           child: Text(
-                                              '\$${data!.price.toString() ?? ''}',
+                                            //  '\$${data!.price.toString() ?? ''}',
+                                               '\$${((data!.price ?? 0) / 100).toString()}',
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
@@ -148,46 +158,50 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                           style: AppStyle.txtSatoshiBold14Gray900)),
                   Padding(
                       padding: getPadding(left: 1, top: 15, right: 76),
-                      child: Row(children: [
-                        Padding(
-                            padding: getPadding(top: 1),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("msg_13_jobs_completed".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiBold125Gray900a7),
-                                  Padding(
-                                      padding: getPadding(top: 3),
-                                      child: Text("lbl_view_profile".tr,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                                padding: getPadding(top: 1),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("msg_13_jobs_completed".tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: AppStyle
-                                              .txtSatoshiLight135Blue900))
-                                ])),
-                        Padding(
-                            padding: getPadding(left: 71, bottom: 1),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("lbl_member_since".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiLight135Gray600),
-                                  Padding(
-                                      padding: getPadding(top: 3),
-                                      child: Text("lbl_mar_2022".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle
-                                              .txtSatoshiBold125Gray900a7))
-                                ]))
-                      ])),
+                                              .txtSatoshiBold125Gray900a7),
+                                      Padding(
+                                          padding: getPadding(top: 3),
+                                          child: Text("lbl_view_profile".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiLight135Blue900))
+                                    ])),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("lbl_member_since".tr,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style:
+                                            AppStyle.txtSatoshiLight135Gray600),
+                                    Padding(
+                                        padding: getPadding(top: 3),
+                                        child: Text("lbl_mar_2022".tr,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
+                                            style: AppStyle
+                                                .txtSatoshiBold125Gray900a7))
+                                  ]),
+                            )
+                          ])),
                   CustomButton(
                       height: getVerticalSize(30),
                       width: getHorizontalSize(86),
@@ -209,7 +223,7 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                 text: "lbl_hire".tr,
                 padding: ButtonPadding.PaddingAll12,
                 onTap: () {
-                  controller.hireInfluencerFunc(data!.bidId!);
+                  controller.hireInfluencerFunc(data!.bidId!, args);
                 },
               ),
               CustomButton(

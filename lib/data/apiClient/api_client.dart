@@ -654,8 +654,7 @@ class ApiClient extends GetConnect {
       if (response.isOk) {
         return response;
       } else {
-        // print(response);
-        // print(response.body);
+          print('Failed to delete message: ${response.statusCode}, ${response.body}');
         throw response.body['message'];
       }
     } catch (e) {

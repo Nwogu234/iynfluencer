@@ -112,14 +112,14 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                   ),
                 );
             }),
-            leadingWidth: 50,
+            leadingWidth: 60,
             actions: [
               Container(
                 child: AppbarSearchview(
                     hintText: "Search influencers".tr,
                     controller: controller.searchController,
                     onTap: () {
-                      onTapSubmit();
+                     // onTapSubmit();
                     }),
               ),
             ],

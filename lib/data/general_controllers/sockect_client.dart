@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -12,7 +14,8 @@ class SocketClient extends GetxService {
   var sentMessages = <Message>[].obs;
   UserController user = Get.find<UserController>();
 
-  static SocketClient get to => Get.find();  // Singleton pattern for easy access
+  // Make SocketClient a singleton
+  static SocketClient get to => Get.find(); // Singleton pattern for easy access
 
   @override
   void onInit() {
@@ -21,11 +24,12 @@ class SocketClient extends GetxService {
   }
 
   void _initSocket() async {
+    // Initialize the socket connection
     var storage = FlutterSecureStorage();
     var token = await storage.read(key: 'token');
-    print('socket has been called');
-   try {
-      socket = IO.io('wss://iynf-chat-hgkkb.ondigitalocean.app', <String, dynamic>{
+    try {
+      socket =
+          IO.io('wss://iynf-chat-hgkkb.ondigitalocean.app', <String, dynamic>{
         'transports': ['websocket'],
         'extraHeaders': {'authorization': token},
         'autoConnect': true,
@@ -87,10 +91,14 @@ class SocketClient extends GetxService {
   }
 
   void _handleUserEvent(dynamic data, String eventType) {
+    if (data is String) {
+     data = json.decode(data);
+   }
     var chatId = data['chatId'];
     var userFirstName = user.userModelObj().firstName;
     if (chatId != null && userFirstName != null) {
-      Get.log('User $userFirstName has $eventType the chat with chat ID: $chatId');
+      Get.log(
+          'User $userFirstName has $eventType the chat with chat ID: $chatId');
     } else {
       Get.log('Incomplete data received for $eventType event', isError: true);
     }

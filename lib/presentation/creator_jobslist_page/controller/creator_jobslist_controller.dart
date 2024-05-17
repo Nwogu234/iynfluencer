@@ -52,7 +52,6 @@ class CreatorJobslistController extends GetxController {
         error('');
         isLoading.value = false;
         getJobs();
-        // getNewJob(newJob); Why are you creating a new job
       }
     } catch (e) {
       print(e);

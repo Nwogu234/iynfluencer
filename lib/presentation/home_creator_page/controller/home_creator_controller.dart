@@ -93,7 +93,7 @@ class HomeCreatorController extends GetxController {
 
 
 //*animation stops here
-  getUser() async {
+ getUser() async {
     isLoading.value = true;
     error('');
     token = await storage.read(key: "token");
