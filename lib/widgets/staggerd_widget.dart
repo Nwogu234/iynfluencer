@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/utils/color_constant.dart';
 import '../core/utils/image_constant.dart';
@@ -18,10 +19,12 @@ import 'custom_image_view.dart';
 
 class StaggeredWidget extends StatelessWidget {
   final Influencer user;
+  final ChatData? chatData;
   final controller = Get.find<HomeCreatorController>();
 
   StaggeredWidget({
     required this.user,
+    this.chatData,
   });
 
   Map<String, IconData> socialIcons = {
@@ -49,21 +52,44 @@ class StaggeredWidget extends StatelessWidget {
     'SlideShare': FontAwesomeIcons.slideshare,
   };
 
+  final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser: null);
+
   @override
   Widget build(BuildContext context) {
     String CountryCode = controller.user.getCountryCode(
         controller.user.capitalizeFirstLetter(user.user?.first.country));
     onTapprofilecard(Influencer listrectangle50) {
       Get.to(
-        InfluencerProfileAboutPage(selectedInfluencer: listrectangle50),
+        InfluencerProfileAboutPage(
+          selectedInfluencer: listrectangle50,
+          chatData: chatData ?? chatsData,
+        ),
       );
     }
+
     return Stack(children: [
       Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 5,
         child: InkWell(
-          onTap: () {onTapprofilecard(user);}, // Placeholder for card tap functionality
+          onTap: () {
+            onTapprofilecard(user);
+          }, // Placeholder for card tap functionality
           child: Container(
             height: 198.h,
             width: 160.w,
@@ -79,7 +105,7 @@ class StaggeredWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  padding: getPadding(left: 5, right: 5,top: 5,bottom: 5),
+                  padding: getPadding(left: 5, right: 5, top: 5, bottom: 5),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.5),
                     borderRadius: BorderRadius.only(
@@ -118,8 +144,7 @@ class StaggeredWidget extends StatelessWidget {
                           Text(
                             '${capitalizeFirstLetter(user.user?.first.country)}',
                             style: TextStyle(
-                                fontSize: getSize(7.sp),
-                                color: Colors.white),
+                                fontSize: getSize(7.sp), color: Colors.white),
                             overflow: TextOverflow.clip,
                           ),
                         ],
@@ -130,27 +155,30 @@ class StaggeredWidget extends StatelessWidget {
                           Padding(
                             padding: getPadding(bottom: 5),
                             child: Text(
-                              "${user.jobsDone.toString()} Jobs Completed"
-                                  .tr,
+                              "${user.jobsDone.toString()} Jobs Completed".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiMedium.copyWith(
-                                  fontSize: getSize(8.sp),
-                                  color: Colors.white),
+                                  fontSize: getSize(8.sp), color: Colors.white),
                             ),
                           ),
-
-
                           Padding(
                             padding: getPadding(bottom: 5),
                             child: Row(
                               children: [
                                 SizedBox(width: 10),
                                 SizedBox(width: 2),
-                                Text('3.5',style:AppStyle.txtSatoshiMedium.copyWith(
-                                    fontSize: getSize(8.sp),
-                                    color: Colors.white),),
-                                Icon(Icons.star,color: Colors.orange,size: 12,)
+                                Text(
+                                  '3.5',
+                                  style: AppStyle.txtSatoshiMedium.copyWith(
+                                      fontSize: getSize(8.sp),
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.orange,
+                                  size: 12,
+                                )
                               ],
                             ),
                           )
@@ -169,11 +197,11 @@ class StaggeredWidget extends StatelessWidget {
         top: 15,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadiusStyle.txtRoundedBorder6,
+            borderRadius: BorderRadiusStyle.txtRoundedBorder6,
             color: ColorConstant.pink,
           ),
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-           // Ribbon color
+          // Ribbon color
           child: Row(
             children: [
               Icon(
@@ -181,7 +209,9 @@ class StaggeredWidget extends StatelessWidget {
                 size: 5,
                 color: Colors.white,
               ),
-              SizedBox(width: 5,),
+              SizedBox(
+                width: 5,
+              ),
               Text(
                 'FEATURED',
                 style: TextStyle(

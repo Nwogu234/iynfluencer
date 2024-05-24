@@ -52,7 +52,12 @@ class _AllHomePageState extends State<AllHomePage>
       return StaggeredGridTile.count(
         crossAxisCellCount: crossAxisCellCount,
         mainAxisCellCount: 1, // Assuming all tiles have the same height
-        child: StaggeredWidget(user: influencers[index]),
+        child: StaggeredWidget(
+          user: influencers[index],
+          chatData: index < messagesController.chatList.length
+             ? messagesController.chatList[index]
+           : null,
+          ),
       );
     });
   }
@@ -172,7 +177,11 @@ class _AllHomePageState extends State<AllHomePage>
                               return Padding(
                                 padding: EdgeInsets.only(right: 10.w),
                                 child: TrendinghorizonItemWidget(
-                                    controller.trendingInfluencers[index]),
+                                    controller.trendingInfluencers[index],
+                                    index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                    ),
                               );
                             }
                           },

@@ -24,9 +24,12 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
     with SingleTickerProviderStateMixin {
   SearchInfluncersController controller =
       Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
+  SearchResultsController controllers =
+      Get.put(SearchResultsController(SearchResultsModel().obs));
   late AnimationController animationController;
-   late SearchInfluncersController controllers;
-  late SearchResultsController searchResultsController;
+  // late SearchInfluncersController controllers;
+  //late SearchResultsController searchResultsController;
+  
   @override
   void initState() {
     super.initState();
@@ -34,8 +37,6 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-     searchResultsController = Get.put(SearchResultsController());
-    controllers = Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
   }
   @override
   void dispose() {
@@ -62,8 +63,8 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
                       onTapArrowleft5();
                     }),
                 title: AppbarSearchview2(
-                    onTap: (String? query) async {
-                    //  onTapSubmit(query);
+                    onTap: (query) async {
+                      onTapSubmit(query);
                     },
                     margin: getMargin(left: 9),
                     hintText: "msg_search_influncers".tr,
@@ -245,14 +246,14 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
 
  void onTapSubmit(String? query) {
     // Get the SearchResultsController instance
-    final searchController = searchResultsController.searchController;
+    final searchController = controllers.searchController;
     searchController.text = query ?? '';
 
 
 
-    searchResultsController.filterInfluencers(query:query);
+    controllers.filterInfluencers(query:query);
 
-    if (searchResultsController.filteredInfluencers.isEmpty) {
+    if (controllers.filteredInfluencers.isEmpty) {
     Get.snackbar(
       'No Influencers Found',
       'There are no influencers matching your search query.',

@@ -1,4 +1,5 @@
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'controller/influencer_profile_comm_post_tab_container_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -19,6 +20,24 @@ class InfluencerProfileCommPostTabContainerScreen
   });
 
   final Influencer? listrectangle50;
+
+  final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser:  null
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +367,9 @@ class InfluencerProfileCommPostTabContainerScreen
                                             children: [
                                               InfluencerProfileAboutPage(
                                                   selectedInfluencer:
-                                                      listrectangle50!),
+                                                      listrectangle50!,
+                                                      chatData: chatsData,
+                                                      ),
                                               InfluencerProfileCommPostPage(),
                                               InfluencerProfileJobsPage(
                                                   selectedInfluencer:

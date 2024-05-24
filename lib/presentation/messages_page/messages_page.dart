@@ -47,6 +47,7 @@ class _MessagesPageState extends State<MessagesPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+    controller.onInit();
   }
 
   @override
@@ -107,13 +108,14 @@ class _MessagesPageState extends State<MessagesPage>
                   AppbarSearchview(
                     hintText: "Search Chats".tr,
                     controller: controller.searchController,
-                    onSubmitted: (query) async {
-                      Get.to(() => SearchCreatorScreen(
+                    /*   onSubmitted: 
+                    (query) async {
+                       Get.to(() => SearchCreatorScreen(
                             query: query,
                             trendingInfluencers:
                                 homeController.trendingInfluencers,
-                          ));
-                    },
+                          ));  
+                    }*/
                   ),
                   SizedBox(height: 10),
                   Divider(),
@@ -134,7 +136,7 @@ class _MessagesPageState extends State<MessagesPage>
                     } else {
                       return SizedBox(
                         width: size.width,
-                        height: MediaQuery.of(context).size.height,
+                        //   height: MediaQuery.of(context).size.height,
                         child: Padding(
                           padding: getPadding(
                             bottom: 5,

@@ -374,3 +374,57 @@ class SignUpScreen extends GetWidget<SignUpController> {
   }
 
 }
+
+
+
+/* 
+
+Obx(() => Column(
+  children: [
+    CustomTextFormField(
+      focusNode: controller.passwordFocusNode,
+      autofocus: true,
+      controller: controller.passwordController,
+      hintText: "lbl_password".tr,
+      margin: getMargin(top: 20),
+      variant: TextFormFieldVariant.Neutral,
+      padding: TextFormFieldPadding.PaddingT14,
+      fontStyle: TextFormFieldFontStyle.SatoshiLight14,
+      textInputAction: TextInputAction.done,
+      textInputType: TextInputType.visiblePassword,
+      onChanged: (value) {
+        controller.updatePasswordRules(value);
+      },
+      suffix: InkWell(
+        onTap: () {
+          controller.isShowPassword.value = !controller.isShowPassword.value;
+        },
+        child: Container(
+          margin: getMargin(left: 30, top: 14, right: 15, bottom: 14),
+          child: CustomImageView(
+            svgPath: controller.isShowPassword.value ? ImageConstant.imgEye : ImageConstant.imgEye,
+          ),
+        ),
+      ),
+      suffixConstraints: BoxConstraints(maxHeight: getVerticalSize(48)),
+      validator: (value) {
+        if (value == null || value.isEmpty || !isValidPassword(value, isRequired: true)) {
+          return "Please enter a valid password\nPassword should have,\nat least an upper case letter\nat least a lower case letter\nat least a digit\nat least a special character [@#\$%^&+=]\nlength of at least 4\nno white space allowed";
+        }
+        return null;
+      },
+      isObscureText: !controller.isShowPassword.value,
+    ),
+    ...controller.passwordRules.map((rule) {
+      return Obx(() => Row(
+        children: [
+          Checkbox(
+            value: rule.isMet.value,
+            onChanged: (value) {},
+          ),
+          Text(rule.description),
+        ],
+      ));
+    }).toList(),
+  ],
+)) */

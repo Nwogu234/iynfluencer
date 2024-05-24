@@ -473,7 +473,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // ChatsOpenedController controller = Get.put(ChatsOpenedController());
   late AnimationController animationController;
   late String imageProvider;
   late String titleName;
@@ -482,6 +481,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   FocusNode focusNode = FocusNode();
   late ChatsOpenedController controller;
   final scrollController = ScrollController();
+   List<Widget> chatList = [];
+ // final  ChatsOpenedController controller = Get.find<ChatsOpenedController>();
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -489,6 +490,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     }
     return text[0].toUpperCase() + text.substring(1);
   }
+
 
   @override
   void initState() {
@@ -527,16 +529,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     if (name != null && name.isNotEmpty) {
       titleName = name;
     } else {
-      imageProvider = "Mark Adebayo";
+      titleName = "Mark Adebayo";
     }
-   
-    controller = Get.put(ChatsOpenedController(
+
+     controller = ChatsOpenedController(
       chatData: widget.chatData,
       selectedInfluencer: widget.selectedInfluencer,
-    ));
+       ); 
 
-    // controller.getUser(widget.chatData.chatId);
-    controller.onInit();
+     controller.onInit();
   }
 
   Future<void> _refresh() async {
@@ -553,7 +554,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
-
     final String chatId = widget.chatData.chatId;
 
     return SafeArea(
@@ -614,6 +614,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                 fullPage: true,
               );
             } else {
+              Map<String, List<Message>> groupedMessages = controller.groupMessagesByDate(controller.messageModelObj);
               return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
@@ -621,42 +622,44 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   child: Column(
                     children: [
                       SizedBox(height: 16),
-                      DateLable(
-                        dateTime: widget.chatData.createdAt,
-                      ),
-                      SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
                           controller: scrollController,
                           reverse: true,
-                          //  shrinkWrap: true,
-                          //  physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.messageModelObj.length,
+                          itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
-                            /*  final sortedMessages =
-                                controller.messageModelObj.reversed.toList();
-                            final reversedIndex =
-                                controller.messageModelObj.length - 1 - index; */
-                            final message = controller.messageModelObj[index];
-                            String formattedDateTime = DateFormat.jm('en_US')
-                                .format(message.createdAt);
-                            if (controller.messageModelObj.isEmpty) {
-                              return SizedBox.shrink();
-                            } //else{
-                            return ChatMessageBubble(
-                                controller: controller,
-                                messageText: message.text,
-                                isReceived: message.authorUserId !=
-                                    widget.chatData.creatorUserId,
-                                timestamp: formattedDateTime,
-                                leadingImagePath: ImageConstant.imgVector,
-                                trailingImagePath: ImageConstant.imgVector,
-                                messageModelObj: message.messageId,
-                                onSwipedMessage: (message) {
-                                  replyToMessage(message);
-                                  focusNode.requestFocus();
-                                });
-                            //     }
+                            String date = groupedMessages.keys.elementAt(index);
+                            List<Message> messages = groupedMessages[date]!;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DateLable(
+                                  dateTime: DateTime.parse(date),
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: messages.length,
+                                  itemBuilder: (context, subIndex) {
+                                    final message = messages[subIndex];
+                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
+                                    return ChatMessageBubble(
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId != widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath: ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (message) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
                           },
                         ),
                       ),
@@ -665,7 +668,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                         canPop: true,
                         onPopInvoked: (didPop) {
                           if (show.value) {
-                            // if show is true
                             show.value = false;
                           } else {
                             Navigator.of(context);
@@ -704,6 +706,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   ),
                 ),
               );
+
+
             }
           }),
         ),
@@ -735,7 +739,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   }
 
   onTapArrowleft8() {
-    messageController.getUser();
+    messageController.onInit();
     messageController.setUnreadCreator(0);
     Get.back(result: true);
   }

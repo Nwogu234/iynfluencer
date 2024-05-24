@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -13,6 +13,7 @@ class SocketClient extends GetxService {
   Rx<Message?> receivedMessage = Rx<Message?>(null);
   var sentMessages = <Message>[].obs;
   UserController user = Get.find<UserController>();
+  Timer? keepAliveTimer;
 
   // Make SocketClient a singleton
   static SocketClient get to => Get.find(); // Singleton pattern for easy access
@@ -22,6 +23,8 @@ class SocketClient extends GetxService {
     super.onInit();
     _initSocket();
   }
+
+
 
   void _initSocket() async {
     // Initialize the socket connection
@@ -34,9 +37,13 @@ class SocketClient extends GetxService {
         'extraHeaders': {'authorization': token},
         'autoConnect': true,
         'reconnection': true,
-        'reconnectionAttempts': 10000,
+      //  'reconnectionAttempts': 100000,
         'path': '/chat-socket',
-        'timeout': 30000,
+        'timeout': 30000000,
+        'reconnectionAttempts': null,
+        'reconnectionDelay': 1000, 
+        'reconnectionDelayMax': 3000,
+        'randomizationFactor': 0.5,
       });
       socket.connect();
       connect();
@@ -82,13 +89,7 @@ class SocketClient extends GetxService {
     socket.on('userJoin', (data) => _handleUserEvent(data, "joined"));
     socket.on('userLeave', (data) => _handleUserEvent(data, "left"));
   }
-
-  void _handleNewMessage(dynamic data) {
-    Message newMessage = Message.fromJson(data);
-    receivedMessage.value = newMessage;
-    sentMessages.add(newMessage);
-    Get.log('New message received: $data');
-  }
+  
 
   void _handleUserEvent(dynamic data, String eventType) {
     if (data is String) {
@@ -104,7 +105,7 @@ class SocketClient extends GetxService {
     }
   }
 
-  void sendMessage(ChatData chatData, String messageText) {
+  void sendMessage(ChatData chatData, dynamic messageText) {
     if (isConnected.value) {
       try {
         socket.emit('onMessageCreate', {

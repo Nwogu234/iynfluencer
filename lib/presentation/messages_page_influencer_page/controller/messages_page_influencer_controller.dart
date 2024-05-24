@@ -211,7 +211,7 @@ var messages = <String>[].obs;
 
 
   
-  Future<void> getCreatorsChat() async {
+  /* Future<void> getCreatorsChat() async {
     try {
       error('');
       isTrendLoading.value = true;
@@ -242,12 +242,44 @@ var messages = <String>[].obs;
       error('Something went wrong');
       isTrendLoading.value = false;
     }
+  } */
+
+  
+  Future<void> getCreatorsChat() async {
+  try {
+    isTrendLoading.value = true;
+    token = await storage.read(key: "token");
+    final Response response = await apiClient.getAllChatsWithCreators(token);
+    List<dynamic> chatJsonList = response.body['data']['docs'];
+    chatList.clear();
+    print(chatJsonList.length);
+    print(chatJsonList);
+    if (chatJsonList.isNotEmpty) {
+      chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+      chatList.sort((a, b) {
+        final aLastMessageTime = a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
+        final bLastMessageTime = b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
+        return bLastMessageTime.compareTo(aLastMessageTime);
+      });
+      chatModelObj.value = chatList;
+      error('');
+    } if (chatList.isEmpty) {
+        error('You don\'s have Influencers in your chats');
+        empty = true;
+        print('No chat data available.');
+      } 
+    isTrendLoading.value = false;
+  } catch (e) {
+    print('Error fetching influencers chat: $e');
+    error('Something went wrong');
+    isTrendLoading.value = false;
   }
+}
 
 
  @override 
  void onClose() { 
-  socketClient.disconnect();
+ // socketClient.disconnect();
   searchController.dispose();
   super.onClose(); 
   } 

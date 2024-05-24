@@ -7,6 +7,8 @@ import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:flutter/material.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 
 import '../../../data/apiClient/api_client.dart';
 import '../../../widgets/staggerd_widget.dart';
@@ -35,6 +37,8 @@ class HomeCreatorController extends GetxController {
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
+   final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
 
 /* 
 //this is for animation
@@ -75,7 +79,13 @@ class HomeCreatorController extends GetxController {
 
       Widget card = Padding(
         padding: padding,
-        child: StaggeredWidget(user: influencers[index]),
+        child: StaggeredWidget(
+          user: influencers[index],
+          chatData: index < messagesController.chatList.length
+                    ? messagesController.chatList[index]
+                             : null,
+          
+          ),
       );  // Your custom widget
 
       // Apply different margins or padding based on the index for visual effect

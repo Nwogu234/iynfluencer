@@ -583,96 +583,6 @@ class ChatsInputController extends GetxController {
     }
   }
 
-  /*  Future<void> sendMessage(BuildContext context, String messageText) async {
-    FocusScope.of(context).unfocus();
-    onCancelReply();
-    try {
-      messageText = messageText.trim();
-
-      final now = DateTime.now();
-      final formattedTime = DateFormat('HH:mm').format(now);
-      final createdAt = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        int.parse(formattedTime.substring(0, 2)),
-        int.parse(formattedTime.substring(3)),
-        0,
-      );
-
-      final messageId = Uuid().v4();
-
-      final newMessage = Message(
-        id: chatData.id,
-        chatId: chatData.chatId,
-        authorId: chatData.creatorId,
-        text: messageText,
-        authorUserId: chatData.creatorUserId,
-        blockedByRecipient: chatData.blockedByInfluencer,
-        messageId: messageId,
-        createdAt: createdAt,
-        updatedAt: createdAt,
-      );
-
-      final id = chatData.id;
-      final chatId = chatData.chatId;
-      final authorId = chatData.creatorId;
-      final text = messageText;
-      final authorUserId = chatData.creatorUserId;
-      final blockedByRecipient = chatData.blockedByInfluencer;
-      final messageIds = messageId;
-      final createdAts = createdAt;
-      final updatedAts = createdAt;
-
-      print('id : $id');
-      print('chatId : $chatId');
-      print('authorId : $authorId');
-      print('text : $text');
-      print('authorUserId : $authorUserId');
-      print('blockedByRecipient : $blockedByRecipient');
-      print('messageId : $messageIds');
-      print('createdAts : $createdAts');
-      print('updatedAts  : $updatedAts');
-
-      final token = await storage.read(key: "token");
-
-      if (token == null) {
-        print("Authorization token is not available");
-        return;
-      }
-      final response = await apiClient.sendMessage(newMessage, token);
-
-      if (response.isOk) {
-        UpdateList(newMessage);
-        print('Message sent and stored successfully');
-
-        messageController.clear();
-
-         focusNode.requestFocus();
-
-        if (_scrollController.hasClients) {
-          scrollToBottom();
-        } else {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_scrollController.hasClients) {
-              scrollToBottom();
-            }
-          });
-        }
-      } else {
-        print('Failed to send message: ${response.statusText}');
-        print('Sent Message: $messageText');
-      }
-    } catch (e) {
-      print('Error sending message: $e');
-    }
-  }
-
-   void UpdateList(Message message) {
-    messageModelObj.insert(0,message);
-    update();
-  }
-  */
 
   void scrollToBottom() {
     _scrollController.animateTo(
@@ -690,6 +600,6 @@ class ChatsInputController extends GetxController {
     _socketClient.socket.off('newMessage');
     _socketClient.socket.off('error');
     _socketClient.disconnect();
-    //  messageController.dispose();
+      messageController.dispose();
   }
 }

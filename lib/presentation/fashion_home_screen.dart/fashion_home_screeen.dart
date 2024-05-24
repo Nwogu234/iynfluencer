@@ -125,7 +125,11 @@ class _FashionHomePageState extends State<FashionHomePage>
                             return Padding(
                               padding: EdgeInsets.only(right: 10.w),
                               child: TrendinghorizonItemWidget(
-                                  controller.trendingInfluencers[index]),
+                                  controller.trendingInfluencers[index],
+                                 index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                  ),
                             );
                           }
                         },

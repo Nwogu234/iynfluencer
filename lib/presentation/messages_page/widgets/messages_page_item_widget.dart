@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/binding/chats_opened_binding.dart';
@@ -13,21 +14,39 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class MessagesPageItemWidget extends StatelessWidget {
   final ChatData messagesPageItemModelObj;
-  VoidCallback? onTapChatcard;
+ // VoidCallback? onTapChatcard;
 
 
   MessagesPageItemWidget({
     Key? key,
     required this.messagesPageItemModelObj,
-    this.onTapChatcard,
+  //  this.onTapChatcard,
   }) : super(key: key);
 
  
-
   final storage = new FlutterSecureStorage();
+
+String formatDateTime(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+
+  if (difference.inDays < 1) {
+    return DateFormat.jm('en_US').format(dateTime); 
+  } else if (difference.inDays == 1) {
+    return 'YESTERDAY';
+  } else if (difference.inDays < 365) {
+    return DateFormat('MMM d').format(dateTime);
+  } else {
+    return DateFormat('MMM d, yyyy').format(dateTime); 
+  }
+}
 
   @override
   Widget build(BuildContext context) {
+
+    String formattedDateTime = messagesPageItemModelObj.messages.isNotEmpty
+        ? formatDateTime(messagesPageItemModelObj.messages.last.createdAt)
+        : '';
     final bool isOnline = false;
     String messageText = messagesPageItemModelObj.messages.isNotEmpty
         ? messagesPageItemModelObj.messages.last.text
@@ -137,7 +156,7 @@ class MessagesPageItemWidget extends StatelessWidget {
                               : 15,
                         ),
                         child: Text(
-                          timeago.format(messagesPageItemModelObj.createdAt),
+                          formattedDateTime,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiLight14Gray900a2,

@@ -107,7 +107,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                     margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
                     onTap: openDrawer,
                      radius: BorderRadius.circular(
-                       getSize(25.0),
+                       getSize(25.r),
                         ),
                   ),
                 );
@@ -119,7 +119,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                     hintText: "Search influencers".tr,
                     controller: controller.searchController,
                     onTap: () {
-                     // onTapSubmit();
+                      onTapSubmit();
                     }),
               ),
             ],

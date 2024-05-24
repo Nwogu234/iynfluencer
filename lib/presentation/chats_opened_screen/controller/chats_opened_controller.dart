@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
+import 'dart:async';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
@@ -343,7 +344,7 @@ class ChatsOpenedController extends GetxController {
   final Influencer? selectedInfluencer;
 
   ChatsOpenedController({required this.chatData, this.selectedInfluencer}) {
-    messageModelObj = chatData.messages.obs;
+    //  messageModelObj = chatData.messages.obs;
   }
 
   TextEditingController messageController = TextEditingController();
@@ -364,30 +365,47 @@ class ChatsOpenedController extends GetxController {
   late final RxBool isDeleted = false.obs;
   RxBool isEmojiWidgetShown = false.obs;
   RxBool isConnected = false.obs;
+  Timer? keepAliveTimer;
+  // List<String> sentMessagesCache = [];
+  Set<String> processedMessageIds = {};
 
-  void listenToNewMessages() {
+  bool isDuplicateMessage(String messageId) {
+  return messageModelObj.any((message) => message.messageId == messageId);
+}
+
+  void listenToNewMessage() {
     _socketClient.socket.on('onMessageCreate', (data) {
-      _handleNewMessage(data);
+      handleNewMessage(data);
     });
     _socketClient.socket.on('error', (errorData) {
       error.value = 'Socket Error: $errorData';
-      update(); 
+      update();
     });
   }
 
- 
-void _handleNewMessage(dynamic data) {
-  print('this is working');
-  print('Received data: $data');
-  try {
-      messages.add(data);
-      update();
+  void handleNewMessage(dynamic data) {
+    print('this is working');
+    print('Received data: $data');
+    try {
 
-  } catch (e) {
-    print('Error parsing message data: $e');
+       final messageMap = data as Map<String, dynamic>;
+
+      final Message newMessage = Message.fromJson(messageMap);
+      
+     if (isDuplicateMessage(newMessage.messageId)) {
+      print('Duplicate message detected: ${newMessage.messageId}');
+      return;
+    }
+      UpdateMessage(newMessage);
+    } catch (e) {
+      print('Error parsing message data: $e');
+    }
   }
-}
 
+  void UpdateMessage(Message message) {
+    messageModelObj.insert(0, message);
+    update();
+  }
 
   void hideEmojiWidget() {
     isEmojiWidgetShown.value = !isEmojiWidgetShown.value;
@@ -449,12 +467,6 @@ void _handleNewMessage(dynamic data) {
             messages.add(message);
           }
 
-          /*    final List<Message> storedMessages = await loadMessages(chatId) ?? [];
-
-        final List<Message> mergedMessages = [...storedMessages, ...messages];
-        messageModelObj.assignAll(mergedMessages);
-        saveMessages(mergedMessages, chatId); */
-
           messageModelObj.assignAll(messages);
 
           saveMessages(messages, chatId);
@@ -499,6 +511,20 @@ void _handleNewMessage(dynamic data) {
       print('Error deleting message: $e');
     }
   }
+
+    Map<String, List<Message>> groupMessagesByDate(List<Message> messages) {
+    Map<String, List<Message>> groupedMessages = {};
+    for (var message in messages) {
+      String date = DateFormat('yyyy-MM-dd').format(message.createdAt);
+      if (groupedMessages.containsKey(date)) {
+        groupedMessages[date]!.add(message);
+      } else {
+        groupedMessages[date] = [message];
+      }
+    }
+    return groupedMessages;
+  }
+
 
   void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
     if (selectedInfluencer == null) {
@@ -635,6 +661,11 @@ void _handleNewMessage(dynamic data) {
     }
   }
 
+  void chatJoin(String chatId) {
+    _socketClient.socket.emit('onChatJoin', {'chatId': chatId});
+    print('user has joined');
+  }
+
   Future<void> sendMessage(BuildContext context, String messageText) async {
     FocusScope.of(context).unfocus();
     try {
@@ -687,18 +718,25 @@ void _handleNewMessage(dynamic data) {
 
       final token = await storage.read(key: "token");
 
+
       if (token == null) {
         print("Authorization token is not available");
         return;
       }
-     
+
       final response = await apiClient.sendMessage(newMessage, token);
 
       if (response.isOk) {
-        UpdateList(newMessage);
-        print('Message sent and stored successfully');
-
         messageController.clear();
+       // processedMessageIds.add(messageKey);
+      //  UpdateList(newMessage);
+       if (!isDuplicateMessage(newMessage.messageId)) {
+        UpdateList(newMessage);
+      }
+        print('Message sent and stored successfully');
+        socketClient.sendMessage(chatData, messageText);
+
+        //  messageController.clear();
       } else {
         print('Failed to send message: ${response.statusText}');
         print('Sent Message: $messageText');
@@ -721,15 +759,16 @@ void _handleNewMessage(dynamic data) {
 
   @override
   void onInit() {
-     _socketClient.connect();
+    _socketClient.connect();
     print(_socketClient.isConnected);
-    //   _socketClient.socket.emit('onChatJoin', {'message': 'user just joined'});
+    // _socketClient.socket.emit('onChatJoin', {'message': 'user just joined'});
     chatJoin(chatData.chatId);
     _socketClient.socket.on('error', (errorData) {
       print('this error is from chat open');
       print('Socket Error: $errorData');
     });
-    listenToNewMessages();
+    listenToNewMessage();
+    // startKeepAliveTimer();
     super.onInit();
 
     print('Chat data before getUser: $chatData');
@@ -739,18 +778,13 @@ void _handleNewMessage(dynamic data) {
     getUser(chatId);
   }
 
-  void chatJoin(String chatId) {
-    _socketClient.socket.emit('onChatJoin', {'chatId': chatId});
-    print('user has joined');
-  }
-
   @override
   void onClose() {
     super.onClose();
     _socketClient.socket.off('newMessage');
     _socketClient.socket.off('error');
-    _socketClient.disconnect();
+    _socketClient.connect();
     messageController.dispose();
-    _socketClient.disconnect();
+    // _socketClient.disconnect();
   }
 }

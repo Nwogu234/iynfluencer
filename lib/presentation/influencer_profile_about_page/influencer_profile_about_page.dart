@@ -23,11 +23,13 @@ import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 class InfluencerProfileAboutPage extends StatelessWidget {
-  InfluencerProfileAboutPage({required this.selectedInfluencer});
+  InfluencerProfileAboutPage(
+      {required this.chatData, required this.selectedInfluencer});
 
   final Influencer selectedInfluencer;
+  final ChatData chatData;
 
-  ChatData chatData = ChatData(
+  ChatData chatsData = ChatData(
     id: 'id',
     creatorId: 'CreatorId',
     creatorUserId: 'CreatorUserId',
@@ -103,7 +105,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
         chatData: chatData, selectedInfluencer: selectedInfluencer));
 
     String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${selectedInfluencer!.userId}-avatar.jpeg";
+      selectedInfluencer.user?.first.avatar;
     String imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -144,12 +146,12 @@ class InfluencerProfileAboutPage extends StatelessWidget {
       'SlideShare': FontAwesomeIcons.slideshare,
     };
 
-      void _launchURL(String url) async {
-        final uri = Uri.parse(url);
-       if (await canLaunchUrl(uri)) {
-         await launchUrl(uri);
-       } else {
-       print('Could not launch $url');
+    void _launchURL(String url) async {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        print('Could not launch $url');
       }
     }
 
@@ -574,9 +576,8 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 12.0
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(top: 12.0),
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -592,69 +593,99 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                                             social
                                                                 .platformName)] ??
                                                     Icons.error;
-                                                return Row(
-                                                  children: [
-                                                  iconData == FontAwesomeIcons.tiktok ?
-                                                     InkWell(
+                                                return Row(children: [
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .tiktok
+                                                      ? InkWell(
                                                           onTap: () =>
-                                                          _launchURL(social.platformUrl),
-                                                       child: Container(
-                                                        width: 35.w, 
-                                                        height: 35.h, 
-                                                        color: Colors.transparent, 
-                                                         child: Icon(iconData,
-                                                          color: Colors.black,
-                                                          size: 35.sp)),
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width:15),
-                                                iconData == FontAwesomeIcons.tiktok ?
-                                                 Column(
-                                                  children: [
-                                                   Text(        
-                                                    formatFollowers(socialname),
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(fontSize: 17.sp),
-                                                    ),
-                                                   Text(
-                                                    'followers',
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.normal)
-                                                   ),
-                                                  ],
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width: 50),
-                                                  iconData == FontAwesomeIcons.twitter ?
-                                                     InkWell(
+                                                              _launchURL(social
+                                                                  .platformUrl),
+                                                          child: Container(
+                                                              width: 35.w,
+                                                              height: 35.h,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Icon(
+                                                                  iconData,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  size: 35.sp)),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 15),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .tiktok
+                                                      ? Column(
+                                                          children: [
+                                                            Text(
+                                                              formatFollowers(
+                                                                  socialname),
+                                                              style: AppStyle
+                                                                  .txtSatoshiBold16
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          17.sp),
+                                                            ),
+                                                            Text('followers',
+                                                                style: AppStyle
+                                                                    .txtSatoshiBold16
+                                                                    .copyWith(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.normal)),
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 50),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .twitter
+                                                      ? InkWell(
                                                           onTap: () =>
-                                                          _launchURL(social.platformUrl),
-                                                       child: Container(
-                                                        width: 35.w, 
-                                                        height: 35.h, 
-                                                        color: Colors.transparent, 
-                                                         child: Icon(iconData,
-                                                          color: Colors.black,
-                                                          size: 35.sp)),
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width:15),
-                                                iconData == FontAwesomeIcons.twitter ?
-                                                 Column(
-                                                  children: [
-                                                   Text(formatFollowers(socialname),
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(fontSize: 17.sp),
-                                                    ),
-                                                   Text(
-                                                    'followers',
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.normal)
-                                                   ),
-                                                  ],
-                                                 ) : SizedBox.shrink()
-                                                  ]);
+                                                              _launchURL(social
+                                                                  .platformUrl),
+                                                          child: Container(
+                                                              width: 35.w,
+                                                              height: 35.h,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Icon(
+                                                                  iconData,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  size: 35.sp)),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 15),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .twitter
+                                                      ? Column(
+                                                          children: [
+                                                            Text(
+                                                              formatFollowers(
+                                                                  socialname),
+                                                              style: AppStyle
+                                                                  .txtSatoshiBold16
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          17.sp),
+                                                            ),
+                                                            Text('followers',
+                                                                style: AppStyle
+                                                                    .txtSatoshiBold16
+                                                                    .copyWith(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.normal)),
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink()
+                                                ]);
                                               }).toList() ??
                                               [
                                                 IconButton(
@@ -669,9 +700,8 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                       ),
                                       SizedBox(height: 15),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -687,68 +717,99 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                                             social
                                                                 .platformName)] ??
                                                     Icons.error;
-                                                return Row(
-                                                  children: [
-                                                  iconData == FontAwesomeIcons.youtube ?
-                                                     InkWell(
+                                                return Row(children: [
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .youtube
+                                                      ? InkWell(
                                                           onTap: () =>
-                                                          _launchURL(social.platformUrl),
-                                                       child: Container(
-                                                        width: 35.w, 
-                                                        height: 35.h, 
-                                                        color: Colors.transparent, 
-                                                         child: Icon(iconData,
-                                                          color: Colors.black,
-                                                          size: 35.sp)),
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width:15),
-                                                  iconData == FontAwesomeIcons.youtube ?
-                                                 Column(
-                                                  children: [
-                                                   Text(formatFollowers(socialname),
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(fontSize: 17.sp),
-                                                    ),
-                                                   Text(
-                                                    'followers',
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.normal)
-                                                   ),
-                                                  ],
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width: 50),
-                                                  iconData == FontAwesomeIcons.facebook ?
-                                                     InkWell(
+                                                              _launchURL(social
+                                                                  .platformUrl),
+                                                          child: Container(
+                                                              width: 35.w,
+                                                              height: 35.h,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Icon(
+                                                                  iconData,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  size: 35.sp)),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 15),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .youtube
+                                                      ? Column(
+                                                          children: [
+                                                            Text(
+                                                              formatFollowers(
+                                                                  socialname),
+                                                              style: AppStyle
+                                                                  .txtSatoshiBold16
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          17.sp),
+                                                            ),
+                                                            Text('followers',
+                                                                style: AppStyle
+                                                                    .txtSatoshiBold16
+                                                                    .copyWith(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.normal)),
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 50),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .facebook
+                                                      ? InkWell(
                                                           onTap: () =>
-                                                          _launchURL(social.platformUrl),
-                                                       child: Container(
-                                                        width: 35.w, 
-                                                        height: 35.h, 
-                                                        color: Colors.transparent, 
-                                                         child: Icon(iconData,
-                                                          color: Colors.black,
-                                                          size: 35.sp)),
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width:15),
-                                                 iconData == FontAwesomeIcons.facebook ?
-                                                 Column(
-                                                  children: [
-                                                   Text(formatFollowers(socialname),
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(fontSize: 17.sp),
-                                                    ),
-                                                   Text(
-                                                    'followers',
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.normal)
-                                                   ),
-                                                  ],
-                                                 ) : SizedBox.shrink()
-                                                  ]);
+                                                              _launchURL(social
+                                                                  .platformUrl),
+                                                          child: Container(
+                                                              width: 35.w,
+                                                              height: 35.h,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Icon(
+                                                                  iconData,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  size: 35.sp)),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 15),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .facebook
+                                                      ? Column(
+                                                          children: [
+                                                            Text(
+                                                              formatFollowers(
+                                                                  socialname),
+                                                              style: AppStyle
+                                                                  .txtSatoshiBold16
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          17.sp),
+                                                            ),
+                                                            Text('followers',
+                                                                style: AppStyle
+                                                                    .txtSatoshiBold16
+                                                                    .copyWith(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.normal)),
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink()
+                                                ]);
                                               }).toList() ??
                                               [
                                                 IconButton(
@@ -762,10 +823,9 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                         ),
                                       ),
                                       SizedBox(height: 15),
-                                        Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0
-                                        ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -781,38 +841,53 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                                             social
                                                                 .platformName)] ??
                                                     Icons.error;
-                                                return Row(
-                                                  children: [
-                                                  iconData == FontAwesomeIcons.whatsapp ?
-                                                     InkWell(
+                                                return Row(children: [
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .whatsapp
+                                                      ? InkWell(
                                                           onTap: () =>
-                                                          _launchURL(social.platformUrl),
-                                                       child: Container(
-                                                        width: 35.w, 
-                                                        height: 35.h, 
-                                                        color: Colors.transparent, 
-                                                         child: Icon(iconData,
-                                                          color: Colors.black,
-                                                          size: 35.sp)),
-                                                 ) : SizedBox.shrink(),
-                                                 SizedBox(width:15),
-                                                  iconData == FontAwesomeIcons.whatsapp ?
-                                                 Column(
-                                                  children: [
-                                                   Text(formatFollowers(socialname),
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(fontSize: 17.sp),
-                                                    ),
-                                                   Text(
-                                                    'followers',
-                                                    style: AppStyle.txtSatoshiBold16
-                                                     .copyWith(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.normal)
-                                                   ),
-                                                  ],
-                                                 ) : SizedBox.shrink(),
-                                                  ]);
+                                                              _launchURL(social
+                                                                  .platformUrl),
+                                                          child: Container(
+                                                              width: 35.w,
+                                                              height: 35.h,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Icon(
+                                                                  iconData,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  size: 35.sp)),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  SizedBox(width: 15),
+                                                  iconData ==
+                                                          FontAwesomeIcons
+                                                              .whatsapp
+                                                      ? Column(
+                                                          children: [
+                                                            Text(
+                                                              formatFollowers(
+                                                                  socialname),
+                                                              style: AppStyle
+                                                                  .txtSatoshiBold16
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          17.sp),
+                                                            ),
+                                                            Text('followers',
+                                                                style: AppStyle
+                                                                    .txtSatoshiBold16
+                                                                    .copyWith(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.normal)),
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                ]);
                                               }).toList() ??
                                               [
                                                 IconButton(
@@ -831,8 +906,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                           Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 10),
                             child: Card(
@@ -864,8 +938,8 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "(${selectedInfluencer?.jobsDone})"
-                                                      .tr,
+                                          "(${selectedInfluencer?.jobsDone})"
+                                              .tr,
                                           maxLines: null,
                                           textAlign: TextAlign.left,
                                           style: AppStyle.txtSatoshiMedium

@@ -474,11 +474,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     String? avatarUrl;
     if (widget.selectedJob != null) {
       avatarUrl =
-          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedJob?.creator?.userId}-avatar.jpeg";
-      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg';
+                widget.selectedJob?.user?.avatar ?? '';
+      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-avatar.jpeg';
     } else if (widget.chatData != null) {
-      avatarUrl =
-          "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData.influencerUserId}-avatar.jpeg";
+      avatarUrl = widget.chatData.creatorUser!.avatar;
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
     }
 
@@ -491,7 +490,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     String? name;
     if (widget.selectedJob != null) {
       name =
-          "${widget.selectedJob?.creator?.userId}"; /* ${capitalizeFirstLetter(widget.selectedJob?.creator?.userId)}"; */
+        "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName ?? 'Adebayo')}";
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
@@ -500,7 +499,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     if (name != null && name.isNotEmpty) {
       titleName = name;
     } else {
-      imageProvider = "Mark Adebayo";
+      titleName = "Mark Adebayo";
     }
 
     controllers = ChatsInfluencerController(
@@ -540,7 +539,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
             },
           ),
           title: Padding(
-            padding: getPadding(left: 2, bottom: 2, top: 2),
+            padding: getPadding(left: 2, top: 3),
             child: Row(
               children: [
                 AppbarCircleimage(
@@ -550,7 +549,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                 AppbarSubtitle(
                   text: titleName.tr,
                   margin: getMargin(left: 14, top: 5, bottom: 20),
-                )
+                ),
               ],
             ),
           ),
@@ -580,7 +579,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                 fullPage: true,
               );
             } else {
-              return GestureDetector(
+ /*              return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
                   padding: getPadding(left: 19, right: 19),
@@ -663,6 +662,107 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                     ],
                   ),
                 ),
+              ); */
+
+
+              Map<String, List<Message>> groupedMessages = controllers.groupMessagesByDate(controllers.messageModelObjs);
+              return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                         controller: scrollController,
+                         reverse: true,
+                          itemCount: groupedMessages.length, 
+                          itemBuilder: (context, index) {
+                           String date = groupedMessages.keys.elementAt(index);
+                           List<Message> messages = groupedMessages[date]!;  
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                               messages.isNotEmpty ? DateLable(
+                                  dateTime: DateTime.parse(date),
+                                ) : DateLable(
+                                  dateTime: widget.chatData.createdAt,
+                                ) ,
+                                SizedBox(height: 16),
+                                ListView.builder(
+                                 controller: scrollController,
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  itemCount: messages.length,
+                                  itemBuilder: (context, subIndex) {
+                                    final message = messages[subIndex];
+                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
+                                     if (messages.isEmpty) {
+                                        return SizedBox.shrink();
+                                    } 
+                                    return ChatMessageBubblez(
+                                     controller: controllers,
+                                     messageText: message.text,
+                                    isReceived: message.authorUserId !=
+                                      widget.chatData.influencerUserId,
+                                    timestamp: formattedDateTime,
+                                    leadingImagePath: ImageConstant.imgVector,
+                                    trailingImagePath: ImageConstant.imgVector,
+                                    messageModelObjs: message.messageId,
+                                    onSwipedMessage: (message) {
+                                     replyToMessage(message);
+                                     focusNode.requestFocus();
+                                   });
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                            ChatInputsBar(
+                                replyMessages: widget.replyMessages,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController:
+                                    controllers.messageController,
+                                closedController: controllers,
+                              ),
+                              show.value
+                                  ? emojiSelect(controllers)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             }
           }),
@@ -695,7 +795,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
   }
 
   onTapArrowleft8() {
-    messageInfluencerController.getUser();
+    messageInfluencerController.onInit();
     messageInfluencerController.setUnreadInfluencer(0);
     Get.back(result: true);
   }

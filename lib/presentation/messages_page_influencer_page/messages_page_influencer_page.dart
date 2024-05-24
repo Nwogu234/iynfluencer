@@ -16,6 +16,7 @@ import 'controller/messages_page_influencer_controller.dart';
 import 'models/listgroup883_item_model.dart';
 import 'models/messages_page_influencer_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage_1.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview_1.dart';
@@ -235,6 +236,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+    controller.onInit();
   }
 
   @override
@@ -343,7 +345,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                             }  else {
                                return SizedBox(
                           width: size.width,
-                          height: getVerticalSize(800),
+                       //   height: getVerticalSize(800),
                           child: Padding(
                             padding: getPadding(
                               bottom: 5,

@@ -298,9 +298,11 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
   
  
 
-  onTapprofilecard(Influencer listrectangle50) {
+  onTapprofilecard(Influencer listrectangle50, ChatData? chatData) {
     Get.to(
-      InfluencerProfileAboutPage(selectedInfluencer: listrectangle50),
+      InfluencerProfileAboutPage(
+        chatData: chatData ?? chatsData,
+        selectedInfluencer: listrectangle50),
     );
   }
 
@@ -328,7 +330,10 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
 
     return GestureDetector(
       onTap: () {
-        onTapprofilecard(widget.listrectangle50);
+        onTapprofilecard(
+          widget.listrectangle50,
+          widget.chatData,
+          );
       },
       child: SingleChildScrollView(
         child: Column(

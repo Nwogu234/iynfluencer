@@ -134,7 +134,11 @@ class _TechnologyHomePageState extends State<TechnologyHomePage>
                             return Padding(
                               padding: EdgeInsets.only(right: 10.w),
                               child: TrendinghorizonItemWidget(
-                                  controller.trendingInfluencers[index]),
+                                  controller.trendingInfluencers[index],
+                                 index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                  ),
                             );
                           }
                         },

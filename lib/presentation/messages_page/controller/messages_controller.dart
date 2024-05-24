@@ -8,86 +8,7 @@ import 'package:iynfluencer/presentation/messages_page/models/messages_model.dar
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../data/general_controllers/sockect_client.dart';
-/* 
-class MessagesController extends GetxController {
-  TextEditingController searchController = TextEditingController();
-  final Rx<MessagesModel> messagesModelObj = MessagesModel().obs;
-  final RxList<ChatData> chatList = <ChatData>[].obs;
-  final RxString error = ''.obs;
-  final RxBool isLoading = false.obs;
-  final RxBool isTrendLoading = false.obs;
-  RxInt unreadCreator = 0.obs;
 
-  final UserController user = Get.find();
-  final ApiClients apiClient = ApiClients();
-  final SocketClient socketClient = SocketClient.to;
-  final FlutterSecureStorage storage = FlutterSecureStorage();
-
-  MessagesController(Rx<MessagesModel> obs);
-
-
-  @override
-  void onInit() {
-    super.onInit();
-    socketClient.connect();
-    print(socketClient.isConnected);
-    getUser();
-  }
-
-  Future<void> getUser() async {
-    isLoading.value = true;
-    try {
-      await user.getUser();
-      if (user.userModelObj.value.firstName.isEmpty) {
-        error.value = 'Something went wrong with user data';
-      } else {
-        await getInfluencersChat();
-      }
-    } catch (e) {
-      error.value = 'Error fetching user: $e';
-      print(e);
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> getInfluencersChat() async {
-    isTrendLoading.value = true;
-    try {
-      String? token = await storage.read(key: "token");
-      var response = await apiClient.getAllChatsWithInfluencers(token!);
-      var chatJsonList = response.body['data']['docs'] as List;
-      chatList.assignAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
-      if (chatList.isEmpty) {
-        error.value = 'You don\'t have Influencers in your chats';
-      }
-    } catch (e) {
-      error.value = 'Error fetching chats: $e';
-      print('Error fetching influencers chat: $e');
-    } finally {
-      isTrendLoading.value = false;
-    }
-  }
-
-  Future<void> refreshItems() async {
-    await Future.delayed(Duration(seconds: 1));
-    await getUser();
-  }
-
-  void setUnreadCreator(int value) {
-    unreadCreator.value = value;
-  }
-
-  @override
-  void onClose() {
-    socketClient.socket.off('newMessage');
-    socketClient.socket.off('error');
-    socketClient.disconnect();
-    searchController.dispose();
-    super.onClose();
-  }
-}
- */
 
 class MessagesController extends GetxController {
   MessagesController(this.messagesModelObj);
@@ -161,7 +82,7 @@ class MessagesController extends GetxController {
   }
 
   
-
+/* 
   Future<void> getInfluencersChat() async {
     try {
       isTrendLoading.value = true;
@@ -193,6 +114,39 @@ class MessagesController extends GetxController {
       isTrendLoading.value = false;
     }
   }
+ */
+
+
+  Future<void> getInfluencersChat() async {
+  try {
+    isTrendLoading.value = true;
+    token = await storage.read(key: "token");
+    final Response response = await apiClient.getAllChatsWithInfluencers(token);
+    List<dynamic> chatJsonList = response.body['data']['docs'];
+    chatList.clear();
+    print(chatJsonList.length);
+    print(chatJsonList);
+    if (chatJsonList.isNotEmpty) {
+      chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+      chatList.sort((a, b) {
+        final aLastMessageTime = a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
+        final bLastMessageTime = b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
+        return bLastMessageTime.compareTo(aLastMessageTime);
+      });
+      chatModelObj.value = chatList;
+      error('');
+    } if (chatList.isEmpty) {
+        error('You don\'s have Influencers in your chats');
+        empty = true;
+        print('No chat data available.');
+      } 
+    isTrendLoading.value = false;
+  } catch (e) {
+    print('Error fetching influencers chat: $e');
+    error('Something went wrong');
+    isTrendLoading.value = false;
+  }
+}
 
   void setUnreadCreator(int value) {
     unreadCreator.value = value;
@@ -201,7 +155,7 @@ class MessagesController extends GetxController {
 
   @override
   void onClose() {
-    socketClient.disconnect();
+   // socketClient.disconnect();
     searchController.dispose();
     super.onClose();
   }

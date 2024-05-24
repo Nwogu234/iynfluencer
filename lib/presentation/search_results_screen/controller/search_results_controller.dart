@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// This class manages the state of the SearchResultsScreen, including the
 /// current searchResultsModelObj
 class SearchResultsController extends GetxController {
-  // SearchResultsController(this.searchResultModelObj);
+  SearchResultsController(this.searchResultModelObj);
 
   final UserController user = Get.find();
 
@@ -28,7 +28,7 @@ class SearchResultsController extends GetxController {
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
-  Rx<SearchResultsModel> searchResultModelObj = SearchResultsModel().obs;
+  Rx<SearchResultsModel> searchResultModelObj;
   RxList<Influencer> filteredInfluencers = <Influencer>[].obs;
   late String? query = '';
   late String? fromDate = '';
@@ -110,6 +110,76 @@ class SearchResultsController extends GetxController {
 
 
 
+  /* void filterInfluencers({
+  String? query,
+  String? fromDate,
+  String? toDate,
+  SelectionPopupModel? selectedNiche,
+  SelectionPopupModel? selectedCountry,
+}) {
+  try {
+    if (query != null) {
+      // Apply query filtering
+      filteredInfluencers.value = recommendedInfluencers.where((influencer) {
+        final fullName =
+            '${influencer.user?.first.firstName ?? ''} ${influencer.user?.first.lastName ?? ''}'
+                .toLowerCase();
+        final country = influencer.user?.first.country?.toLowerCase() ?? '';
+        final jobsCompleted = influencer.jobsDone.toString().toLowerCase();
+
+        return fullName.contains(query.toLowerCase()) ||
+            country.contains(query.toLowerCase()) ||
+            jobsCompleted.contains(query.toLowerCase());
+      }).toList();
+    }
+
+    // Filter by fromDate if it's not empty
+    if (fromDate != null && fromDate.isNotEmpty) {
+      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
+        final influencerFromDate =
+            influencer.jobs?.first.createdAt?.substring(0, 4) ?? '';
+        int influencerYear = int.parse(influencerFromDate);
+        int fromYear = int.parse(fromDate.substring(0, 4));
+        return influencerYear >= fromYear;
+      }).toList();
+    }
+
+    // Filter by toDate if it's not empty
+    if (toDate != null && toDate.isNotEmpty) {
+      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
+        final influencerFromDate =
+            influencer.jobs?.first.createdAt?.substring(0, 4) ?? '';
+        int influencerYear = int.parse(influencerFromDate);
+        int toYear = int.parse(toDate.substring(0, 4));
+        return influencerYear <= toYear;
+      }).toList();
+    }
+
+    // Filter by selected niche if it's not null
+    if (selectedNiche != null) {
+      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
+        return influencer.niche == selectedNiche.title;
+      }).toList();
+    }
+
+    // Filter by selected country if it's not null
+    if (selectedCountry != null) {
+      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
+        return influencer.user?.first.country?.toLowerCase() == selectedCountry.title;
+      }).toList();
+    }
+
+    error('');
+    isRecommendedLoading.value = false;
+  } catch (e) {
+    error('Something went wrong');
+    print(e);
+    isRecommendedLoading.value = false;
+  }
+}
+ */
+
+
   void filterInfluencers({
   String? query,
   String? fromDate,
@@ -122,8 +192,6 @@ class SearchResultsController extends GetxController {
   try {
     if (query != null) {
       // Apply query filtering
-
-      filteredInfluencers.clear();
       filteredInfluencers.value = recommendedInfluencers.where((influencer) {
        final fullName =
             '${influencer.user?.first.firstName ?? ''} ${influencer.user?.first.lastName ?? ''}'
@@ -135,8 +203,6 @@ class SearchResultsController extends GetxController {
             country.contains(query.toLowerCase()) ||
             jobsCompleted.contains(query.toLowerCase());
       }).toList();
-    }else {
-      filteredInfluencers.addAll(recommendedInfluencers);
     }
 
 
@@ -189,12 +255,6 @@ class SearchResultsController extends GetxController {
       error('Something went wrong');
       print(e);
       isRecommendedLoading.value = false;
-    // Filter by selected country if it's not null
-    if (selectedCountry != null) {
-      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
-        return influencer.user?.first.country?.toLowerCase() == selectedCountry.title;
-      }).toList();
-    }
 
     error('');
     isRecommendedLoading.value = false;
