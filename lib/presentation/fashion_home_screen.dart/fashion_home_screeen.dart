@@ -57,7 +57,7 @@ class _FashionHomePageState extends State<FashionHomePage>
     )..repeat();
     //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
-    messagesController.dispose();
+   // messagesController.dispose();
   }
 
   @override

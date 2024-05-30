@@ -3,11 +3,8 @@ import 'package:iynfluencer/presentation/creator_hireslist_page/models/creator_h
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
-
 import 'package:flutter/material.dart';
-
 import '../../../data/apiClient/api_client.dart';
-
 /// A controller class for the CreatorHireslistPage.
 ///
 /// This class manages the state of the CreatorHireslistPage, including the
@@ -17,11 +14,8 @@ class CreatorHireslistController extends GetxController {
     this.creatorHireslistModelObj =
         Rx<CreatorHireslistModel>(creatorHireslistModelObj);
   }
-
   Rx<CreatorHireslistModel>? creatorHireslistModelObj;
-
   final UserController user = Get.find();
-
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isRecommendedLoading = false.obs;
@@ -31,11 +25,10 @@ class CreatorHireslistController extends GetxController {
   var error = ''.obs;
   bool empty = false;
 
-//  RxList<Job> allJobs = <Job>[].obs;
+  RxList<Job> allJobs = <Job>[].obs;
   RxList<Job> hiredJobs = <Job>[].obs;
 
   SelectionPopupModel? selectedDropDownValue;
-
   onSelected(dynamic value) {
     for (var element
         in creatorHireslistModelObj!.value.dropdownItemList.value) {
@@ -46,8 +39,14 @@ class CreatorHireslistController extends GetxController {
     }
     creatorHireslistModelObj!.value.dropdownItemList.refresh();
   }
-
 //this is for animation
+  late AnimationController animationController;
+  void initializeAnimationController(TickerProvider vsync) {
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: vsync,
+    )..repeat();
+  }
 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
@@ -76,19 +75,19 @@ class CreatorHireslistController extends GetxController {
     }
   }
 
-
+ 
   Future<void> fetchHiredJobs() async {
     try {
       error('');
       token = await storage.read(key: "token");
       isTrendLoading.value = true;
       Response response = await apiClient.getCreatorJobs(token);
-
       if (response.isOk) {
         final responseJson = response.body;
         final jobResponse = JobResponse.fromJson(responseJson);
         final jobResponseData = responseJson['data']['docs'];
         print(jobResponseData);
+
 
         // Filter the jobs based on the hired status
         final List<Job> hiredJob =
@@ -99,7 +98,6 @@ class CreatorHireslistController extends GetxController {
           error('No hired jobs found.');
           empty = true;
         } else {
-          // Convert List<Job> to RxList<Job>
           hiredJobs.assignAll(hiredJob);
           error('');
         }
@@ -114,7 +112,6 @@ class CreatorHireslistController extends GetxController {
       isTrendLoading.value = false;
     }
   }
-
   @override
   void onInit() {
     print('OnInit called');

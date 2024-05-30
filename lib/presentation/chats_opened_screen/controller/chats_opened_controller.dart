@@ -1,9 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
+import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
@@ -297,6 +299,108 @@ class ChatsOpenedController extends GetxController {
     }
   }
 
+
+  
+  Future<void> sendMessage(BuildContext context, String messageText) async {
+    FocusScope.of(context).unfocus();
+    try {
+      messageText = messageText.trim();
+
+      final now = DateTime.now();
+      final formattedTime = DateFormat('HH:mm').format(now);
+      final createdAt = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(formattedTime.substring(0, 2)),
+        int.parse(formattedTime.substring(3)),
+        0,
+      );
+
+      final messageId = Uuid().v4();
+
+      final newMessage = Message(
+        id: chatData.id,
+        chatId: chatData.chatId,
+        authorId: chatData.creatorId,
+        text: messageText,
+        authorUserId: chatData.creatorUserId,
+        blockedByRecipient: chatData.blockedByInfluencer,
+        messageId: messageId,
+        createdAt: createdAt,
+        updatedAt: createdAt,
+      );
+
+      final id = chatData.id;
+      final chatId = chatData.chatId;
+      final authorId = chatData.creatorId;
+      final text = messageText;
+      final authorUserId = chatData.creatorUserId;
+      final blockedByRecipient = chatData.blockedByInfluencer;
+      final messageIds = messageId;
+      final createdAts = createdAt;
+      final updatedAts = createdAt;
+
+      print('id : $id');
+      print('chatId : $chatId');
+      print('authorId : $authorId');
+      print('text : $text');
+      print('authorUserId : $authorUserId');
+      print('blockedByRecipient : $blockedByRecipient');
+      print('messageId : $messageIds');
+      print('createdAts : $createdAts');
+      print('updatedAts  : $updatedAts');
+
+      final token = await storage.read(key: "token");
+
+
+      if (token == null) {
+        print("Authorization token is not available");
+        return;
+      }
+
+      final response = await apiClient.sendMessage(newMessage, token);
+
+      if (response.isOk) {
+        messageController.clear();
+       if (!isDuplicateMessage(newMessage.messageId)) {
+        UpdateList(newMessage);
+      }
+        print('Message sent and stored successfully');
+        socketClient.sendMessage(chatData, messageText);
+
+        // notify the recipient
+        final recipientToken = await getRecipientToken(chatData.influencerUserId);
+        final name =
+          "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+
+
+         if (recipientToken != null) {
+        await notificationService.sendNotification(
+          name,
+          "just sent you a message",
+          chatData.toJson(),
+          recipientToken
+        );
+
+        await notificationService.saveNotificationToFirestore(
+          name,
+          "just sent you a message",
+          chatData.toJson(),
+          'Message',
+        );
+      }
+      
+
+      } else {
+        print('Failed to send message: ${response.statusText}');
+        print('Sent Message: $messageText');
+      }
+    } catch (e) {
+      print('Error sending message: $e');
+    }
+  } 
+
   String formatDateTime(String createdAt) {
     DateTime dateTime = DateTime.parse(createdAt);
     String formattedDateTime = DateFormat('h:mm a').format(dateTime);
@@ -357,6 +461,7 @@ class ChatsOpenedController extends GetxController {
   final ApiClients apiClient = ApiClients();
   final SocketClient socketClient = SocketClient.to;
   final SocketClient _socketClient = Get.find();
+   final NotificationService notificationService = Get.find();
   final storage = FlutterSecureStorage();
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
@@ -368,6 +473,7 @@ class ChatsOpenedController extends GetxController {
   Timer? keepAliveTimer;
   // List<String> sentMessagesCache = [];
   Set<String> processedMessageIds = {};
+  
 
   bool isDuplicateMessage(String messageId) {
   return messageModelObj.any((message) => message.messageId == messageId);
@@ -382,6 +488,26 @@ class ChatsOpenedController extends GetxController {
       update();
     });
   }
+
+  
+ Future<void> storeFcmToken(String userId, String? fcmTokenId) async {
+  await storage.write(key: 'fcm_Token_$userId', value: fcmTokenId);
+ }
+
+ Future<String?> getRecipientToken(String userId) async {
+  final token = await storage.read(key: 'fcmToken_$userId');
+  print('Retrieved FCM Token for $userId: $token');
+  return token;
+ }
+
+ 
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
 
   void handleNewMessage(dynamic data) {
     print('this is working');
@@ -435,7 +561,12 @@ class ChatsOpenedController extends GetxController {
         }).catchError((err) {
           isLoading.value = false;
         });
-        // onTapChatCard(selectedInfluencer, chatData);
+         final userId = user.userModelObj().userId;
+          final fcmToken =  await FirebaseMessaging.instance.getToken();
+          print('fcmToken: $fcmToken');
+          await storeFcmToken(userId, fcmToken);
+          print('Stored FCM Token for $userId: $fcmToken'); 
+    
       }
     } catch (e) {
       print('Error in getUser: $e');
@@ -537,7 +668,7 @@ class ChatsOpenedController extends GetxController {
     token = await storage.read(key: "token");
 
     try {
-      await Future.delayed(Duration(seconds: 10));
+     // await Future.delayed(Duration(seconds: 10));
       Response existingChatResponse =
           await apiClient.getAllChatsWithInfluencers(token!);
       if (existingChatResponse.isOk && existingChatResponse.body != null) {
@@ -666,37 +797,38 @@ class ChatsOpenedController extends GetxController {
     print('user has joined');
   }
 
+
   Future<void> sendMessage(BuildContext context, String messageText) async {
-    FocusScope.of(context).unfocus();
-    try {
-      messageText = messageText.trim();
+  FocusScope.of(context).unfocus();
+  try {
+    messageText = messageText.trim();
 
-      final now = DateTime.now();
-      final formattedTime = DateFormat('HH:mm').format(now);
-      final createdAt = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        int.parse(formattedTime.substring(0, 2)),
-        int.parse(formattedTime.substring(3)),
-        0,
-      );
+    final now = DateTime.now();
+    final formattedTime = DateFormat('HH:mm').format(now);
+    final createdAt = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      int.parse(formattedTime.substring(0, 2)),
+      int.parse(formattedTime.substring(3)),
+      0,
+    );
 
-      final messageId = Uuid().v4();
+    final messageId = Uuid().v4();
 
-      final newMessage = Message(
-        id: chatData.id,
-        chatId: chatData.chatId,
-        authorId: chatData.creatorId,
-        text: messageText,
-        authorUserId: chatData.creatorUserId,
-        blockedByRecipient: chatData.blockedByInfluencer,
-        messageId: messageId,
-        createdAt: createdAt,
-        updatedAt: createdAt,
-      );
+    final newMessage = Message(
+      id: chatData.id,
+      chatId: chatData.chatId,
+      authorId: chatData.creatorId,
+      text: messageText,
+      authorUserId: chatData.creatorUserId,
+      blockedByRecipient: chatData.blockedByInfluencer,
+      messageId: messageId,
+      createdAt: createdAt,
+      updatedAt: createdAt,
+    );
 
-      final id = chatData.id;
+     final id = chatData.id;
       final chatId = chatData.chatId;
       final authorId = chatData.creatorId;
       final text = messageText;
@@ -716,35 +848,64 @@ class ChatsOpenedController extends GetxController {
       print('createdAts : $createdAts');
       print('updatedAts  : $updatedAts');
 
-      final token = await storage.read(key: "token");
+    final token = await storage.read(key: "token");
 
+    if (token == null) {
+      print("Authorization token is not available");
+      return;
+    }
 
-      if (token == null) {
-        print("Authorization token is not available");
-        return;
-      }
+    final response = await apiClient.sendMessage(newMessage, token);
 
-      final response = await apiClient.sendMessage(newMessage, token);
-
-      if (response.isOk) {
-        messageController.clear();
-       // processedMessageIds.add(messageKey);
-      //  UpdateList(newMessage);
-       if (!isDuplicateMessage(newMessage.messageId)) {
+    if (response.isOk) {
+      messageController.clear();
+      if (!isDuplicateMessage(newMessage.messageId)) {
         UpdateList(newMessage);
       }
-        print('Message sent and stored successfully');
-        socketClient.sendMessage(chatData, messageText);
+      print('Message sent and stored successfully');
+      socketClient.sendMessage(chatData, messageText);
 
-        //  messageController.clear();
+      final fcmToken =  await FirebaseMessaging.instance.getToken();
+  
+      // Notify the recipient
+      final recipientToken = await getRecipientToken(chatData.influencerUserId);
+      final name =
+        "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+
+       print('Recipient Token: $recipientToken'); // Debug log
+
+      if (fcmToken != null) {
+        try {
+          print('Sending notification to recipient'); // Debug log
+          await notificationService.sendNotification(
+            name,
+            "just sent you a message",
+            chatData.toJson(),
+          //  recipientToken
+            fcmToken!
+          );
+
+          await notificationService.saveNotificationToFirestore(
+            name,
+            "just sent you a message",
+            chatData.toJson(),
+            'Message',
+          );
+          print('Notification sent and saved to Firestore'); 
+        } catch (e) {
+          print('Error sending notification: $e'); 
+        }
       } else {
-        print('Failed to send message: ${response.statusText}');
-        print('Sent Message: $messageText');
+        print('Recipient token is null'); 
       }
-    } catch (e) {
-      print('Error sending message: $e');
+    } else {
+      print('Failed to send message: ${response.statusText}');
+      print('Sent Message: $messageText');
     }
+  } catch (e) {
+    print('Error sending message: $e');
   }
+}
 
   void UpdateList(Message message) {
     messageModelObj.insert(0, message);

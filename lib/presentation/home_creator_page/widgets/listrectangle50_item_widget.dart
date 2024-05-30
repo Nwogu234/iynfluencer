@@ -245,28 +245,28 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
 // ignore: must_be_immutable
 class Listrectangle50ItemWidget extends StatefulWidget {
   Listrectangle50ItemWidget(
-    this.listrectangle50, 
-   this.chatData,
-     {
+    this.listrectangle50,
+    this.chatData, {
     Key? key,
   }) : super(
           key: key,
         );
 
   Influencer listrectangle50;
- ChatData? chatData;
-//final chatData = Get.arguments as ChatData;  
+  ChatData? chatData;
+//final chatData = Get.arguments as ChatData;
 
   @override
-  State<Listrectangle50ItemWidget> createState() => _Listrectangle50ItemWidgetState();
+  State<Listrectangle50ItemWidget> createState() =>
+      _Listrectangle50ItemWidgetState();
 }
 
 class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
   var controller = Get.find<HomeCreatorController>();
 
- // late ChatsOpenedController chatsController;
-  
-      final chatsData = ChatData(
+  // late ChatsOpenedController chatsController;
+
+  final chatsData = ChatData(
       id: '',
       creatorId: '',
       creatorUserId: '',
@@ -281,36 +281,30 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
       updatedAt: DateTime.now(),
       messages: const [],
       influencerUser: null,
-      creatorUser:  null
-      );
+      creatorUser: null);
 
   @override
   void initState() {
     super.initState();
     /* chatsController = Get.put(ChatsOpenedController(
      chatData: widget.chatData!, selectedInfluencer: widget.listrectangle50)); */
-     Get.put(ChatsOpenedController(
-      chatData: widget.chatData ?? chatsData, 
-      selectedInfluencer: widget.listrectangle50
-     ));
+    Get.put(ChatsOpenedController(
+        chatData: widget.chatData ?? chatsData,
+        selectedInfluencer: widget.listrectangle50));
   }
-
-  
- 
 
   onTapprofilecard(Influencer listrectangle50, ChatData? chatData) {
     Get.to(
       InfluencerProfileAboutPage(
-        chatData: chatData ?? chatsData,
-        selectedInfluencer: listrectangle50),
+          chatData: chatData ?? chatsData, selectedInfluencer: listrectangle50),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-     final  ChatsOpenedController chatsController = Get.find<ChatsOpenedController>();
-    String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.listrectangle50.userId}-avatar.jpeg";
+    final ChatsOpenedController chatsController =
+        Get.find<ChatsOpenedController>();
+      String? avatarUrl = widget.listrectangle50.user?.first.avatar;
     //  'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${listrectangle50.userId}-avatar.jpeg';
     // Assuming this is a String
     String imageProvider;
@@ -333,7 +327,7 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
         onTapprofilecard(
           widget.listrectangle50,
           widget.chatData,
-          );
+        );
       },
       child: SingleChildScrollView(
         child: Column(
@@ -480,9 +474,8 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
                       margin: getMargin(top: 17),
                       padding: ButtonPaddings.PaddingAll15,
                       onTap: () {
-                         chatsController.onTapChatCard(
-                            widget.listrectangle50, 
-                            chatsController.chatData);
+                        chatsController.onTapChatCard(
+                            widget.listrectangle50, chatsController.chatData);
                       }),
                 ),
               ),

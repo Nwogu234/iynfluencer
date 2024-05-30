@@ -5,6 +5,8 @@ import 'package:iynfluencer/presentation/all_home_screen.dart/all_home_screen.da
 import 'package:iynfluencer/presentation/all_home_screen.dart/binding/all_home_page_binding.dart';
 import 'package:iynfluencer/presentation/bid_accepted_screen/bid_accepted_screen.dart';
 import 'package:iynfluencer/presentation/bid_accepted_screen/binding/bid_accepted_binding.dart';
+import 'package:iynfluencer/presentation/complete_job_screen/binding/complete_job_binding.dart';
+import 'package:iynfluencer/presentation/complete_job_screen/complete_job_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashion_home_screen_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
@@ -291,6 +293,8 @@ class AppRoutes {
 
   static const String bidScreen = '/bid_screen';
 
+  static const String completeJobScreen = '/complete_job_screen';
+
   static const String editProfileAboutPage = '/edit_profile_about_page';
 
   static const String editProfileCommPostPage = '/edit_profile_comm_post_page';
@@ -542,6 +546,13 @@ class AppRoutes {
       page: () => BidsScreen(),
       bindings: [
         BidsBinding(),
+      ],
+    ),
+    GetPage(
+      name: completeJobScreen,
+      page: () => CompleteJobScreen(),
+      bindings: [
+        CompleteJobBinding(),
       ],
     ),
     GetPage(

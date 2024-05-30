@@ -20,6 +20,13 @@ class ListclientItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
     return GestureDetector(
       onTap: (() {
         Get.to(JobDetailsScreen(
@@ -135,7 +142,8 @@ class ListclientItemWidget extends StatelessWidget {
                            Row(
                              children: [
                                CustomImageView(
-                                 imagePath: ImageConstant.imgGroup85237,
+                               //  imagePath: ImageConstant.imgGroup85237,
+                                 url: listclientItemModelObj.user?.avatar,
                                  height: getSize(
                                    30,
                                  ),
@@ -155,7 +163,7 @@ class ListclientItemWidget extends StatelessWidget {
                                    bottom: 5,
                                  ),
                                  child: Text(
-                                   "lbl_alfred_ruo".tr,
+                                      "${capitalizeFirstLetter(listclientItemModelObj.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj.user?.lastName)}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
                                    style:AppStyle.txtSatoshiLight135Gray600,

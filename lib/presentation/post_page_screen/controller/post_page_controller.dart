@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
+import 'package:iynfluencer/data/general_controllers/notification_service.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/media_file/media_file.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_hire_modal_controller.dart';
@@ -22,6 +25,7 @@ class PostPageController extends GetxController
   var storage = FlutterSecureStorage();
   HomeCreatorContainerController homcont =
       Get.put(HomeCreatorContainerController());
+  final NotificationService notificationService = Get.find();
   InfluencerProfileCommHireModalContainerController hireJobController =
       Get.put(InfluencerProfileCommHireModalContainerController());
 
@@ -40,6 +44,7 @@ class PostPageController extends GetxController
   TextEditingController frametwelvetwoController = TextEditingController();
   late AnimationController animationController;
   BottomBarController bumcont = Get.put(BottomBarController());
+  final UserController user = Get.find();
 
   // this is for the job category
 
@@ -115,6 +120,15 @@ class PostPageController extends GetxController
     print(selectedNiche.value.id);
     update();
   }
+
+   
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
 
 //this is for adding resposibilities
   Rx<bool> isAddingResponsibility = false.obs;
@@ -238,7 +252,28 @@ class PostPageController extends GetxController
                 .pushReplacementNamed(
                     AppRoutes.creatorHireslistTabContainerPage);
             bumcont.selectedIndex.value = 1;
+            
+          final fcmToken =  await FirebaseMessaging.instance.getToken();
+          final name =
+          "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+                print('Sending notification to recipient'); 
+              await notificationService.sendNotification(
+                name,
+                "just created a Job Post ",
+                jobRequest.toJson(),
+                //  recipientToken
+              fcmToken!
+             );
+
+          await notificationService.saveNotificationToFirestore(
+            name,
+            "just created a Job Post",
+            jobRequest.toJson(),
+            'Job',
+          );
+          print('Notification sent and saved to Firestore'); 
           }
+
         } else if (response.statusCode == 400) {
           // Handles bad request errors
           ScaffoldMessenger.of(context).showSnackBar(

@@ -48,7 +48,7 @@ class BidRequestController extends GetxController {
       print('-----trying something---');
       print(err);
       Get.back();
-      Get.snackbar('Error', '$err');
+      Get.snackbar('Error', 'Server error, Check your connection');
       error('Something went wrong');
       isError.value = true;
       isTrendLoading.value = false;

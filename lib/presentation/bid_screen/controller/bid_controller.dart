@@ -21,6 +21,7 @@ class BidController extends GetxController with GetSingleTickerProviderStateMixi
   TextEditingController priceController = TextEditingController();
   final apiClient = ApiClient();
   Rx<BidModel> bidModelObj = BidModel().obs;
+  TextEditingController termsAndConditionController = TextEditingController();
   Rx<bool> isAddingTermsOfContract = false.obs;
 
   startAddingTermsOfContract() {
@@ -54,7 +55,7 @@ class BidController extends GetxController with GetSingleTickerProviderStateMixi
           jobId: jobId,
           //price: int.tryParse(priceController.text),
           price: (int.tryParse(priceController.text) ?? 0) * 100,
-          terms: termsAndConditions,
+          terms:  termsAndConditionController.text.split(',').map((term) => term.trim()).toList()
         );
         try {
           Response res = await apiClient.bidAJob(bidData, token);
@@ -69,7 +70,7 @@ class BidController extends GetxController with GetSingleTickerProviderStateMixi
           if (res.isOk) {
             Get.snackbar('Success', 'Bid Posted Successfully');
             Get.toNamed(AppRoutes.bidAcceptedScreen, parameters: {'jobId': jobId});
-            // Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
+            
           } else if (res.statusCode == 400) {
             // Handles bad request errors
             ScaffoldMessenger.of(context).showSnackBar(

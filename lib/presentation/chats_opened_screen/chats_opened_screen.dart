@@ -484,6 +484,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
    List<Widget> chatList = [];
  // final  ChatsOpenedController controller = Get.find<ChatsOpenedController>();
 
+
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
       return text;
@@ -633,12 +634,16 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                DateLable(
+                                messages.isNotEmpty
+                                    ?  DateLable(
                                   dateTime: DateTime.parse(date),
-                                ),
+                                )  : DateLable(
+                                        dateTime: widget.chatData.createdAt,
+                                  ),
                                 ListView.builder(
+                                  controller: scrollController,
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  reverse: true,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
                                     final message = messages[subIndex];

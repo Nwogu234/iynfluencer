@@ -58,14 +58,13 @@ class _TechnologyHomePageState extends State<TechnologyHomePage>
     )..repeat();
     //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
-    messagesController.dispose();
   }
 
   @override
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
-    messagesController.dispose();
+   // messagesController.dispose();
     super.dispose();
   }
 

@@ -1,5 +1,8 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -16,6 +19,9 @@ class BidsScreen extends GetWidget<BidsController> {
   BidsScreen({Key? key}) : super(key: key);
   // String? jobId = Get.parameters['id'];
   final Job selectedJob = Get.arguments as Job;
+
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
   @override
   Widget build(BuildContext context) {
     String? jobId = selectedJob.jobId;
@@ -144,10 +150,12 @@ class BidsScreen extends GetWidget<BidsController> {
                             itemCount: controller.allJobBids.length,
                             itemBuilder: (context, index) {
                               JobBids model = controller.allJobBids[index];
+                              ChatData? chatData =
+                                  index < messagesController.chatList.length
+                                      ? messagesController.chatList[index]
+                                      : null;
                               return BidsItemWidget(
-                                model,
-                                selectedJob
-                              );
+                                  model, selectedJob, chatData);
                             },
                           );
                         }

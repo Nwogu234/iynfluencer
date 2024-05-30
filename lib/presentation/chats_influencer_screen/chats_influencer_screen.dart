@@ -428,7 +428,6 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 }
  */
 
-
 class ChatsInfluencerScreen extends StatefulWidget {
   ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData})
       : super(key: key);
@@ -473,9 +472,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? avatarUrl;
     if (widget.selectedJob != null) {
-      avatarUrl =
-                widget.selectedJob?.user?.avatar ?? '';
-      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-avatar.jpeg';
+        avatarUrl = widget.selectedJob?.user?.avatar ?? '';
+      //print(avatarUrl);
+    //  avatarUrl =
+     //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
     } else if (widget.chatData != null) {
       avatarUrl = widget.chatData.creatorUser!.avatar;
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
@@ -489,8 +489,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? name;
     if (widget.selectedJob != null) {
-      name =
-        "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName ?? 'Adebayo')}";
+       name =
+          "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName ?? 'Adebayo')}";
+      // print(name);
+    //  name = 'Mark Adebayo';
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
@@ -543,7 +545,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
             child: Row(
               children: [
                 AppbarCircleimage(
-                  url: imageProvider,
+                  url:imageProvider  ,
                   margin: getMargin(left: 10, top: 5, bottom: 20),
                 ),
                 AppbarSubtitle(
@@ -579,7 +581,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                 fullPage: true,
               );
             } else {
- /*              return GestureDetector(
+              /*              return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
                   padding: getPadding(left: 19, right: 19),
@@ -664,8 +666,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                 ),
               ); */
 
-
-              Map<String, List<Message>> groupedMessages = controllers.groupMessagesByDate(controllers.messageModelObjs);
+              Map<String, List<Message>> groupedMessages =
+                  controllers.groupMessagesByDate(controllers.messageModelObjs);
               return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
@@ -675,45 +677,51 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                       SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
-                         controller: scrollController,
-                         reverse: true,
-                          itemCount: groupedMessages.length, 
+                          controller: scrollController,
+                          reverse: true,
+                          itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
-                           String date = groupedMessages.keys.elementAt(index);
-                           List<Message> messages = groupedMessages[date]!;  
+                            String date = groupedMessages.keys.elementAt(index);
+                            List<Message> messages = groupedMessages[date]!;
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                               messages.isNotEmpty ? DateLable(
-                                  dateTime: DateTime.parse(date),
-                                ) : DateLable(
-                                  dateTime: widget.chatData.createdAt,
-                                ) ,
+                                messages.isNotEmpty
+                                    ? DateLable(
+                                        dateTime: DateTime.parse(date),
+                                      )
+                                    : DateLable(
+                                        dateTime: widget.chatData.createdAt,
+                                      ),
                                 SizedBox(height: 16),
                                 ListView.builder(
-                                 controller: scrollController,
+                                  controller: scrollController,
                                   reverse: true,
                                   shrinkWrap: true,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
                                     final message = messages[subIndex];
-                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
-                                     if (messages.isEmpty) {
-                                        return SizedBox.shrink();
-                                    } 
+                                    String formattedDateTime =
+                                        DateFormat.jm('en_US')
+                                            .format(message.createdAt);
+                                    if (messages.isEmpty) {
+                                      return SizedBox.shrink();
+                                    }
                                     return ChatMessageBubblez(
-                                     controller: controllers,
-                                     messageText: message.text,
-                                    isReceived: message.authorUserId !=
-                                      widget.chatData.influencerUserId,
-                                    timestamp: formattedDateTime,
-                                    leadingImagePath: ImageConstant.imgVector,
-                                    trailingImagePath: ImageConstant.imgVector,
-                                    messageModelObjs: message.messageId,
-                                    onSwipedMessage: (message) {
-                                     replyToMessage(message);
-                                     focusNode.requestFocus();
-                                   });
+                                        controller: controllers,
+                                        messageText: message.text,
+                                        isReceived: message.authorUserId !=
+                                            widget.chatData.influencerUserId,
+                                        timestamp: formattedDateTime,
+                                        leadingImagePath:
+                                            ImageConstant.imgVector,
+                                        trailingImagePath:
+                                            ImageConstant.imgVector,
+                                        messageModelObjs: message.messageId,
+                                        onSwipedMessage: (message) {
+                                          replyToMessage(message);
+                                          focusNode.requestFocus();
+                                        });
                                   },
                                 ),
                               ],
@@ -736,7 +744,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                           top: false,
                           child: Column(
                             children: [
-                            ChatInputsBar(
+                              ChatInputsBar(
                                 replyMessages: widget.replyMessages,
                                 onCancelReply: () {
                                   cancelReply();

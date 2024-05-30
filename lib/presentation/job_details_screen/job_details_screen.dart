@@ -432,7 +432,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     )
                   : CustomButton(
                       height: getVerticalSize(44),
-                      text: "lbl_bid".tr,
+                      text: "Complete Job".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
                         onTapBid();
@@ -450,7 +450,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
   onTapBid() {
-    Get.toNamed(AppRoutes.bidScreen, arguments: widget.selectedJob);
+    Get.toNamed(AppRoutes.completeJobScreen/* , arguments: widget.selectedJob */);
   }
 
   /// Navigates to the previous screen.

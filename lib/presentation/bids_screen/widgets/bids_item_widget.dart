@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 
 import '../controller/bids_controller.dart';
@@ -14,7 +15,7 @@ class BidsItemWidget extends StatelessWidget {
   BidsItemWidget(
     this.bidsItemModelObj,
     this.selectedJob,
-     {
+    this.chatData,{
     Key? key,
   }) : super(
           key: key,
@@ -22,6 +23,7 @@ class BidsItemWidget extends StatelessWidget {
 
   JobBids bidsItemModelObj;
   Job selectedJob;
+  ChatData? chatData;
 
   var controller = Get.find<BidsController>();
 
@@ -129,8 +131,9 @@ class BidsItemWidget extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                               // text: '\$${bidsItemModelObj.price.toString()}',
-                                text: '\$${((bidsItemModelObj.price ?? 0) / 100).toString()}',
+                                // text: '\$${bidsItemModelObj.price.toString()}',
+                                text:
+                                    '\$${((bidsItemModelObj.price ?? 0) / 100).toString()}',
                                 style: AppStyle.txtSatoshiBold16.copyWith(
                                     fontWeight: FontWeight.w600, fontSize: 15)),
                           ],
@@ -183,7 +186,7 @@ class BidsItemWidget extends StatelessWidget {
                     text: "lbl_view_details".tr,
                     fontStyle: ButtonFontStyle.SatoshiBold12,
                     onTap: () {
-                      onTapViewdetails(bidsItemModelObj, selectedJob);
+                      onTapViewdetails(bidsItemModelObj, selectedJob, chatData);
                     },
                   ),
                   CustomButton(
@@ -209,8 +212,8 @@ class BidsItemWidget extends StatelessWidget {
     );
   }
 
-  onTapViewdetails(bidsItemModelObj, selectedJob) {
-     final args = BidsArguments(bidsItemModelObj, selectedJob);
+  onTapViewdetails(bidsItemModelObj, selectedJob, chatData) {
+    final args = BidsArguments(bidsItemModelObj, selectedJob, chatData);
     Get.toNamed(AppRoutes.bidRequestScreen, arguments: args);
   }
 }

@@ -34,6 +34,7 @@ class AllHomePage extends StatefulWidget {
 
 class _AllHomePageState extends State<AllHomePage>
     with SingleTickerProviderStateMixin {
+      
   HomeCreatorController controller =
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
@@ -88,7 +89,7 @@ class _AllHomePageState extends State<AllHomePage>
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
-    messagesController.dispose();
+   // messagesController.dispose();
     super.dispose();
   }
 

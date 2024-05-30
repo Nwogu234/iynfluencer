@@ -54,13 +54,14 @@ class BidsController extends GetxController {
       response = await apiClient.getAllBidsForAJob(jobId, token);
       if (response.isOk) {
         final responseJson = response.body;
-
         List<dynamic> dd = responseJson['data']['docs'];
+        print(dd);
 
         print('response.isOk');
         if (dd.length > 0) {
           dd.forEach((e) {
             allJobBids.add(JobBids.fromJson(e));
+            print('jobBids: $allJobBids');
           });
         }
         if (allJobBids.isEmpty) {
@@ -79,12 +80,57 @@ class BidsController extends GetxController {
       error('Something went wrong');
       isLoading.value = false;
     }
+  } 
+
+
+
+
+/* 
+getAllJobsBids(String jobId) async {
+  Response response;
+  try {
+    error('');
+    isLoading.value = true;
+    response = await apiClient.getAllBidsForAJob(jobId, token);
+    if (response.isOk) {
+      final responseJson = response.body;
+      print('Full Response: $responseJson'); // Debugging: Print the full response
+
+      // Ensure 'data' is a Map and 'docs' is a List
+      if (responseJson['data'] is Map<String, dynamic> && responseJson['data']['docs'] is List) {
+        List<dynamic> docs = responseJson['data']['docs'];
+        print('Docs List: $docs'); // Debugging: Print the docs list
+
+        if (docs.isNotEmpty) {
+          docs.forEach((e) {
+            allJobBids.add(JobBids.fromJson(e));
+            print('jobBids: $allJobBids');
+          });
+        } else {
+          error('No Job Bids');
+        }
+      } else {
+        error('Unexpected response format');
+        print('Data or Docs format issue'); // Debugging: Indicate data/docs format issue
+      }
+
+      isLoading.value = false;
+    } else {
+      error('Something went wrong');
+      isLoading.value = false;
+    }
+  } catch (e) {
+    print('Exception: $e'); // Debugging: Print the exception
+    isError.value = true;
+    error('Something went wrong');
+    isLoading.value = false;
   }
+} */
 
   @override
   void onInit() {
     print('OnInit called');
-     final Job selectedJob = Get.arguments as Job;
+    final Job selectedJob = Get.arguments as Job;
     getUser(selectedJob.jobId);
     super.onInit();
   }

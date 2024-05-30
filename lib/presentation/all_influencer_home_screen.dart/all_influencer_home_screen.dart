@@ -138,7 +138,8 @@ void _onScroll() {
                              physics: BouncingScrollPhysics(),
                              shrinkWrap: true,
                              separatorBuilder: (context, index) {
-                               return SizedBox(height: getVerticalSize(16));
+                               return SizedBox(
+                                height: getVerticalSize(16));
                              },
                              itemCount: controller.isJobsLoading.value
                                  ? 5
