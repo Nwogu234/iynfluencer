@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../core/utils/validation_functions.dart';
+import '../../data/general_controllers/user_controller.dart';
 import '../../widgets/custo_dropdown.dart';
 import 'controller/complete_profile_creator_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,11 @@ class CompleteProfileCreatorScreen
   CompleteProfileCreatorScreen({Key? key}) : super(key: key);
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
+  String imgPath='';
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -82,7 +83,9 @@ class CompleteProfileCreatorScreen
                                       if (image != null) {
                                         controller.profileImage.value =
                                             File(image.path);
-                                        await controller.storage.write(key: 'profile_image_path', value: image.path);
+
+                                            await controller.user.uploadUserPic(image.path);
+
                                       }
                                     } catch (e) {
                                       print(e);
@@ -220,7 +223,9 @@ class CompleteProfileCreatorScreen
             )));
   }
 
-  onTapSaveand() {
+  onTapSaveand() async{
+
+
     if (!_formKey.currentState!.validate()&&controller.selectedDropdownItems.isEmpty) {
       controller.errorText.value="Please select at least one niche";
       return;

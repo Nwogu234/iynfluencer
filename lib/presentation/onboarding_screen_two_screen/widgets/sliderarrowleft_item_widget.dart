@@ -22,31 +22,33 @@ class SliderarrowleftItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CustomImageView(
-          svgPath: sliderarrowleftItemModelObj.svgPath,
-          height: getVerticalSize(
-            130,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomImageView(
+            svgPath: sliderarrowleftItemModelObj.svgPath,
+            height: getVerticalSize(
+              130,
+            ),
+            width: getHorizontalSize(
+              116,
+            ),
           ),
-          width: getHorizontalSize(
-            116,
+          Padding(
+            padding: getPadding(
+              top: 17,
+            ),
+            child: Text(
+              sliderarrowleftItemModelObj.text,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+              style: AppStyle.txtH2,
+            ),
           ),
-        ),
-        Padding(
-          padding: getPadding(
-            top: 17,
-          ),
-          child: Text(
-            sliderarrowleftItemModelObj.text,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            style: AppStyle.txtH2,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

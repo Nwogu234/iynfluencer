@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/search_creator_screen/models/search_creator_model.dart';
+import 'package:iynfluencer/presentation/search_influncers_screen/models/search_influncers_model.dart';
+
 import '../controller/search_influncers_controller.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +11,6 @@ import 'package:get/get.dart';
 class SearchInfluncersBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => SearchInfluncersController());
+    Get.lazyPut(() => SearchInfluncersController(SearchInfluncersModel().obs));
   }
 }

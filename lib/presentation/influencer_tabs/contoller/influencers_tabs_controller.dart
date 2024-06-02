@@ -10,4 +10,5 @@ import '../models/influencer_tab_model.dart';
 class InfluencerTabsController extends GetxController {
   Rx<InfluencerTabsModel> influencerTabsModelObj =
       InfluencerTabsModel().obs;
+  var currentRoute = AppRoutes.influencerHomeScreen.obs;
 }

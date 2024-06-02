@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/jobs_requests_influencer_page/models/jobs_requests_influencer_model.dart';
+import 'package:iynfluencer/presentation/request_detail_screen/request_detail_screen.dart';
+
 import '../controller/jobs_requests_influencer_controller.dart';
 import '../models/listgroup855_item_model.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +16,53 @@ class Listgroup855ItemWidget extends StatelessWidget {
           key: key,
         );
 
-  Listgroup855ItemModel listgroup855ItemModelObj;
+  JobsRequestsInfluencerModel listgroup855ItemModelObj;
 
-  var controller = Get.find<JobsRequestsInfluencerController>();
+  final JobsRequestsInfluencerController controller =
+      Get.find<JobsRequestsInfluencerController>();
+
+  // Widget cancelButton = TextButton(
+  //   child: Text("Cancel"),
+  //   onPressed: () {},
+  // );
+  // Widget continueButton = TextButton(
+  //   child: Text("Continue"),
+  //   onPressed: () {
+  //    controller.jobsRequestsInfluencerModelObj();
+  //   },
+  // );
+
+  // show the dialog
+  Future<void> _showAlertDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Dismiss Request'),
+          content: Text('Are You Sure you want to Dismiss Request'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                // Perform an action when OK button is pressed
+                controller.influencerDeclineRequestJob(
+                    listgroup855ItemModelObj.jobRequestId!,
+                    Navigator.of(context));
+                // Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,26 +109,22 @@ class Listgroup855ItemWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Obx(
-                          () => Text(
-                            listgroup855ItemModelObj.nameTxt.value,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold145,
-                          ),
+                        Text(
+                          'Name',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiBold145,
                         ),
                         Padding(
                           padding: getPadding(
                             left: 1,
                             top: 1,
                           ),
-                          child: Obx(
-                            () => Text(
-                              listgroup855ItemModelObj.durationTxt.value,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight13,
-                            ),
+                          child: Text(
+                            '2 Weeks',
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiLight13,
                           ),
                         ),
                       ],
@@ -109,7 +152,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                 top: 20,
               ),
               child: Text(
-                "msg_music_video_influencer2".tr,
+                listgroup855ItemModelObj.job?.title ?? '',
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiBold14Gray900ab,
@@ -125,7 +168,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                 right: 9,
               ),
               child: Text(
-                "msg_looking_for_a_game".tr,
+                listgroup855ItemModelObj.job?.description ?? '',
                 maxLines: null,
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiLight14Gray900ab,
@@ -154,7 +197,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                           top: 3,
                         ),
                         child: Text(
-                          "lbl_200_500".tr,
+                          '${listgroup855ItemModelObj.job?.budgetFrom} ${listgroup855ItemModelObj.job?.budgetTo}',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -177,7 +220,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                           top: 3,
                         ),
                         child: Text(
-                          "lbl_10_weeks".tr,
+                          '${listgroup855ItemModelObj.job!.duration!.toString()} weeks',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -204,6 +247,14 @@ class Listgroup855ItemWidget extends StatelessWidget {
                     ),
                     text: "lbl_view_details".tr,
                     fontStyle: ButtonFontStyle.SatoshiBold12,
+                    onTap: () {
+                      Get.to(RequestDetailScreen(
+                        jobrequest: listgroup855ItemModelObj,
+                      ));
+                      // Get.toNamed(
+                      //   AppRoutes.requestDetailScreen,
+                      // );
+                    },
                   ),
                   CustomButton(
                     height: getVerticalSize(
@@ -216,6 +267,7 @@ class Listgroup855ItemWidget extends StatelessWidget {
                     margin: getMargin(
                       left: 12,
                     ),
+                    onTap: () => _showAlertDialog(context),
                     variant: ButtonVariant.OutlineIndigo50_2,
                     fontStyle: ButtonFontStyle.SatoshiBold12Gray900ab,
                   ),

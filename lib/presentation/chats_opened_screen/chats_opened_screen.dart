@@ -1,4 +1,25 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/messages_page.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+import 'package:iynfluencer/widgets/custom_loading.dart';
+import 'package:iynfluencer/widgets/datelable.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
+import 'package:swipe_to/swipe_to.dart';
+export 'package:get/get.dart';
 import 'controller/chats_opened_controller.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
@@ -6,227 +27,725 @@ import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_subtitle.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
-class ChatsOpenedScreen extends GetWidget<ChatsOpenedController> {
-  const ChatsOpenedScreen({Key? key}) : super(key: key);
+/* class ChatsOpenedScreen extends StatefulWidget {
+  ChatsOpenedScreen({
+    Key? key,
+    this.selectedInfluencer,
+    required this.chatData,
+  }) : super(key: key);
+
+  final Influencer? selectedInfluencer;
+  // ChatData chatData;
+  final ChatData chatData;
+  Rx<Message?> replyMessage = Rx<Message?>(null);
+
+  @override
+  State<ChatsOpenedScreen> createState() => _ChatsOpenedScreenState();
+}
+
+class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
+    with SingleTickerProviderStateMixin {
+  final MessagesController messageController = Get.put(MessagesController());
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // ChatsOpenedController controller = Get.put(ChatsOpenedController());
+  late AnimationController animationController;
+  late String imageProvider;
+  late String titleName;
+  final UserController user = Get.find();
+  RxBool show = false.obs;
+  FocusNode focusNode = FocusNode();
+  late ChatsOpenedController controller;
+  final scrollController = ScrollController();
+  DateTime? lastDisplayedDate;
+
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+
+    String? avatarUrl;
+    if (widget.selectedInfluencer != null) {
+       avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
+    //  avatarUrl =
+      //    'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg';
+    } else if (widget.chatData != null) {
+      avatarUrl = widget.chatData.influencerUser!.avatar;
+      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
+    }
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = "mypic.wit";
+    }
+
+    String? name;
+    if (widget.selectedInfluencer != null) {
+       name =
+         "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+    } else if (widget.chatData != null) {
+      name =
+          "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
+    }
+
+    if (name != null && name.isNotEmpty) {
+      titleName = name;
+    } else {
+      imageProvider = "Mark Adebayo";
+    }
+
+    controller = Get.put(ChatsOpenedController(
+      chatData: widget.chatData,
+      selectedInfluencer: widget.selectedInfluencer,
+    ));
+
+    // controller.getUser(widget.chatData.chatId);
+    controller.onInit();
+  }
+
+  Future<void> _refresh() async {
+    await controller.refreshItems();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    scrollController.dispose();
+    // controller.dispose();
+    super.dispose();
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final String chatId = widget.chatData.chatId;
+
     return SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: ColorConstant.gray5001,
-            appBar: CustomAppBar(
-                height: getVerticalSize(64),
-                leadingWidth: 52,
-                leading: AppbarImage(
-                    height: getSize(30),
-                    width: getSize(30),
-                    svgPath: ImageConstant.imgArrowleftGray600,
-                    margin: getMargin(left: 22, top: 17, bottom: 17),
-                    onTap: () {
-                      onTapArrowleft8();
-                    }),
-                title: Padding(
-                    padding: getPadding(left: 12),
-                    child: Row(children: [
-                      AppbarCircleimage(
-                          imagePath: ImageConstant.imgGroup85235x35),
-                      AppbarSubtitle(
-                          text: "lbl_mark_adebayo".tr,
-                          margin: getMargin(left: 14, top: 9, bottom: 5))
-                    ])),
-                actions: [
-                  AppbarImage(
-                      height: getSize(18),
-                      width: getSize(18),
-                      svgPath: ImageConstant.imgFrame18x18,
-                      margin:
-                          getMargin(left: 23, top: 23, right: 22, bottom: 1),
-                   onTap: (){
-                    Get.back();
-                   },
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: ColorConstant.gray5001,
+        appBar: CustomAppBar(
+          height: getVerticalSize(54),
+          leadingWidth: 52,
+          leading: AppbarImage(
+            height: getSize(30),
+            width: getSize(30),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
+            onTap: () {
+              onTapArrowleft8();
+            },
+          ),
+          title: Padding(
+            padding: getPadding(left: 2, top: 3),
+            child: Row(
+              children: [
+                AppbarCircleimage(
+                  url: imageProvider,
+                  margin: getMargin(left: 10, top: 5, bottom: 20),
+                ),
+                AppbarSubtitle(
+                  text: titleName.tr,
+                  margin: getMargin(left: 14, top: 5, bottom: 20),
+                ),
+              ],
+            ),
+          ),
+          styleType: Style.bgOutlineIndigo50_1,
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Stack(
+                children: [
+                  PositionedDirectional(
+                    top: 150,
+                    start: 150,
+                    child: CustomLoadingWidget(
+                      animationController: animationController,
+                    ),
                   ),
-                  AppbarImage(
-                      height: getSize(20),
-                      width: getSize(20),
-                      svgPath: ImageConstant.imgFrame20x20,
-                      margin: getMargin(left: 23, top: 22, right: 45),
-                   onTap: (){
-                    Get.back();
-                   },)
                 ],
-                styleType: Style.bgOutlineIndigo50_1),
-            body: Container(
-                width: double.maxFinite,
-                padding: getPadding(left: 19, top: 25, right: 19, bottom: 25),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  controller.getUser(chatId);
+                },
+                fullPage: true,
+              );
+            } else {
+              /*  return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
+                  child: Column(
                     children: [
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                              padding: getPadding(left: 43),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: Obx(() {
+                          return ListView.builder(
+                            // key: PageStorageKey<String>('messagesList'),
+                            controller: scrollController,
+                            reverse: true,
+                            // shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.messageModelObj.length,
+                            itemBuilder: (context, index) {
+                              final message = controller.messageModelObj[index];
+                              String formattedDateTime = DateFormat.jm('en_US')
+                                  .format(message.createdAt);
+                              if (controller.messageModelObj.isEmpty) {
+                                return SizedBox.shrink();
+                              } // Check if the current message's date is the same as the date of the last displayed message
+                              else if (lastDisplayedDate == null ||
+                                  !isSameDay(
+                                      lastDisplayedDate!, message.createdAt)) {
+                                lastDisplayedDate = message.createdAt;
+                                return Column(
                                   children: [
-                                    CustomImageView(
-                                        svgPath: ImageConstant.imgTrashCyan300,
-                                        height: getVerticalSize(61),
-                                        width: getHorizontalSize(16)),
-                                    Expanded(
-                                        child: Container(
-                                            padding:
-                                                getPadding(top: 9, bottom: 9),
-                                            decoration:
-                                                AppDecoration.outlineCyan300,
-                                            child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                      width: getHorizontalSize(
-                                                          218),
-                                                      margin: getMargin(
-                                                          top: 2, right: 32),
-                                                      child: Text(
-                                                          "msg_hey_favour_how"
-                                                              .tr,
-                                                          maxLines: null,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: AppStyle
-                                                              .txtSatoshiLight14WhiteA70001))
-                                                ]))),
-                                    CustomImageView(
-                                        svgPath: ImageConstant.imgFile,
-                                        height: getVerticalSize(61),
-                                        width: getHorizontalSize(24))
-                                  ]))),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                              padding: getPadding(top: 10, right: 16),
-                              child: Text("lbl_7_13_pm".tr,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: AppStyle.txtSatoshiLight12))),
-                      Padding(
-                          padding: getPadding(left: 11, top: 33, right: 42),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgTrashGray20003,
-                                height: getVerticalSize(79),
-                                width: getHorizontalSize(16)),
-                            Expanded(
-                                child: Container(
-                                    padding: getPadding(top: 9, bottom: 9),
-                                    decoration: AppDecoration.outlineGray20003,
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                              width: getHorizontalSize(245),
-                                              margin:
-                                                  getMargin(top: 2, right: 2),
-                                              child: Text(
-                                                  "msg_just_rounded_up".tr,
-                                                  maxLines: null,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle
-                                                      .txtSatoshiLight14Gray900))
-                                        ]))),
-                            CustomImageView(
-                                svgPath: ImageConstant.imgFrame2,
-                                height: getVerticalSize(79),
-                                width: getHorizontalSize(16))
-                          ])),
-                      Padding(
-                          padding: getPadding(left: 1, top: 9, right: 42),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgBookmarkGray20003,
-                                height: getVerticalSize(61),
-                                width: getHorizontalSize(24)),
-                            Expanded(
-                                child: Container(
-                                    padding: getPadding(top: 9, bottom: 9),
-                                    decoration: AppDecoration.outlineGray20003,
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                              width: getHorizontalSize(227),
-                                              margin:
-                                                  getMargin(top: 2, right: 23),
-                                              child: Text(
-                                                  "msg_i_will_most_certainly"
-                                                      .tr,
-                                                  maxLines: null,
-                                                  textAlign: TextAlign.left,
-                                                  style: AppStyle
-                                                      .txtSatoshiLight14Gray900))
-                                        ]))),
-                            CustomImageView(
-                                svgPath: ImageConstant.imgFrame2,
-                                height: getVerticalSize(61),
-                                width: getHorizontalSize(16))
-                          ])),
-                      Padding(
-                          padding: getPadding(left: 15, top: 13, bottom: 5),
-                          child: Text("lbl_8_12_pm".tr,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight12))
-                    ])),
-            bottomNavigationBar: Container(
-                height: getVerticalSize(42),
-                width: getHorizontalSize(334),
-                margin: getMargin(left: 21, right: 20, bottom: 45),
-                decoration: AppDecoration.outlineIndigo505,
-                child: Stack(alignment: Alignment.center, children: [
-                  CustomImageView(
-                      svgPath: ImageConstant.imgFrame6,
-                      height: getSize(20),
-                      width: getSize(20),
-                      alignment: Alignment.topRight,
-                      margin: getMargin(top: 3, right: 5)),
-                  CustomTextFormField(
-                      width: getHorizontalSize(334),
-                      focusNode: FocusNode(),
-                      autofocus: true,
-                      controller: controller.messageController,
-                      hintText: "lbl_write_a_message".tr,
-                      variant: TextFormFieldVariant.Neutral,
-                      padding: TextFormFieldPadding.PaddingT11,
-                      fontStyle: TextFormFieldFontStyle.SatoshiLight14,
-                      textInputAction: TextInputAction.done,
-                      alignment: Alignment.center,
-                      suffix: Container(
-                          margin: getMargin(
-                              left: 30, top: 10, right: 16, bottom: 10),
-                          child: CustomImageView(
-                              svgPath: ImageConstant.imgCamera)),
-                      suffixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(42)))
-                ]))));
+                                    SizedBox(height: 16),
+                                    DateLable(
+                                      dateTime: message.createdAt,
+                                    ),
+                                    ChatMessageBubble(
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (message) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                // If it's the same date, only display the message bubble
+                                return ChatMessageBubble(
+                                  controller: controller,
+                                  messageText: message.text,
+                                  isReceived: message.authorUserId !=
+                                      widget.chatData.creatorUserId,
+                                  timestamp: formattedDateTime,
+                                  leadingImagePath: ImageConstant.imgVector,
+                                  trailingImagePath: ImageConstant.imgVector,
+                                  messageModelObj: message.messageId,
+                                  onSwipedMessage: (message) {
+                                    replyToMessage(message);
+                                    focusNode.requestFocus();
+                                  },
+                                );
+                              }
+                            },
+                          );
+                        }),
+                      ),
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            // if show is true
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                              ChatInputBar(
+                                messageModelObj: controller.messageModelObj,
+                                replyMessage: widget.replyMessage,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  controller.hideEmojiWidget();
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController: controller.messageController,
+                                openedController: controller,
+                              ),
+                              show.value
+                                  ? emojiSelect(controller)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );  */
+               return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16),
+                        DateLable(
+                         dateTime: widget.chatData.createdAt,
+                        ),
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: Obx(() {
+                          return ListView.builder(
+                            //key: PageStorageKey<String>('messagesList'),
+                            controller: scrollController,
+                            reverse: true,
+                            //  shrinkWrap: true,
+                            //  physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.messageModelObj.length,
+                            itemBuilder: (context, index) {
+                              /*  final sortedMessages =
+                                  controller.messageModelObj.reversed.toList();
+                              final reversedIndex =
+                                  controller.messageModelObj.length - 1 - index; */
+                              final message = controller.messageModelObj[index];
+                              String formattedDateTime = DateFormat.jm('en_US')
+                                  .format(message.createdAt);
+                              if (controller.messageModelObj.isEmpty) {
+                                return SizedBox.shrink();
+                              } //else{
+                              return Column(
+                                children: [
+                                  ChatMessageBubble(
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (message) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      }),
+                                ],
+                              );
+                              //     }
+                            },
+                          );
+                        }),
+                      ),
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            // if show is true
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                              ChatInputBar(
+                                messageModelObj: controller.messageModelObj,
+                                replyMessage: widget.replyMessage,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  controller.hideEmojiWidget();
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController: controller.messageController,
+                                openedController: controller,
+                              ),
+                              show.value
+                                  ? emojiSelect(controller)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ); 
+            }
+          }),
+        ),
+      ),
+    );
   }
 
-  /// Navigates to the previous screen.
-  ///
-  /// When the action is triggered, this function uses the [Get] library to
-  /// navigate to the previous screen in the navigation stack.
+  Widget emojiSelect(ChatsOpenedController controller) {
+    return EmojiPicker(
+      config: const Config(
+        bottomActionBarConfig: BottomActionBarConfig(
+          showBackspaceButton: false,
+          showSearchViewButton: false,
+        ),
+      ),
+      onEmojiSelected: (category, emoji) {
+        controller.messageController.text =
+            controller.messageController.text + emoji.emoji;
+      },
+    );
+  }
+
+  void replyToMessage(Message message) {
+    widget.replyMessage.value = message;
+  }
+
+  void cancelReply() {
+    widget.replyMessage.value = null;
+  }
+
   onTapArrowleft8() {
-    Get.back();
+    messageController.getUser();
+    messageController.setUnreadCreator(0);
+    Get.back(result: true);
+  }
+}
+ */
+
+
+class ChatsOpenedScreen extends StatefulWidget {
+  ChatsOpenedScreen({
+    Key? key,
+    this.selectedInfluencer,
+    required this.chatData,
+  }) : super(key: key);
+
+  final Influencer? selectedInfluencer;
+  // ChatData chatData;
+  final ChatData chatData;
+  Rx<Message?> replyMessage = Rx<Message?>(null);
+
+  @override
+  State<ChatsOpenedScreen> createState() => _ChatsOpenedScreenState();
+}
+
+class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
+    with SingleTickerProviderStateMixin {
+  final MessagesController messageController =
+      Get.put(MessagesController(MessagesModel().obs));
+
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late AnimationController animationController;
+  late String imageProvider;
+  late String titleName;
+  final UserController user = Get.find();
+  RxBool show = false.obs;
+  FocusNode focusNode = FocusNode();
+  late ChatsOpenedController controller;
+  final scrollController = ScrollController();
+   List<Widget> chatList = [];
+ // final  ChatsOpenedController controller = Get.find<ChatsOpenedController>();
+
+
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+
+    String? avatarUrl;
+    if (widget.selectedInfluencer != null) {
+             avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
+     // avatarUrl =
+     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+    } else if (widget.chatData != null) {
+       avatarUrl = widget.chatData.influencerUser!.avatar;
+    //  avatarUrl =
+     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
+    }
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = "mypic.wit";
+    }
+
+    String? name;
+    if (widget.selectedInfluencer != null) {
+      name =
+          "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+    } else if (widget.chatData != null) {
+      name =
+          "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
+    }
+
+    if (name != null && name.isNotEmpty) {
+      titleName = name;
+    } else {
+      titleName = "Mark Adebayo";
+    }
+
+     controller = ChatsOpenedController(
+      chatData: widget.chatData,
+      selectedInfluencer: widget.selectedInfluencer,
+       ); 
+
+     controller.onInit();
+  }
+
+  Future<void> _refresh() async {
+    await controller.refreshItems();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+    final String chatId = widget.chatData.chatId;
+
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: ColorConstant.gray5001,
+        appBar: CustomAppBar(
+          height: getVerticalSize(54),
+          leadingWidth: 52,
+          leading: AppbarImage(
+            height: getSize(30),
+            width: getSize(30),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
+            onTap: () {
+              onTapArrowleft8();
+            },
+          ),
+          title: Padding(
+            padding: getPadding(left: 2, top: 3),
+            child: Row(
+              children: [
+                AppbarCircleimage(
+                  url: imageProvider,
+                  margin: getMargin(left: 10, top: 5, bottom: 20),
+                ),
+                AppbarSubtitle(
+                  text: titleName.tr,
+                  margin: getMargin(left: 14, top: 5, bottom: 20),
+                ),
+              ],
+            ),
+          ),
+          styleType: Style.bgOutlineIndigo50_1,
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Stack(
+                children: [
+                  PositionedDirectional(
+                    top: 150,
+                    start: 150,
+                    child: CustomLoadingWidget(
+                      animationController: animationController,
+                    ),
+                  ),
+                ],
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  controller.getUser(chatId);
+                },
+                fullPage: true,
+              );
+            } else {
+              Map<String, List<Message>> groupedMessages = controller.groupMessagesByDate(controller.messageModelObj);
+              return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                          controller: scrollController,
+                          reverse: true,
+                          itemCount: groupedMessages.length,
+                          itemBuilder: (context, index) {
+                            String date = groupedMessages.keys.elementAt(index);
+                            List<Message> messages = groupedMessages[date]!;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                messages.isNotEmpty
+                                    ?  DateLable(
+                                  dateTime: DateTime.parse(date),
+                                )  : DateLable(
+                                        dateTime: widget.chatData.createdAt,
+                                  ),
+                                ListView.builder(
+                                  controller: scrollController,
+                                  shrinkWrap: true,
+                                  reverse: true,
+                                  itemCount: messages.length,
+                                  itemBuilder: (context, subIndex) {
+                                    final message = messages[subIndex];
+                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
+                                    return ChatMessageBubble(
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId != widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath: ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (message) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                              ChatInputBar(
+                                replyMessage: widget.replyMessage,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  controller.hideEmojiWidget();
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController: controller.messageController,
+                                openedController: controller,
+                              ),
+                              show.value
+                                  ? emojiSelect(controller)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+
+
+            }
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget emojiSelect(ChatsOpenedController controller) {
+    return EmojiPicker(
+      config: const Config(
+        bottomActionBarConfig: BottomActionBarConfig(
+          showBackspaceButton: false,
+          showSearchViewButton: false,
+        ),
+      ),
+      onEmojiSelected: (category, emoji) {
+        controller.messageController.text =
+            controller.messageController.text + emoji.emoji;
+      },
+    );
+  }
+
+  void replyToMessage(Message message) {
+    widget.replyMessage.value = message;
+  }
+
+  void cancelReply() {
+    widget.replyMessage.value = null;
+  }
+
+  onTapArrowleft8() {
+    messageController.onInit();
+    messageController.setUnreadCreator(0);
+    Get.back(result: true);
   }
 }

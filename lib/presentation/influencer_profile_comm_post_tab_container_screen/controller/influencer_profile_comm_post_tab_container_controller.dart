@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 /// current influencerProfileCommPostTabContainerModelObj
 class InfluencerProfileCommPostTabContainerController extends GetxController
     with GetSingleTickerProviderStateMixin {
- Rx<Influencer?> influencerProfileCommPostTabContainerModelObj =
- Rx<Influencer?>(null);
+  Rx<Influencer?> influencerProfileCommPostTabContainerModelObj =
+      Rx<Influencer?>(null);
 
- late TabController tabviewController =
- Get.put(TabController(vsync: this, length: 4));
+  late TabController tabviewController =
+      Get.put(TabController(vsync: this, length: 4));
 
- void setSelectedInfluencer(Influencer listrectangle50) {
-  influencerProfileCommPostTabContainerModelObj.value = listrectangle50;
- }
+  void setSelectedInfluencer(Influencer listrectangle50) {
+    influencerProfileCommPostTabContainerModelObj.value = listrectangle50;
+  }
 }

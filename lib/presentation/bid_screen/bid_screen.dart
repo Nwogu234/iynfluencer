@@ -17,7 +17,6 @@ class BidScreen extends GetWidget {
 
   final BidController controller = Get.put(BidController(BidModel().obs));
   Widget _buildAccountForm() {
-    var termsAndConditionController = TextEditingController();
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -34,7 +33,7 @@ class BidScreen extends GetWidget {
                 focusNode: FocusNode(),
                 autofocus: true,
                 maxLines: 4,
-                controller: termsAndConditionController,
+                controller: controller.termsAndConditionController,
                 hintText: "msg_input_all_terms".tr,
                 margin: getMargin(
                   top: 6,
@@ -71,7 +70,7 @@ class BidScreen extends GetWidget {
                         if (controller.formKey.currentState!.validate()) {
                           controller.errorText.value = "";
                           controller.addTermsAndCondition(
-                              termsAndConditionController.text);
+                              controller.termsAndConditionController.text);
                           // controller.animationController.reverse();
                         }
                       },
@@ -219,13 +218,16 @@ class BidScreen extends GetWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomButton(
-                height: getVerticalSize(44),
-                text: "lbl_submit_bid2".tr,
-                padding: ButtonPadding.PaddingAll12,
-                onTap: () {
-                  controller.submitForm(context, selectedJob.jobId!);
-                },
+              Obx(
+                () => CustomButton(
+                  height: getVerticalSize(44),
+                  text: "lbl_submit_bid2".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  loading: controller.isLoading.value,
+                  onTap: () {
+                    controller.submitForm(context, selectedJob.jobId!);
+                  },
+                ),
               ),
             ],
           ),

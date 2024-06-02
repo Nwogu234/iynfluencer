@@ -19,6 +19,7 @@ class CreatorJobslistController extends GetxController {
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
+  bool empty=false;
   final apiClient = ApiClient();
   var error = ''.obs;
   List<Job> existingJobs = []; // Existing jobs
@@ -51,7 +52,6 @@ class CreatorJobslistController extends GetxController {
         error('');
         isLoading.value = false;
         getJobs();
-        // getNewJob(newJob); Why are you creating a new job
       }
     } catch (e) {
       print(e);
@@ -63,12 +63,16 @@ class CreatorJobslistController extends GetxController {
   Future<void> getJobs() async {
     try {
       error('');
+      token = await storage.read(key: "token");
       isTrendLoading.value = true;
       Response response = await apiClient.getCreatorJobs(token);
 
       if (response.isOk) {
         final responseJson = response.body;
         final jobResponse = JobResponse.fromJson(responseJson);
+        if (jobResponse.data.docs.isEmpty){
+          empty=true;
+        }
         existingJobs= jobResponse.data.docs;
         error('');
         isTrendLoading.value = false;
@@ -87,7 +91,7 @@ class CreatorJobslistController extends GetxController {
   @override
   void onInit() {
     print('OnInit called');
-    getUser();
+    getJobs();
     super.onInit();
   }
 

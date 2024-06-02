@@ -1,4 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
+import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
+import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
+import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/media_file.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
@@ -7,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/data/models/media_file/media_file.dart';
 import 'package:iynfluencer/presentation/complete_profile_influencer_screen/controller/complete_profile_influencer_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../widgets/custo_dropdown.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../widgets/custom_bottom_bar.dart';
@@ -24,15 +30,21 @@ import 'models/post_page_model.dart';
 
 // ignore_for_file: must_be_immutable
 class PostPageScreen extends GetWidget {
-  PostPageScreen({Key? key})
+  PostPageScreen(
+      {Key? key, this.fromHire = false, this.fromHireInfluencerId = ''})
       : super(
           key: key,
         ); //
   PostPageController controller =
       Get.put(PostPageController(PostPageModel().obs));
-
+  bool fromHire;
+  String fromHireInfluencerId;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<MediaFile> selectedMediaFiles = [];
+
+  HomeCreatorController homeController =
+      Get.put(HomeCreatorController(HomeCreatorModel().obs));
+
   void removeSelectedMediaFile(String filePath) {
     selectedMediaFiles.remove(filePath);
   }
@@ -52,7 +64,7 @@ class PostPageScreen extends GetWidget {
       print("Name: $name");
       print("Type: $type");
 
-      if (type == "png" || type == "jpeg" || type == "jpg") {
+      if (type == ".png" || type == ".jpeg" || type == ".jpg") {
         controller.selectedMediaFiles
             .add(MediaFile(name: name, type: type, file: file));
       } else {
@@ -103,7 +115,7 @@ class PostPageScreen extends GetWidget {
       allowedExtensions: [
         'pdf',
         'doc'
-            'docx',
+        'docx',
       ], // Add allowed document file extensions
     );
 
@@ -114,7 +126,7 @@ class PostPageScreen extends GetWidget {
       final String type = extension?.toLowerCase() ?? "";
       final File? file = docFile.path != null ? File(docFile.path!) : null;
 
-      if (type == "pdf" || type == "doc") {
+      if (type == "pdf" || type == "doc"  || type == "docx") {
         controller.selectedMediaFiles
             .add(MediaFile(name: name, type: type, file: file!));
       } else {
@@ -204,6 +216,10 @@ class PostPageScreen extends GetWidget {
     );
   }
 
+  openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -211,463 +227,653 @@ class PostPageScreen extends GetWidget {
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         backgroundColor: ColorConstant.whiteA700,
-        appBar: CustomAppBar(
-          height: getVerticalSize(
-            57,
-          ),
-          leadingWidth: 44,
-          leading: AppbarImage(
-            onTap: () {
-              print("AppbarImage onTap triggered");
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              controller.bumcont.selectedIndex.value = 0;
-            },
-            height: getSize(
-              24,
-            ),
-            width: getSize(
-              24,
-            ),
-            svgPath: ImageConstant.imgArrowright,
-            margin: getMargin(
-              left: 20,
-              top: 17,
-              bottom: 16,
-            ),
-          ),
-          actions: [
-            AppbarButton(
-              margin: getMargin(
-                left: 21,
-                top: 13,
-                right: 21,
-                bottom: 12,
-              ),
-              onTap: () {
-                controller.submitForm(context);
-              },
-            ),
-          ],
-          styleType: Style.bgShadowGray9000c,
-        ),
-        body: SizedBox(
-          width: size.width,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            padding: getPadding(
-              top: 35,
-            ),
-            child: Form(
-              key: controller.formKeyMain,
-              child: Padding(
-                padding: getPadding(
-                  left: 20,
-                  right: 19,
-                  bottom: 5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CustomTextFormField(
-                      width: getHorizontalSize(
-                        216,
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.maxFinite,
+            decoration: AppDecoration.fillWhiteA700,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      DefaultTextStyle(
+                        style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                            fontSize: 24.sp, fontWeight: FontWeight.bold),
+                        child: AnimatedTextKit(
+                          repeatForever: true,
+                          pause: Duration(milliseconds: 6000),
+                          isRepeatingAnimation: true,
+                          totalRepeatCount: 3,
+                          animatedTexts: [
+                            TypewriterAnimatedText('Post'),
+                          ],
+                        ),
                       ),
-                      focusNode: FocusNode(),
-                      autofocus: true,
-                      controller: controller.inputController,
-                      hintText: "msg_what_is_the_job".tr,
-                      margin: getMargin(
-                        left: 1,
-                      ),
-                      variant: TextFormFieldVariant.None,
-                      fontStyle: TextFormFieldFontStyle.SatoshiBold22,
-                    ),
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: Container(
+                      AppbarImage(
+                        onTap: () {
+                          print("AppbarImage onTap triggered");
+                          controller.homcont.currentRoute.value =
+                              AppRoutes.homeCreatorPage;
+                          Navigator.of(Get.nestedKey(1)!.currentState!.context)
+                              .pushReplacementNamed(
+                                  AppRoutes.homeCreatorContainerScreen);
+                          controller.bumcont.selectedIndex.value = 0;
+                        },
+                        height: getSize(
+                          60,
+                        ),
+                        width: getSize(
+                          60,
+                        ),
+                        svgPath: ImageConstant.imgCancel,
                         margin: getMargin(
-                          top: 23,
+                          left: 8,
+                          top: 17,
+                          bottom: 16,
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                /*              Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Container(
+                    height: getVerticalSize(87),
+                    width: double.maxFinite,
+                   decoration: BoxDecoration(
+                   color: ColorConstant.whiteA700,
+                   boxShadow: [
+                    BoxShadow(
+                     color: ColorConstant.gray9000c,
+                     spreadRadius: getHorizontalSize(
+                      2,
+                    ),
+                     blurRadius: getHorizontalSize(
+                      2,
+                    ),
+                    offset: Offset(
+                      0,
+                      1,
+                    ),
+                  ),
+                ],
+               ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        AppbarImage(
+                          onTap: () {
+                          print("AppbarImage onTap triggered");
+                          controller.homcont.currentRoute.value=AppRoutes.homeCreatorPage;
+                          Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
+                          controller.bumcont.selectedIndex.value = 0;
+                         },
+                         height: getSize(
+                             60,
+                           ),
+                         width: getSize(
+                           60,
+                           ),
+                         svgPath: ImageConstant.imgCancel,
+                         margin: getMargin(
+                          left: 8,
+                          top: 17,
+                          bottom: 16,
+                         ),
+                        ),
+                        AppbarButton(
+                          margin: getMargin(
+                          left: 21,
+                          top: 13,
+                          right: 21,
+                          bottom: 12,
+                         ),
+                   onTap: () {
+                    controller.submitForm(context, fromHire, fromHireInfluencerId);
+                  },
+                  ),
+                      ],
+                    ),
+                  ),
+                ), */
+                SizedBox(
+                  width: size.width,
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    padding: getPadding(
+                      top: 15,
+                    ),
+                    child: Form(
+                      key: controller.formKeyMain,
+                      child: Padding(
                         padding: getPadding(
-                          left: 28,
-                          top: 33,
-                          right: 28,
-                          bottom: 33,
-                        ),
-                        decoration: AppDecoration.outlineGray20002.copyWith(
-                          borderRadius: BorderRadiusStyle.circleBorder7,
+                          left: 20,
+                          right: 19,
+                          bottom: 5,
                         ),
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
+                            CustomTextFormField(
                               width: getHorizontalSize(
-                                236,
+                                316,
                               ),
-                              margin: getMargin(
-                                left: 22,
-                                top: 1,
-                                right: 20,
-                              ),
-                              child: Text(
-                                "msg_upload_media_files".tr,
-                                maxLines: null,
-                                textAlign: TextAlign.center,
-                                style: AppStyle.txtSatoshiLight13,
-                              ),
-                            ),
-                            CustomButton(
-                              height: getVerticalSize(
-                                43,
-                              ),
-                              text: "lbl_select_media".tr,
-                              onTap: () {
-                                showMediaSelectionModal(context);
+                              focusNode: FocusNode(),
+                              autofocus: true,
+                              controller: controller.inputController,
+                              hintText: "msg_what_is_the_job".tr,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a job title';
+                                }
+                                return null; // Return null if the input is valid
                               },
                               margin: getMargin(
-                                top: 13,
+                                left: 1,
                               ),
-                              variant: ButtonVariant.OutlineGray300b2,
-                              padding: ButtonPadding.PaddingAll12,
-                              fontStyle: ButtonFontStyle.SatoshiLight14,
+                              variant: TextFormFieldVariant.None,
+                              fontStyle: TextFormFieldFontStyle.SatoshiBold22,
+                            ),
+                            SizedBox(
+                              width: double.maxFinite,
+                              child: Container(
+                                margin: getMargin(
+                                  top: 23,
+                                ),
+                                padding: getPadding(
+                                  left: 28,
+                                  top: 33,
+                                  right: 28,
+                                  bottom: 33,
+                                ),
+                                decoration:
+                                    AppDecoration.outlineGray20002.copyWith(
+                                  borderRadius: BorderRadiusStyle.circleBorder7,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: getHorizontalSize(
+                                        236,
+                                      ),
+                                      margin: getMargin(
+                                        left: 22,
+                                        top: 1,
+                                        right: 20,
+                                      ),
+                                      child: Text(
+                                        "msg_upload_media_files".tr,
+                                        maxLines: null,
+                                        textAlign: TextAlign.center,
+                                        style: AppStyle.txtSatoshiLight13
+                                            .copyWith(
+                                                fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    CustomButton(
+                                      height: getVerticalSize(
+                                        43,
+                                      ),
+                                      text: "lbl_select_media".tr,
+                                      onTap: () {
+                                        showMediaSelectionModal(context);
+                                      },
+                                      margin: getMargin(
+                                        top: 13,
+                                      ),
+                                      variant: ButtonVariant.OutlineGray300b2,
+                                      padding: ButtonPadding.PaddingAll12,
+                                      fontStyle: ButtonFontStyle.SatoshiLight14,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Obx(
+                              () {
+                                return Container(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Selected Media Files:",
+                                        style: AppStyle.txtSatoshiLight13,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: controller.selectedMediaFiles
+                                            .map((mediaFile) {
+                                          return ListTile(
+                                            title: Text(mediaFile.name),
+                                            trailing: IconButton(
+                                              icon: Icon(Icons.remove_circle),
+                                              onPressed: () {
+                                                controller
+                                                    .removeSelectedMediaFile(
+                                                        mediaFile);
+                                              },
+                                            ),
+                                            onTap: () {
+                                              // Show a dialog to display the media
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title:
+                                                        Text('Media Preview'),
+                                                    content: MediaFileWidget(
+                                                        mediaFile: mediaFile),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text('Close'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            Padding(
+                              padding: getPadding(
+                                top: 30,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Text(
+                                      "lbl_job_category".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiLight13Gray900
+                                          .copyWith(
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  Obx(
+                                    () => FormField<SelectionPopupModel>(
+                                      validator: (value) {
+                                        if (value?.value == null ||
+                                            value?.value.isEmpty) {
+                                          return 'Please select at least one option'; // Your validation logic here
+                                        }
+                                        return null;
+                                      },
+                                      initialValue:
+                                          controller.selectedNiche.value,
+                                      builder:
+                                          (FormFieldState<SelectionPopupModel>
+                                              state) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CustoDropDown(
+                                              value: controller
+                                                  .selectedNiche.value,
+                                              hintText: 'Add Niche',
+                                              focusNode: FocusNode(),
+                                              autofocus: true,
+                                              items: controller.nicheToDisplay,
+                                              onChanged: (newValue) {
+                                                if (newValue != null) {
+                                                  controller
+                                                      .onDropdownItemChanged(
+                                                          newValue);
+                                                  state.didChange(
+                                                      newValue); // Trigger validation on change
+                                                }
+                                              },
+                                            ),
+                                            if (state.hasError)
+                                              Text(
+                                                state.errorText!,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Obx(
+                                    () => Wrap(
+                                      spacing: 8.0,
+                                      children: controller.selectedNiches.map(
+                                        (niche) {
+                                          return Chip(
+                                            label: Text('${niche.title}'),
+                                            deleteIcon: Icon(
+                                              Icons.close,
+                                            ),
+                                            onDeleted: () => controller
+                                                .handleNicheDelete(niche),
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: getPadding(
+                                top: 29,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "msg_what_is_your_budget".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiLight13Gray900
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  Padding(
+                                    padding: getPadding(
+                                      top: 16,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: getPadding(
+                                              right: 8,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "lbl_from".tr,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.left,
+                                                  style: AppStyle
+                                                      .txtSatoshiLight13Gray900
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                ),
+                                                CustomTextFormField(
+                                                  validator: (value) {
+                                                    double? thisValue =
+                                                        double.tryParse(
+                                                            value ?? "");
+                                                    double? otherValue = double
+                                                        .tryParse(controller
+                                                            .priceoneController
+                                                            .text);
+
+                                                    if (thisValue == null) {
+                                                      return 'Please enter a valid number';
+                                                    } else if (otherValue !=
+                                                            null &&
+                                                        thisValue >=
+                                                            otherValue) {
+                                                      return 'Value should be less than the other field';
+                                                    }
+
+                                                    return null;
+                                                  },
+                                                  width: getHorizontalSize(
+                                                    160,
+                                                  ),
+                                                  focusNode: FocusNode(),
+                                                  autofocus: true,
+                                                  controller: controller
+                                                      .priceController,
+                                                  hintText: "lbl_50".tr,
+                                                  margin: getMargin(
+                                                    top: 7,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: getPadding(
+                                              left: 8,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "lbl_to".tr,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.left,
+                                                  style: AppStyle
+                                                      .txtSatoshiLight13Gray900
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                ),
+                                                CustomTextFormField(
+                                                  width: getHorizontalSize(
+                                                    160,
+                                                  ),
+                                                  validator: (value) {
+                                                    double? thisValue =
+                                                        double.tryParse(
+                                                            value ?? "");
+                                                    double? otherValue =
+                                                        double.tryParse(
+                                                            controller
+                                                                .priceController
+                                                                .text);
+
+                                                    if (thisValue == null) {
+                                                      return 'Please enter a valid number';
+                                                    } else if (otherValue !=
+                                                            null &&
+                                                        thisValue <=
+                                                            otherValue) {
+                                                      return 'Value should be greater than the other field';
+                                                    }
+
+                                                    return null;
+                                                  },
+                                                  focusNode: FocusNode(),
+                                                  autofocus: true,
+                                                  controller: controller
+                                                      .priceoneController,
+                                                  hintText: "lbl_2002".tr,
+                                                  margin: getMargin(
+                                                    top: 7,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                                padding: getPadding(
+                                  top: 29,
+                                ),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Job Duration", // Add a localization key if needed
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: AppStyle.txtSatoshiLight13Gray900
+                                            .copyWith(
+                                                fontWeight: FontWeight.w600),
+                                      ),
+                                      CustomTextFormField(
+                                        width: getHorizontalSize(160),
+                                        focusNode: FocusNode(),
+                                        autofocus: true,
+                                        controller:
+                                            controller.durationController,
+                                        hintText: "Enter duration in days",
+                                        margin: getMargin(top: 7),
+                                        /*  decoration: InputDecoration(
+                                  errorStyle: TextStyle( 
+                                  color: Colors.red
+                                 )), */
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a duration';
+                                          }
+                                          return null; // Return null if the input is valid
+                                        },
+                                      ),
+                                    ])),
+                            Padding(
+                              padding: getPadding(
+                                top: 29,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "lbl_add_description".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiLight13Gray900
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  CustomTextFormField(
+                                    maxLines: 4,
+                                    focusNode: FocusNode(),
+                                    autofocus: true,
+                                    controller:
+                                        controller.frametwelveoneController,
+                                    hintText: "msg_explain_briefly".tr,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a duration';
+                                      }
+                                      return null; // Return null if the input is valid
+                                    },
+                                    margin: getMargin(
+                                      top: 6,
+                                    ),
+                                    // padding: TextFormFieldPadding.PaddingT38,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: getPadding(
+                                top: 29,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "msg_add_responsibilities".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiLight13Gray900
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  CustomButton(
+                                    height: getVerticalSize(44.h),
+                                    text: "Add the tasks to be carried out",
+                                    onTap: () {
+                                      controller.startAddingResponsibilities();
+                                    },
+                                    margin: getMargin(top: 24.h),
+                                    variant: ButtonVariant.OutlineGray300b2,
+                                    padding: ButtonPadding.PaddingT12,
+                                    fontStyle: ButtonFontStyle.SatoshiLight14,
+                                    prefixWidget: Container(
+                                      margin: getMargin(right: 6.w),
+                                      child: CustomImageView(
+                                          svgPath:
+                                              ImageConstant.imgFrameGray700),
+                                    ),
+                                  ),
+                                  Obx(() =>
+                                      controller.isAddingResponsibility.value
+                                          ? _buildAccountForm()
+                                          : _buildAccountChips()),
+                                  if (controller.errorText.value.isNotEmpty)
+                                    Obx(
+                                      () => Text(
+                                        controller.errorText.value,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Center(
+                                child: AppbarButton(
+                                  margin: getMargin(
+                                    left: 21,
+                                    top: 13,
+                                    right: 21,
+                                    bottom: 12,
+                                  ),
+                                  onTap: () {
+                                    controller.submitForm(context, fromHire,
+                                        fromHireInfluencerId);
+                                  },
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Selected Media Files:",
-                            style: AppStyle.txtSatoshiLight13,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:
-                                controller.selectedMediaFiles.map((mediaFile) {
-                              return ListTile(
-                                title: Text(mediaFile.name),
-                                subtitle: Text(mediaFile.type),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.remove_circle),
-                                  onPressed: () {
-                                    controller
-                                        .removeSelectedMediaFile(mediaFile);
-                                  },
-                                ),
-                                onTap: () {
-                                  // Show a dialog to display the media
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Media Preview'),
-                                        content: MediaFileWidget(
-                                            mediaFile: mediaFile),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Close'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(
-                        top: 30,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "lbl_job_category".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13Gray900,
-                          ),
-                          Obx(
-                            () => FormField<SelectionPopupModel>(
-                              validator: (value) {
-                                if (value?.value == null ||
-                                    value?.value.isEmpty) {
-                                  return 'Please select at least one option'; // Your validation logic here
-                                }
-                                return null;
-                              },
-                              initialValue: controller.selectedNiche.value,
-                              builder:
-                                  (FormFieldState<SelectionPopupModel> state) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustoDropDown(
-                                      value: controller.selectedNiche.value,
-                                      hintText: 'Add Niche',
-                                      focusNode: FocusNode(),
-                                      autofocus: true,
-                                      items: controller.nicheToDisplay,
-                                      onChanged: (newValue) {
-                                        if (newValue != null) {
-                                          controller
-                                              .onDropdownItemChanged(newValue);
-                                          state.didChange(
-                                              newValue); // Trigger validation on change
-                                        }
-                                      },
-                                    ),
-                                    if (state.hasError)
-                                      Text(
-                                        state.errorText!,
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          Obx(
-                            () => Wrap(
-                              spacing: 8.0.w,
-                              children: controller.selectedNiches.value.map(
-                                (niche) {
-                                  return Chip(
-                                    label: Text('${niche.title}'),
-                                    deleteIcon: Icon(
-                                      Icons.close,
-                                    ),
-                                    onDeleted: () =>
-                                        controller.handleNicheDelete(niche),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(
-                        top: 29,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "msg_what_is_your_budget".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13Gray900,
-                          ),
-                          Padding(
-                            padding: getPadding(
-                              top: 16,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: getPadding(
-                                      right: 8,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "lbl_from".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style:
-                                              AppStyle.txtSatoshiLight13Gray900,
-                                        ),
-                                        CustomTextFormField(
-                                          width: getHorizontalSize(
-                                            160,
-                                          ),
-                                          focusNode: FocusNode(),
-                                          autofocus: true,
-                                          controller:
-                                              controller.priceController,
-                                          hintText: "lbl_50".tr,
-                                          margin: getMargin(
-                                            top: 7,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: getPadding(
-                                      left: 8,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "lbl_to".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style:
-                                              AppStyle.txtSatoshiLight13Gray900,
-                                        ),
-                                        CustomTextFormField(
-                                          width: getHorizontalSize(
-                                            160,
-                                          ),
-                                          focusNode: FocusNode(),
-                                          autofocus: true,
-                                          controller:
-                                              controller.priceoneController,
-                                          hintText: "lbl_2002".tr,
-                                          margin: getMargin(
-                                            top: 7,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: getPadding(
-                          top: 29,
-                        ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Job Duration", // Add a localization key if needed
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiLight13Gray900,
-                              ),
-                              CustomTextFormField(
-                                width: getHorizontalSize(160),
-                                focusNode: FocusNode(),
-                                autofocus: true,
-                                controller: controller.durationController,
-                                hintText: "Enter duration in days",
-                                margin: getMargin(top: 7),
-                                /*  decoration: InputDecoration(
-                                errorStyle: TextStyle( 
-                                color: Colors.red
-                               )), */
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a duration';
-                                  }
-                                  return null; // Return null if the input is valid
-                                },
-                              ),
-                            ])),
-                    Padding(
-                      padding: getPadding(
-                        top: 29,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "lbl_add_description".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13Gray900,
-                          ),
-                          CustomTextFormField(
-                            maxLines: 4,
-                            focusNode: FocusNode(),
-                            autofocus: true,
-                            controller: controller.frametwelveoneController,
-                            hintText: "msg_explain_briefly".tr,
-                            margin: getMargin(
-                              top: 6,
-                            ),
-                            // padding: TextFormFieldPadding.PaddingT38,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(
-                        top: 29,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "msg_add_responsibilities".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13Gray900,
-                          ),
-                          CustomButton(
-                            height: getVerticalSize(44.h),
-                            text: "Add the tasks to be carried out",
-                            onTap: () {
-                              controller.startAddingResponsibilities();
-                            },
-                            margin: getMargin(top: 24.h),
-                            variant: ButtonVariant.OutlineGray300b2,
-                            padding: ButtonPadding.PaddingT12,
-                            fontStyle: ButtonFontStyle.SatoshiLight14,
-                            prefixWidget: Container(
-                              margin: getMargin(right: 6.w),
-                              child: CustomImageView(
-                                  svgPath: ImageConstant.imgFrameGray700),
-                            ),
-                          ),
-                          Obx(() => controller.isAddingResponsibility.value
-                              ? _buildAccountForm()
-                              : _buildAccountChips()),
-                          if (controller.errorText.value != null)
-                            Obx(
-                              () => Text(
-                                controller.errorText.value,
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 10.sp,
-                                ),
-                              ),
-                            )
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -748,7 +954,7 @@ class PostPageScreen extends GetWidget {
 
   //This is for showing the list of responsibilities
   Widget _buildAccountChips() {
-    List responsibilitiesCopy = controller.resposibilities.toList();
+    List responsibilitiesCopy = controller.responsibilities.toList();
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(

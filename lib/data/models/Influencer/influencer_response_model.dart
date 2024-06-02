@@ -1,6 +1,5 @@
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 
-import '../use_model/user_model.dart';
 import '../Socials/social.dart';
 
 class User {
@@ -9,6 +8,7 @@ class User {
   final String? lastName;
   final String? userId;
   final String? country;
+  final String? countryCode;
   final String? avatar;
 
   User({
@@ -17,6 +17,7 @@ class User {
     required this.lastName,
     required this.userId,
     required this.country,
+    this.countryCode,
     required this.avatar,
   });
 
@@ -29,6 +30,17 @@ class User {
       country: json['country'], // Optional field
       avatar: json['avatar'], // Optional field
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['userId'] = this.userId;
+    data['country'] = this.country;
+    data['avatar'] = this.avatar;
+    return data;
   }
 }
 
@@ -77,16 +89,16 @@ class Influencer {
 
   Influencer(
       {this.id,
-        this.userId,
-        this.niche,
-        this.bio,
-        this.completed,
-        this.socials,
-        this.suspended,
-        this.influencerId,
-        this.user,
-        this.jobsDone,
-        this.jobs});
+      this.userId,
+      this.niche,
+      this.bio,
+      this.completed,
+      this.socials,
+      this.suspended,
+      this.influencerId,
+      this.user,
+      this.jobsDone,
+      this.jobs});
 
   factory Influencer.fromJson(Map<String, dynamic> json) {
     return Influencer(
@@ -108,5 +120,21 @@ class Influencer {
           ?.map((i) => Job.fromJson(i as Map<String, dynamic>))
           .toList(),
     );
+  }
+
+    Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'niche': niche,
+      'bio': bio,
+      'completed': completed,
+      'socials': socials,
+      'suspended': suspended,
+      'influencerId': influencerId,
+      'jobsDone': jobsDone,
+      'user': user,
+      'jobs': jobs,
+    };
   }
 }

@@ -93,6 +93,13 @@ class CustomCheckbox extends StatelessWidget {
       height: iconSize,
       width: iconSize,
       child: Checkbox(
+        activeColor:Colors.cyan,
+        // MaterialStateProperty.resolveWith ((Set  states) {
+        //   if (states.contains(MaterialState.disabled)) {
+        //     return Colors.cyan.withOpacity(.32);
+        //   }
+        //   return Colors.cyan;
+        // }),
         value: value ?? false,
         onChanged: (value) {
           onChange!(value!);

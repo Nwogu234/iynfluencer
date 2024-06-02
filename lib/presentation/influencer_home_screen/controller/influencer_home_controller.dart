@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -17,7 +18,7 @@ class InfluencerHomeController extends GetxController {
 
   final UserController user = Get.find();
 
-  TextEditingController searchController = TextEditingController();
+  late TextEditingController searchController2 = TextEditingController();
 
   Rx<InfluencerHomeModel> influencerHomeModelObj = InfluencerHomeModel().obs;
   final storage = new FlutterSecureStorage();
@@ -29,14 +30,9 @@ class InfluencerHomeController extends GetxController {
   List<Job> jobsList = <Job>[].obs;
   List<Job> infJobsList = <Job>[].obs;
 
-  late AnimationController animationController;
+  RxString? updatedName = ''.obs;
+  Rx<File?> updatedProfileImage = Rx<File?>(null);
 
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   // this is to get user when the jobs page is loaded
   getUser() async {
@@ -67,14 +63,15 @@ class InfluencerHomeController extends GetxController {
     try {
       error('');
       isJobsLoading.value = true;
-      response = await apiClient.getInfluencerAllJobs(user.userModelObj.value.influencerId!, token);
+      response = await apiClient.getAllJobs(1, 20, token);
       print(response.body);
       if (response.isOk) {
         final responseJson = response.body;
         final jobResponse = JobResponse.fromJson(responseJson);
         jobsList = jobResponse.data.docs;
         infJobsList = jobsList
-            .where((item) => item.creatorId!=user.userModelObj.value.creatorId)
+            .where(
+                (item) => item.creatorId != user.userModelObj.value.creatorId)
             .toList();
         print(jobsList); // List of Influencers
         error('');
@@ -85,22 +82,47 @@ class InfluencerHomeController extends GetxController {
       }
     } catch (e) {
       print(e);
-      print(jobsList);
+      // print(jobsList);
       error('Something went wrong');
       isJobsLoading.value = false;
     }
   }
 
+  void onSearchSubmitted(String query) {
+    print("Submitted query: $query");
+  }
+
+  // Function to update profile data
+  void updateProfileData(Map<String, dynamic>? data) {
+    if (data != null) {
+      updatedName?.value = data['profileDetails']['firstName'] +
+          ' ' +
+          data['profileDetails']['lastName'];
+      updatedProfileImage.value = File(data['profileImagePath']);
+    }
+  }
+
   @override
   void onInit() {
+    super.onInit();
     print('OnInit called');
     getUser();
-    super.onInit();
   }
 
   @override
   void onClose() {
     super.onClose();
-    searchController.dispose();
+    searchController2.dispose();
   }
+
+  
+  Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+   
+  }
+
 }
+
+
+ 

@@ -1,4 +1,5 @@
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/presentation/job_details_screen/models/job_details_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,9 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
+
 import '../controller/bids_controller.dart';
 import '../models/bids_item_model.dart';
 import 'package:flutter/material.dart';
@@ -7,24 +13,33 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class BidsItemWidget extends StatelessWidget {
   BidsItemWidget(
-    this.bidsItemModelObj, {
+    this.bidsItemModelObj,
+    this.selectedJob,
+    this.chatData,{
     Key? key,
-    this.onTapViewdetails,
   }) : super(
           key: key,
         );
 
-  BidsItemModel bidsItemModelObj;
+  JobBids bidsItemModelObj;
+  Job selectedJob;
+  ChatData? chatData;
 
   var controller = Get.find<BidsController>();
 
-  VoidCallback? onTapViewdetails;
-
   @override
   Widget build(BuildContext context) {
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
     return SizedBox(
       width: double.maxFinite,
       child: Container(
+        margin: getMargin(right: 4, left: 4),
         decoration: AppDecoration.outlineIndigo501,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +51,7 @@ class BidsItemWidget extends StatelessWidget {
                 padding: getPadding(
                   left: 25,
                   top: 19,
-                  right: 25,
+                  right: 20,
                   bottom: 19,
                 ),
                 decoration: AppDecoration.fillWhiteA700,
@@ -51,7 +66,8 @@ class BidsItemWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           CustomImageView(
-                            imagePath: ImageConstant.imgGroup8525,
+                            fit: BoxFit.cover,
+                            url: bidsItemModelObj.influencer!.user!.avatar!,
                             height: getSize(
                               50,
                             ),
@@ -70,20 +86,20 @@ class BidsItemWidget extends StatelessWidget {
                               top: 17,
                               bottom: 12,
                             ),
-                            child: Obx(
-                              () => Text(
-                                bidsItemModelObj.biddernameTxt.value,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold145,
-                              ),
+                            child: Text(
+                              "${capitalizeFirstLetter(bidsItemModelObj.influencer!.user!.firstName!)} ${capitalizeFirstLetter(bidsItemModelObj.influencer!.user!.lastName!)}",
+                              // bidsItemModelObj..value,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold16
+                                  .copyWith(fontSize: 16.sp),
                             ),
                           ),
                           Spacer(),
                           CustomImageView(
                             svgPath: ImageConstant.imgVector,
                             height: getVerticalSize(
-                              1,
+                              13,
                             ),
                             width: getHorizontalSize(
                               13,
@@ -104,27 +120,22 @@ class BidsItemWidget extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "lbl_bid_amount".tr,
+                              text: 'Bid amount: ',
                               style: TextStyle(
                                 color: ColorConstant.gray600,
                                 fontSize: getFontSize(
                                   14,
                                 ),
                                 fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             TextSpan(
-                              text: "lbl_200".tr,
-                              style: TextStyle(
-                                color: ColorConstant.gray900,
-                                fontSize: getFontSize(
-                                  13,
-                                ),
-                                fontFamily: 'Satoshi',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                                // text: '\$${bidsItemModelObj.price.toString()}',
+                                text:
+                                    '\$${((bidsItemModelObj.price ?? 0) / 100).toString()}',
+                                style: AppStyle.txtSatoshiBold16.copyWith(
+                                    fontWeight: FontWeight.w600, fontSize: 15)),
                           ],
                         ),
                         textAlign: TextAlign.left,
@@ -140,10 +151,17 @@ class BidsItemWidget extends StatelessWidget {
                         right: 20,
                       ),
                       child: Text(
-                        "msg_hello_i_m_interested".tr,
+                        bidsItemModelObj.coverLetter!,
                         maxLines: null,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight138,
+                        style: TextStyle(
+                          color: ColorConstant.gray600,
+                          fontSize: getFontSize(
+                            14,
+                          ),
+                          fontFamily: 'Satoshi',
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ],
@@ -168,7 +186,7 @@ class BidsItemWidget extends StatelessWidget {
                     text: "lbl_view_details".tr,
                     fontStyle: ButtonFontStyle.SatoshiBold12,
                     onTap: () {
-                      onTapViewdetails?.call();
+                      onTapViewdetails(bidsItemModelObj, selectedJob, chatData);
                     },
                   ),
                   CustomButton(
@@ -183,7 +201,7 @@ class BidsItemWidget extends StatelessWidget {
                       left: 12,
                     ),
                     variant: ButtonVariant.OutlineIndigo50_2,
-                    fontStyle: ButtonFontStyle.SatoshiBold12Gray900ab,
+                    fontStyle: ButtonFontStyle.SatoshiBold14Black900,
                   ),
                 ],
               ),
@@ -192,5 +210,10 @@ class BidsItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  onTapViewdetails(bidsItemModelObj, selectedJob, chatData) {
+    final args = BidsArguments(bidsItemModelObj, selectedJob, chatData);
+    Get.toNamed(AppRoutes.bidRequestScreen, arguments: args);
   }
 }

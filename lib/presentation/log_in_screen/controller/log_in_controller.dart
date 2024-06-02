@@ -12,8 +12,10 @@ import '../../../data/apiClient/api_client.dart';
 class LogInController extends GetxController {
   var storage = FlutterSecureStorage();
   TextEditingController usernameController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
+
+  var passwordFocusNode= FocusNode();
+  var emailFocusNode=FocusNode();
   final apiClient = ApiClient();
   String message = '';
 
@@ -28,7 +30,7 @@ class LogInController extends GetxController {
     });
 
     Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
+      Center(child: CircularProgressIndicator(color: ColorConstant.cyan100,)), // showing a loading dialog
       barrierDismissible: false, // user must not close it manually
     );
 
@@ -76,5 +78,8 @@ class LogInController extends GetxController {
     super.onClose();
     usernameController.dispose();
     passwordController.dispose();
+
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
   }
 }

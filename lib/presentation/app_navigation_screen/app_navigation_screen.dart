@@ -3233,11 +3233,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
 
   onTapSearchfilter() {
     Get.bottomSheet(
-      SearchFilterBottomsheet(
-        Get.put(
-          SearchFilterController(),
-        ),
-      ),
+      SearchFilterBottomsheet(),
       isScrollControlled: true,
     );
   }

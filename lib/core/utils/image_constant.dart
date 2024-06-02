@@ -8,13 +8,23 @@ class ImageConstant {
 
   static String imgGroup85256 = 'assets/images/img_group852_56.png';
 
+  static String imgLocation = 'assets/images/img_location_marker.svg';
+
   static String imgGroup85222 = 'assets/images/img_group852_22.png';
 
   static String imgFrameCyan300 = 'assets/images/img_frame_cyan_300.svg';
 
+  static String imgFrameBudget = 'assets/images/Imgframe_budget.png';
+
+  static String imgFrameDollar = 'assets/images/Imgframe_dollar.png';
+
+  static String imgFrameDustbin = 'assets/images/image_Dustbin.svg';
+
   static String imgGroup8837 = 'assets/images/img_group883_7.png';
 
   static String imgGroup8834 = 'assets/images/img_group883_4.png';
+
+  static String imgframeBar = 'assets/images/Imgframe_bar.png';
 
   static String imgGroup85234 = 'assets/images/img_group852_34.png';
 
@@ -30,6 +40,8 @@ class ImageConstant {
 
   static String imgGroup85264 = 'assets/images/img_group852_64.png';
 
+  static String profilecover = 'assets/images/profilecover.png';
+
   static String imgArrowleftGray600 =
       'assets/images/img_arrowleft_gray_600.svg';
 
@@ -40,11 +52,16 @@ class ImageConstant {
   static String imgArrowdownGray600 =
       'assets/images/img_arrowdown_gray_600.svg';
 
+  static String imgArrowMark =
+      'assets/images/img_mark.svg';
+
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
 
   static String imgSearchGray600 = 'assets/images/img_search_gray_600.svg';
 
   static String imgFrame1 = 'assets/images/img_frame_1.svg';
+
+  static String imgClock = 'assets/images/Img_Clock.svg';
 
   static String imgGroup85220 = 'assets/images/img_group852_20.png';
 
@@ -80,6 +97,8 @@ class ImageConstant {
   static String imgEye2 = 'assets/images/img_eye_2.svg';
 
   static String imgArrowup = 'assets/images/img_arrowup.svg';
+
+  static String imgCalenders = 'assets/images/img_calendar.svg';
 
   static String imgGroup94785x85 = 'assets/images/img_group947_85x85.png';
 
@@ -270,7 +289,15 @@ class ImageConstant {
 
   static String imgGroup85255 = 'assets/images/img_group852_55.png';
 
-  static String imgFacebook = 'assets/images/img_facebook.png';
+  static String imgFacebook = 'assets/images/svg_facebook.svg';
+
+  static String imgInstagram = 'assets/images/Img_Instagram.png';
+
+  static String imgTwitter = 'assets/images/Img_Twitter.png';
+
+  static String imgYoutube = 'assets/images/Img_Youtube.png';
+
+  static String imgTiktok = 'assets/images/Img_Tiktok.png';
 
   static String imgRectangle5066181x335 =
       'assets/images/img_rectangle5066_181x335.png';
@@ -497,4 +524,6 @@ class ImageConstant {
   static String imgMditwitter = 'assets/images/img_mditwitter.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String infbkgrd = 'assets/images/background.png';
 }

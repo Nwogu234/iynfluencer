@@ -1,3 +1,6 @@
+import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+
 import 'controller/payment_succesful_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -5,10 +8,12 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 
 // ignore_for_file: must_be_immutable
 class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
-  const PaymentSuccesfulScreen({Key? key})
+   PaymentSuccesfulScreen({Key? key})
       : super(
           key: key,
         );
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +85,9 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
           ),
         ),
         bottomNavigationBar: CustomButton(
+          onTap: () {
+            onTapHome();
+          },
           height: getVerticalSize(
             46,
           ),
@@ -93,5 +101,11 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
         ),
       ),
     );
+  }
+
+  onTapHome(){
+    controller.infTabcont.currentRoute.value=AppRoutes.homeCreatorContainerScreen;
+      Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
+       controller.bumcont.selectedIndex.value=0;
   }
 }

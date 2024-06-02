@@ -4,6 +4,8 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
+import '../../widgets/app_bar/influencer_buttom_bar.dart';
+import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
 import '../jobs_my_bids_influencer_page/widgets/listmediainflue_item_widget.dart';
 import 'controller/jobs_my_bids_influencer_controller.dart';
 import 'models/jobs_my_bids_influencer_model.dart';
@@ -25,9 +27,11 @@ class JobsMyBidsInfluencerPage extends StatefulWidget {
 
 class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
     with SingleTickerProviderStateMixin {
-  late JobsMyBidsInfluencerController controller;
+  final controller = Get.put(JobsMyBidsInfluencerController());
 
-  // Get.put(JobsMyBidsInfluencerController(JobsMyBidsInfluencerModel().obs));
+  final bumcont =
+      Get.put(InfluencerBottomBarController());
+
   final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
   late AnimationController animationController;
 
@@ -38,13 +42,8 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    controller = Get.put(JobsMyBidsInfluencerController(
-        // jobsMyBidsInfluencerModelObj.listmediainflueItemList,
-        ));
   }
+
   @override
   void dispose() {
     animationController.dispose();
@@ -55,7 +54,7 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: ColorConstant.whiteA700,
         body: SizedBox(
           width: size.width,
           height: size.height,
@@ -68,44 +67,40 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: getPadding(
-                    left: 19,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: getPadding(
-                          top: 8,
-                          bottom: 7,
-                        ),
-                        child: Text(
-                          "lbl_all_bids2".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: getPadding(
+                        top: 8,
+                        bottom: 7,
+                      ),
+                      child: Text(
+                        "lbl_all_bids2".tr,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: AppStyle.txtSatoshiLight135Gray600
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    CustomButton(
+                      height: getVerticalSize(
+                        35,
+                      ),
+                      width: getHorizontalSize(
+                        83,
+                      ),
+                      text: "lbl_filter".tr,
+                      variant: ButtonVariant.OutlineIndigo50,
+                      padding: ButtonPadding.PaddingT8,
+                      fontStyle: ButtonFontStyle.SatoshiBold135,
+                      prefixWidget: Container(
+                        child: CustomImageView(
+                          svgPath: ImageConstant.imgSignalBlack900,
                         ),
                       ),
-                      CustomButton(
-                        height: getVerticalSize(
-                          35,
-                        ),
-                        width: getHorizontalSize(
-                          83,
-                        ),
-                        text: "lbl_filter".tr,
-                        variant: ButtonVariant.OutlineIndigo50,
-                        padding: ButtonPadding.PaddingT8,
-                        fontStyle: ButtonFontStyle.SatoshiBold135,
-                        prefixWidget: Container(
-                          child: CustomImageView(
-                            svgPath: ImageConstant.imgSignalBlack900,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: Padding(
@@ -149,9 +144,16 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                                 .jobsMyBidsInfluencerModelObj.isEmpty &&
                             !controller.isTrendLoading.value) {
                           return ResponsiveEmptyWidget(
-                            errorMessage: 'No Job Bids Available',
+                            errorMessage: 'You have submitted (0) bids',
+                            smallMessage: 'Your past bids will appear here',
+                            buttonText: "Bid on jobs now!",
                             onRetry: () {
-                              Get.toNamed(AppRoutes.influencerHomeScreen);
+                              Navigator.of(
+                                      Get.nestedKey(1)?.currentState?.context ??
+                                          context)
+                                  .pushReplacementNamed(
+                                      AppRoutes.influencerHomeScreen);
+                              bumcont.selectedIndex.value = 0;
                             },
                             fullPage: true,
                           ); // Your error widget

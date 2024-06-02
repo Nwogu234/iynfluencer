@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
 // ignore: must_be_immutable
@@ -9,17 +10,25 @@ class AppbarCircleimage extends StatelessWidget {
     this.svgPath,
     this.margin,
     this.onTap,
+    this.url,
+    this.fit,
+    this.radius
   }) : super(
           key: key,
         );
 
   String? imagePath;
+  String? url;
 
   String? svgPath;
 
   EdgeInsetsGeometry? margin;
 
   Function? onTap;
+
+  BoxFit? fit;
+
+  BorderRadius? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +38,25 @@ class AppbarCircleimage extends StatelessWidget {
       },
       child: Padding(
         padding: margin ?? EdgeInsets.zero,
-        child: CustomImageView(
-          svgPath: svgPath,
-          imagePath: imagePath,
-          height: getSize(
-            35,
+        child: Container(
+           decoration: BoxDecoration(
+                    shape: BoxShape.circle
           ),
-          width: getSize(
-            35,
-          ),
-          fit: BoxFit.contain,
-          radius: BorderRadius.circular(
+          child: CustomImageView(
+            svgPath: svgPath,
+            imagePath: imagePath,
+            url: url,
+            height: getSize(
+              50,
+            ),
+            width: getSize(
+              50,
+            ),
+            fit: BoxFit.cover,
+            radius: BorderRadius.circular(
             getSize(
-              17.5,
+               25.0,
+             ),
             ),
           ),
         ),

@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
+import 'package:iynfluencer/data/general_controllers/notification_service.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/media_file/media_file.dart';
+import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_hire_modal_controller.dart';
 import 'package:iynfluencer/presentation/post_page_screen/models/post_page_model.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +23,12 @@ class PostPageController extends GetxController
   PostPageController(this.postPageModelObj);
   final formKeyMain = GlobalKey<FormState>();
   var storage = FlutterSecureStorage();
-  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
+  HomeCreatorContainerController homcont =
+      Get.put(HomeCreatorContainerController());
+  final NotificationService notificationService = Get.find();
+  InfluencerProfileCommHireModalContainerController hireJobController =
+      Get.put(InfluencerProfileCommHireModalContainerController());
+
   TextEditingController inputController = TextEditingController();
 
   TextEditingController frametwelveController = TextEditingController();
@@ -34,7 +43,8 @@ class PostPageController extends GetxController
 
   TextEditingController frametwelvetwoController = TextEditingController();
   late AnimationController animationController;
-  BottomBarController bumcont=Get.put(BottomBarController());
+  BottomBarController bumcont = Get.put(BottomBarController());
+  final UserController user = Get.find();
 
   // this is for the job category
 
@@ -111,25 +121,45 @@ class PostPageController extends GetxController
     update();
   }
 
+   
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+
 //this is for adding resposibilities
   Rx<bool> isAddingResponsibility = false.obs;
   final formKey = GlobalKey<FormState>();
   Rx<String> errorText = "".obs;
-  var resposibilities = <String>[].obs;
+  var responsibilities = <String>[].obs;
   startAddingResponsibilities() {
     isAddingResponsibility.value = true;
   }
 
   addResponsibilities(String responsibility) {
-    resposibilities.add(responsibility);
+    responsibilities.add(responsibility);
     print(responsibility);
     isAddingResponsibility.value = false;
+  }
+
+  ///VALIDTAE RESPONSIBILITY LIST
+  bool validateResponsibilities() {
+    if (responsibilities.isEmpty) {
+      errorText.value = 'At least one responsibility must be added!';
+      return false;
+    } else {
+      errorText.value = '';
+      return true;
+    }
   }
 
   Rx<PostPageModel> postPageModelObj = PostPageModel().obs;
 
   handleDelete(String account) {
-    resposibilities.remove(account);
+    responsibilities.remove(account);
     update();
   }
 
@@ -144,9 +174,15 @@ class PostPageController extends GetxController
     selectedMediaFiles.add(mediaFile);
   }
 
+  void UpdateMediaList(MediaFile mediafile) {
+    selectedMediaFiles.insert(0, mediafile);
+    update();
+  }
+
   // Method to remove a selected media file
   void removeSelectedMediaFile(MediaFile mediaFile) {
     selectedMediaFiles.remove(mediaFile);
+    update();
   }
 
   bool validateMediaFiles(List<MediaFile> mediaFiles) {
@@ -172,8 +208,9 @@ class PostPageController extends GetxController
     return true;
   }
 
-  void submitForm(BuildContext context) async {
-    token= await storage.read(key: 'token');
+  void submitForm(
+      BuildContext context, bool fromHire, String? fromHireInfluencerId) async {
+    token = await storage.read(key: 'token');
     print("this is running");
     // Validate the media files
     if (!validateMediaFiles(selectedMediaFiles)) {
@@ -185,30 +222,59 @@ class PostPageController extends GetxController
       );
       print("media validated");
     }
-    if (formKeyMain.currentState!.validate()) {
+    if (formKeyMain.currentState!.validate() && validateResponsibilities()) {
       final JobRequest jobRequest = JobRequest(
         title: inputController.text,
         description: frametwelveoneController.text,
         budgetFrom: int.tryParse(priceController.text) ?? 0,
         budgetTo: int.tryParse(priceoneController.text) ?? 0,
         duration: int.tryParse(durationController.text) ?? 0,
-        category: selectedNiches.value.map((item) => item.title).toList(),
-        responsibilities: resposibilities.value,
+        category: selectedNiches.map((item) => item.title).toList(),
+        responsibilities: responsibilities,
       );
       final apiClient = ApiClient();
       // Sending it to a server using an API request
       try {
         final response = await apiClient.createJob(jobRequest, token);
-
+        print('-----');
+        print(response.body['data']);
         if (response.isOk) {
-          Get.snackbar('Success', 'Your job has been posted!');
-          homcont.currentRoute.value=AppRoutes.creatorHireslistTabContainerPage;
-          Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
-          bumcont.selectedIndex.value=1;
-        }
+          if (fromHire) {
+            await hireJobController.sendJobRequest(
+                response.body['data']['jobId'], fromHireInfluencerId!);
+            Get.snackbar(
+                'Success', 'Your New Job has been posted and Assigned!');
+          } else {
+            Get.snackbar('Success', 'Your job has been posted!');
+            homcont.currentRoute.value =
+                AppRoutes.creatorHireslistTabContainerPage;
+            Navigator.of(Get.nestedKey(1)!.currentState!.context)
+                .pushReplacementNamed(
+                    AppRoutes.creatorHireslistTabContainerPage);
+            bumcont.selectedIndex.value = 1;
+            
+          final fcmToken =  await FirebaseMessaging.instance.getToken();
+          final name =
+          "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+                print('Sending notification to recipient'); 
+              await notificationService.sendNotification(
+                name,
+                "just created a Job Post ",
+                jobRequest.toJson(),
+                //  recipientToken
+              fcmToken!
+             );
 
+          await notificationService.saveNotificationToFirestore(
+            name,
+            "just created a Job Post",
+            jobRequest.toJson(),
+            'Job',
+          );
+          print('Notification sent and saved to Firestore'); 
+          }
 
-        else if (response.statusCode == 400) {
+        } else if (response.statusCode == 400) {
           // Handles bad request errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -230,7 +296,8 @@ class PostPageController extends GetxController
             ),
           );
         }
-      } catch (error) {
+      } catch (e) {
+        print(e);
         // Handles other API request errors (e.g., network errors)
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

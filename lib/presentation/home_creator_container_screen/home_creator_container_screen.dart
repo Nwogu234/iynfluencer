@@ -11,10 +11,7 @@ import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 
 class HomeCreatorContainerScreen
     extends GetWidget<HomeCreatorContainerController> {
-  HomeCreatorContainerScreen(
-      {Key? key})
-      : super(key: key);
-
+  HomeCreatorContainerScreen({Key? key}) : super(key: key);
 
   var currentRoute = AppRoutes.homeCreatorPage.obs;
 
@@ -35,7 +32,7 @@ class HomeCreatorContainerScreen
             }),
             bottomNavigationBar:
                 CustomBottomBar(onChanged: (BottomBarEnum type) {
-                 controller.currentRoute.value=getCurrentRoute(type);
+              controller.currentRoute.value = getCurrentRoute(type);
               Get.toNamed(getCurrentRoute(type), id: 1);
             })));
   }

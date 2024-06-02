@@ -22,7 +22,12 @@ class CustomTextFormField extends StatelessWidget {
       this.prefixConstraints,
       this.suffix,
       this.suffixConstraints,
-      this.validator});
+      this.validator,
+      this.height,
+      this.onChanged,
+      this.onSubmitted,
+      this.onPressed,
+      this.label});
 
   TextFormFieldShape? shape;
 
@@ -36,7 +41,11 @@ class CustomTextFormField extends StatelessWidget {
 
   double? width;
 
+  double? height;
+
   EdgeInsetsGeometry? margin;
+
+  String? label;
 
   TextEditingController? controller;
 
@@ -64,6 +73,12 @@ class CustomTextFormField extends StatelessWidget {
 
   FormFieldValidator<String>? validator;
 
+  void Function(String)? onChanged;
+
+  void Function(String)? onSubmitted;
+
+  final VoidCallback? onPressed;
+
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -89,12 +104,18 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLines ?? 1,
         decoration: _buildDecoration(),
         validator: validator,
+        onChanged: (text) {
+          if (onChanged != null) {
+            onChanged!(text);
+          }
+        },
       ),
     );
   }
 
   _buildDecoration() {
     return InputDecoration(
+      labelText: label??null,
       hintText: hintText ?? "",
       hintStyle: _setFontStyle(),
       border: _setBorderStyle(),
@@ -116,7 +137,7 @@ class CustomTextFormField extends StatelessWidget {
     switch (fontStyle) {
       case TextFormFieldFontStyle.SatoshiLight14:
         return TextStyle(
-          color: ColorConstant.gray600Ab,
+          color: Colors.black,
           fontSize: getFontSize(
             14,
           ),
@@ -136,7 +157,7 @@ class CustomTextFormField extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
-            10,
+            15,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
@@ -224,7 +245,10 @@ class CustomTextFormField extends StatelessWidget {
           borderSide: BorderSide.none,
         );
       case TextFormFieldVariant.None:
-        return InputBorder.none;
+        return OutlineInputBorder(
+          borderRadius: _setOutlineBorderRadius(),
+          borderSide: BorderSide(width: 1.0, color: Colors.lightBlue.shade50),
+        );
       default:
         return OutlineInputBorder(
           borderRadius: _setOutlineBorderRadius(),

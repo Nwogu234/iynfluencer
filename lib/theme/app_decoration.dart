@@ -32,8 +32,16 @@ class AppDecoration {
           ),
         ),
       );
+  static BoxDecoration get outlineIndigo5012 => BoxDecoration(
+        border: Border.all(
+          color: ColorConstant.whiteA70001,
+          width: getHorizontalSize(
+            1,
+          ),
+        ),
+      );
   static BoxDecoration get outlineGray20002 => BoxDecoration(
-        color: ColorConstant.gray100,
+        color: ColorConstant.blueGray500,
         border: Border.all(
           color: ColorConstant.gray20002,
           width: getHorizontalSize(
@@ -304,7 +312,7 @@ class BorderRadiusStyle {
 
   static BorderRadius roundedBorder17 = BorderRadius.circular(
     getHorizontalSize(
-      17,
+      10,
     ),
   );
 
@@ -356,4 +364,4 @@ double get strokeAlignOutside => BorderSide.strokeAlignOutside;
 // StrokeAlign get strokeAlignCenter => StrokeAlign.center;
 //
 // StrokeAlign get strokeAlignOutside => StrokeAlign.outside;
-    
+   

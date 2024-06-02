@@ -1,15 +1,18 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+
 /// This class defines the variables used in the [complete_profile_influencer_screen],
 /// and is typically used to hold data that is passed between different parts of the application.
 class CompleteProfileInfluencerModel {
-
   String bio;
   List<String> niches; // Update this to be a list of strings
   List<Social> socials;
+  List<User>? user;
 
   CompleteProfileInfluencerModel({
     required this.bio,
     required this.niches,
     required this.socials,
+    required this.user,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +23,7 @@ class CompleteProfileInfluencerModel {
     };
   }
 }
+
 class Social {
   String name;
   int followers;

@@ -13,10 +13,11 @@ class CustomButton extends StatelessWidget {
       this.width,
       this.height,
       this.text,
+      this.loading = false,
       this.prefixWidget,
       this.suffixWidget});
 
-  ButtonShape? shape;
+  ButtonShapes? shape;
 
   ButtonPadding? padding;
 
@@ -33,6 +34,8 @@ class CustomButton extends StatelessWidget {
   double? width;
 
   double? height;
+  
+  bool loading;
 
   String? text;
 
@@ -67,20 +70,37 @@ class CustomButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           prefixWidget ?? SizedBox(),
-          Text(
-            text ?? "",
-            textAlign: TextAlign.center,
-            style: _setFontStyle(),
-          ),
+          loading
+              ? CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1,
+                )
+              : Text(
+                  text ?? "",
+                  textAlign: TextAlign.center,
+                  style: _setFontStyle(),
+                ),
           suffixWidget ?? SizedBox(),
         ],
       );
     } else {
-      return Text(
-        text ?? "",
-        textAlign: TextAlign.center,
-        style: _setFontStyle(),
-      );
+      return loading
+          ? Container(
+              width: getVerticalSize(20),
+              height: getVerticalSize(20),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1.5,
+                  strokeCap: StrokeCap.round,
+                ),
+              ),
+            )
+          : Text(
+              text ?? "",
+              textAlign: TextAlign.center,
+              style: _setFontStyle(),
+            );
     }
   }
 
@@ -216,7 +236,7 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonVariant.OutlineIndigo50:
         return BorderSide(
-          color: ColorConstant.indigo50,
+          color: ColorConstant.gray600,
           width: getHorizontalSize(
             1.00,
           ),
@@ -274,19 +294,19 @@ class CustomButton extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShape.RoundedBorder12:
+      case ButtonShapes.RoundedBorder12:
         return BorderRadius.circular(
           getHorizontalSize(
-            12.00,
+            25.00,
           ),
         );
-      case ButtonShape.RoundedBorder3:
+      case ButtonShapes.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
             3.00,
           ),
         );
-      case ButtonShape.Square:
+      case ButtonShapes.Square:
         return BorderRadius.circular(0);
       default:
         return BorderRadius.circular(
@@ -414,7 +434,16 @@ class CustomButton extends StatelessWidget {
             11.5,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w800,
+        );
+      case ButtonFontStyle.SatoshiBold115Red700:
+        return TextStyle(
+          color:  ColorConstant.redA600,
+          fontSize: getFontSize(
+            11.5,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w800,
         );
       case ButtonFontStyle.SatoshiBold135:
         return TextStyle(
@@ -423,7 +452,7 @@ class CustomButton extends StatelessWidget {
             13.5,
           ),
           fontFamily: 'Satoshi',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.bold,
         );
       case ButtonFontStyle.SatoshiBold115Gray90003:
         return TextStyle(
@@ -483,12 +512,13 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-enum ButtonShape {
+enum ButtonShapes {
   Square,
   RoundedBorder7,
   RoundedBorder12,
   RoundedBorder3,
 }
+
 enum ButtonPadding {
   PaddingAll15,
   PaddingAll12,
@@ -500,6 +530,7 @@ enum ButtonPadding {
   PaddingT8,
   PaddingT32,
 }
+
 enum ButtonVariant {
   FillCyan300,
   Neutral,
@@ -518,7 +549,9 @@ enum ButtonVariant {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
+  yellow200
 }
+
 enum ButtonFontStyle {
   SatoshiBold14WhiteA700,
   SatoshiBold14,
@@ -540,4 +573,5 @@ enum ButtonFontStyle {
   SatoshiBold14Gray200,
   SatoshiLight16,
   SatoshiBold13WhiteA700,
+  SatoshiBold115Red700
 }
