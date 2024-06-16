@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
@@ -266,7 +267,8 @@ class CompletPaymentScreen extends GetWidget<CompletPaymentController> {
                                               Padding(
                                                   padding: getPadding(top: 9),
                                                   child: Text(
-                                                      "lbl_mar_18_2023".tr,
+                                                      DateFormat("yyyy-MM-dd").format(
+                                                DateTime.parse(data?.createdAt ?? '')),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,

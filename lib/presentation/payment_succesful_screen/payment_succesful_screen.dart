@@ -1,3 +1,4 @@
+import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 
@@ -8,12 +9,12 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 
 // ignore_for_file: must_be_immutable
 class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
-   PaymentSuccesfulScreen({Key? key})
+  PaymentSuccesfulScreen({Key? key})
       : super(
           key: key,
         );
 
-
+  final args = Get.arguments as BidsArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
         ),
         bottomNavigationBar: CustomButton(
           onTap: () {
-            onTapHome();
+            onTapAfter(args);
           },
           height: getVerticalSize(
             46,
@@ -103,9 +104,8 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
     );
   }
 
-  onTapHome(){
-    controller.infTabcont.currentRoute.value=AppRoutes.homeCreatorContainerScreen;
-      Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.homeCreatorContainerScreen);
-       controller.bumcont.selectedIndex.value=0;
+  onTapAfter(BidsArguments bidsArguments) {
+    Get.toNamed(AppRoutes.creatorAfterJobDetailsScreen,
+        arguments: bidsArguments);
   }
 }

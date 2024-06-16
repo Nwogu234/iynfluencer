@@ -42,6 +42,8 @@ class ImageConstant {
 
   static String profilecover = 'assets/images/profilecover.png';
 
+  static String logo = 'assets/images/logo.png';
+
   static String imgArrowleftGray600 =
       'assets/images/img_arrowleft_gray_600.svg';
 

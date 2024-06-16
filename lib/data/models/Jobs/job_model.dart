@@ -76,31 +76,34 @@ class Job {
   final String? createdAt;
   final String? updatedAt;
   final int? version;
+  final String? status;
+  final List<JobBid>? bids;
   final Creator? creator;
   final int? bidsCount;
   final User? user;
 
-  Job({
-    this.id,
-    this.creatorId,
-    this.title,
-    this.description,
-    this.responsibilities,
-    this.category,
-    this.budgetFrom,
-    this.budgetTo,
-    this.duration,
-    this.public,
-    this.hired,
-    this.suspended,
-    this.jobId,
-    this.createdAt,
-    this.updatedAt,
-    this.version,
-    this.creator,
-    this.bidsCount,
-    this.user,
-  });
+  Job(
+      {this.id,
+      this.creatorId,
+      this.title,
+      this.description,
+      this.responsibilities,
+      this.category,
+      this.budgetFrom,
+      this.budgetTo,
+      this.duration,
+      this.public,
+      this.hired,
+      this.suspended,
+      this.jobId,
+      this.createdAt,
+      this.updatedAt,
+      this.version,
+      this.status,
+      this.bids,
+      this.creator,
+      this.bidsCount,
+      this.user});
 
   Map<String, dynamic> toJson() {
     return {
@@ -119,6 +122,8 @@ class Job {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'version': version,
+      'status': status,
+      'bids': bids?.map((bids) => bids.toJson()).toList(),
       'bidsCount': bidsCount,
       'creator': creator,
       "user": user
@@ -143,6 +148,10 @@ class Job {
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       version: json['__v'],
+      status: json['status'],
+      bids: json['bids'] != null
+          ? (json['bids'] as List).map((i) => JobBid.fromJson(i)).toList()
+          : null,
       bidsCount: json['bidsCount'],
       // creator:
       //     (json['creator'] as List).map((i) => Creator.fromJson(i)).toList(),
@@ -154,6 +163,62 @@ class Job {
           : null,
       user: json['user'] != null ? new User.fromJson(json['user']) : null,
     );
+  }
+}
+
+class JobBid {
+  String? id;
+  String? jobId;
+  String? influencerId;
+  String? coverLetter;
+  int? price;
+  String? status;
+  String? bidId;
+  String? createdAt;
+  String? updatedAt;
+  int? version;
+
+  JobBid({
+     this.id,
+     this.jobId,
+     this.influencerId,
+     this.coverLetter,
+     this.price,
+     this.status,
+     this.bidId,
+     this.createdAt,
+    this.updatedAt,
+    this.version,
+  });
+
+  factory JobBid.fromJson(Map<String, dynamic> json) {
+    return JobBid(
+      id: json['_id'],
+      jobId: json['jobId'],
+      influencerId: json['influencerId'],
+      coverLetter: json['coverLetter'],
+      price: json['price'],
+      status: json['status'],
+      bidId: json['bidId'],
+      createdAt : json['createdAt'],
+      updatedAt : json['updatedAt'],
+      version: json['version'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'jobId': jobId,
+      'influencerId': influencerId,
+      'coverLetter': coverLetter,
+      'price': price,
+      'status': status,
+      'bidId': bidId,
+      'createdAt' : createdAt,
+      'updatedAt' : updatedAt,
+      'version': version,
+    };
   }
 }
 

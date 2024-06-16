@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 ///
 /// This class manages the state of the BidScreen, including the
 /// current bidModelObj
-class BidController extends GetxController with GetSingleTickerProviderStateMixin {
+class BidController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   BidController(this.postPageModelObj);
   Rx<BidModel> postPageModelObj = BidModel().obs;
   var storage = FlutterSecureStorage();
@@ -51,26 +52,35 @@ class BidController extends GetxController with GetSingleTickerProviderStateMixi
       } else {
         isLoading.value = true;
         final bidData = BidModel(
-          coverLetter: frametwelveController.text,
-          jobId: jobId,
-          //price: int.tryParse(priceController.text),
-          price: (int.tryParse(priceController.text) ?? 0) * 100,
-          terms:  termsAndConditionController.text.split(',').map((term) => term.trim()).toList()
-        );
+            coverLetter: frametwelveController.text,
+            jobId: jobId,
+            //price: int.tryParse(priceController.text),
+            price: (int.tryParse(priceController.text) ?? 0) * 100,
+            terms: termsAndConditionController.text
+                .split(',')
+                .map((term) => term.trim())
+                .toList());
         try {
           Response res = await apiClient.bidAJob(bidData, token);
           final price = int.tryParse(priceController.text);
           final bidPrice = (int.tryParse(priceController.text) ?? 0) * 100;
           print(price);
           print(bidPrice);
+          print(jobId);
+          final terms =
+          termsAndConditionController.text
+              .split(',')
+              .map((term) => term.trim())
+              .toList();
+          print(terms);
 
           // print(res.statusCode);
           // print('----- statuscode---');
           // print(res.body['message']);
           if (res.isOk) {
             Get.snackbar('Success', 'Bid Posted Successfully');
-            Get.toNamed(AppRoutes.bidAcceptedScreen, parameters: {'jobId': jobId});
-            
+            Get.toNamed(AppRoutes.bidAcceptedScreen,
+                parameters: {'jobId': jobId});
           } else if (res.statusCode == 400) {
             // Handles bad request errors
             ScaffoldMessenger.of(context).showSnackBar(

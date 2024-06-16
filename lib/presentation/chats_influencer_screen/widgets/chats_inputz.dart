@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
+import 'package:iynfluencer/widgets/custom_text_form_field2.dart';
 import 'package:iynfluencer/widgets/reply_message_widget.dart';
 import 'package:uuid/uuid.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -303,6 +304,7 @@ class ChatInputsBar extends StatefulWidget {
   Rx<Message?> replyMessages = Rx<Message?>(null);
   final VoidCallback onCancelReply;
   final ChatsInfluencerController closedController;
+  final String? query;
 
   ChatInputsBar(
       {required this.messageController,
@@ -312,7 +314,8 @@ class ChatInputsBar extends StatefulWidget {
       required this.focusNode,
       required this.replyMessages,
       required this.onCancelReply,
-      required this.closedController
+      required this.closedController,
+      this.query
       // this.controller,
       });
 
@@ -324,6 +327,7 @@ class _ChatInputsBarState extends State<ChatInputsBar> {
   int popTime = 0;
   var sendButton = false.obs;
   late ChatsInputsController controllers;
+  
 
   @override
   void initState() {
@@ -376,7 +380,7 @@ class _ChatInputsBarState extends State<ChatInputsBar> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 5, bottom: 6),
                 child: Center(
-                  child: CustomTextFormField(
+                  child: CustomTextFormField2(
                     width: getHorizontalSize(334),
                     focusNode: widget.focusNode,
                     autofocus: true,
@@ -384,10 +388,10 @@ class _ChatInputsBarState extends State<ChatInputsBar> {
                       sendButton.value = value.isNotEmpty;
                     },
                     hintText: "lbl_write_a_message".tr,
-                    onSubmitted: (_) => widget.closedController.sendMessage(
-                        context, widget.messageController.text),
-                    padding: TextFormFieldPadding.PaddingT11,
-                    fontStyle: TextFormFieldFontStyle.SatoshiLight14,
+                    onSubmitted: (_) => widget.closedController
+                        .sendMessage(context, widget.messageController.text,false),
+                    padding: TextFormFieldPaddings.PaddingT11,
+                    fontStyle: TextFormFieldFontStyles.SatoshiLight14,
                     textInputAction: TextInputAction.done,
                     controller: controllers.messageController,
                     alignment: Alignment.center,
@@ -397,26 +401,42 @@ class _ChatInputsBarState extends State<ChatInputsBar> {
                         child: IconButton(
                           onPressed: sendButton.value
                               ? () async {
-                                  await widget.closedController.sendMessage(context,
-                                      widget.messageController.text);
+                                  await widget.closedController.sendMessage(
+                                      context, widget.messageController.text,
+                                      false
+                                      );
                                 }
-                              : null,
+                              : widget.query != null
+                                  ? () async {
+                                      await widget.closedController.sendMessage(
+                                          context,
+                                          widget.messageController.text,
+                                          true
+                                          );
+                                    }
+                                  : null,
                           icon: sendButton.value
                               ? Icon(
                                   Icons.send,
                                   color: ColorConstant.black900,
                                   size: 24.0,
                                 )
-                              : CustomImageView(
-                                  onTap: () {
-                                    popTime = 3;
-                                    Get.to(CameraScreen());
-                                  },
-                                  height: 24,
-                                  width: 24,
-                                  svgPath: ImageConstant.imgCamera,
-                                  // Add any other necessary properties and styling for CustomImageView
-                                ),
+                              : widget.query != null
+                                  ? Icon(
+                                      Icons.send,
+                                      color: ColorConstant.black900,
+                                      size: 24.0,
+                                    )
+                                  : CustomImageView(
+                                      onTap: () {
+                                        popTime = 3;
+                                        Get.to(CameraScreen());
+                                      },
+                                      height: 24,
+                                      width: 24,
+                                      svgPath: ImageConstant.imgCamera,
+                                      // Add any other necessary properties and styling for CustomImageView
+                                    ),
                         ),
                       );
                     }),
@@ -448,33 +468,31 @@ class ChatsInputsController extends GetxController {
       required this.closedController});
 
   RxList<Message> messageModelObjs = <Message>[].obs;
-   var message = "".obs;
-   bool empty = false;
-   var token;
-   var error = ''.obs;
-   final UserController user = Get.find();
-   final storage = FlutterSecureStorage();
-   final ScrollController _scrollController = ScrollController();
-   final ApiClients apiClient = ApiClients();
-   final SocketClient socketClient = SocketClient.to;
-   RxBool isConnected = false.obs;
-   var messages = <String>[].obs;
-   final SocketClient _socketClient = Get.find();
-   Rx<bool> isLoading = false.obs;
-   Rx<bool> isTrendLoading = false.obs;
-   late final RxBool isDeleted = false.obs;
-   RxBool isEmojiWidgetShown = false.obs;
+  var message = "".obs;
+  bool empty = false;
+  var token;
+  var error = ''.obs;
+  final UserController user = Get.find();
+  final storage = FlutterSecureStorage();
+  final ScrollController _scrollController = ScrollController();
+  final ApiClients apiClient = ApiClients();
+  final SocketClient socketClient = SocketClient.to;
+  RxBool isConnected = false.obs;
+  var messages = <String>[].obs;
+  final SocketClient _socketClient = Get.find();
+  Rx<bool> isLoading = false.obs;
+  Rx<bool> isTrendLoading = false.obs;
+  late final RxBool isDeleted = false.obs;
+  RxBool isEmojiWidgetShown = false.obs;
 
   @override
   void onInit() {
     super.onInit();
 
     socketClient.connect();
-    
+
     scrollToBottom();
   }
-
-
 
   void scrollToBottom() {
     _scrollController.animateTo(
@@ -484,12 +502,12 @@ class ChatsInputsController extends GetxController {
     );
   }
 
-   @override
+  @override
   void onClose() {
     super.onClose();
     _socketClient.socket.off('newMessage');
     _socketClient.socket.off('error');
     _socketClient.disconnect();
-  //  messageController.dispose();
+    //  messageController.dispose();
   }
 }

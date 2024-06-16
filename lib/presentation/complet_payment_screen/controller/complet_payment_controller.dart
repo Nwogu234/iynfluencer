@@ -94,7 +94,7 @@ class CompletPaymentController extends GetxController {
           ),
         );
 
-        displayPaymentSheet(reference);
+        displayPaymentSheet(reference, bidsArguments);
       } else {
         print(
             'Failed to create with Transaction: ${paymentIntentResponse.statusCode}, ${paymentIntentResponse.body}');
@@ -106,7 +106,7 @@ class CompletPaymentController extends GetxController {
     }
   }
 
-  Future<void> displayPaymentSheet(String referenceId) async {
+  Future<void> displayPaymentSheet(String referenceId, BidsArguments bidsArguments) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) async {
         print('success');
@@ -114,7 +114,7 @@ class CompletPaymentController extends GetxController {
         // Check if payment is verified
         if (verifyResponse.body['status']) {
           print('Payment verified: ${verifyResponse.body['message']}');
-          Get.toNamed(AppRoutes.paymentSuccesfulScreen);
+          Get.toNamed(AppRoutes.paymentSuccesfulScreen, arguments: bidsArguments);
         } else {
           print('Payment not verified: ${verifyResponse.body['message']}');
           Get.toNamed(AppRoutes.paymentFailedScreen);

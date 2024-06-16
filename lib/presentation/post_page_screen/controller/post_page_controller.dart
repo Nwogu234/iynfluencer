@@ -268,7 +268,6 @@ class PostPageController extends GetxController
           await notificationService.saveNotificationToFirestore(
             name,
             "just created a Job Post",
-            jobRequest.toJson(),
             'Job',
           );
           print('Notification sent and saved to Firestore'); 

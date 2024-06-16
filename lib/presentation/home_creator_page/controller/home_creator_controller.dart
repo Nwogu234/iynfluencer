@@ -9,6 +9,7 @@ import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_m
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
 import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../../data/apiClient/api_client.dart';
 import '../../../widgets/staggerd_widget.dart';
@@ -28,7 +29,7 @@ class HomeCreatorController extends GetxController {
   var token;
   final apiClient = ApiClient();
   var error = ''.obs;
-  List<Widget> tiles =[];
+  List<Widget> tiles = [];
   var usePlaceholder = false.obs;
   RxString avatar = ''.obs;
   List<Influencer> trendingInfluencers = [];
@@ -37,7 +38,7 @@ class HomeCreatorController extends GetxController {
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
-   final MessagesController messagesController =
+  final MessagesController messagesController =
       Get.put(MessagesController(MessagesModel().obs));
 
 /* 
@@ -52,58 +53,51 @@ class HomeCreatorController extends GetxController {
   }
  */
 
-
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     getUser();
-   
   }
 
   Future<void> loadRecommendedInfluencers() async {
-  try {
-    await Future.delayed(Duration(seconds: 1));
-    
-    recommendedInfluencers.addAll(List.generate(10, (index) => Influencer()));
-  } catch (e) {
-    error.value = e.toString();
-  } finally {
-    isLoading.value = false;
-  }
-}
-  List<Widget> generateTiles(List<Influencer> influencers) {
+    try {
+      await Future.delayed(Duration(seconds: 1));
 
+      recommendedInfluencers.addAll(List.generate(10, (index) => Influencer()));
+    } catch (e) {
+      error.value = e.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  List<Widget> generateTiles(List<Influencer> influencers) {
     return List<Widget>.generate(influencers.length, (index) {
-      EdgeInsetsGeometry padding = index % 2 == 0 ?
-      EdgeInsets.all(0):
-      EdgeInsets.only(top: 0);
+      EdgeInsetsGeometry padding =
+          index % 2 == 0 ? EdgeInsets.all(0) : EdgeInsets.only(top: 0);
 
       Widget card = Padding(
         padding: padding,
         child: StaggeredWidget(
           user: influencers[index],
           chatData: index < messagesController.chatList.length
-                    ? messagesController.chatList[index]
-                             : null,
-          
-          ),
-      );  // Your custom widget
+              ? messagesController.chatList[index]
+              : null,
+        ),
+      ); // Your custom widget
 
       // Apply different margins or padding based on the index for visual effect
 
-
       return StaggeredGridTile.count(
         crossAxisCellCount: 1, // Same width for all tiles
-        mainAxisCellCount: index % 2 == 0 ? 1.2:1,  // Same height for all tiles
+        mainAxisCellCount:
+            index % 2 == 0 ? 1.2 : 1, // Same height for all tiles
         child: card,
       );
     });
   }
 
-
-
-
 //*animation stops here
- getUser() async {
+  getUser() async {
     isLoading.value = true;
     error('');
     token = await storage.read(key: "token");
@@ -115,10 +109,12 @@ class HomeCreatorController extends GetxController {
       } else {
         error('');
         print(user.userModelObj.value.avatar);
+        print(user.userModelObj.value.userId);
+          final playerId = OneSignal.login(user.userModelObj.value.userId);
+        print('this is playerId : $playerId');
         isLoading.value = false;
         avatar.value = user.userModelObj.value.avatar;
         getInfluencers();
-
         getRecommended();
       }
     } catch (e) {
@@ -138,7 +134,7 @@ class HomeCreatorController extends GetxController {
         isTrendLoading.value = false;
       } else {
         error('');
-        tiles=generateTiles(trendingInfluencers);
+        tiles = generateTiles(trendingInfluencers);
         isTrendLoading.value = false;
       }
     } catch (e) {

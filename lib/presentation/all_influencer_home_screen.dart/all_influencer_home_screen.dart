@@ -3,8 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/bids_screen/controller/bids_controller.dart';
+import 'package:iynfluencer/presentation/bids_screen/models/bids_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
@@ -29,7 +32,7 @@ class AllInfluencerHomePage extends StatefulWidget {
 class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
     with SingleTickerProviderStateMixin {
 
-        final  MessagesPageInfluencerController messagesController =
+    final  MessagesPageInfluencerController messagesController =
       Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
   InfluencerHomeController controller =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
@@ -37,8 +40,7 @@ class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
 
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
-  
-  
+
   
 void _onScroll() {
   if (!controller.isLoading.value &&
@@ -157,7 +159,7 @@ void _onScroll() {
                                      onTapJobpost: () {
                                    onTapJobpost(
                                     model,
-                                    chatData
+                                    chatData,
                                     );
                                  });
                                }

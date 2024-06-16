@@ -7,6 +7,10 @@ import 'package:iynfluencer/presentation/bid_accepted_screen/bid_accepted_screen
 import 'package:iynfluencer/presentation/bid_accepted_screen/binding/bid_accepted_binding.dart';
 import 'package:iynfluencer/presentation/complete_job_screen/binding/complete_job_binding.dart';
 import 'package:iynfluencer/presentation/complete_job_screen/complete_job_screen.dart';
+import 'package:iynfluencer/presentation/creator_after_job_detail_screen/binding/creator_after_job_detail_binding.dart';
+import 'package:iynfluencer/presentation/creator_after_job_detail_screen/creator_after_job_detail_screen.dart';
+import 'package:iynfluencer/presentation/edit_bid_screen/binding/edit_binding.dart';
+import 'package:iynfluencer/presentation/edit_bid_screen/edit_bid_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashion_home_screen_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
@@ -293,6 +297,8 @@ class AppRoutes {
 
   static const String bidScreen = '/bid_screen';
 
+  static const String editScreen = '/edit_screen';
+
   static const String completeJobScreen = '/complete_job_screen';
 
   static const String editProfileAboutPage = '/edit_profile_about_page';
@@ -337,6 +343,8 @@ class AppRoutes {
   static const String communityPostScreen = '/community_post_screen';
 
   static const String allHomePage = '/all_home_screen';
+
+  static const String creatorAfterJobDetailsScreen = '/creator_after_job_details_screen';
 
   static const String fashionHomePage = '/fashion_home_screen';
 
@@ -546,6 +554,13 @@ class AppRoutes {
       page: () => BidsScreen(),
       bindings: [
         BidsBinding(),
+      ],
+    ),
+    GetPage(
+      name: editScreen,
+      page: () => EditBidScreen(),
+      bindings: [
+        EditBidBinding(),
       ],
     ),
     GetPage(
@@ -761,6 +776,13 @@ class AppRoutes {
       page: () => CreatorJobDetailsScreen(),
       bindings: [
         CreatorJobDetailsBinding(),
+      ],
+    ),
+    GetPage(
+      name: creatorAfterJobDetailsScreen,
+      page: () => CreatorAfterJobDetailsScreen(),
+      bindings: [
+        CreatorAfterJobDetailsBinding(),
       ],
     ),
     // GetPage(

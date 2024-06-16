@@ -4,12 +4,15 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
 import 'package:iynfluencer/presentation/influencer_social_media_home_screen/controller/influencer_social-controller.dart';
 import 'package:iynfluencer/presentation/influencer_social_media_home_screen/model/influencer_social_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -24,6 +27,9 @@ class InfluencerSocialMediaHomePage extends StatefulWidget {
 
 class _InfluencerSocialMediaHomePageState extends State<InfluencerSocialMediaHomePage> 
    with SingleTickerProviderStateMixin {
+
+      final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
 
       InfluencerSocialController controller =
       Get.put(InfluencerSocialController(InfluencerSocialModel().obs));
@@ -138,9 +144,16 @@ void _onScroll() {
                                  return InfluencerHomeItemSkeletonWidget();
                                } else {
                                  Job model = controller.infJobsList[index];
+                                 ChatData? chatData = 
+                                         index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null;
                                  return InfluencerHomeItemWidget(model,
                                      onTapJobpost: () {
-                                   onTapJobpost(model);
+                                   onTapJobpost(
+                                    model,
+                                    chatData
+                                    );
                                  });
                                }
                              },
@@ -156,9 +169,10 @@ void _onScroll() {
     })));
   }
 
-   onTapJobpost(model) {
+   onTapJobpost(model, chatData) {
     Get.to(JobDetailsScreen(
       selectedJob: model,
+      chatData: chatData,
     ));
   }
 }

@@ -507,6 +507,35 @@ class ApiClient extends GetConnect {
     }
   }
 
+  //this is for updating a current bid
+    Future<Response> updateBid(BidModel bidRequest, var token, String bidId) async {
+    Response response;
+    try {
+      response = await patch(
+        'influencers/me/bids/$bidId/single',
+        bidRequest.toJson(), 
+        headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(bidRequest.toJson());
+        print('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer bid');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+
 //this is for getting list of bids
   Future<Response> getInfluencerJobsBids(var token) async {
     Response response = Response();

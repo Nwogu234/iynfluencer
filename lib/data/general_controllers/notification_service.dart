@@ -5,13 +5,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import 'package:iynfluencer/env.dart';
 import 'package:iynfluencer/routes/app_routes.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter/material.dart';
 
 class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+   final storage = new FlutterSecureStorage();
+  var accessToken;
 
   void initialize() {
     _firebaseMessaging.requestPermission(
@@ -34,13 +35,12 @@ class NotificationService {
         saveNotificationToFirestore(
             message.notification!.title!, 
             message.notification!.body!, 
-            message.data,
             message.data['type'] ?? 'unknown'
             );
       }
     });
 
-    // when the app is opned, on foregraound
+    // when the app is opned, on foreground
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Notification was tapped!');
       if (message.notification != null) {
@@ -49,7 +49,6 @@ class NotificationService {
                saveNotificationToFirestore(
             message.notification!.title!,
             message.notification!.body!, 
-            message.data,
             message.data['type'] ?? 'unknown'
              );
       }
@@ -64,7 +63,6 @@ class NotificationService {
                saveNotificationToFirestore(
             message.notification!.title!, 
             message.notification!.body!,
-            message.data,
             message.data['type'] ?? 'unknown'
             );
       }
@@ -74,19 +72,22 @@ class NotificationService {
   
 Future<void> sendNotification(String title, String body,dynamic data,String token) async {
   try {
-    final url = 'https://fcm.googleapis.com/fcm/send';
+    accessToken = await storage.read(key: "access_token");
+    final url = ' https://fcm.googleapis.com/v1/projects/iynfluencer-c4f3f/messages:send';
     final payload = {
-      'to': token,
+      "message": {
+      'token': token,
       'notification': {
         'title': title,
         'body': body,
       },
       'data': data,
+    }
     };
 
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'key=$firebaseKey'
+      'Authorization': 'Bearer $accessToken'
     };
 
     final response = await post(
@@ -110,12 +111,11 @@ Future<void> sendNotification(String title, String body,dynamic data,String toke
 }
 
 
-Future<void> saveNotificationToFirestore(String title, String body, dynamic data, String type) async {
+Future<void> saveNotificationToFirestore(String title, String body, String type) async {
   final firestore = FirebaseFirestore.instance;
   await firestore.collection('notifications').add({
     'title': title,
     'body': body,
-    'data': data,
     'type': type,
     'timestamp': FieldValue.serverTimestamp(),
   });

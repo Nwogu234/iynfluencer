@@ -1,6 +1,8 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/job_influencer_details_screen.dart/job_influencer_detail_screen.dart';
 import '../controller/jobs_jobs_influencer_controller.dart';
 import '../models/listclient_item_model.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,16 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class ListclientItemWidget extends StatelessWidget {
   ListclientItemWidget(
-    this.listclientItemModelObj, {
+    this.listclientItemModelObj,
+    this.chatData,
+    {
     Key? key,
   }) : super(
-          key: key,
+    key: key,
         );
 
   Job listclientItemModelObj;
+  ChatData? chatData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,10 @@ class ListclientItemWidget extends StatelessWidget {
   }
     return GestureDetector(
       onTap: (() {
-        Get.to(JobDetailsScreen(
+        Get.to(JobInfluencerDetailScreen(
           selectedJob: listclientItemModelObj,
+          chatData: chatData,
+          
         ));
       }),
       child: SizedBox(

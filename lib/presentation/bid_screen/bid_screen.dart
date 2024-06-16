@@ -17,7 +17,6 @@ class BidScreen extends GetWidget {
 
   final BidController controller = Get.put(BidController(BidModel().obs));
   Widget _buildAccountForm() {
-
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(

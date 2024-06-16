@@ -26,7 +26,7 @@ class BidRequestController extends GetxController {
   final apiClient = ApiClient();
   var error = ''.obs;
 
-  Future<void> hireInfluencerFunc(String bidId, BidsArguments bidsArguments) async {
+/*   Future<void> hireInfluencerFunc(String bidId, BidsArguments bidsArguments) async {
     var token = await storage.read(key: "token");
     Response response = Response();
     try {
@@ -53,7 +53,7 @@ class BidRequestController extends GetxController {
       isError.value = true;
       isTrendLoading.value = false;
     }
-  }
+  } */
 
   @override
   void onInit() {

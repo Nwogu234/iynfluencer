@@ -4,9 +4,11 @@ import 'package:focused_menu/modals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
+import 'package:iynfluencer/presentation/creator_mark_job_details_screen/creator_mark_job_detail_screen.dart';
 import 'package:swipe_to/swipe_to.dart';
 import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
@@ -24,6 +26,7 @@ class ChatMessageBubble extends StatefulWidget {
   final String? trailingImagePath;
   ChatData? chatData;
   final ValueChanged<Message> onSwipedMessage;
+  final bool isCompleteMessage;
 
   ChatMessageBubble({
     required this.messageModelObj,
@@ -35,6 +38,7 @@ class ChatMessageBubble extends StatefulWidget {
     this.leadingImagePath,
     this.trailingImagePath,
     this.chatData,
+    required this.isCompleteMessage,
     Key? key,
   }) : super(key: key);
 
@@ -50,24 +54,26 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     Color bubbleColor =
         widget.isReceived ? ColorConstant.gray200 : ColorConstant.cyan100;
     if (isDeleted.value == true) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.5),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-            bottomLeft:
-                widget.isReceived ? Radius.circular(0) : Radius.circular(20),
-            bottomRight:
-                widget.isReceived ? Radius.circular(20) : Radius.circular(0),
+      return Obx(() {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomLeft:
+                  widget.isReceived ? Radius.circular(0) : Radius.circular(20),
+              bottomRight:
+                  widget.isReceived ? Radius.circular(20) : Radius.circular(0),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(8),
-        child: Text(
-          'This message has been deleted',
-          style: TextStyle(color: Colors.black87),
-        ),
-      );
+          padding: EdgeInsets.all(8),
+          child: Text(
+            'This message has been deleted',
+            style: TextStyle(color: Colors.black87),
+          ),
+        );
+      });
     } else {
       return Column(
         crossAxisAlignment: widget.isReceived
@@ -115,11 +121,34 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                           : Radius.circular(0),
                     ),
                   ),
-                  child: Text(widget.messageText,
-                      style: TextStyle(
-                          color: widget.isReceived
-                              ? Colors.black87
-                              : Colors.white)),
+                  child: Column(
+                    children: [
+                      Text(widget.messageText,
+                          style: TextStyle(
+                              color: widget.isReceived
+                                  ? Colors.black87
+                                  : Colors.white)),
+                      widget.isReceived && widget.isCompleteMessage == true
+                          ? InkWell(
+                              onTap: () {
+                                onTapJob();
+                              },
+                              child: Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: ColorConstant.cyan100,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text('Mark Job has Completed',
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink()
+                    ],
+                  ),
                 ),
                 if (!widget.isReceived && widget.trailingImagePath != null)
                   GestureDetector(
@@ -197,5 +226,11 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         widget.controller.deleteIdMessage(widget.messageModelObj);
       }
     });
+  }
+
+  onTapJob() {
+    Get.to(
+      CreatorMarkJobDetailsScreen()
+    );
   }
 }

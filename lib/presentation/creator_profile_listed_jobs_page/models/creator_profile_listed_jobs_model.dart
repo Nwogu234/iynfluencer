@@ -27,6 +27,7 @@ class CreatorProfileListedJobsModel {
             version: 1,
             // creator: [],
             bidsCount: 0,
+            bids: []
           )));
 }
 

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
@@ -455,11 +456,13 @@ class ChatsOpenedScreen extends StatefulWidget {
     Key? key,
     this.selectedInfluencer,
     required this.chatData,
+    this.selectedJob
   }) : super(key: key);
 
   final Influencer? selectedInfluencer;
   // ChatData chatData;
   final ChatData chatData;
+  final Job? selectedJob;
   Rx<Message?> replyMessage = Rx<Message?>(null);
 
   @override
@@ -649,6 +652,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                                     final message = messages[subIndex];
                                     String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
                                     return ChatMessageBubble(
+                                      isCompleteMessage: message.isCompleteMessage ?? false,
                                       controller: controller,
                                       messageText: message.text,
                                       isReceived: message.authorUserId != widget.chatData.creatorUserId,
