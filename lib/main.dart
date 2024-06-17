@@ -37,7 +37,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> configOneSignal() async{
   OneSignal.Debug.setLogLevel(OSLogLevel.debug);
 
-  OneSignal.initialize('3afeeda7-bb93-4b0b-807a-4ed6bb727e4c');
+  OneSignal.initialize(appId);
   OneSignal.Notifications.requestPermission(true).then((value) {
     print('signal value: $value');
   });
