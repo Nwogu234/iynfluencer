@@ -4,7 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
+import 'package:iynfluencer/data/apiClient/api_client.dart';
+import 'package:iynfluencer/data/models/notification/notification_model';
 import 'package:iynfluencer/routes/app_routes.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,12 @@ import 'package:flutter/material.dart';
 class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
    final storage = new FlutterSecureStorage();
-  var accessToken;
+    var accessToken;
+    Rx<bool> isLoading = false.obs;
+   Rx<bool> isTrendLoading = false.obs;
+   var error = ''.obs;
+    var token;
+   final ApiClient apiClient = ApiClient();
 
   void initialize() {
     _firebaseMessaging.requestPermission(
@@ -35,7 +41,8 @@ class NotificationService {
         saveNotificationToFirestore(
             message.notification!.title!, 
             message.notification!.body!, 
-            message.data['type'] ?? 'unknown'
+            message.data['type'] ?? 'unknown',
+            message.data['img'] ?? 'unknown'
             );
       }
     });
@@ -49,7 +56,8 @@ class NotificationService {
                saveNotificationToFirestore(
             message.notification!.title!,
             message.notification!.body!, 
-            message.data['type'] ?? 'unknown'
+            message.data['type'] ?? 'unknown',
+            message.data['img'] ?? 'unknown'
              );
       }
     });
@@ -63,13 +71,14 @@ class NotificationService {
                saveNotificationToFirestore(
             message.notification!.title!, 
             message.notification!.body!,
-            message.data['type'] ?? 'unknown'
+            message.data['type'] ?? 'unknown',
+            message.data['img'] ?? 'unknown'
             );
       }
         });
   }
 
-  
+/*   
 Future<void> sendNotification(String title, String body,dynamic data,String token) async {
   try {
     accessToken = await storage.read(key: "access_token");
@@ -108,15 +117,16 @@ Future<void> sendNotification(String title, String body,dynamic data,String toke
     print(e);
     throw Exception('Server error');
   }
-}
+} */
 
 
-Future<void> saveNotificationToFirestore(String title, String body, String type) async {
+Future<void> saveNotificationToFirestore(String title, String body, String type,String? img) async {
   final firestore = FirebaseFirestore.instance;
   await firestore.collection('notifications').add({
     'title': title,
     'body': body,
     'type': type,
+    'img': img,
     'timestamp': FieldValue.serverTimestamp(),
   });
 }
@@ -129,6 +139,39 @@ void _handleNotificationTap(String title, String body, Map<String, dynamic> data
     'data': data
   });
 }
+
+
+  Future<void> createNotification(
+      String title, String body, String type, String img) async {
+    token = await storage.read(key: "token");
+    if (token == null) {
+      print("No token found. Please login again.");
+      return;
+    }
+
+    isLoading.value = true;
+
+    final notification = MNotification(
+      title: title,
+      body: body,
+      type: type,
+      img: img,
+    );
+
+    try {
+      Response res = await apiClient.storeNotification(notification, token);
+      if (res.isOk) {
+        print("Notification stored successfully");
+      } else {
+        print('Failed to store notification: ${res.statusText}');
+        throw Exception('Failed to store notification');
+      }
+    } catch (e) {
+      print("Error storing notification: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
 }
 

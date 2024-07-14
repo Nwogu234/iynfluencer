@@ -234,7 +234,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   onTapMenutab03() {
     Get.toNamed(
-      AppRoutes.notificationPageClientScreen,
+      AppRoutes.notificationFirestore,
     );
   }
 

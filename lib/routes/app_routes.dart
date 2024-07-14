@@ -18,6 +18,8 @@ import 'package:iynfluencer/presentation/home_creator_container_screen/home_crea
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
+import 'package:iynfluencer/presentation/notification_firestore/binding/notification_firestore_binding.dart';
+import 'package:iynfluencer/presentation/notification_firestore/notification_firestore.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/social_media_home_page_binding.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/splash_screen/splash_screen.dart';
@@ -342,6 +344,8 @@ class AppRoutes {
 
   static const String communityPostScreen = '/community_post_screen';
 
+  static const String notificationFirestore = '/notification_firestore';
+
   static const String allHomePage = '/all_home_screen';
 
   static const String creatorAfterJobDetailsScreen = '/creator_after_job_details_screen';
@@ -490,6 +494,14 @@ class AppRoutes {
       page: () => CompleteProfileInfluencerScreen(),
       bindings: [
         CompleteProfileInfluencerBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: notificationFirestore,
+      page: () => NotificationFirestore(),
+      bindings: [
+        NotificationFirestoreBinding(),
       ],
     ),
 /* 

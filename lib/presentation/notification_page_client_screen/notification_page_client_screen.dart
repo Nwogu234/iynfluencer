@@ -699,30 +699,3 @@ class NotificationPageClientScreen
     Get.back();
   }
 }
-
-
-/* 
-  body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('notifications').orderBy('timestamp', descending: true).snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          final notifications = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: notifications.length,
-            itemBuilder: (context, index) {
-              final notification = notifications[index];
-              return ListTile(
-                title: Text(notification['title']),
-                subtitle: Text(notification['body']),
-                trailing: Text((notification['timestamp'] as Timestamp).toDate().toString()),
-              );
-            },
-          );
-        },
-      ),
-    );
-  } */

@@ -1,11 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
+import 'package:iynfluencer/data/apiClient/notificationApi.dart';
+import 'package:iynfluencer/data/general_controllers/notification_service.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 /// A controller class for the JobDetailsScreen.
 ///
@@ -21,6 +25,8 @@ class CreatorAfterJobDetailsController extends GetxController {
   final apiClient = ApiClient();
   final storage = new FlutterSecureStorage();
   Rx<bool> isError = false.obs;
+  final notificationClient = NotificationClient();
+  final NotificationService notificationService = Get.find();
   HomeCreatorContainerController homcont =
       Get.put(HomeCreatorContainerController());
   BottomBarController bumcont = Get.put(BottomBarController());
@@ -28,6 +34,13 @@ class CreatorAfterJobDetailsController extends GetxController {
   // Method to set the selected job
   void setSelectedJob(Job selectedJob) {
     jobDetailsModelObj.value = selectedJob;
+  }
+
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
   }
 
 //this is for animation
@@ -43,6 +56,12 @@ class CreatorAfterJobDetailsController extends GetxController {
   Future<void> hireInfluencerFunc(
       String bidId, BidsArguments bidsArguments) async {
     var token = await storage.read(key: "token");
+    final JobBids? data = bidsArguments.jobBid;
+    final userId = data?.influencer?.userId ?? '';
+    final Job job = bidsArguments.job;
+    final jobTitle = job.title;
+    final names =
+        "${capitalizeFirstLetter(job.user?.firstName ?? '')} ${capitalizeFirstLetter(job.user?.lastName ?? '')}";
     Response response = Response();
     try {
       error('');
@@ -62,6 +81,30 @@ class CreatorAfterJobDetailsController extends GetxController {
           .pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
       bumcont.selectedIndex.value = 1;
       isTrendLoading.value = false;
+      await OneSignal.login(userId);
+      if (jobTitle != null) {
+        try {
+          print('Sending notification to recipient');
+          await notificationClient.sendNotification(
+            'Job update: $jobTitle',
+            '$names has hired you', 
+             userId, 
+             null
+            );
+
+          await notificationService.createNotification(
+             'Job update: $jobTitle',
+             '$names', 
+            'Hire',
+             ImageConstant.logo
+          );
+          print('Notification sent and saved to Firestore');
+        } catch (e) {
+          print('Error sending notification: $e');
+        }
+      } else {
+        print('name is null');
+      }
     } catch (err) {
       print('-----trying something---');
       print(err);

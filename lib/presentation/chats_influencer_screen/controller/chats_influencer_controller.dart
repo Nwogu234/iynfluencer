@@ -771,12 +771,13 @@ class ChatsInfluencerController extends GetxController {
               avatar
             ); 
 
-             await notificationService.saveNotificationToFirestore(
+             await notificationService.createNotification(
               name,
               messageText,
               'Message',
+              avatar
             );
-            print('Notification sent and saved to Firestore');
+            print('Notification sent and saved to database');
           } catch (e) {
             print('Error sending notification: $e');
           }

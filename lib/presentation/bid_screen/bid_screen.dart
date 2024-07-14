@@ -224,7 +224,13 @@ class BidScreen extends GetWidget {
                   padding: ButtonPadding.PaddingAll12,
                   loading: controller.isLoading.value,
                   onTap: () {
-                    controller.submitForm(context, selectedJob.jobId!);
+                    controller.submitForm(
+                      context, 
+                      selectedJob.jobId!,
+                      selectedJob.creator?.userId ?? '',
+                      selectedJob.title!
+                      
+                      );
                   },
                 ),
               ),

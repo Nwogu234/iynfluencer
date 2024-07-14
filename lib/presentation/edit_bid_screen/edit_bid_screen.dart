@@ -229,7 +229,13 @@ class EditBidScreen extends GetWidget {
                   padding: ButtonPadding.PaddingAll12,
                   loading: controller.isLoading.value,
                   onTap: () {
-                    controller.editForm(context, selectedJob.jobId ?? '', selectedJob.bids?.first.bidId ?? '');
+                    controller.editForm(
+                      context, 
+                      selectedJob.jobId ?? '', 
+                      selectedJob.bids?.first.bidId ?? '',
+                      selectedJob.creator?.userId ?? '',
+                      selectedJob.title!
+                      );
                   },
                 ),
               ),

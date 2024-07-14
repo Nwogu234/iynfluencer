@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/notification/notification_model';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
@@ -20,7 +21,7 @@ class ApiClient extends GetConnect {
   ApiClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
+        'https://iynf-kong-ko4xr.ondigitalocean.app/api/v1/';
   }
 
   dynamic errorHandler(Response response) {
@@ -691,6 +692,56 @@ class ApiClient extends GetConnect {
       print(e);
       errorHandler(response);
       throw e;
+    }
+  }
+
+  // This is for storing the notification
+  Future<Response> storeNotification(MNotification notification, var token) async {
+    Response response;
+    try {
+      response = await post(
+        'users/auth/notification', 
+        notification.toJson(),
+         headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  
+  //this is for getting list of notifications
+  Future<Response> fetchNotification(var token) async {
+    Response response;
+    try {
+      response = await get(
+        'users/auth/notification',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of notifications');
+
+      throw Exception('Server error');
     }
   }
 }

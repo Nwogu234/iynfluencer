@@ -103,7 +103,8 @@ class Job {
       this.bids,
       this.creator,
       this.bidsCount,
-      this.user});
+      this.user
+      });
 
   Map<String, dynamic> toJson() {
     return {
@@ -226,11 +227,13 @@ class Creator {
   final String? id;
   final String? userId;
   final String? creatorId;
+  final User? user;
 
   Creator({
     this.id,
     this.userId,
     this.creatorId,
+    this.user
   });
 
   factory Creator.fromJson(Map<String, dynamic> json) {
@@ -238,6 +241,7 @@ class Creator {
       id: json['_id'],
       userId: json['userId'],
       creatorId: json['creatorId'],
+      user: json['user'] != null ? new User.fromJson(json['user']) : null,
     );
   }
 }

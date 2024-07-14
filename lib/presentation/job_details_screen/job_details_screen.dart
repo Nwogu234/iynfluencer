@@ -77,7 +77,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     }
 
     String countryCode = user.getCountryCode(
-        user.capitalizeFirstLetter(widget.selectedJob?.user?.country!));
+        user.capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country!));
     print(countryCode);
 
     return SafeArea(
@@ -264,7 +264,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget.selectedJob?.user?.avatar,
+                                    url: widget.selectedJob?.creator?.user?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -278,14 +278,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.user?.country}",
+                                                "${widget.selectedJob?.creator?.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:

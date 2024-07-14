@@ -376,7 +376,7 @@ class CreatorAfterJobDetailsScreen extends GetWidget< CreatorAfterJobDetailsCont
                   text: "Hire".tr,
                   padding: ButtonPadding.PaddingAll12,
                   onTap: () {
-                //  controller.hireInfluencerFunc(data!.bidId!, args);
+                  controller.hireInfluencerFunc(data!.bidId!, args);
                   })
             ],
           ),

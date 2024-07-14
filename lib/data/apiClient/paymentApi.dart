@@ -9,7 +9,7 @@ class PaymentClient extends GetConnect {
   PaymentClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/payments/transactions';
+        'https://iynf-kong-ko4xr.ondigitalocean.app/api/v1/payments/transactions';
   }
 
   dynamic errorHandler(Response response) {

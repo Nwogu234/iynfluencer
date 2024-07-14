@@ -574,6 +574,7 @@ class ChatsOpenedController extends GetxController {
     }
   }
 
+
   Future<void> fetchAllMessagesWithInfluencer(String chatId) async {
     try {
       error.value = '';
@@ -867,7 +868,7 @@ class ChatsOpenedController extends GetxController {
         final avatar = user.userModelObj.value.avatar;
         if (name != null) {
           try {
-             print('Sending notification to recipient'); // Debug log
+             print('Sending notification to recipient');
             await notificationClient.sendNotification(
               name,
               messageText,
@@ -875,17 +876,18 @@ class ChatsOpenedController extends GetxController {
               avatar
             ); 
 
-            await notificationService.saveNotificationToFirestore(
+            await notificationService.createNotification(
               name,
               messageText,
               'Message',
+               avatar
             );
-            print('Notification sent and saved to Firestore');
+            print('Notification sent and saved to database');
           } catch (e) {
             print('Error sending notification: $e');
           }
         } else {
-          print('Recipient token is null');
+          print('name is null');
         }
       } else {
         print('Failed to send message: ${response.statusText}');
