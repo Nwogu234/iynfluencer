@@ -47,12 +47,13 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.iynfluencer.app"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 31 
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+      //  manifestPlaceholders = [appAuthRedirectScheme: "com.iynfluencer.app"]   
     }
 
      compileOptions {
@@ -87,10 +88,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation "com.google.firebase:firebase-analytics"
     implementation "com.google.firebase:firebase-messaging"
+    implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 }
 
-
-// import io.flutter.embedding.android.FlutterActivity
-// org.gradle.java.home=C:/Windows/System32/Java/jdk-17
-// org.gradle.jvmargs=-Xmx1536M
-// org.gradle.java.home=C:/Windows/System32/Java/jdk-17

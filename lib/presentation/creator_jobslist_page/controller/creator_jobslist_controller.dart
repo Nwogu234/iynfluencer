@@ -3,6 +3,7 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../../data/apiClient/api_client.dart';
 

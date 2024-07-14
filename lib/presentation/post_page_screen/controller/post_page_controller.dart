@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
+import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -10,6 +11,7 @@ import 'package:iynfluencer/data/models/media_file/media_file.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_hire_modal_controller.dart';
 import 'package:iynfluencer/presentation/post_page_screen/models/post_page_model.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../../widgets/custom_bottom_bar.dart';
 import '../../home_creator_container_screen/controller/home_creator_container_controller.dart';
@@ -45,6 +47,8 @@ class PostPageController extends GetxController
   late AnimationController animationController;
   BottomBarController bumcont = Get.put(BottomBarController());
   final UserController user = Get.find();
+  final notificationClient = NotificationClient();
+  Rx<bool> isLoading = false.obs;
 
   // this is for the job category
 
@@ -208,6 +212,7 @@ class PostPageController extends GetxController
     return true;
   }
 
+
   void submitForm(
       BuildContext context, bool fromHire, String? fromHireInfluencerId) async {
     token = await storage.read(key: 'token');
@@ -253,27 +258,35 @@ class PostPageController extends GetxController
                     AppRoutes.creatorHireslistTabContainerPage);
             bumcont.selectedIndex.value = 1;
             
-          final fcmToken =  await FirebaseMessaging.instance.getToken();
-          final name =
-          "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
-                print('Sending notification to recipient'); 
-              await notificationService.sendNotification(
-                name,
-                "just created a Job Post ",
-                jobRequest.toJson(),
-                //  recipientToken
-              fcmToken!
-             );
+            final fcmToken = await FirebaseMessaging.instance.getToken();
+            final name = "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+            print('Sending notification to recipient'); 
+            await OneSignal.login(user.userModelObj().userId);
+            final avatar = user.userModelObj.value.avatar;
+            if (name != null) {
+              try {
+                print('Sending notification to recipient');
+                await notificationClient.sendNotification(
+                  name,
+                  "just created a Job Post ",    
+                  user.userModelObj().userId,
+                  avatar
+                ); 
 
-          await notificationService.saveNotificationToFirestore(
-            name,
-            "just created a Job Post",
-            jobRequest.toJson(),
-            'Job',
-          );
-          print('Notification sent and saved to Firestore'); 
+                await notificationService.createNotification(
+                  name,
+                  "just created a Job Post",
+                  'Job',
+                  avatar
+                );
+                print('Notification sent and saved to database');
+              } catch (e) {
+                print('Error sending notification: $e');
+              }
+            } else {
+              print('name is null');
+            }
           }
-
         } else if (response.statusCode == 400) {
           // Handles bad request errors
           ScaffoldMessenger.of(context).showSnackBar(
@@ -304,9 +317,12 @@ class PostPageController extends GetxController
             content: Text('An error occurred while submitting the form.'),
           ),
         );
+      } finally {
+        isLoading.value = false;
       }
     }
   }
+
 
   @override
   void onInit() {

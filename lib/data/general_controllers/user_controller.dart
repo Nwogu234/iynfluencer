@@ -48,7 +48,7 @@ class UserController extends GetxController {
   String baseUrl =
   // 'https://iynfluencer.s3.us-east-1.amazonaws.com/';
 
-  'https://iynf-kong-akbf9.ondigitalocean.app/';
+  'https://iynf-kong-ko4xr.ondigitalocean.app/';
 
   String getCountryCode(String countryName) {
     for (var entry in countries.entries) {

@@ -1,6 +1,8 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/job_influencer_details_screen.dart/job_influencer_detail_screen.dart';
 import '../controller/jobs_jobs_influencer_controller.dart';
 import '../models/listclient_item_model.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,16 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class ListclientItemWidget extends StatelessWidget {
   ListclientItemWidget(
-    this.listclientItemModelObj, {
+    this.listclientItemModelObj,
+    this.chatData,
+    {
     Key? key,
   }) : super(
-          key: key,
+    key: key,
         );
 
   Job listclientItemModelObj;
+  ChatData? chatData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,10 @@ class ListclientItemWidget extends StatelessWidget {
   }
     return GestureDetector(
       onTap: (() {
-        Get.to(JobDetailsScreen(
+        Get.to(JobInfluencerDetailScreen(
           selectedJob: listclientItemModelObj,
+          chatData: chatData,
+          
         ));
       }),
       child: SizedBox(
@@ -143,7 +150,7 @@ class ListclientItemWidget extends StatelessWidget {
                              children: [
                                CustomImageView(
                                //  imagePath: ImageConstant.imgGroup85237,
-                                 url: listclientItemModelObj.user?.avatar,
+                                 url: listclientItemModelObj.creator?.user?.avatar,
                                  height: getSize(
                                    30,
                                  ),
@@ -163,7 +170,7 @@ class ListclientItemWidget extends StatelessWidget {
                                    bottom: 5,
                                  ),
                                  child: Text(
-                                      "${capitalizeFirstLetter(listclientItemModelObj.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj.user?.lastName)}",
+                                      "${capitalizeFirstLetter(listclientItemModelObj.creator?.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj.creator?.user?.lastName)}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
                                    style:AppStyle.txtSatoshiLight135Gray600,

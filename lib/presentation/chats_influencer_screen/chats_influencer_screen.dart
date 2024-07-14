@@ -13,6 +13,7 @@ import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chatbub
 import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
@@ -429,11 +430,12 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
  */
 
 class ChatsInfluencerScreen extends StatefulWidget {
-  ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData})
+  ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData, this.query})
       : super(key: key);
 
   final Job? selectedJob;
   final ChatData chatData;
+  final String? query;
 
   Rx<Message?> replyMessages = Rx<Message?>(null);
 
@@ -472,10 +474,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? avatarUrl;
     if (widget.selectedJob != null) {
-        avatarUrl = widget.selectedJob?.user?.avatar ?? '';
+      avatarUrl =  widget.selectedJob?.creator?.user?.avatar ?? '';
       //print(avatarUrl);
-    //  avatarUrl =
-     //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
+      //  avatarUrl =
+      //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
     } else if (widget.chatData != null) {
       avatarUrl = widget.chatData.creatorUser!.avatar;
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
@@ -489,10 +491,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? name;
     if (widget.selectedJob != null) {
-       name =
-          "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName ?? 'Adebayo')}";
+      name =
+          "${capitalizeFirstLetter( widget.selectedJob?.creator?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName ?? 'Adebayo')}";
       // print(name);
-    //  name = 'Mark Adebayo';
+      //  name = 'Mark Adebayo';
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
@@ -505,7 +507,10 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     }
 
     controllers = ChatsInfluencerController(
-        chatData: widget.chatData, selectedJob: widget.selectedJob);
+        chatData: widget.chatData, 
+        selectedJob: widget.selectedJob,
+         query: widget.query
+        );
 
     // controllers.getUser(widget.chatData.chatId);
     controllers.onInit();
@@ -545,7 +550,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
             child: Row(
               children: [
                 AppbarCircleimage(
-                  url:imageProvider  ,
+                  url: imageProvider,
                   margin: getMargin(left: 10, top: 5, bottom: 20),
                 ),
                 AppbarSubtitle(
@@ -757,9 +762,12 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                   focusNode.canRequestFocus = false;
                                   show.value = !show.value;
                                 },
-                                messageController:
-                                    controllers.messageController,
+                                messageController: widget.query != null
+                               //  ? controllers.queryController  :      
+                                ? TextEditingController(text: widget.query) :
+                                   controllers.messageController,
                                 closedController: controllers,
+                                query: widget.query,
                               ),
                               show.value
                                   ? emojiSelect(controllers)

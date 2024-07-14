@@ -3,6 +3,7 @@ import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
 import '../job_details_screen/widgets/job_details_item_widget.dart';
@@ -15,8 +16,8 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class JobDetailsScreen extends StatefulWidget{
-  JobDetailsScreen({
+class JobDetailsScreen extends StatefulWidget {
+JobDetailsScreen({
     this.selectedJob,
     this.fromBids = false,
     this.chatData,
@@ -33,7 +34,7 @@ class JobDetailsScreen extends StatefulWidget{
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
   final UserController user = Get.find();
 
-   final chatsData = ChatData(
+  final chatsData = ChatData(
       id: '',
       creatorId: '',
       creatorUserId: '',
@@ -48,19 +49,17 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       updatedAt: DateTime.now(),
       messages: const [],
       influencerUser: null,
-      creatorUser:  null
-      );
+      creatorUser: null);
 
   @override
   void initState() {
     super.initState();
-     Get.put( ChatsInfluencerController(
-            chatData: widget.chatData ?? chatsData, 
-            selectedJob: widget.selectedJob));
+    Get.put(ChatsInfluencerController(
+        chatData: widget.chatData ?? chatsData,
+        selectedJob: widget.selectedJob));
   }
 
-   JobDetailsController controller =
-      Get.put(JobDetailsController());
+  JobDetailsController controller = Get.put(JobDetailsController());
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     //   selectedJob,
     // ];
 
-      final   ChatsInfluencerController chatControllers = Get.find< ChatsInfluencerController>();
+    final ChatsInfluencerController chatControllers =
+        Get.find<ChatsInfluencerController>();
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
         return text;
@@ -77,9 +77,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     }
 
     String countryCode = user.getCountryCode(
-        user.capitalizeFirstLetter(widget.selectedJob?.user?.country!));
+        user.capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country!));
     print(countryCode);
-
 
     return SafeArea(
       child: Scaffold(
@@ -131,7 +130,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                   width: getHorizontalSize(324),
                                   margin:
                                       getMargin(left: 20, top: 9, right: 30),
-                                  child: Text("${widget.selectedJob?.description}",
+                                  child: Text(
+                                      "${widget.selectedJob?.description}",
                                       maxLines: null,
                                       textAlign: TextAlign.left,
                                       style: AppStyle
@@ -149,7 +149,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                 margin: getMargin(left: 20, top: 9, right: 20),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: widget.selectedJob!.responsibilities!
+                                  children: widget
+                                      .selectedJob!.responsibilities!
                                       .map((mediaFile) {
                                     return Padding(
                                         padding: getPadding(top: 7),
@@ -263,7 +264,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget.selectedJob?.user?.avatar,
+                                    url: widget.selectedJob?.creator?.user?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -277,14 +278,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.user?.country}",
+                                                "${widget.selectedJob?.creator?.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
@@ -329,7 +330,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                     onTap: () {
                                       chatControllers.onTapChatsCard(
                                           widget.selectedJob,
-                                          chatControllers.chatData
+                                          chatControllers.chatData,
+                                           null
                                           );
                                     },
                                     height: getVerticalSize(30),
@@ -420,19 +422,19 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              widget.fromBids != null && widget.fromBids == true
-                  ? CustomButton(
+            children: [  // chnage when the JobBids model is added 
+              widget.selectedJob?.bidsCount != 0
+                   ? CustomButton(
                       height: getVerticalSize(44),
-                      text: "lbl_edit_bid".tr,
+                      text: "Edit bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
-                        // onTapBid();
+                       onTapEdit();
                       },
                     )
                   : CustomButton(
                       height: getVerticalSize(44),
-                      text: "Complete Job".tr,
+                      text: "lbl_bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
                         onTapBid();
@@ -450,8 +452,13 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
   onTapBid() {
-    Get.toNamed(AppRoutes.completeJobScreen/* , arguments: widget.selectedJob */);
+    Get.toNamed(AppRoutes.bidScreen, arguments: widget.selectedJob);
   }
+
+  onTapEdit() {
+    Get.toNamed(AppRoutes.editScreen, arguments: widget.selectedJob);
+  }
+
 
   /// Navigates to the previous screen.
   ///

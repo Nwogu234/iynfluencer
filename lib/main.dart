@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,6 +11,7 @@ import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/env.dart';
 import 'package:iynfluencer/firebase_options.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'core/app_export.dart';
 import 'data/general_controllers/sockect_client.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -32,6 +34,14 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+Future<void> configOneSignal() async{
+  OneSignal.Debug.setLogLevel(OSLogLevel.debug);
+
+  OneSignal.initialize(appId);
+  OneSignal.Notifications.requestPermission(true).then((value) {
+    print('signal value: $value');
+  });
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +58,7 @@ Future<void> main() async {
   print('fcmToken: $fcmToken');
 
   final storage = FlutterSecureStorage();
-  await storage.write(key: 'fcm_token', value: fcmToken);
+  await storage.write(key: 'fcmToken', value: fcmToken.toString());
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
 
@@ -58,6 +68,7 @@ Future<void> main() async {
       ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  await configOneSignal();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {

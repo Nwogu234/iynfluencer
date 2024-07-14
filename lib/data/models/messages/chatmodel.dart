@@ -45,7 +45,8 @@ class Chat {
 
   factory Chat.fromJson(Map<String, dynamic> json) {
     return Chat(
-       chatData: (json['chatData'] as List).map((i) => ChatData.fromJson(i)).toList(),
+      chatData:
+          (json['chatData'] as List).map((i) => ChatData.fromJson(i)).toList(),
       totalDocs: json['totalDocs'],
       limit: json['limit'],
       totalPages: json['totalPages'],
@@ -90,8 +91,8 @@ class ChatData {
     required this.createdAt,
     required this.updatedAt,
     required this.messages,
-     this.creatorUser,
-     this.influencerUser,
+    this.creatorUser,
+    this.influencerUser,
   });
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
@@ -109,8 +110,8 @@ class ChatData {
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt']),
         messages: (json['messages'] as List)
-             .map((i) => Message.fromJson(i as Map<String, dynamic>))
-                  .toList(),
+            .map((i) => Message.fromJson(i as Map<String, dynamic>))
+            .toList(),
         creatorUser: json['creatorUser'] != null
             ? new UserModel.fromJson(json['creatorUser'])
             : null,
@@ -136,7 +137,6 @@ class ChatData {
       'messages': messages.map((message) => message.toJson()).toList(),
       'creatorUser': creatorUser?.toJson(),
       'influencerUser': influencerUser?.toJson(),
-
     };
   }
 }
@@ -151,6 +151,7 @@ class Message {
   final String messageId;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool? isCompleteMessage;
 
   Message({
     required this.id,
@@ -162,6 +163,7 @@ class Message {
     required this.messageId,
     required this.createdAt,
     required this.updatedAt,
+    this.isCompleteMessage,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -175,6 +177,7 @@ class Message {
       messageId: json['messageId'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
+      isCompleteMessage: json['isCompleteMessage'],
     );
   }
 
@@ -187,8 +190,9 @@ class Message {
       'authorUserId': authorUserId,
       'blockedByRecipient': blockedByRecipient,
       'messageId': messageId,
-      'createdAt':  createdAt.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'isCompleteMessage': isCompleteMessage
     };
   }
 }
@@ -275,7 +279,7 @@ class UserModel {
     );
   }
 
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.id;
     data['firstName'] = this.firstName;

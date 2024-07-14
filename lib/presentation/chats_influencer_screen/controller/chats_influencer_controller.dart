@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
+import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -14,6 +15,8 @@ import 'package:iynfluencer/presentation/chats_influencer_screen/model/chat_infl
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:flutter/material.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'dart:async';
 import 'package:uuid/uuid.dart';
 
@@ -337,12 +340,15 @@ Future<List<Message>> loadMessages() async {
 class ChatsInfluencerController extends GetxController {
   final ChatData chatData;
   final Job? selectedJob;
+  final String? query;
 
-  ChatsInfluencerController({required this.chatData, this.selectedJob}) {
+  ChatsInfluencerController(
+      {required this.chatData, this.selectedJob, this.query}) {
     // messageModelObjs = chatData.messages.obs;
   }
 
   TextEditingController messageController = TextEditingController();
+  // late  TextEditingController queryController;
   Rx<ChatsInfluencerModel> chatsinfluencerModelObj = ChatsInfluencerModel().obs;
   var messages = <String>[].obs;
   bool empty = false;
@@ -363,7 +369,8 @@ class ChatsInfluencerController extends GetxController {
   late final RxBool isDeleted = false.obs;
   Timer? keepAliveTimer;
   Set<String> processedMessageIds = {};
-
+ final notificationClient = NotificationClient();
+ 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     final String chatId = chatData.chatId;
@@ -574,7 +581,8 @@ class ChatsInfluencerController extends GetxController {
     return groupedMessages;
   }
 
-  void onTapChatsCard(Job? selectedJob, ChatData chatData) async {
+  void onTapChatsCard(
+      Job? selectedJob, ChatData chatData, String? query) async {
     if (selectedJob == null) {
       print("selectedJob is null");
       return;
@@ -600,9 +608,9 @@ class ChatsInfluencerController extends GetxController {
         if (existingsChat != null) {
           await fetchAllMessagesWithCreators(existingsChat.chatId);
           Get.to(ChatsInfluencerScreen(
-            selectedJob: selectedJob,
-            chatData: existingsChat,
-          ));
+              selectedJob: selectedJob,
+              chatData: existingsChat,
+              query: query != null ? query : ''));
           return;
         } else {
           print("No existing chat found for the selected creator");
@@ -657,9 +665,9 @@ class ChatsInfluencerController extends GetxController {
 
             // Navigate to the chat screen with the new chat data
             Get.to(ChatsInfluencerScreen(
-              selectedJob: selectedJob,
-              chatData: createdChat,
-            ));
+                selectedJob: selectedJob,
+                chatData: createdChat,
+                query: query != null ? query : ''));
           } else {
             print("Failed to create chat: ${createChatResponse.statusCode}");
           }
@@ -676,7 +684,8 @@ class ChatsInfluencerController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(BuildContext context, String messageText) async {
+  Future<void> sendMessage(
+      BuildContext context, String messageText, bool isCompleteMessage) async {
     FocusScope.of(context).unfocus();
     try {
       messageText = messageText.trim();
@@ -695,16 +704,38 @@ class ChatsInfluencerController extends GetxController {
       final messageId = Uuid().v4();
 
       final newMessage = Message(
-        id: chatData.id,
-        chatId: chatData.chatId,
-        authorId: chatData.influencerId,
-        text: messageText,
-        authorUserId: chatData.influencerUserId,
-        blockedByRecipient: chatData.blockedByCreator,
-        messageId: messageId,
-        createdAt: createdAt,
-        updatedAt: createdAt,
-      );
+          id: chatData.id,
+          chatId: chatData.chatId,
+          authorId: chatData.influencerId,
+          text: messageText,
+          authorUserId: chatData.influencerUserId,
+          blockedByRecipient: chatData.blockedByCreator,
+          messageId: messageId,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+          isCompleteMessage: isCompleteMessage);
+
+      final id = chatData.id;
+      final chatId = chatData.chatId;
+      final authorId = chatData.influencerId;
+      final text = messageText;
+      final authorUserId = chatData.influencerUserId;
+      final blockedByRecipient = chatData.blockedByInfluencer;
+      final messageIds = messageId;
+      final createdAts = createdAt;
+      final updatedAts = createdAt;
+      final isCompletesMessage = isCompleteMessage;
+
+      print('id : $id');
+      print('chatId : $chatId');
+      print('authorId : $authorId');
+      print('text : $text');
+      print('authorUserId : $authorUserId');
+      print('blockedByRecipient : $blockedByRecipient');
+      print('messageId : $messageIds');
+      print('createdAts : $createdAts');
+      print('updatedAts  : $updatedAts');
+      print('isCompleteMessage  : $isCompletesMessage');
 
       final token = await storage.read(key: "token");
 
@@ -715,36 +746,38 @@ class ChatsInfluencerController extends GetxController {
       final response = await apiClient.sendMessage(newMessage, token);
 
       if (response.isOk) {
-        messageController.clear();
+        query != null
+            ? TextEditingController(text: query).clear()
+            : messageController.clear();
+        //  messageController.clear();
+
         if (!isDuplicateMessage(newMessage.messageId)) {
           UpdateList(newMessage);
         }
         print('Message sent and stored successfully');
         socketClient.sendMessage(chatData, messageText);
 
-        final fcmToken = await FirebaseMessaging.instance.getToken();
-
-        // notify the recipient
-        final recipientToken = await getRecipientToken(chatData.creatorUserId);
         final name =
             "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
-        if (fcmToken != null) {
+         await OneSignal.login(chatData.creatorUserId);
+        final avatar = user.userModelObj.value.avatar;
+        if (name != null) {
           try {
             print('Sending notification to recipient'); // Debug log
-            await notificationService.sendNotification(
-                name,
-                "just sent you a message",
-                chatData.toJson(),
-                //  recipientToken
-                fcmToken!);
-
-            await notificationService.saveNotificationToFirestore(
+            await notificationClient.sendNotification(
               name,
-              "just sent you a message",
-              chatData.toJson(),
+              messageText,
+              chatData.creatorUserId,
+              avatar
+            ); 
+
+             await notificationService.createNotification(
+              name,
+              messageText,
               'Message',
+              avatar
             );
-            print('Notification sent and saved to Firestore');
+            print('Notification sent and saved to database');
           } catch (e) {
             print('Error sending notification: $e');
           }
@@ -807,6 +840,7 @@ Future<List<Message>> loadMessages() async {
     final String chatId = chatData.chatId;
     print('Chat ID: $chatId');
     getUser(chatId);
+    // queryController = TextEditingController(text: query ?? '');
   }
 
   void chatJoin(String chatId) {
@@ -823,3 +857,5 @@ Future<List<Message>> loadMessages() async {
     //  _socketClient.disconnect();
   }
 }
+
+// fix the querycontroller later on

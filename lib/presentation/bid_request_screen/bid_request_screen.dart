@@ -28,7 +28,7 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
 
   BidRequestController controller = Get.put(BidRequestController());
 
-   final chatsData = ChatData(
+  final chatsData = ChatData(
       id: '',
       creatorId: '',
       creatorUserId: '',
@@ -45,21 +45,21 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
       influencerUser: null,
       creatorUser: null);
 
-    @override
-    void initState() {
+  @override
+  void initState() {
     super.initState();
 
     final ChatData? chatData = args.chatData;
 
     Get.put(ChatsOpenedController(
-        chatData: chatData ?? chatsData,
-        ));
+      chatData: chatData ?? chatsData,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     final JobBids? data = args.jobBid;
-   //final Influencer? influencer = data!.influencer;
+    //final Influencer? influencer = data!.influencer;
     final ChatsOpenedController chatsController =
         Get.find<ChatsOpenedController>();
 
@@ -244,11 +244,11 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                             )
                           ])),
                   CustomButton(
-                    onTap: (() {
-                    /*   chatsController.onTapChatCard(
+                      onTap: (() {
+                        /*   chatsController.onTapChatCard(
                             influencer
                              chatsController.chatData); */
-                    }),
+                      }),
                       height: getVerticalSize(30),
                       width: getHorizontalSize(86),
                       text: "lbl_message".tr,
@@ -266,10 +266,11 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
             children: [
               CustomButton(
                 height: getVerticalSize(44),
-                text: "lbl_hire".tr,
+                text: "Payment".tr,
                 padding: ButtonPadding.PaddingAll12,
                 onTap: () {
-                  controller.hireInfluencerFunc(data!.bidId!, args);
+                  onTapPay(args);
+                  //   controller.hireInfluencerFunc(data!.bidId!, args);
                 },
               ),
               CustomButton(
@@ -292,5 +293,9 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
   /// navigate to the previous screen in the navigation stack.
   onTapArrowleft3() {
     Get.back();
+  }
+
+  onTapPay(BidsArguments bidsArguments) {
+    Get.toNamed(AppRoutes.completPaymentScreen, arguments: bidsArguments);
   }
 }
