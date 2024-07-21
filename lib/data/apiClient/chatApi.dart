@@ -1,21 +1,20 @@
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+
 class ApiClients extends GetConnect {
   // Configure the base URL
   ApiClients() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-    'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
+    'https://iynf-kong-ko4xr.ondigitalocean.app/api/v1/';
   }
   dynamic errorHandler(Response response) {
     print(response.toString());
     switch (response.statusCode) {
       case 200:
         return response;
-
       case 201:
         return response;
-
       case 202:
         return response;
       case 500:
@@ -31,6 +30,7 @@ class ApiClients extends GetConnect {
         throw 'Error occurred retry';
     }
   }
+
   ///THIS IS FOR STARTING CHATS
   Future<Response> createChat(ChatData chat, String token) async{
 
@@ -56,6 +56,7 @@ class ApiClients extends GetConnect {
       print(e);
       throw Exception('Server error');
     }
+   
 
   }
 
@@ -75,14 +76,14 @@ class ApiClients extends GetConnect {
       } else {
         print(response);
         print(response.body);
-       throw Exception('Server error');
+        throw Exception('Server error');
       }
     } catch (e) {
       print('$e from getting list of chats of influencers');
       print(e);
       throw Exception('Server error');
     }
-    
+
   }
 
  /// THIS IS FOR GETTING CHATS FOR CREATORS
@@ -109,7 +110,6 @@ class ApiClients extends GetConnect {
       throw Exception('Server error');
     }
   }
-
   /// THIS IS FOR GETTING MESSAGES WITH INFLUENCERs CREATORS
   Future<Response> getAllMessages(
       String chatId, String token) async {
@@ -132,19 +132,17 @@ class ApiClients extends GetConnect {
       throw Exception('Server error');
     }
   }
-
   /// THIS IS FOR SENDING A MESSAGE
   Future<Response<dynamic>> sendMessage(Message message, String token) async {
   try {
     final response = await post(
-      'chats/message/send',
-      message.toJson(),
+      'chats/message/send', 
+      message.toJson(), 
       headers: {
         "Content-Type": "application/json",
         'Authorization': token,
       },
     );
-
     if (response.isOk) {
       print('Message sent and stored successfully');
       return response;
@@ -157,7 +155,6 @@ class ApiClients extends GetConnect {
     throw Exception('Server error');
   }
 }
-
  /// THIS IS FOR DELETING A MESSAGE
   Future<Response> deleteMessage(String chatId, String messageId, String token) async {
     Response response;

@@ -35,16 +35,13 @@ class AppbarSearchview extends StatelessWidget {
       child: Padding(
         padding: margin ?? getPadding(top: 5, right: 10),
         child: CustomSearchView(
+          onSubmitted: onTap,
           width: getHorizontalSize(
-            300,
+            295,
           ),
           height: getVerticalSize(45),
-          onTap: (() {
-            print("Search bar tapped");
-            Get.to(() => SearchInfluncersScreen());
-          }),
           focusNode: FocusNode(),
-          autofocus: true,
+          autofocus: false,
           controller: controller,
           hintText: hintText,
           prefix: Container(

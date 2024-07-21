@@ -499,6 +499,15 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
+      case ButtonFontStyle.SatoshiBold13White700:
+        return TextStyle(
+          color: ColorConstant.whiteA700,
+          fontSize: getFontSize(
+            17,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
       default:
         return TextStyle(
           color: ColorConstant.whiteA700,
@@ -554,6 +563,7 @@ enum ButtonVariant {
 
 enum ButtonFontStyle {
   SatoshiBold14WhiteA700,
+  SatoshiBold13White700,
   SatoshiBold14,
   SatoshiBold14Gray90002,
   SatoshiBold14Gray600,

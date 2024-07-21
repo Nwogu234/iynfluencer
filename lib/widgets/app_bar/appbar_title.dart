@@ -32,6 +32,7 @@ class AppbarTitle extends StatelessWidget {
           textAlign: TextAlign.left,
           style: AppStyle.txtSatoshiBold16.copyWith(
             color: ColorConstant.gray900,
+            fontWeight: FontWeight.w600
           ),
         ),
       ),

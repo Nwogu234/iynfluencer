@@ -19,6 +19,7 @@ class CustomSearchView extends StatelessWidget {
       this.suffix,
       this.height,
       this.onTap,
+      this.onSubmitted,
       this.suffixConstraints});
 
   SearchViewShape? shape;
@@ -55,6 +56,8 @@ class CustomSearchView extends StatelessWidget {
 
   final VoidCallback? onTap; 
 
+  void Function()? onSubmitted;
+
   
 
   @override
@@ -73,15 +76,15 @@ class CustomSearchView extends StatelessWidget {
       width: width ?? double.maxFinite,
       margin: margin,
       child: GestureDetector(
-        onTap:(){
-         onTap;
-      },
+        onTap:onTap,
         child: TextFormField(
           controller: controller ?? TextEditingController(),
           focusNode: focusNode,
           autofocus: autofocus!,
+          onTap: onSubmitted,
           style: _setFontStyle(),
           decoration: _buildDecoration(),
+          
         ),
       ),
     );
@@ -192,6 +195,8 @@ enum SearchViewVariant {
 enum SearchViewFontStyle {
   SatoshiLight13,
 }
+
+
 
 
 

@@ -73,8 +73,8 @@ class JobBids {
     return data;
   }
 }
-
-class Influencer {
+ 
+class Influencer{
   String? sId;
   String? userId;
   List<String>? niche;
@@ -273,7 +273,7 @@ class User {
     data['avatar'] = this.avatar;
     return data;
   }
-}
+} 
 
 class Creator {
   final String? id;

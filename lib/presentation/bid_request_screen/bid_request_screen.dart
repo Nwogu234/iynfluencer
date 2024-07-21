@@ -1,5 +1,12 @@
+import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:intl/intl.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'controller/bid_request_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -8,12 +15,54 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class BidRequestScreen extends GetWidget<BidRequestController> {
+class BidRequestScreen extends StatefulWidget {
   BidRequestScreen({Key? key}) : super(key: key);
-  late JobBids? data = Get.arguments;
+
+  @override
+  State<BidRequestScreen> createState() => _BidRequestScreenState();
+}
+
+class _BidRequestScreenState extends State<BidRequestScreen> {
+  // late JobBids? data = Get.arguments;
+  final args = Get.arguments as BidsArguments;
+
+  BidRequestController controller = Get.put(BidRequestController());
+
+  final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser: null);
+
+  @override
+  void initState() {
+    super.initState();
+
+    final ChatData? chatData = args.chatData;
+
+    Get.put(ChatsOpenedController(
+      chatData: chatData ?? chatsData,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
+    final JobBids? data = args.jobBid;
+    //final Influencer? influencer = data!.influencer;
+    final ChatsOpenedController chatsController =
+        Get.find<ChatsOpenedController>();
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -42,7 +91,8 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                       padding: getPadding(right: 5),
                       child: Row(children: [
                         CustomImageView(
-                            imagePath: ImageConstant.imgGroup8528,
+                            url: data!.influencer!.user!.avatar,
+                            fit: BoxFit.cover,
                             height: getSize(45),
                             width: getSize(45),
                             radius: BorderRadius.circular(getSize(22.5))),
@@ -114,7 +164,8 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                                       Padding(
                                           padding: getPadding(top: 3),
                                           child: Text(
-                                              '\$${data!.price.toString() ?? ''}',
+                                              //  '\$${data!.price.toString() ?? ''}',
+                                              '\$${((data!.price ?? 0) / 100).toString()}',
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
@@ -148,47 +199,56 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
                           style: AppStyle.txtSatoshiBold14Gray900)),
                   Padding(
                       padding: getPadding(left: 1, top: 15, right: 76),
-                      child: Row(children: [
-                        Padding(
-                            padding: getPadding(top: 1),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("msg_13_jobs_completed".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiBold125Gray900a7),
-                                  Padding(
-                                      padding: getPadding(top: 3),
-                                      child: Text("lbl_view_profile".tr,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                                padding: getPadding(top: 1),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("msg_13_jobs_completed".tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: AppStyle
-                                              .txtSatoshiLight135Blue900))
-                                ])),
-                        Padding(
-                            padding: getPadding(left: 71, bottom: 1),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("lbl_member_since".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiLight135Gray600),
-                                  Padding(
-                                      padding: getPadding(top: 3),
-                                      child: Text("lbl_mar_2022".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle
-                                              .txtSatoshiBold125Gray900a7))
-                                ]))
-                      ])),
+                                              .txtSatoshiBold125Gray900a7),
+                                      Padding(
+                                          padding: getPadding(top: 3),
+                                          child: Text("lbl_view_profile".tr,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: AppStyle
+                                                  .txtSatoshiLight135Blue900))
+                                    ])),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("lbl_member_since".tr,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style:
+                                            AppStyle.txtSatoshiLight135Gray600),
+                                    Padding(
+                                        padding: getPadding(top: 3),
+                                        child: Text("lbl_mar_2022".tr,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.left,
+                                            style: AppStyle
+                                                .txtSatoshiBold125Gray900a7))
+                                  ]),
+                            )
+                          ])),
                   CustomButton(
+                      onTap: (() {
+                        /*   chatsController.onTapChatCard(
+                            influencer
+                             chatsController.chatData); */
+                      }),
                       height: getVerticalSize(30),
                       width: getHorizontalSize(86),
                       text: "lbl_message".tr,
@@ -206,10 +266,11 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
             children: [
               CustomButton(
                 height: getVerticalSize(44),
-                text: "lbl_hire".tr,
+                text: "Payment".tr,
                 padding: ButtonPadding.PaddingAll12,
                 onTap: () {
-                  controller.hireInfluencerFunc(data!.bidId!);
+                  onTapPay(args);
+                  //   controller.hireInfluencerFunc(data!.bidId!, args);
                 },
               ),
               CustomButton(
@@ -232,5 +293,9 @@ class BidRequestScreen extends GetWidget<BidRequestController> {
   /// navigate to the previous screen in the navigation stack.
   onTapArrowleft3() {
     Get.back();
+  }
+
+  onTapPay(BidsArguments bidsArguments) {
+    Get.toNamed(AppRoutes.completPaymentScreen, arguments: bidsArguments);
   }
 }

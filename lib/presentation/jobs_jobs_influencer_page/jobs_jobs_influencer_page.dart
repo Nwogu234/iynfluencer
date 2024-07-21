@@ -1,4 +1,7 @@
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
@@ -22,6 +25,8 @@ class JobsJobsInfluencerPage extends StatelessWidget {
       JobsJobsInfluencerController(
           JobsJobsInfluencerModel().listclientItemList));
   late AnimationController animationController;
+   final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
 
 
 
@@ -122,7 +127,7 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                           return ResponsiveEmptyWidget(
                             errorMessage: 'You have no current Jobs ',
                               smallMessage: 'Your past and present Jobs will appear here',
-                            buttonText: "Bid on jobs now!",
+                            buttonText: "Bid jobs!",
                             onRetry: () {
                               controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;
                               Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
@@ -149,8 +154,13 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               Job model = controller
                                   .jobsJobsInfluencerModelObj.value[index];
+                            ChatData? chatData = 
+                                         index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null;
                               return ListclientItemWidget(
                                 model,
+                                chatData,
                               );
                             },
                           );

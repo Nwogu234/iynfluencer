@@ -17,8 +17,6 @@ class BidScreen extends GetWidget {
 
   final BidController controller = Get.put(BidController(BidModel().obs));
   Widget _buildAccountForm() {
-    var termsAndConditionController = TextEditingController();
-
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -34,7 +32,7 @@ class BidScreen extends GetWidget {
                 focusNode: FocusNode(),
                 autofocus: true,
                 maxLines: 4,
-                controller: termsAndConditionController,
+                controller: controller.termsAndConditionController,
                 hintText: "msg_input_all_terms".tr,
                 margin: getMargin(
                   top: 6,
@@ -71,7 +69,7 @@ class BidScreen extends GetWidget {
                         if (controller.formKey.currentState!.validate()) {
                           controller.errorText.value = "";
                           controller.addTermsAndCondition(
-                              termsAndConditionController.text);
+                              controller.termsAndConditionController.text);
                           // controller.animationController.reverse();
                         }
                       },
@@ -226,7 +224,13 @@ class BidScreen extends GetWidget {
                   padding: ButtonPadding.PaddingAll12,
                   loading: controller.isLoading.value,
                   onTap: () {
-                    controller.submitForm(context, selectedJob.jobId!);
+                    controller.submitForm(
+                      context, 
+                      selectedJob.jobId!,
+                      selectedJob.creator?.userId ?? '',
+                      selectedJob.title!
+                      
+                      );
                   },
                 ),
               ),

@@ -1,4 +1,8 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -13,9 +17,14 @@ import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 
 class BidsScreen extends GetWidget<BidsController> {
   BidsScreen({Key? key}) : super(key: key);
-  String? jobId = Get.parameters['id'];
+  // String? jobId = Get.parameters['id'];
+  final Job selectedJob = Get.arguments as Job;
+
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
   @override
   Widget build(BuildContext context) {
+    String? jobId = selectedJob.jobId;
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -107,17 +116,20 @@ class BidsScreen extends GetWidget<BidsController> {
                         );
                       } else {
                         if (controller.isError.value) {
-                          return ResponsiveErrorWidget(
-                            errorMessage: controller.error.value,
-                            onRetry: () {
-                              controller.getUser(jobId);
-                            },
-                            fullPage: true,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: ResponsiveErrorWidget(
+                              errorMessage: controller.error.value,
+                              onRetry: () {
+                                controller.getUser(jobId);
+                              },
+                              fullPage: true,
+                            ),
                           ); // Your error widget
                         } else if (controller.allJobBids.isEmpty &&
                             !controller.isLoading.value) {
                           return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
                             child: ResponsiveEmptyWidget(
                               errorMessage: 'No Job Bids Available',
                               buttonText: "Refresh now!",
@@ -138,9 +150,12 @@ class BidsScreen extends GetWidget<BidsController> {
                             itemCount: controller.allJobBids.length,
                             itemBuilder: (context, index) {
                               JobBids model = controller.allJobBids[index];
+                              ChatData? chatData =
+                                  index < messagesController.chatList.length
+                                      ? messagesController.chatList[index]
+                                      : null;
                               return BidsItemWidget(
-                                model,
-                              );
+                                  model, selectedJob, chatData);
                             },
                           );
                         }

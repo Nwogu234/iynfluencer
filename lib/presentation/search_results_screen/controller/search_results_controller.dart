@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// This class manages the state of the SearchResultsScreen, including the
 /// current searchResultsModelObj
 class SearchResultsController extends GetxController {
-  // SearchResultsController(this.searchResultModelObj);
+  SearchResultsController(this.searchResultModelObj);
 
   final UserController user = Get.find();
 
@@ -28,7 +28,7 @@ class SearchResultsController extends GetxController {
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
-  Rx<SearchResultsModel> searchResultModelObj = SearchResultsModel().obs;
+  Rx<SearchResultsModel> searchResultModelObj;
   RxList<Influencer> filteredInfluencers = <Influencer>[].obs;
   late String? query = '';
   late String? fromDate = '';
@@ -255,12 +255,6 @@ class SearchResultsController extends GetxController {
       error('Something went wrong');
       print(e);
       isRecommendedLoading.value = false;
-    // Filter by selected country if it's not null
-    if (selectedCountry != null) {
-      filteredInfluencers.value = filteredInfluencers.value.where((influencer) {
-        return influencer.user?.first.country?.toLowerCase() == selectedCountry.title;
-      }).toList();
-    }
 
     error('');
     isRecommendedLoading.value = false;

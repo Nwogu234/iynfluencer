@@ -15,6 +15,11 @@ import 'package:iynfluencer/presentation/search_results_screen/search_results_sc
   SearchFilterController searchFilterController =
   Get.put(SearchFilterController());
 
+  
+ // SearchFilterController controller = Get.put(SearchFilterController());
+  SearchResultsController controllers =
+      Get.put(SearchResultsController(SearchResultsModel().obs));
+
   @override
   Widget build(BuildContext context) {
 
@@ -161,7 +166,7 @@ import 'package:iynfluencer/presentation/search_results_screen/search_results_sc
                           margin: getMargin(left: 1, top: 25, bottom: 14),
                           padding: ButtonPadding.PaddingAll15,
                           onTap: () {
-                            onTapApplyfilters();
+                           // onTapApplyfilters();
                           })
                     ]))));
   }
@@ -169,7 +174,7 @@ import 'package:iynfluencer/presentation/search_results_screen/search_results_sc
   /// Navigates to the searchResultsScreen when the action is triggered.
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the searchResultsScreen.
-  onTapApplyfilters() {
+onTapApplyfilters() {
   
     final String? fromDate = searchFilterController.frametwelveController.text;
     final String? toDate = searchFilterController.frametwelveoneController.text;
@@ -177,14 +182,14 @@ import 'package:iynfluencer/presentation/search_results_screen/search_results_sc
     final SelectionPopupModel? selectedCountry =
         searchFilterController.selectedDropDownValue1;
 
-    searchFilterController.searchResultController.filterInfluencers(
+    controllers.filterInfluencers(
       fromDate: fromDate,
       toDate: toDate,
       selectedNiche: selectedNiche,
       selectedCountry: selectedCountry,
     );
 
-      if (searchFilterController.searchResultController.filteredInfluencers.isEmpty) {
+      if (controllers.filteredInfluencers.isEmpty) {
     Get.snackbar(
       'No Influencers Found',
       'There are no influencers matching your filter.',

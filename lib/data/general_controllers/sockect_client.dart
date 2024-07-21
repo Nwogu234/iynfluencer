@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -11,8 +13,10 @@ class SocketClient extends GetxService {
   Rx<Message?> receivedMessage = Rx<Message?>(null);
   var sentMessages = <Message>[].obs;
   UserController user = Get.find<UserController>();
+  Timer? keepAliveTimer;
 
-  static SocketClient get to => Get.find();  // Singleton pattern for easy access
+  // Make SocketClient a singleton
+  static SocketClient get to => Get.find(); // Singleton pattern for easy access
 
   @override
   void onInit() {
@@ -20,19 +24,26 @@ class SocketClient extends GetxService {
     _initSocket();
   }
 
+
+
   void _initSocket() async {
+    // Initialize the socket connection
     var storage = FlutterSecureStorage();
     var token = await storage.read(key: 'token');
-    print('socket has been called');
-   try {
-      socket = IO.io('wss://iynf-chat-hgkkb.ondigitalocean.app', <String, dynamic>{
+    try {
+      socket =
+          IO.io('wss://iynf-chat-afosd.ondigitalocean.app/', <String, dynamic>{
         'transports': ['websocket'],
         'extraHeaders': {'authorization': token},
         'autoConnect': true,
         'reconnection': true,
-        'reconnectionAttempts': 10000,
+      //  'reconnectionAttempts': 100000,
         'path': '/chat-socket',
-        'timeout': 30000,
+        'timeout': 30000000,
+        'reconnectionAttempts': null,
+        'reconnectionDelay': 1000, 
+        'reconnectionDelayMax': 3000,
+        'randomizationFactor': 0.5,
       });
       socket.connect();
       connect();
@@ -78,25 +89,23 @@ class SocketClient extends GetxService {
     socket.on('userJoin', (data) => _handleUserEvent(data, "joined"));
     socket.on('userLeave', (data) => _handleUserEvent(data, "left"));
   }
-
-  void _handleNewMessage(dynamic data) {
-    Message newMessage = Message.fromJson(data);
-    receivedMessage.value = newMessage;
-    sentMessages.add(newMessage);
-    Get.log('New message received: $data');
-  }
+  
 
   void _handleUserEvent(dynamic data, String eventType) {
+    if (data is String) {
+     data = json.decode(data);
+   }
     var chatId = data['chatId'];
     var userFirstName = user.userModelObj().firstName;
     if (chatId != null && userFirstName != null) {
-      Get.log('User $userFirstName has $eventType the chat with chat ID: $chatId');
+      Get.log(
+          'User $userFirstName has $eventType the chat with chat ID: $chatId');
     } else {
       Get.log('Incomplete data received for $eventType event', isError: true);
     }
   }
 
-  void sendMessage(ChatData chatData, String messageText) {
+  void sendMessage(ChatData chatData, dynamic messageText) {
     if (isConnected.value) {
       try {
         socket.emit('onMessageCreate', {

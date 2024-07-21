@@ -39,7 +39,7 @@ class SearchResultsScreen extends StatefulWidget {
 class _SearchResultsScreenState extends State<SearchResultsScreen>
     with SingleTickerProviderStateMixin {
   SearchResultsController controller =
-      Get.put(SearchResultsController());
+      Get.put(SearchResultsController(SearchResultsModel().obs));
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
   

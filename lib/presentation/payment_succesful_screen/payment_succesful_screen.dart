@@ -1,3 +1,7 @@
+import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
+import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+
 import 'controller/payment_succesful_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -5,10 +9,12 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 
 // ignore_for_file: must_be_immutable
 class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
-  const PaymentSuccesfulScreen({Key? key})
+  PaymentSuccesfulScreen({Key? key})
       : super(
           key: key,
         );
+
+  final args = Get.arguments as BidsArguments;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +86,9 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
           ),
         ),
         bottomNavigationBar: CustomButton(
+          onTap: () {
+            onTapAfter(args);
+          },
           height: getVerticalSize(
             46,
           ),
@@ -93,5 +102,10 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
         ),
       ),
     );
+  }
+
+  onTapAfter(BidsArguments bidsArguments) {
+    Get.toNamed(AppRoutes.creatorAfterJobDetailsScreen,
+        arguments: bidsArguments);
   }
 }

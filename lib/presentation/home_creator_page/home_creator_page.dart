@@ -107,12 +107,12 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                     margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
                     onTap: openDrawer,
                      radius: BorderRadius.circular(
-                       getSize(25.0),
+                       getSize(25.r),
                         ),
                   ),
                 );
             }),
-            leadingWidth: 50,
+            leadingWidth: 60,
             actions: [
               Container(
                 child: AppbarSearchview(

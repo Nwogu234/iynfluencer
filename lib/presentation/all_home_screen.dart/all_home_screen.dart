@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,10 +9,13 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/listrectangle50_item_widget.dart';
 import 'package:iynfluencer/presentation/home_creator_page/widgets/trendinghorizon_item_widget.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
@@ -29,8 +34,15 @@ class AllHomePage extends StatefulWidget {
 
 class _AllHomePageState extends State<AllHomePage>
     with SingleTickerProviderStateMixin {
+      
   HomeCreatorController controller =
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
+
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
+  //   final MessagesController messagesController = Get.find<MessagesController>();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
@@ -41,7 +53,12 @@ class _AllHomePageState extends State<AllHomePage>
       return StaggeredGridTile.count(
         crossAxisCellCount: crossAxisCellCount,
         mainAxisCellCount: 1, // Assuming all tiles have the same height
-        child: StaggeredWidget(user: influencers[index]),
+        child: StaggeredWidget(
+          user: influencers[index],
+          chatData: index < messagesController.chatList.length
+             ? messagesController.chatList[index]
+           : null,
+          ),
       );
     });
   }
@@ -65,40 +82,34 @@ class _AllHomePageState extends State<AllHomePage>
     )..repeat();
     //   controller.loadRecommendedInfluencers(); // Load initial data
     _scrollController.addListener(_onScroll);
+    //Get.put(MessagesController(MessagesModel().obs));
   }
 
   @override
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
+   // messagesController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(body: Obx(() {
+    return SafeArea(child: Scaffold(
+      //   key: _scaffoldKey,
+        body: Obx(() {
       if (controller.isLoading.value) {
         return Container(
-          height: getHorizontalSize(200),
-          child: Stack(
-            children: [
-              Center(
+            height: getHorizontalSize(200),
+            child: Center(
                 child: CustomLoadingWidget(
-                  animationController: animationController,
-                ),
-              ),
-            ],
-          ),
-        );
+              animationController: animationController,
+            )));
       } else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-          top: 150,
-          start: 150,
-          child: ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: controller.getUser(),
-            fullPage: true,
-          ),
+        return ResponsiveErrorWidget(
+          errorMessage: controller.error.value,
+          onRetry: controller.getUser,
+          fullPage: true,
         );
       } else {
         return SingleChildScrollView(
@@ -112,19 +123,21 @@ class _AllHomePageState extends State<AllHomePage>
                 Text(
                   "Featured Influencers".tr,
                   textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold16
-                      .copyWith(
+                  style: AppStyle.txtSatoshiBold16.copyWith(
                     fontSize: 16.sp,
                     color: ColorConstant.black900,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SingleChildScrollView(
-                  child: StaggeredGrid.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 5,
-                    crossAxisSpacing: 5,
-                    children: controller.tiles,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      children: controller.tiles,
+                    ),
                   ),
                 ),
                 Padding(
@@ -165,7 +178,11 @@ class _AllHomePageState extends State<AllHomePage>
                               return Padding(
                                 padding: EdgeInsets.only(right: 10.w),
                                 child: TrendinghorizonItemWidget(
-                                    controller.trendingInfluencers[index]),
+                                    controller.trendingInfluencers[index],
+                                    index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                    ),
                               );
                             }
                           },
@@ -174,10 +191,11 @@ class _AllHomePageState extends State<AllHomePage>
                     ],
                   ),
                 ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: getPadding(top: 40,left:5),
+                      padding: getPadding(top: 40, left: 5),
                       child: Text(
                         'For You',
                         textAlign: TextAlign.left,
@@ -188,14 +206,18 @@ class _AllHomePageState extends State<AllHomePage>
                         ),
                       ),
                     ),
-
                     Padding(
-                      padding: getPadding(left: 5,bottom: 5,right: 10),
-                      child: Text("Based on your activity, we suggest these influencers.".tr,
+                      padding: getPadding(left: 5, bottom: 5, right: 10),
+                      child: Text(
+                          "Based on your activity, we suggest these influencers."
+                              .tr,
                           textAlign: TextAlign.start,
                           style: AppStyle.txtSatoshiMedium),
                     ),
-                    Divider(height: 0.1,thickness: 0.1,)
+                    Divider(
+                      height: 0.1,
+                      thickness: 0.1,
+                    )
                   ],
                 ),
                 SizedBox(height: 15.h),
@@ -203,6 +225,13 @@ class _AllHomePageState extends State<AllHomePage>
                   controller: _scrollController,
                   child: Column(
                     children: [
+                      /* for (var index = 0;
+                          index <
+                              (controller.isRecommendedLoading.value ||
+                                      messagesController.isTrendLoading.value
+                                  ? 5
+                                  : maxIndex);
+                          index++) */
                       for (var index = 0;
                           index <
                               (controller.isRecommendedLoading.value
@@ -210,16 +239,15 @@ class _AllHomePageState extends State<AllHomePage>
                                   : controller.recommendedInfluencers.length);
                           index++)
                         Padding(
-                          padding: EdgeInsets.only(bottom: 24.h),
-                          child: controller.isRecommendedLoading.value
-                              ? Listrectangle50ItemSkeletonWidget()
-                              : Listrectangle50ItemWidget(
-                                  controller.recommendedInfluencers[index],
-                                  
-
-                                  
-                                  ),
-                        ),
+                            padding: EdgeInsets.only(bottom: 24.h),
+                            child: controller.isRecommendedLoading.value
+                                ? Listrectangle50ItemSkeletonWidget()
+                                : Listrectangle50ItemWidget(
+                                    controller.recommendedInfluencers[index],
+                                    index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                  )),
                     ],
                   ),
                 ),

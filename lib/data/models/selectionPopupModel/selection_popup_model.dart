@@ -12,8 +12,7 @@ class SelectionPopupModel {
     this.value,
     this.isSelected = false,
   });
-
-  @override
+ @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SelectionPopupModel &&
@@ -25,7 +24,7 @@ class SelectionPopupModel {
   @override
   int get hashCode => id.hashCode ^ title.hashCode ^ value.hashCode;
 
-  @override
+   @override
   String toString() {
     return 'SelectionPopupModel {id: $id, title: $title, value: $value, isSelected: $isSelected}';
   }
