@@ -96,6 +96,8 @@ class ColorConstant {
 
   static Color pink400 = fromHex('#f74f73');
 
+  static Color strk100 = fromHex('#E0E5ED');
+
   static Color gray90002 = fromHex('#001c30');
 
   static Color whiteA700E5 = fromHex('#e5ffffff');
@@ -115,6 +117,10 @@ class ColorConstant {
   static Color blueGray600 = fromHex('#615e82');
 
   static Color gray900 = fromHex('#222222');
+
+  static Color deepgray = fromHex('#3D8352');
+
+  static Color lightgray = fromHex('#CAF9D2');
 
   static Color gray90001 = fromHex('#001c2f');
 
@@ -145,6 +151,10 @@ class ColorConstant {
   static Color gray300B2 = fromHex('#b2dbdbde');
 
   static Color yellow200 = fromHex('#F7FF00');
+
+  static Color lightPink222 = fromHex('#F9CACA');
+
+  static Color lightRed222 = fromHex('#833D3D');
 
   static Color fromHex(String hexString) {
     final buffer = StringBuffer();

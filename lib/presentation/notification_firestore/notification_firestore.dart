@@ -77,19 +77,21 @@ class _NotificationFirestoreState extends State<NotificationFirestore>
                 ),
               );
             } else if (controller.notifications.isEmpty) {
-              return Center(
-                child: Text('No notifications found'),
-              );
+              return ResponsiveEmptyWidget(
+                  errorMessage: 'No Notifications found',
+                  smallMessage: 'Your Notifications will appear here',
+                  buttonText: "Ooops",
+                  onRetry: () {});
             } else {
               return ListView.separated(
                 physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 itemCount: controller.notifications.length,
                 separatorBuilder: (context, index) => Divider(thickness: 0.1),
                 itemBuilder: (context, index) {
                   MNotification notification = controller.notifications[index];
-                  return NotificationWidget(
-                    notication: notification);
+                  return NotificationWidget(notication: notification);
                 },
               );
             }

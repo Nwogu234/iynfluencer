@@ -178,6 +178,7 @@ class JobBid {
   String? createdAt;
   String? updatedAt;
   int? version;
+  bool? paymentStatus;
 
   JobBid({
      this.id,
@@ -190,6 +191,7 @@ class JobBid {
      this.createdAt,
     this.updatedAt,
     this.version,
+    this.paymentStatus
   });
 
   factory JobBid.fromJson(Map<String, dynamic> json) {
@@ -204,6 +206,7 @@ class JobBid {
       createdAt : json['createdAt'],
       updatedAt : json['updatedAt'],
       version: json['version'],
+      paymentStatus: json['paymentStatus']
     );
   }
 

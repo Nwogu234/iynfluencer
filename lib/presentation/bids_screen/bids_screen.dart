@@ -22,6 +22,8 @@ class BidsScreen extends GetWidget<BidsController> {
 
   final MessagesController messagesController =
       Get.put(MessagesController(MessagesModel().obs));
+      
+
   @override
   Widget build(BuildContext context) {
     String? jobId = selectedJob.jobId;
@@ -52,39 +54,39 @@ class BidsScreen extends GetWidget<BidsController> {
               Padding(
                 padding: getPadding(left: 22),
                 child: Row(
-                    // children: [
-                    //   RichText(
-                    //       text: TextSpan(children: [
-                    //         TextSpan(
-                    //             text: "lbl_all_bids2".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray900,
-                    //                 fontSize: getFontSize(14),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700)),
-                    //         TextSpan(
-                    //             text: "  ".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray600,
-                    //                 fontSize: getFontSize(14),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700)),
-                    //         TextSpan(
-                    //             text: "lbl_12".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray600,
-                    //                 fontSize: getFontSize(13),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700))
-                    //       ]),
-                    //       textAlign: TextAlign.left),
-                    //   CustomImageView(
-                    //     svgPath: ImageConstant.imgArrowup,
-                    //     height: getSize(20),
-                    //     width: getSize(20),
-                    //     margin: getMargin(left: 6),
-                    //   ),
-                    // ],
+                     children: [
+                       RichText(
+                           text: TextSpan(children: [
+                            TextSpan(
+                                text: "lbl_all_bids2".tr,
+                                style: TextStyle(
+                                    color: ColorConstant.gray900,
+                                    fontSize: getFontSize(14),
+                                     fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700)),
+                             TextSpan(
+                                text: "  ".tr,
+                                style: TextStyle(
+                                    color: ColorConstant.gray600,
+                                    fontSize: getFontSize(14),
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700)),
+                             TextSpan(
+                                text: selectedJob.bidsCount.toString().tr,
+                                style: TextStyle(
+                                     color: ColorConstant.gray600,
+                                    fontSize: getFontSize(13),
+                                     fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700))
+                           ]),
+                           textAlign: TextAlign.left),
+                       CustomImageView(
+                         svgPath: ImageConstant.imgArrowup,
+                        height: getSize(20),
+                         width: getSize(20),
+                         margin: getMargin(left: 6),
+                      ),
+                    ],
                     ),
               ),
               Expanded(
