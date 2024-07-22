@@ -98,8 +98,8 @@ class JobsJobsInfluencerController extends GetxController {
 
   @override
   void onClose() {
-    bumcont.dispose();
-    infTabcont.dispose();
+    // bumcont.dispose();
+    // infTabcont.dispose();
     super.onClose();
   }
 }

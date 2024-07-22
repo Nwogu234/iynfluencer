@@ -3,6 +3,7 @@ import 'package:iynfluencer/presentation/home_creator_page/controller/home_creat
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import '../../data/general_controllers/user_controller.dart';
 import '../creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'controller/creator_hireslist_tab_container_controller.dart';
 import 'models/creator_hireslist_tab_container_model.dart';
@@ -21,8 +22,8 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
       CreatorHireslistTabContainerModel().obs));
 
   GlobalKey<ScaffoldState> _scaffoldKey1 = GlobalKey<ScaffoldState>();
-  HomeCreatorController homeController =
-      Get.put(HomeCreatorController(HomeCreatorModel().obs));
+  UserController userController =
+      Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class CreatorHireslistTabContainerPage extends StatelessWidget {
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   AppbarCircleimage(
-                    url: homeController.user.userModelObj.value.avatar,
+                    url: userController.userModelObj.value.avatar,
                     margin: EdgeInsets.only(top: 10, bottom: 14),
                     onTap: openDrawer,
                   ),

@@ -32,12 +32,9 @@ class CreatorJobslistController extends GetxController {
 //this is for animation
   late AnimationController animationController;
 
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
+  // void initializeAnimationController(TickerProvider vsync) {
+  //
+  // }
 
 //*animation stops here
   getUser() async {

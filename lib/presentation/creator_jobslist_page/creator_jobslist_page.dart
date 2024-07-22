@@ -51,8 +51,6 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
   @override
   void dispose() {
     animationController.dispose();
-    bumcont.dispose();
-    homcont.dispose();
     super.dispose();
   }
 

@@ -180,7 +180,7 @@ class CreatorHireslistPage extends StatefulWidget {
 class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     with SingleTickerProviderStateMixin {
   late CreatorHireslistController controller;
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _hiredListScaffoldKey = GlobalKey<ScaffoldState>();
   // Initialize creatorJobslistModelObj here
   final creatorHireslistModelObj = CreatorHireslistModel();
   // List<JobRequest> jobpostingItemList = [];
@@ -210,7 +210,7 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
     return SafeArea(
       child: Scaffold(
-        key: _scaffoldKey,
+        key: _hiredListScaffoldKey,
         backgroundColor: Colors.transparent,
         body: RefreshIndicator(
           onRefresh: _refresh,
