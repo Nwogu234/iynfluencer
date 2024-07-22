@@ -16,6 +16,7 @@ class JobBids {
   String? hiredId;
   Influencer? influencer;
   String? id;
+  bool? paymentStatus;
 
   JobBids(
       {this.sId,
@@ -31,25 +32,28 @@ class JobBids {
       this.hired,
       this.hiredId,
       this.influencer,
-      this.id});
+      this.id,
+      this.paymentStatus});
 
   JobBids.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    jobId = json['jobId'];
-    influencerId = json['influencerId'];
-    coverLetter = json['coverLetter'];
-    price = json['price'];
-    status = json['status'];
-    bidId = json['bidId'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-    hired = json['hired'];
-    hiredId = json['hiredId'];
+    sId = json['_id'] ?? '';
+    jobId = json['jobId'] ?? '';
+    influencerId = json['influencerId'] ?? '';
+    coverLetter = json['coverLetter'] ?? '';
+    price = json['price'] ?? 0;
+    status = json['status'] ?? '';
+    bidId = json['bidId'] ?? '';
+    createdAt = json['createdAt'] ?? '';
+    updatedAt = json['updatedAt'] ?? '';
+    iV = json['__v'] ?? 0;
+    hired = json['hired'] ?? false;
+    hiredId = json['hiredId'] ?? '';
     influencer = json['influencer'] != null
         ? new Influencer.fromJson(json['influencer'])
         : null;
-    id = json['id'];
+    id = json['id'] ?? '';
+    paymentStatus =
+        json['paymentStatus'] != null ? json['paymentStatus'] : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -70,11 +74,12 @@ class JobBids {
       data['influencer'] = this.influencer!.toJson();
     }
     data['id'] = this.id;
+    data['paymentStatus'] = this.paymentStatus;
     return data;
   }
 }
- 
-class Influencer{
+
+class Influencer {
   String? sId;
   String? userId;
   List<String>? niche;
@@ -273,7 +278,7 @@ class User {
     data['avatar'] = this.avatar;
     return data;
   }
-} 
+}
 
 class Creator {
   final String? id;

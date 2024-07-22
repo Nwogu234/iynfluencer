@@ -94,7 +94,7 @@ class CompletPaymentController extends GetxController {
           ),
         );
 
-        displayPaymentSheet(reference, bidsArguments);
+        displayPaymentSheet(reference, bidsArguments, clientSecret);
       } else {
         print(
             'Failed to create with Transaction: ${paymentIntentResponse.statusCode}, ${paymentIntentResponse.body}');
@@ -106,13 +106,14 @@ class CompletPaymentController extends GetxController {
     }
   }
 
-  Future<void> displayPaymentSheet(String referenceId, BidsArguments bidsArguments) async {
+  Future<void> displayPaymentSheet(String referenceId, BidsArguments bidsArguments, String clientSecret) async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) async {
+      await Stripe.instance.confirmPayment(
+        paymentIntentClientSecret: clientSecret).then((value) async {
         print('success');
         final verifyResponse = await paymentClient.verifyPayment(referenceId);
         // Check if payment is verified
-        if (verifyResponse.body['status']) {
+        if (verifyResponse.body['status'] == true) {
           print('Payment verified: ${verifyResponse.body['message']}');
           Get.toNamed(AppRoutes.paymentSuccesfulScreen, arguments: bidsArguments);
         } else {
@@ -138,7 +139,38 @@ class CompletPaymentController extends GetxController {
         SnackBar(content: Text(e.toString())),
       );
     }
+  } 
+
+
+  /* Future<void> displayPaymentSheet(String referenceId, BidsArguments bidsArguments, String clientSecret) async {
+    try {
+      await Stripe.instance.confirmPayment(
+        paymentIntentClientSecret: clientSecret
+      );
+      
+      final verifyResponse = await paymentClient.verifyPayment(referenceId);
+      
+      if (verifyResponse.body['status'] == true) {
+        print('Payment verified: ${verifyResponse.body['message']}');
+        Get.toNamed(AppRoutes.paymentSuccesfulScreen, arguments: bidsArguments);
+      } else {
+        print('Payment not verified: ${verifyResponse.body['message']}');
+        Get.toNamed(AppRoutes.paymentFailedScreen);
+      }
+    } catch (error) {
+      if (error is StripeException) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('${error.error.localizedMessage}')),
+        );
+      } else {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Stripe Error: $error')),
+        );
+      }
+    }
   }
+
+ */
 
   int calculateAmount(int price) {
     final calculatedAmount = price * 100;

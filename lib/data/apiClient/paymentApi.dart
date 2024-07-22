@@ -125,8 +125,57 @@ class PaymentClient extends GetConnect {
     }
   }
 
+   Future<Response> fetchTransaction(var token) async {
+    Response response;
+    try {
+      response = await get(
+        '/',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of transactions');
+
+      throw Exception('Server error');
+    }
+  }
+
+   Future<Response> fetchAPayment(String transactionId, var token) async {
+    Response response;
+    try {
+      response = await get(
+        '/$transactionId/single',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of transactions');
+
+      throw Exception('Server error');
+    }
+  }
+
   int calculateAmount(int price) {
     final calculatedAmount = (price) * 100;
     return calculatedAmount;
   }
 }
+

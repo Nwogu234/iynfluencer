@@ -82,12 +82,17 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                 svgPath: ImageConstant.imgBookmarkBlueGray400,
                                 height: 24.h,
                                 width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 1.h),
-                                child: Text("msg_saved_influencers".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray900))
+                            GestureDetector(
+                              onTap: (){
+                                onTapMenutab01();
+                              },
+                              child: Padding(
+                                  padding: EdgeInsets.only(left: 14.w, top: 1.h),
+                                  child: Text("Transactions".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray900)),
+                            )
                           ])),
                       GestureDetector(
                           onTap: () {
@@ -235,6 +240,12 @@ class CreatorProfileDraweritem extends StatelessWidget {
   onTapMenutab03() {
     Get.toNamed(
       AppRoutes.notificationFirestore,
+    );
+  }
+
+  onTapMenutab01() {
+    Get.toNamed(
+      AppRoutes.transactionScreen,
     );
   }
 

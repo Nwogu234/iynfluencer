@@ -54,6 +54,9 @@ class ImageConstant {
   static String imgArrowdownGray600 =
       'assets/images/img_arrowdown_gray_600.svg';
 
+  static String imgGreenArrow =
+      'assets/images/green_arrow.svg';
+
   static String imgArrowMark =
       'assets/images/img_mark.svg';
 

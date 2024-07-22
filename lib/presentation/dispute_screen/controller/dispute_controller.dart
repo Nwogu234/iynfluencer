@@ -2,8 +2,9 @@ import 'package:iynfluencer/core/app_export.dart';import 'package:iynfluencer/pr
 ///
 /// This class manages the state of the DisputeScreen, including the
 /// current disputeModelObj
-class DisputeController extends GetxController {Rx<DisputeModel> disputeModelObj = DisputeModel().obs;
+class DisputeController extends GetxController {
+  Rx<DisputeModel> disputeModelObj = DisputeModel().obs;
 
-Rx<String> radioGroup = "".obs;
+ Rx<String> radioGroup = "".obs;
 
  }

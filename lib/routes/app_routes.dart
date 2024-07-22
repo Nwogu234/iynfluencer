@@ -120,6 +120,8 @@ import 'package:iynfluencer/presentation/dispute_screen/dispute_screen.dart';
 import 'package:iynfluencer/presentation/dispute_screen/binding/dispute_binding.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/binding/technology_home_screen_binding.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
+import 'package:iynfluencer/presentation/transactions_screen/binding/transaction_binding.dart';
+import 'package:iynfluencer/presentation/transactions_screen/transaction_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/withdrawal_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/binding/withdrawal_binding.dart';
 import 'package:iynfluencer/presentation/withdrawal_successful_screen/withdrawal_successful_screen.dart';
@@ -236,6 +238,9 @@ class AppRoutes {
 
   static const String editProfileCommPostsPage =
       '/edit_profile_comm_posts_page';
+
+  static const String transactionScreen =
+      '/transaction_screen';
 
   static const String editProfileDetailsScreen = '/edit_profile_details_screen';
 
@@ -753,6 +758,13 @@ class AppRoutes {
       page: () => SearchCreatorScreen(),
       bindings: [
         SearchCreatorBinding(),
+      ],
+    ),
+    GetPage(
+      name: transactionScreen,
+      page: () => TransactionScreen(),
+      bindings: [
+        TransactionBinding(),
       ],
     ),
     GetPage(

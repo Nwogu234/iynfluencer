@@ -229,7 +229,7 @@ class InfluencerDraweritem extends StatelessWidget {
 
   onTapMenutab03() {
     Get.toNamed(
-      AppRoutes.notificationPageClientScreen,
+      AppRoutes.notificationFirestore,
     );
   }
 

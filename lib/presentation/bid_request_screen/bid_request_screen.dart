@@ -264,15 +264,23 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomButton(
-                height: getVerticalSize(44),
-                text: "Payment".tr,
-                padding: ButtonPadding.PaddingAll12,
-                onTap: () {
-                  onTapPay(args);
-                  //   controller.hireInfluencerFunc(data!.bidId!, args);
-                },
-              ),
+               data.paymentStatus == true
+                  ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Job has been paid".tr,
+                      margin: getMargin(top: 10),
+                      variant: ButtonVariant.Neutral,
+                      padding: ButtonPadding.PaddingAll12,
+                      fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+                  : CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Payment".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        onTapPay(args);
+                        //   controller.hireInfluencerFunc(data!.bidId!, args);
+                      },
+                  ),
               CustomButton(
                   height: getVerticalSize(44),
                   text: "lbl_decline".tr,
