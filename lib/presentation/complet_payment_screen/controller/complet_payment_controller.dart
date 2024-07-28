@@ -45,7 +45,7 @@ class CompletPaymentController extends GetxController {
         dataz.bidId!,
         dataz.jobId!,
         dataz.influencerId!,
-        givenPrice,
+        dataz!.price!,
         selectedJob!.creatorId!,
       );
 
