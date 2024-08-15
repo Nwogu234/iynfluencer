@@ -32,7 +32,7 @@ class SocketClient extends GetxService {
     var token = await storage.read(key: 'token');
     try {
       socket =
-          IO.io('wss://iynf-chat-afosd.ondigitalocean.app/', <String, dynamic>{
+          IO.io('wss://iynf-chat.onrender.com/', <String, dynamic>{
         'transports': ['websocket'],
         'extraHeaders': {'authorization': token},
         'autoConnect': true,

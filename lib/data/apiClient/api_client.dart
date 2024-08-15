@@ -21,7 +21,7 @@ class ApiClient extends GetConnect {
   ApiClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://iynf-kong-ko4xr.ondigitalocean.app/api/v1/';
+        'https://iynf-kong.onrender.com/api/v1/';
   }
 
   dynamic errorHandler(Response response) {

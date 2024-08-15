@@ -9,7 +9,7 @@ class PaymentClient extends GetConnect {
   PaymentClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://iynf-kong-ko4xr.ondigitalocean.app/api/v1/payments/transactions';
+        'https://iynf-kong.onrender.com/api/v1/payments/transactions';
   }
 
   dynamic errorHandler(Response response) {
@@ -115,6 +115,7 @@ class PaymentClient extends GetConnect {
         print('Payment verified: ${responseData['message']}');
         return response;
       } else {
+        print(response);
         print(
             'Failed to verify payment: ${response.statusCode}, ${response.body}');
         throw Exception('Failed to verify payment');
