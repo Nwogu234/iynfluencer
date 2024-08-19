@@ -430,7 +430,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                       onTap: () {
                         onTapJob(
                           widget.selectedJob,
-                          widget.chatData
+                          chatControllers.chatData
                         );
                       },
                     )
