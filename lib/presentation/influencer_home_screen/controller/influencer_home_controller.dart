@@ -68,7 +68,7 @@ class InfluencerHomeController extends GetxController {
       if (response.isOk) {
         final responseJson = response.body;
         final jobResponse = JobResponse.fromJson(responseJson);
-        jobsList = jobResponse.data.docs;
+        jobsList = jobResponse.data.docs!;
         infJobsList = jobsList
             .where(
                 (item) => item.creatorId != user.userModelObj.value.creatorId)

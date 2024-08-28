@@ -603,7 +603,7 @@ class ChatsInfluencerController extends GetxController {
             chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
 
         ChatData? existingsChat = chatList.firstWhereOrNull(
-            (chat) => chat.creatorId == selectedJob.creator?.id);
+            (chat) => chat.creatorId == selectedJob.creator?.first.id);
 
         if (existingsChat != null) {
           await fetchAllMessagesWithCreators(existingsChat.chatId);
@@ -633,9 +633,9 @@ class ChatsInfluencerController extends GetxController {
 
           ChatData newsChat = ChatData(
             id: '',
-            creatorId: selectedJob.creator?.id ?? '',
+            creatorId: selectedJob.creator?.first.id ?? '',
             influencerId: influencerId,
-            creatorUserId: selectedJob.creator?.userId ?? '',
+            creatorUserId: selectedJob.creator?.first.userId ?? '',
             influencerUserId: influencerUserId,
             unreadByCreator: 0,
             unreadByInfluencer: 0,
@@ -647,8 +647,8 @@ class ChatsInfluencerController extends GetxController {
             messages: [],
           );
 
-          final creatorId = selectedJob.creator?.id ?? '';
-          final creatorUserId = selectedJob.creator?.userId ?? '';
+          final creatorId = selectedJob.creator?.first.id ?? '';
+          final creatorUserId = selectedJob.creator?.first.userId ?? '';
 
           print('creatorId : $creatorId');
           print('creatorUserId : $creatorUserId');

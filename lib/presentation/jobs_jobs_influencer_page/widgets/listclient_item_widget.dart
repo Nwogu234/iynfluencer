@@ -20,11 +20,16 @@ class ListclientItemWidget extends StatelessWidget {
     key: key,
         );
 
-  Job listclientItemModelObj;
+  Job? listclientItemModelObj;
   ChatData? chatData;
 
   @override
   Widget build(BuildContext context) {
+     DateTime? parsedDate =
+        DateTime.tryParse(listclientItemModelObj?.createdAt ?? "lbl_mar_18_2023".tr);
+    String formattedDate = parsedDate != null
+        ? "${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}"
+        : 'Unknown Date';
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -56,9 +61,10 @@ class ListclientItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${listclientItemModelObj.title!.length > 25 ? 
-                          listclientItemModelObj.title!.substring(0, 25) 
-                          : listclientItemModelObj.title!}',
+                         
+                        '${listclientItemModelObj?.title != null && listclientItemModelObj!.title!.length > 25 
+                           ? listclientItemModelObj?.title!.substring(0, 25) 
+                         : listclientItemModelObj?.title ?? ''}',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold16.copyWith(
@@ -107,10 +113,10 @@ class ListclientItemWidget extends StatelessWidget {
                             bottom: 10,
                           ),
                           child: Text(
-                            truncateWithEllipsis(
-                              myString:
-                                  '${listclientItemModelObj.description?.substring(0, 90)}.....',
-                            ),
+                              truncateWithEllipsis(
+                                myString: listclientItemModelObj?.description ?? '',
+                                textLength: 90,
+                                 ),
                              maxLines: null,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -149,8 +155,9 @@ class ListclientItemWidget extends StatelessWidget {
                            Row(
                              children: [
                                CustomImageView(
+                                fit: BoxFit.cover,
                                //  imagePath: ImageConstant.imgGroup85237,
-                                 url: listclientItemModelObj.creator?.user?.avatar,
+                                 url: listclientItemModelObj?.creator?.first.user?.avatar,
                                  height: getSize(
                                    30,
                                  ),
@@ -170,7 +177,7 @@ class ListclientItemWidget extends StatelessWidget {
                                    bottom: 5,
                                  ),
                                  child: Text(
-                                      "${capitalizeFirstLetter(listclientItemModelObj.creator?.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj.creator?.user?.lastName)}",
+                                      "${capitalizeFirstLetter(listclientItemModelObj?.creator?.first.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj?.creator?.first.user?.lastName)}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
                                    style:AppStyle.txtSatoshiLight135Gray600,
@@ -204,15 +211,22 @@ class ListclientItemWidget extends StatelessWidget {
                                width: getHorizontalSize(
                                  82,
                                ),
-                               text: "lbl_completed".tr,
+                               text: '${listclientItemModelObj?.status ?? 'In Progress'}'.tr,
                                margin: getMargin(
                                  top: 3,
                                ),
-                               variant: ButtonVariant.FillGreenA10099,
+                               variant: listclientItemModelObj?.status == 'completed' 
+                             ? ButtonVariant.FillGreenA10099 :
+                              listclientItemModelObj?.status == 'In Progress' 
+                              ?  ButtonVariant.FillLime100b2 
+                              : ButtonVariant.FillRed10099,
                                shape: ButtonShapes.RoundedBorder12,
                                padding: ButtonPadding.PaddingAll4,
-                               fontStyle:
-                                   ButtonFontStyle.SatoshiBold115Green700,
+                               fontStyle: listclientItemModelObj?.status == 'In Progress' 
+                            ? ButtonFontStyle.SatoshiBold115 
+                            : listclientItemModelObj?.status == 'completed' 
+                            ? ButtonFontStyle.SatoshiBold115Green700
+                            : ButtonFontStyle.SatoshiBold115Red700,
                                alignment: Alignment.center,
                              ),
                            ],
@@ -245,7 +259,7 @@ class ListclientItemWidget extends StatelessWidget {
                                  top: 7,
                                ),
                                child: Text(
-                                 "lbl_200".tr,
+                                 "\$${capitalizeFirstLetter(listclientItemModelObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(listclientItemModelObj?.budgetTo.toString())}",
                                  overflow: TextOverflow.ellipsis,
                                  textAlign: TextAlign.left,
                                  style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -271,7 +285,7 @@ class ListclientItemWidget extends StatelessWidget {
                                top: 9,
                              ),
                              child: Text(
-                               "lbl_mar_18_2023".tr,
+                               "$formattedDate".tr,
                                overflow: TextOverflow.ellipsis,
                                textAlign: TextAlign.left,
                                style: AppStyle.txtSatoshiBold125Gray900a7,

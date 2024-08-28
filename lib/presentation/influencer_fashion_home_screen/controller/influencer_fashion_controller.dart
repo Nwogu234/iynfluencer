@@ -68,7 +68,7 @@ class InfluencerFashionController extends GetxController {
     if (response.isOk) {
       final responseJson = response.body;
       final jobResponse = JobResponse.fromJson(responseJson);
-      jobsList = jobResponse.data.docs;
+      jobsList = jobResponse.data.docs!;
 
       // Filter jobs based on the fashion niche and creatorId
       infJobsList = jobsList.where((job) => 

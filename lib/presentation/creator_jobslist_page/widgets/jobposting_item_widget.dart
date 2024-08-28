@@ -23,7 +23,7 @@ class JobpostingItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
-    String? avatarUrl = creatorJobslistModelObj.user?.avatar;
+    String? avatarUrl = creatorJobslistModelObj.user?.first.avatar;
     ImageProvider imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {

@@ -474,7 +474,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? avatarUrl;
     if (widget.selectedJob != null) {
-      avatarUrl =  widget.selectedJob?.creator?.user?.avatar ?? '';
+      avatarUrl =  widget.selectedJob?.creator?.first.user?.avatar ?? '';
       //print(avatarUrl);
       //  avatarUrl =
       //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
@@ -492,7 +492,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     String? name;
     if (widget.selectedJob != null) {
       name =
-          "${capitalizeFirstLetter( widget.selectedJob?.creator?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName ?? 'Adebayo')}";
+          "${capitalizeFirstLetter( widget.selectedJob?.creator?.first.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.lastName ?? 'Adebayo')}";
       // print(name);
       //  name = 'Mark Adebayo';
     } else if (widget.chatData != null) {

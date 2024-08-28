@@ -5,6 +5,7 @@ import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:flutter/material.dart';
+import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 /// A controller class for the BidScreen.
@@ -19,6 +20,7 @@ class EditBidController extends GetxController
   Rx<bool> isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   Rx<String> errorText = "".obs;
+  InfluencerTabsController infcont =   Get.put(InfluencerTabsController());
   var termsAndConditions = <String>[].obs;
   TextEditingController frametwelveController = TextEditingController();
   late AnimationController animationController;
@@ -48,12 +50,22 @@ class EditBidController extends GetxController
   void editForm(BuildContext context, String jobId, String bidId,String userId, String title) async {
     var token = await storage.read(key: 'token');
     if (formKey.currentState!.validate()) {
+
+       if (termsAndConditions.isEmpty) {
+         ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+          content: Text('Please add at least one deliverable before submitting.'),
+         ),
+       );
+       return; 
+      }
       if (frametwelveController.text.length <= 20) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Cover Letter Must be Greater than 20 characters'),
           ),
         );
+
       } else {
         isLoading.value = true;
         final bidData = BidModel(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-class CustomButton extends StatelessWidget {
-  CustomButton(
+class CustozButton extends StatelessWidget {
+  CustozButton(
       {this.shape,
       this.padding,
       this.variant,
@@ -17,13 +17,13 @@ class CustomButton extends StatelessWidget {
       this.prefixWidget,
       this.suffixWidget});
 
-  ButtonShapes? shape;
+  ButtonShapeszz? shape;
 
-  ButtonPadding? padding;
+  ButtonPaddingzz? padding;
 
-  ButtonVariant? variant;
+  ButtonVariantzz? variant;
 
-  ButtonFontStyle? fontStyle;
+  ButtonFontStylezz? fontStyle;
 
   Alignment? alignment;
 
@@ -67,7 +67,7 @@ class CustomButton extends StatelessWidget {
   _buildButtonWithOrWithoutIcon() {
     if (prefixWidget != null || suffixWidget != null) {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           prefixWidget ?? SizedBox(),
           loading
@@ -75,11 +75,14 @@ class CustomButton extends StatelessWidget {
                   color: Colors.white,
                   strokeWidth: 1,
                 )
-              : Text(
-                  text ?? "",
-                  textAlign: TextAlign.center,
-                  style: _setFontStyle(),
-                ),
+              : Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    text ?? "",
+                    textAlign: TextAlign.left,
+                    style: _setFontStyle(),
+                  ),
+              ),
           suffixWidget ?? SizedBox(),
         ],
       );
@@ -122,53 +125,53 @@ class CustomButton extends StatelessWidget {
 
   _setPadding() {
     switch (padding) {
-      case ButtonPadding.PaddingAll15:
+      case ButtonPaddingzz.PaddingAll15:
         return getPadding(
           all: 15,
         );
-      case ButtonPadding.PaddingAll12:
+      case ButtonPaddingzz.PaddingAll12:
         return getPadding(
           all: 12,
         );
-      case ButtonPadding.PaddingT12:
+      case ButtonPaddingzz.PaddingT12:
         return getPadding(
           top: 12,
           right: 12,
           bottom: 12,
         );
-      case ButtonPadding.PaddingAll4:
+      case ButtonPaddingzz.PaddingAll4:
         return getPadding(
           top:3,
           bottom:3,
           right:11,
           left:11
         );
-      case ButtonPadding.PaddingT4:
+      case ButtonPaddingzz.PaddingT4:
         return getPadding(
           top: 4,
           right: 4,
           bottom: 4,
         );
-      case ButtonPadding.PaddingT13:
+      case ButtonPaddingzz.PaddingT13:
         return getPadding(
           left: 13,
           top: 13,
           bottom: 13,
         );
-      case ButtonPadding.PaddingT8:
+      case ButtonPaddingzz.PaddingT8:
         return getPadding(
           top: 8,
           right: 8,
           bottom: 8,
         );
-      case ButtonPadding.PaddingT32:
+      case ButtonPaddingzz.PaddingT32:
         return getPadding(
           left: 30,
           top: 32,
           right: 32,
           bottom: 32,
         );
-      case ButtonPadding.PaddingT52:
+      case ButtonPaddingzz.PaddingT52:
         return getPadding(
           left: 12,
           top: 8,
@@ -184,39 +187,39 @@ class CustomButton extends StatelessWidget {
 
   _setColor() {
     switch (variant) {
-      case ButtonVariant.Neutral:
+      case ButtonVariantzz.Neutral:
         return ColorConstant.gray200;
-      case ButtonVariant.OutlineGray300b2:
+      case ButtonVariantzz.OutlineGray300b2:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillLime100b2:
+      case ButtonVariantzz.FillLime100b2:
         return ColorConstant.lime100B2;
-      case ButtonVariant.OutlineIndigo50_1:
+      case ButtonVariantzz.OutlineIndigo50_1:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillCyan30083:
+      case ButtonVariantzz.FillCyan30083:
         return ColorConstant.cyan30083;
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariantzz.OutlineIndigo50_2:
         return ColorConstant.whiteA700;
-      case ButtonVariant.FillGray200ab:
+      case ButtonVariantzz.FillGray200ab:
         return ColorConstant.gray200Ab;
-      case ButtonVariant.FillGray20087:
+      case ButtonVariantzz.FillGray20087:
         return ColorConstant.gray20087;
-      case ButtonVariant.FillCyan3005e:
+      case ButtonVariantzz.FillCyan3005e:
         return ColorConstant.cyan3005e;
-      case ButtonVariant.FillGreenA10099:
+      case ButtonVariantzz.FillGreenA10099:
         return ColorConstant.greenA10099;
-      case ButtonVariant.FillRed10099:
+      case ButtonVariantzz.FillRed10099:
         return ColorConstant.red10099;
-      case ButtonVariant.FillGray20003:
+      case ButtonVariantzz.FillGray20003:
         return ColorConstant.gray20003;
-      case ButtonVariant.FillRedA700:
+      case ButtonVariantzz.FillRedA700:
         return ColorConstant.redA700;
-      case ButtonVariant.gray700:
+      case ButtonVariantzz.gray700:
         return ColorConstant.gray100;
-      case ButtonVariant.FillCyan30066:
+      case ButtonVariantzz.FillCyan30066:
         return ColorConstant.cyan30066;
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariantzz.OutlineIndigo50_3:
         return ColorConstant.whiteA700;
-      case ButtonVariant.OutlineIndigo50:
+      case ButtonVariantzz.OutlineIndigo50:
         return null;
       default:
         return ColorConstant.cyan300;
@@ -225,53 +228,53 @@ class CustomButton extends StatelessWidget {
 
   _setTextButtonBorder() {
     switch (variant) {
-      case ButtonVariant.OutlineGray300b2:
+      case ButtonVariantzz.OutlineGray300b2:
         return BorderSide(
           color: ColorConstant.gray300B2,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_1:
+      case ButtonVariantzz.OutlineIndigo50_1:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariantzz.OutlineIndigo50_2:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50:
+      case ButtonVariantzz.OutlineIndigo50:
         return BorderSide(
           color: ColorConstant.gray600,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariantzz.OutlineIndigo50_3:
         return BorderSide(
           color: ColorConstant.indigo50,
           width: getHorizontalSize(
             1.00,
           ),
         );
-      case ButtonVariant.FillCyan300:
-      case ButtonVariant.Neutral:
-      case ButtonVariant.FillLime100b2:
-      case ButtonVariant.FillCyan30083:
-      case ButtonVariant.FillGray200ab:
-      case ButtonVariant.FillGray20087:
-      case ButtonVariant.FillCyan3005e:
-      case ButtonVariant.FillGreenA10099:
-      case ButtonVariant.FillRed10099:
-      case ButtonVariant.FillGray20003:
-      case ButtonVariant.FillRedA700:
-      case ButtonVariant.FillCyan30066:
+      case ButtonVariantzz.FillCyan300:
+      case ButtonVariantzz.Neutral:
+      case ButtonVariantzz.FillLime100b2:
+      case ButtonVariantzz.FillCyan30083:
+      case ButtonVariantzz.FillGray200ab:
+      case ButtonVariantzz.FillGray20087:
+      case ButtonVariantzz.FillCyan3005e:
+      case ButtonVariantzz.FillGreenA10099:
+      case ButtonVariantzz.FillRed10099:
+      case ButtonVariantzz.FillGray20003:
+      case ButtonVariantzz.FillRedA700:
+      case ButtonVariantzz.FillCyan30066:
         return null;
       default:
         return null;
@@ -280,24 +283,24 @@ class CustomButton extends StatelessWidget {
 
   _setTextButtonShadowColor() {
     switch (variant) {
-      case ButtonVariant.OutlineIndigo50_2:
+      case ButtonVariantzz.OutlineIndigo50_2:
         return ColorConstant.gray9000c;
-      case ButtonVariant.FillCyan300:
-      case ButtonVariant.Neutral:
-      case ButtonVariant.OutlineGray300b2:
-      case ButtonVariant.FillLime100b2:
-      case ButtonVariant.OutlineIndigo50_1:
-      case ButtonVariant.FillCyan30083:
-      case ButtonVariant.FillGray200ab:
-      case ButtonVariant.FillGray20087:
-      case ButtonVariant.FillCyan3005e:
-      case ButtonVariant.FillGreenA10099:
-      case ButtonVariant.OutlineIndigo50:
-      case ButtonVariant.FillRed10099:
-      case ButtonVariant.FillGray20003:
-      case ButtonVariant.FillRedA700:
-      case ButtonVariant.FillCyan30066:
-      case ButtonVariant.OutlineIndigo50_3:
+      case ButtonVariantzz.FillCyan300:
+      case ButtonVariantzz.Neutral:
+      case ButtonVariantzz.OutlineGray300b2:
+      case ButtonVariantzz.FillLime100b2:
+      case ButtonVariantzz.OutlineIndigo50_1:
+      case ButtonVariantzz.FillCyan30083:
+      case ButtonVariantzz.FillGray200ab:
+      case ButtonVariantzz.FillGray20087:
+      case ButtonVariantzz.FillCyan3005e:
+      case ButtonVariantzz.FillGreenA10099:
+      case ButtonVariantzz.OutlineIndigo50:
+      case ButtonVariantzz.FillRed10099:
+      case ButtonVariantzz.FillGray20003:
+      case ButtonVariantzz.FillRedA700:
+      case ButtonVariantzz.FillCyan30066:
+      case ButtonVariantzz.OutlineIndigo50_3:
         return null;
       default:
         return null;
@@ -306,25 +309,25 @@ class CustomButton extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShapes.RoundedBorder12:
+      case ButtonShapeszz.RoundedBorder12:
         return BorderRadius.circular(
           getHorizontalSize(
             25.00,
           ),
         );
-      case ButtonShapes.RoundedBorder122:
+      case ButtonShapeszz.RoundedBorder122:
         return BorderRadius.circular(
           getHorizontalSize(
             30.00,
           ),
         );
-      case ButtonShapes.RoundedBorder3:
+      case ButtonShapeszz.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
             3.00,
           ),
         );
-      case ButtonShapes.Square:
+      case ButtonShapeszz.Square:
         return BorderRadius.circular(0);
       default:
         return BorderRadius.circular(
@@ -337,7 +340,7 @@ class CustomButton extends StatelessWidget {
 
   _setFontStyle() {
     switch (fontStyle) {
-      case ButtonFontStyle.SatoshiBold14:
+      case ButtonFontStylezz.SatoshiBold14:
         return TextStyle(
           color: ColorConstant.gray90001,
           fontSize: getFontSize(
@@ -346,7 +349,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray90002:
+      case ButtonFontStylezz.SatoshiBold14Gray90002:
         return TextStyle(
           color: ColorConstant.gray90002,
           fontSize: getFontSize(
@@ -355,7 +358,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray600:
+      case ButtonFontStylezz.SatoshiBold14Gray600:
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
@@ -364,7 +367,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray100:
+      case ButtonFontStylezz.SatoshiBold14Gray100:
         return TextStyle(
           color: ColorConstant.gray100,
           fontSize: getFontSize(
@@ -373,7 +376,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiLight14:
+      case ButtonFontStylezz.SatoshiLight14:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -382,7 +385,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w300,
         );
-      case ButtonFontStyle.SatoshiBold115:
+      case ButtonFontStylezz.SatoshiBold115:
         return TextStyle(
           color: ColorConstant.redA600,
           fontSize: getFontSize(
@@ -391,7 +394,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold12:
+      case ButtonFontStylezz.SatoshiBold12:
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
@@ -400,7 +403,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold12Gray900ab:
+      case ButtonFontStylezz.SatoshiBold12Gray900ab:
         return TextStyle(
           color: ColorConstant.gray900Ab,
           fontSize: getFontSize(
@@ -409,7 +412,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold13:
+      case ButtonFontStylezz.SatoshiBold13:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -418,7 +421,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray900:
+      case ButtonFontStylezz.SatoshiBold14Gray900:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -427,7 +430,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold15:
+      case ButtonFontStylezz.SatoshiBold15:
         return TextStyle(
           color: ColorConstant.gray100,
           fontSize: getFontSize(
@@ -436,7 +439,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold15Gray900:
+      case ButtonFontStylezz.SatoshiBold15Gray900:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -445,7 +448,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold115Green700:
+      case ButtonFontStylezz.SatoshiBold115Green700:
         return TextStyle(
           color: ColorConstant.green700,
           fontSize: getFontSize(
@@ -454,7 +457,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w800,
         );
-      case ButtonFontStyle.SatoshiBold115Red700:
+      case ButtonFontStylezz.SatoshiBold115Red700:
         return TextStyle(
           color:  ColorConstant.redA600,
           fontSize: getFontSize(
@@ -463,7 +466,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w800,
         );
-      case ButtonFontStyle.SatoshiBold135:
+      case ButtonFontStylezz.SatoshiBold135:
         return TextStyle(
           color: ColorConstant.gray900B0,
           fontSize: getFontSize(
@@ -472,7 +475,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.bold,
         );
-      case ButtonFontStyle.SatoshiBold115Gray90003:
+      case ButtonFontStylezz.SatoshiBold115Gray90003:
         return TextStyle(
           color: ColorConstant.gray90003,
           fontSize: getFontSize(
@@ -481,7 +484,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Black900:
+      case ButtonFontStylezz.SatoshiBold14Black900:
         return TextStyle(
           color: ColorConstant.black900,
           fontSize: getFontSize(
@@ -490,7 +493,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold14Gray200:
+      case ButtonFontStylezz.SatoshiBold14Gray200:
         return TextStyle(
           color: ColorConstant.gray200,
           fontSize: getFontSize(
@@ -499,7 +502,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiLight16:
+      case ButtonFontStylezz.SatoshiLight16:
         return TextStyle(
           color: ColorConstant.gray900,
           fontSize: getFontSize(
@@ -508,7 +511,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w300,
         );
-      case ButtonFontStyle.SatoshiBold13WhiteA700:
+      case ButtonFontStylezz.SatoshiBold13WhiteA700:
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
@@ -517,7 +520,7 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
-      case ButtonFontStyle.SatoshiBold13White700:
+      case ButtonFontStylezz.SatoshiBold13White700:
         return TextStyle(
           color: ColorConstant.whiteA700,
           fontSize: getFontSize(
@@ -539,7 +542,7 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-enum ButtonShapes {
+enum ButtonShapeszz {
   Square,
   RoundedBorder7,
   RoundedBorder12,
@@ -547,7 +550,7 @@ enum ButtonShapes {
   RoundedBorder122
 }
 
-enum ButtonPadding {
+enum ButtonPaddingzz {
   PaddingAll15,
   PaddingAll12,
   PaddingT12,
@@ -560,7 +563,7 @@ enum ButtonPadding {
   PaddingT52,
 }
 
-enum ButtonVariant {
+enum ButtonVariantzz {
   FillCyan300,
   Neutral,
   OutlineGray300b2,
@@ -582,7 +585,7 @@ enum ButtonVariant {
   gray700
 }
 
-enum ButtonFontStyle {
+enum ButtonFontStylezz {
   SatoshiBold14WhiteA700,
   SatoshiBold13White700,
   SatoshiBold14,

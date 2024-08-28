@@ -36,13 +36,14 @@ class HiresItemWidget extends StatelessWidget {
     }
 
     String? avatarUrl = 
-   'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${hiresItemlistObj?.creator?.userId}-avatar.jpeg' ?? ImageConstant.imgGroup85235x35;
+  // 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${hiresItemlistObj?.user.first.}-avatar.jpeg' ?? ImageConstant.imgGroup85235x35;
+    hiresItemlistObj?.user?.first.avatar ?? ImageConstant.imgGroup85235x35;
     String imageProvider;
 
     print(avatarUrl);
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = "${controller.user.baseUrl}$avatarUrl";
+      imageProvider = avatarUrl;
     } else {
       imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
     }
@@ -99,8 +100,8 @@ class HiresItemWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "\$${capitalizeFirstLetter(hiresItemlistObj?.user?.firstName)}-\$${capitalizeFirstLetter(hiresItemlistObj?.user?.lastName)}",
+                          Text(          
+                          "\$${capitalizeFirstLetter(hiresItemlistObj?.user?.first.firstName)}-\$${capitalizeFirstLetter(hiresItemlistObj?.user?.first.lastName)}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold145,
@@ -129,7 +130,7 @@ class HiresItemWidget extends StatelessWidget {
                                     left: 3,
                                   ),
                                   child: Text(
-                                    hiresItemlistObj?.user?.country ??
+                                    hiresItemlistObj?.user?.first.country ??
                                         "lbl_lagos_nigeria".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
@@ -196,14 +197,22 @@ class HiresItemWidget extends StatelessWidget {
                             width: getHorizontalSize(
                               83,
                             ),
-                            text: "lbl_in_progress".tr,
+                            text: '${hiresItemlistObj?.status ?? ''}'.tr,
                             margin: getMargin(
                               top: 3,
                             ),
-                            variant: ButtonVariant.FillLime100b2,
+                            variant: hiresItemlistObj?.status == 'completed' 
+                             ? ButtonVariant.FillGreenA10099 :
+                              hiresItemlistObj?.status == 'In Progress' 
+                              ?  ButtonVariant.FillLime100b2 
+                              : ButtonVariant.FillRed10099,
                             shape: ButtonShapes.RoundedBorder12,
                             padding: ButtonPadding.PaddingAll4,
-                            fontStyle: ButtonFontStyle.SatoshiBold115,
+                            fontStyle: hiresItemlistObj?.status == 'In Progress' 
+                            ? ButtonFontStyle.SatoshiBold115 
+                            : hiresItemlistObj?.status == 'completed' 
+                            ? ButtonFontStyle.SatoshiBold115Green700
+                            : ButtonFontStyle.SatoshiBold115Red700,
                           ),
                         ],
                       ),
@@ -229,7 +238,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 7,
                             ),
                             child: Text(
-                              "\$${capitalizeFirstLetter(hiresItemlistObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(hiresItemlistObj?.budgetTo.toString())}",
+                             "\$${capitalizeFirstLetter(hiresItemlistObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(hiresItemlistObj?.budgetTo.toString())}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold125Gray900a7,
@@ -258,7 +267,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 9,
                             ),
                             child: Text(
-                              "$formattedDate",
+                             "$formattedDate",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold125Gray900a7,

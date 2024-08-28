@@ -1,5 +1,6 @@
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
+import 'package:iynfluencer/widgets/custoz_button.dart';
 
 import 'controller/bid_controller.dart';
 import 'package:flutter/material.dart';
@@ -169,27 +170,56 @@ class BidScreen extends GetWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "msg_terms_of_contract".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900,
-                        ),
-                        CustomButton(
-                          height: getVerticalSize(44.h),
-                          text: "Add the Terms of Contract",
-                          onTap: () {
-                            controller.startAddingTermsOfContract();
-                          },
-                          margin: getMargin(top: 24.h),
-                          variant: ButtonVariant.OutlineGray300b2,
-                          padding: ButtonPadding.PaddingT12,
-                          fontStyle: ButtonFontStyle.SatoshiLight14,
-                          prefixWidget: Container(
-                            margin: getMargin(right: 6.w),
-                            child: CustomImageView(
-                                svgPath: ImageConstant.imgFrameGray700),
-                          ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top:4),
+                                  child: Text(
+                                    "Add deliverables".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiBold14Gray900
+                                        .copyWith(
+                                            fontSize: 16,
+                                            color: ColorConstant.black900),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                CustomImageView(
+                                  margin: EdgeInsets.only(top: 5),
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.centerRight,
+                                  svgPath: ImageConstant.imgInformation,
+                                  width: getHorizontalSize(20),
+                                  height: getHorizontalSize(20),
+                                  color: ColorConstant.blueGray400,
+                                )
+                              ],
+                            ),
+                            CustomButton(
+                              height: getHorizontalSize(40),
+                              width: getHorizontalSize(70),
+                              prefixWidget: Text(
+                                "+",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.txtSatoshiBold14Gray900
+                                    .copyWith(
+                                        fontSize: 16,
+                                        color: ColorConstant.whiteA700),
+                              ),
+                              text: " Add",
+                              onTap: () {
+                                controller.startAddingTermsOfContract();
+                              },
+                              padding: ButtonPadding.PaddingT52,
+                              fontStyle: ButtonFontStyle.SatoshiBold13WhiteA700,
+                              shape: ButtonShapes.RoundedBorder122,
+                            )
+                          ],
                         ),
                         Obx(() => controller.isAddingTermsOfContract.value
                             ? _buildAccountForm()
@@ -227,7 +257,7 @@ class BidScreen extends GetWidget {
                     controller.submitForm(
                       context, 
                       selectedJob.jobId!,
-                      selectedJob.creator?.userId ?? '',
+                      selectedJob.creator?.first.userId ?? '',
                       selectedJob.title!
                       
                       );
@@ -253,10 +283,36 @@ class BidScreen extends GetWidget {
       child: Wrap(
         spacing: 8.0.w,
         children: responsibilitiesCopy.map((account) {
-          return Chip(
-            label: Text("${account.toString()}"),
-            deleteIcon: Icon(Icons.close),
-            onDeleted: () => controller.handleDelete(account),
+          return Padding(
+            padding: const EdgeInsets.only(
+              top:15
+            ),
+            child: CustozButton(
+              margin: EdgeInsets.symmetric(
+                vertical: 1
+              ),
+              height: getHorizontalSize(58),
+              width: double.infinity,
+              variant: ButtonVariantzz.gray700,
+              padding: ButtonPaddingzz.PaddingAll12,
+              prefixWidget: Text(
+                "${account.toString()}",
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold14Gray600ab.copyWith(
+                  fontSize: 14,
+                  color: ColorConstant.black9000,
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+              suffixWidget: Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                    onTap: () {
+                      controller.handleDelete(account);
+                    },
+                    child: Icon(Icons.close)),
+              ),
+            ),
           );
         }).toList(),
       ),

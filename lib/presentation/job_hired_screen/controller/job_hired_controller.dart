@@ -1,29 +1,24 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
-import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
-import 'package:flutter/material.dart';
-import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-/// A controller class for the JobDetailsScreen.
-///
-/// This class manages the state of the JobDetailsScreen, including the
-/// current jobDetailsModelObj
-class CreatorAfterJobDetailsController extends GetxController {
-  Rx<bool> isLoading = false.obs;
+class JobHiredController extends GetxController {
+   Rx<Job?> jobDetailsModelObj = Rx<Job?>(null);
+   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isRecommendedLoading = false.obs;
   var token;
   var error = ''.obs;
-  Rx<Job?> jobDetailsModelObj = Rx<Job?>(null);
   final apiClient = ApiClient();
-  final storage = new FlutterSecureStorage();
+   final storage = new FlutterSecureStorage();
   Rx<bool> isError = false.obs;
   final notificationClient = NotificationClient();
   final NotificationService notificationService = Get.find();
@@ -36,32 +31,21 @@ class CreatorAfterJobDetailsController extends GetxController {
     jobDetailsModelObj.value = selectedJob;
   }
 
-  String? capitalizeFirstLetter(String? text) {
+    String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
       return text;
     }
     return text[0].toUpperCase() + text.substring(1);
   }
 
-//this is for animation
-  late AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
-
-  Future<void> hireInfluencerFunc(
-      String bidId, BidsArguments bidsArguments) async {
+   Future<void> completeJobFunc(
+      String jobId, Job? selectedJob) async {
+        
     var token = await storage.read(key: "token");
-    final JobBids? data = bidsArguments.jobBid;
-    final userId = data?.influencer?.userId ?? '';
-    final Job job = bidsArguments.job;
-    final jobTitle = job.title;
+    final userId = selectedJob?.influencerz?.first.influencerId ?? '';
+    final jobTitle = selectedJob?.title ?? '';
     final names =
-        "${capitalizeFirstLetter(job.user?.first.firstName ?? '')} ${capitalizeFirstLetter(job.user?.first.lastName ?? '')}";
+        "${capitalizeFirstLetter(selectedJob?.user?.first.firstName ?? '')} ${capitalizeFirstLetter(selectedJob?.user?.first.lastName ?? '')}";
     Response response = Response();
     try {
       error('');
@@ -69,11 +53,11 @@ class CreatorAfterJobDetailsController extends GetxController {
         Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-      response = await apiClient.hireInfluencerForAJob(bidId, token);
+      response = await apiClient.completeAJob(jobId, token);
       if (response.isOk) {
         if (response.body['status'] == 'SUCCESS') {
-          Get.snackbar('Success', 'Influencer Hired');
-          print('Success : Influencer Hired');
+          Get.snackbar('Success', 'Job completed');
+          print('Success : Job completed');
         }
       }
       homcont.currentRoute.value = AppRoutes.creatorHireslistTabContainerPage;
@@ -87,15 +71,15 @@ class CreatorAfterJobDetailsController extends GetxController {
           print('Sending notification to recipient');
           await notificationClient.sendNotification(
             'Job update: $jobTitle',
-            '$names has hired you', 
+            'Job Completed', 
              userId, 
              null
             );
 
           await notificationService.createNotification(
              'Job update: $jobTitle',
-             '$names', 
-            'Hire',
+             'Job has been completed', 
+              'Job',
              ImageConstant.logo
           );
           print('Notification sent and saved to Firestore');

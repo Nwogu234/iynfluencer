@@ -20,7 +20,7 @@ class JobInfluencerDetailScreen extends StatefulWidget {
   JobInfluencerDetailScreen({
     this.selectedJob,
     this.fromBids = false,
-    this.chatData,
+   this.chatData,
   });
 
   final Job? selectedJob;
@@ -54,7 +54,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
   @override
   void initState() {
     super.initState();
-    Get.put(ChatsInfluencerController(
+     Get.put(ChatsInfluencerController(
         chatData: widget.chatData ?? chatsData,
         selectedJob: widget.selectedJob));
   }
@@ -77,7 +77,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
     }
 
     String countryCode = user.getCountryCode(
-        user.capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country!));
+        user.capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.country!));
     print(countryCode);
 
     return SafeArea(
@@ -264,7 +264,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget.selectedJob?.creator?.user?.avatar,
+                                    url: widget.selectedJob?.creator?.first.user?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -278,14 +278,14 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.creator?.user?.country}",
+                                                "${widget.selectedJob?.creator?.first.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
@@ -343,15 +343,17 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                     fontStyle: ButtonFontStyle.SatoshiBold13)
                               ])),
                           Padding(
-                              padding: getPadding(left: 20, top: 19),
-                              child: Row(children: [
+                              padding: getPadding(left: 23,right:23,top: 19),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                 Padding(
                                     padding: getPadding(top: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Text("lbl_13_jobs_posted".tr,
                                               overflow: TextOverflow.ellipsis,
@@ -393,7 +395,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                                   textAlign: TextAlign.left))
                                         ])),
                                 Padding(
-                                    padding: getPadding(left: 70, bottom: 1),
+                                    padding: getPadding( bottom: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -450,7 +452,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
   onTapJob(selectedJob, chatData) {
   final args = JobArguments(selectedJob, chatData);
     Get.toNamed(
-        AppRoutes.completeJobScreen  , arguments:args);
+        AppRoutes.influencerJobTabScreen  , arguments:args);
   }
 
   /// Navigates to the previous screen.

@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:iynfluencer/core/app_export.dart';
-import 'package:iynfluencer/data/models/Jobs/job_model.dart';
-import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
-import 'package:iynfluencer/presentation/request_accepted_screen/controller/request_accepted_controller.dart';
-import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
-import 'package:iynfluencer/widgets/custom_button.dart';
+
 
 // ignore_for_file: must_be_immutable
-class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
-  BidAcceptedScreen({Key? key})
+import 'package:flutter/material.dart';
+import 'package:iynfluencer/presentation/request_accepted_screen/controller/request_accepted_controller.dart';
+import 'package:iynfluencer/widgets/custom_button.dart';
+
+import '../../core/app_export.dart';
+
+class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
+  ReviewAcceptedScreen({Key? key})
       : super(
           key: key,
         );
 
 
-  late final String jobId = Get.parameters['jobId'] ?? '';
+ late final String jobId = Get.parameters['jobId'] ?? '';
 
 
   @override
@@ -60,7 +60,7 @@ class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   top: 35,
                 ),
                 child: Text(
-                  "Job Bid Submitted".tr,
+                  "Review Submitted".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtSatoshiBold20,
@@ -72,7 +72,7 @@ class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   bottom: 5,
                 ),
                 child: Text(
-                  "You have successfully bid Job with JobId;  $jobId".tr,
+                  "You have successfully submitted Your Review $jobId".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtH2Gray600,

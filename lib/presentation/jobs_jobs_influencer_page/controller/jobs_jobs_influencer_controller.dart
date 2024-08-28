@@ -16,10 +16,13 @@ import '../../../widgets/app_bar/influencer_buttom_bar.dart';
 /// This class manages the state of the JobsJobsInfluencerPage, including the
 /// current jobsJobsInfluencerModelObj
 class JobsJobsInfluencerController extends GetxController {
-  JobsJobsInfluencerController(this.jobsJobsInfluencerModelObj);
-  // Rx<JobsJobsInfluencerModel> jobsJobsInfluencerModelObj;
+ //JobsJobsInfluencerController(this.jobsJobsInfluencerModelObj);
 
-  Rx<List<Job>> jobsJobsInfluencerModelObj;
+  // Rx<JobsJobsInfluencerModel> jobsJobsInfluencerModelObj;
+   Rx<JobsJobsInfluencerModel> jobsJobsInfluencerModelObj = JobsJobsInfluencerModel().obs;
+
+  // Rx<List<Job>> jobsJobsInfluencerModelObj = <Job>[].obs;
+ // RxList<Job> jobsJobsInfluencerModelObj = <Job>[].obs;
   final UserController user = Get.find();
   late InfluencerBottomBarController bumcont =
       Get.find<InfluencerBottomBarController>();
@@ -33,7 +36,7 @@ class JobsJobsInfluencerController extends GetxController {
   var token;
   final apiClient = ApiClient();
   var error = ''.obs;
-  List<Job> existingJobs = []; // Existing jobs
+  List<Job> existingJobs = []; 
 
 
   getUser() async {
@@ -61,33 +64,34 @@ class JobsJobsInfluencerController extends GetxController {
     }
   }
 
-  Future<void> getInfluencerJobJobs(String influencerId) async {
-    try {
-      error('');
-      isTrendLoading.value = true;
-      Response response =
-          await apiClient.getInfluencerAllJobs(influencerId, token);
-      if (response.isOk) {
-        List<dynamic> dd = response.body['docs'];
-        dd.forEach((element) {
-          existingJobs.add(Job.fromJson(element));
-        });
-        if (existingJobs.isEmpty) {
-          error('');
-          isEpty.value = true;
-          isTrendLoading.value = false;
-        } else {
-          jobsJobsInfluencerModelObj.value = existingJobs;
-          error('');
-          isTrendLoading.value = false;
-        }
+ Future<void> getInfluencerJobJobs(String influencerId) async {
+  try {
+    error('');
+    isTrendLoading.value = true;
+    Response response = await apiClient.getInfluencerAllJobs(influencerId, token);
+    if (response.isOk) {
+      List<dynamic> dd = response.body['docs'];
+      existingJobs.clear();
+      dd.forEach((element) {
+        existingJobs.add(Job.fromJson(element));
+      });
+      if (existingJobs.isEmpty) {
+        error('');
+        isEpty.value = true;
+        isTrendLoading.value = false;
+      } else {
+        // Update the list in the model
+        jobsJobsInfluencerModelObj.value.listclientItemList.value = existingJobs;
+        error('');
+        isTrendLoading.value = false;
       }
-    } catch (e) {
-      print(e);
-      error('Something went wrong');
-      isTrendLoading.value = false;
     }
+  } catch (e) {
+    print(e);
+    error('Something went wrong');
+    isTrendLoading.value = false;
   }
+}
 
   @override
   void onInit() {

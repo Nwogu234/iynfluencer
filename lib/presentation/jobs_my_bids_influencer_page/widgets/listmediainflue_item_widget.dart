@@ -104,7 +104,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               CustomImageView(
-                                url: listmediainflueItemModelObj?.job?.user?.avatar ??  ImageConstant.imgGroup85233,
+                                url: listmediainflueItemModelObj?.job?.user?.first.avatar ??  ImageConstant.imgGroup85233,
                                 height: getSize(
                                   30,
                                 ),
@@ -131,7 +131,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 ),
                               ),
                          Text(
-                              "${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.lastName ?? 'Adebayo')}",
+                              "${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.first.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.first.lastName ?? 'Adebayo')}",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiLight135Gray600.copyWith(
