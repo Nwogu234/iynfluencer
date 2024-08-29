@@ -22,10 +22,10 @@ class MediaFileWidget extends StatelessWidget {
       return CameraViewScreen(mediaFile: mediaFile.file);
     } else if (mediaFile.type == 'mp4') {
       return VideoViewScreen(mediaFile: mediaFile.file);
-    } else if (mediaFile.type == '.pdf' ||
-        mediaFile.type == '.doc' ||
-        mediaFile.type == '.docx' ||
-        mediaFile.type == '.ppt') {
+    } else if (mediaFile.type == 'pdf' ||
+        mediaFile.type == 'doc' ||
+        mediaFile.type == 'docx' ||
+        mediaFile.type == 'ppt') {
       return PDFView(
         filePath: mediaFile.file.path,
       );

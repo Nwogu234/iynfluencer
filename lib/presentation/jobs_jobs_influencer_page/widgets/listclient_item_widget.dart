@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
@@ -20,7 +21,7 @@ class ListclientItemWidget extends StatelessWidget {
     key: key,
         );
 
-  Job? listclientItemModelObj;
+  Jobz? listclientItemModelObj;
   ChatData? chatData;
 
   @override
@@ -157,7 +158,7 @@ class ListclientItemWidget extends StatelessWidget {
                                CustomImageView(
                                 fit: BoxFit.cover,
                                //  imagePath: ImageConstant.imgGroup85237,
-                                 url: listclientItemModelObj?.creator?.first.user?.avatar,
+                                 url: listclientItemModelObj?.creator?.user?.avatar,
                                  height: getSize(
                                    30,
                                  ),
@@ -177,7 +178,7 @@ class ListclientItemWidget extends StatelessWidget {
                                    bottom: 5,
                                  ),
                                  child: Text(
-                                      "${capitalizeFirstLetter(listclientItemModelObj?.creator?.first.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj?.creator?.first.user?.lastName)}",
+                                      "${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.lastName)}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
                                    style:AppStyle.txtSatoshiLight135Gray600,

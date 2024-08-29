@@ -11,14 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class JobHiredController extends GetxController {
-   Rx<Job?> jobDetailsModelObj = Rx<Job?>(null);
-   Rx<bool> isLoading = false.obs;
+  Rx<Job?> jobDetailsModelObj = Rx<Job?>(null);
+  Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   Rx<bool> isRecommendedLoading = false.obs;
   var token;
   var error = ''.obs;
   final apiClient = ApiClient();
-   final storage = new FlutterSecureStorage();
+  final storage = new FlutterSecureStorage();
   Rx<bool> isError = false.obs;
   final notificationClient = NotificationClient();
   final NotificationService notificationService = Get.find();
@@ -31,18 +31,17 @@ class JobHiredController extends GetxController {
     jobDetailsModelObj.value = selectedJob;
   }
 
-    String? capitalizeFirstLetter(String? text) {
+  String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
       return text;
     }
     return text[0].toUpperCase() + text.substring(1);
   }
 
-   Future<void> completeJobFunc(
-      String jobId, Job? selectedJob) async {
-        
+  Future<void> completeJobFunc(
+      BuildContext context, String jobId, Job? selectedJob) async {
     var token = await storage.read(key: "token");
-    final userId = selectedJob?.influencerz?.first.influencerId ?? '';
+    final userId = selectedJob?.creator?.first.userId ?? '';
     final jobTitle = selectedJob?.title ?? '';
     final names =
         "${capitalizeFirstLetter(selectedJob?.user?.first.firstName ?? '')} ${capitalizeFirstLetter(selectedJob?.user?.first.lastName ?? '')}";
@@ -54,46 +53,50 @@ class JobHiredController extends GetxController {
         barrierDismissible: false,
       );
       response = await apiClient.completeAJob(jobId, token);
-      if (response.isOk) {
-        if (response.body['status'] == 'SUCCESS') {
-          Get.snackbar('Success', 'Job completed');
-          print('Success : Job completed');
-        }
-      }
-      homcont.currentRoute.value = AppRoutes.creatorHireslistTabContainerPage;
-      Navigator.of(Get.nestedKey(1)!.currentState!.context)
-          .pushReplacementNamed(AppRoutes.creatorHireslistTabContainerPage);
-      bumcont.selectedIndex.value = 1;
-      isTrendLoading.value = false;
-      await OneSignal.login(userId);
-      if (jobTitle != null) {
+
+      if (response.isOk && response.body['status'] == 'SUCCESS') {
+        Get.back();
+        Get.snackbar('Success', 'Job completed');
+        print('Success: Job completed');
+        Get.toNamed(AppRoutes.jobAcceptedScreen, parameters: {'jobid': jobId});
+
+        await OneSignal.login(userId);
         try {
           print('Sending notification to recipient');
           await notificationClient.sendNotification(
-            'Job update: $jobTitle',
-            'Job Completed', 
-             userId, 
-             null
-            );
+              'Job update: $jobTitle', 'Job Completed', userId, null);
 
-          await notificationService.createNotification(
-             'Job update: $jobTitle',
-             'Job has been completed', 
-              'Job',
-             ImageConstant.logo
-          );
+          await notificationService.createNotification('Job update: $jobTitle',
+              'Job has been completed', 'Job', ImageConstant.logo);
           print('Notification sent and saved to Firestore');
         } catch (e) {
           print('Error sending notification: $e');
         }
       } else {
-        print('name is null');
+        Get.back();
+        SnackBar(
+          content:
+              Text('${response.body['message'] ?? 'Error completing job'}'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('${response.body['message'] ?? 'Error completing job'}'),
+          ),
+        );
+        error('Something went wrong');
+        isError.value = true;
+        isTrendLoading.value = false;
       }
     } catch (err) {
-      print('-----trying something---');
-      print(err);
       Get.back();
-      Get.snackbar('Error', 'Server error, Check your connection');
+      print('Error: $err');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('$err'),
+        ),
+      );
       error('Something went wrong');
       isError.value = true;
       isTrendLoading.value = false;

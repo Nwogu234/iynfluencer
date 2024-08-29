@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/widgets/custoz_button.dart';
@@ -14,7 +15,7 @@ import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 
 class BidScreen extends GetWidget {
   BidScreen({Key? key}) : super(key: key);
-  final Job selectedJob = Get.arguments as Job;
+  final Jobz selectedJob = Get.arguments as Jobz;
 
   final BidController controller = Get.put(BidController(BidModel().obs));
   Widget _buildAccountForm() {
@@ -257,7 +258,7 @@ class BidScreen extends GetWidget {
                     controller.submitForm(
                       context, 
                       selectedJob.jobId!,
-                      selectedJob.creator?.first.userId ?? '',
+                      selectedJob.creator?.userId ?? '',
                       selectedJob.title!
                       
                       );

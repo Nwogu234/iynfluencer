@@ -1,5 +1,6 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
@@ -23,7 +24,7 @@ class JobInfluencerDetailScreen extends StatefulWidget {
    this.chatData,
   });
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final bool? fromBids;
   final ChatData? chatData;
 
@@ -77,7 +78,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
     }
 
     String countryCode = user.getCountryCode(
-        user.capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.country!));
+        user.capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country!));
     print(countryCode);
 
     return SafeArea(
@@ -264,7 +265,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget.selectedJob?.creator?.first.user?.avatar,
+                                    url: widget.selectedJob?.creator?.user?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -278,14 +279,14 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.creator?.first.user?.country}",
+                                                "${widget.selectedJob?.creator?.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:

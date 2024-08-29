@@ -32,6 +32,7 @@ class UserController extends GetxController {
           verified: false,
           verifiedEmail: false,
           followers: 0,
+          balance: 0,
           following: 0,
           views: 0,
           userId: "",

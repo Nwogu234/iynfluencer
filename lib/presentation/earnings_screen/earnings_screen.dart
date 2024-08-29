@@ -1,3 +1,7 @@
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/widgets/error_widget.dart';
+
 import '../earnings_screen/widgets/earnings_item_widget.dart';
 import 'controller/earnings_controller.dart';
 import 'models/earnings_item_model.dart';
@@ -8,8 +12,17 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class EarningsScreen extends GetWidget<EarningsController> {
-  const EarningsScreen({Key? key}) : super(key: key);
+class EarningsScreen extends StatefulWidget {
+  EarningsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<EarningsScreen> createState() => _EarningsScreenState();
+}
+
+class _EarningsScreenState extends State<EarningsScreen> {
+  final UserController user = Get.find();
+
+  final EarningsController controller = Get.put(EarningsController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,9 @@ class EarningsScreen extends GetWidget<EarningsController> {
                             children: [
                               Align(
                                   alignment: Alignment.center,
-                                  child: Text("lbl_16_500".tr,
+                                  child: Text(
+                                      '\$${((user.userModelObj.value.balance) / 100).toString()}'
+                                          .tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: AppStyle.txtSatoshiBlack24)),
@@ -84,19 +99,6 @@ class EarningsScreen extends GetWidget<EarningsController> {
                                                     fontStyle: ButtonFontStyle
                                                         .SatoshiBold14Gray100))
                                           ]))),
-                              Padding(
-                                  padding: getPadding(top: 34),
-                                  child: Text("lbl_total_jobs".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight10)),
-                              Padding(
-                                  padding: getPadding(top: 1),
-                                  child: Text("lbl_34".tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style:
-                                          AppStyle.txtSatoshiBold18Gray900a7)),
                               SizedBox(
                                   width: double.maxFinite,
                                   child: Container(
@@ -259,7 +261,7 @@ class EarningsScreen extends GetWidget<EarningsController> {
                                                 padding: getPadding(
                                                     left: 1,
                                                     top: 5,
-                                                    right: 42,
+                                                    right: 40,
                                                     bottom: 20),
                                                 child: Row(children: [
                                                   Padding(
@@ -324,70 +326,72 @@ class EarningsScreen extends GetWidget<EarningsController> {
                                                               .txtSatoshiLight12Bluegray600))
                                                 ]))
                                           ]))),
-                              Padding(
+                              SingleChildScrollView(
+                                child: Padding(
                                   padding: getPadding(left: 2, top: 27),
-                                  child: Row(children: [
-                                    RichText(
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                              text: "lbl_recent2".tr,
-                                              style: TextStyle(
-                                                  color: ColorConstant.gray900,
-                                                  fontSize: getFontSize(14),
-                                                  fontFamily: 'Satoshi',
-                                                  fontWeight: FontWeight.w700)),
-                                          TextSpan(
-                                              text: "  ".tr,
-                                              style: TextStyle(
-                                                  color: ColorConstant.gray600,
-                                                  fontSize: getFontSize(14),
-                                                  fontFamily: 'Satoshi',
-                                                  fontWeight: FontWeight.w700)),
-                                          TextSpan(
-                                              text: "lbl_12".tr,
-                                              style: TextStyle(
-                                                  color: ColorConstant.gray600,
-                                                  fontSize: getFontSize(13),
-                                                  fontFamily: 'Satoshi',
-                                                  fontWeight: FontWeight.w700))
-                                        ]),
-                                        textAlign: TextAlign.left),
-                                    CustomImageView(
-                                        svgPath: ImageConstant.imgArrowup,
-                                        height: getSize(20),
-                                        width: getSize(20),
-                                        margin: getMargin(left: 6))
-                                  ])),
-                              Padding(
-                                  padding: getPadding(top: 26, right: 2),
-                                  child: ListView.separated(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      separatorBuilder: (context, index) {
-                                        return Padding(
-                                            padding: getPadding(
-                                                top: 19.0, bottom: 19.0),
-                                            child: SizedBox(
-                                                width: getHorizontalSize(335),
-                                                child: Divider(
-                                                    height: getVerticalSize(1),
-                                                    thickness:
-                                                        getVerticalSize(1),
-                                                    color: ColorConstant
-                                                        .indigo50)));
-                                      },
-                                      itemCount: 2,
-                                      itemBuilder: (context, index) {
-                                        // EarningsItemModel model = controller
-                                        //     .earningsItemList.value[index];
-                                        return EarningsItemWidget();
-                                      })),
-                              Padding(
-                                  padding: getPadding(top: 14),
-                                  child: Divider(
-                                      height: getVerticalSize(1),
-                                      thickness: getVerticalSize(1),
-                                      color: ColorConstant.indigo50))
+                                  child: SizedBox(
+                                    height: getVerticalSize(300),
+                                    child: Obx(() {
+                                      if (controller.isLoading.value) {
+                                        return CircularProgressIndicator(
+                                            color: ColorConstant.gray100);
+                                      } else {
+                                        if (controller.error.value.isNotEmpty) {
+                                          return ResponsiveErrorWidget(
+                                            errorMessage: controller.error.value,
+                                            onRetry: () {
+                                              controller.getUser();
+                                            },
+                                            fullPage: true,
+                                          ); // Your error widget
+                                        } else if (controller.isEpty.value) {
+                                          return Text(
+                                              'No Jobs have been completed.');
+                                        } else {
+                                          return ListView.separated(
+                                            physics: BouncingScrollPhysics(),
+                                            shrinkWrap: true,
+                                            separatorBuilder: (
+                                              context,
+                                              index,
+                                            ) {
+                                              return SizedBox(
+                                                height: getVerticalSize(
+                                                  23,
+                                                ),
+                                              );
+                                            },
+                                            itemCount: controller
+                                                    .isTrendLoading.value
+                                                ? 5 
+                                                : controller
+                                                    .earningsModelObj
+                                                    .value
+                                                    .earningsItemList
+                                                    .length, 
+                                            itemBuilder: (context, index) {
+                                              Job? model = index <
+                                                      controller
+                                                          .earningsModelObj
+                                                          .value
+                                                          .earningsItemList
+                                                          .length
+                                                  ? controller
+                                                      .earningsModelObj
+                                                      .value
+                                                      .earningsItemList[index]
+                                                  : null;
+                                              return EarningsItemWidget(
+                                                  earningsItemModelObj: model);
+                                            },
+                                          );
+                                        }
+                                      }
+                                    }),
+                                  ),
+                                ),
+                              ),
+
                             ]))))));
   }
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/bids_screen/controller/bids_controller.dart';
@@ -150,7 +151,7 @@ void _onScroll() {
                                if (controller.isJobsLoading.value) {
                                  return InfluencerHomeItemSkeletonWidget();
                                } else {
-                                 Job model = controller.infJobsList[index];
+                                 Jobz model = controller.infJobsList[index];
                                  ChatData? chatData = 
                                          index < messagesController.chatList.length
                                         ? messagesController.chatList[index]

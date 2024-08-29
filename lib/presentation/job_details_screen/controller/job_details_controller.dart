@@ -1,5 +1,6 @@
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/models/job_details_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ class JobDetailsController extends GetxController {
   Rx<bool> isRecommendedLoading = false.obs;
   var token;
   var error = ''.obs;
-  Rx<Job?> jobDetailsModelObj = Rx<Job?>(null);
+  Rx<Jobz?> jobDetailsModelObj = Rx<Jobz?>(null);
 
   // Method to set the selected job
-  void setSelectedJob(Job selectedJob) {
+  void setSelectedJob(Jobz selectedJob) {
     jobDetailsModelObj.value = selectedJob;
   }
 

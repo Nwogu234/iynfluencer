@@ -806,8 +806,8 @@ Future<Response> uploadFile(String filePath, String token) async {
   Future<Response> completeAJob(String jobId, var token) async {
     Response response = Response();
     try {
-      response = await post(
-        'creator/me/jobs/complete/$jobId',
+      response = await patch(
+        'creators/me/jobs/complete/$jobId',
         null,
         headers: {
           "Content-Type": "application/json",
@@ -923,6 +923,34 @@ Future<Response> uploadFile(String filePath, String token) async {
     } catch (e) {
       print('$e from getting list of Reviews');
 
+      throw Exception('Server error');
+    }
+  }
+
+   //this is for updating a current review
+    Future<Response> updateReview(ReviewRequest review, var token, String reviewId) async {
+    Response response;
+    try {
+      response = await patch(
+        '/influencers/me/jobs/review/$reviewId',
+        review.toJson(), 
+        headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(review.toJson());
+        print('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer bid');
+      print(e);
       throw Exception('Server error');
     }
   }

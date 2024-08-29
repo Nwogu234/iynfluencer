@@ -1,14 +1,12 @@
-
-
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:iynfluencer/presentation/request_accepted_screen/controller/request_accepted_controller.dart';
+import 'package:iynfluencer/presentation/job_accepted_screen/controller/job_accepted_controller.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
 import '../../core/app_export.dart';
 
-class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
-  ReviewAcceptedScreen({Key? key})
+class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
+  JobAcceptedScreen({Key? key})
       : super(
           key: key,
         );
@@ -60,7 +58,7 @@ class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   top: 35,
                 ),
                 child: Text(
-                  "Review Submitted".tr,
+                  "Job Completed".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtSatoshiBold20,
@@ -72,7 +70,7 @@ class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   bottom: 5,
                 ),
                 child: Text(
-                  "You have successfully submitted Your Review $jobId".tr,
+                  "Job have been sucessfully completed $jobId".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtH2Gray600,

@@ -224,7 +224,7 @@ class InfluencerJobTabController extends GetxController {
     print('Error during submission: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('An error occurred while submitting the form.'),
+        content: Text('$e'),
       ),
     );
   } finally {
@@ -232,25 +232,15 @@ class InfluencerJobTabController extends GetxController {
   }
 }  
 
-/* 
-void submitReview(
-  BuildContext context,
-  String influencerId,
-  String creatorId,
-  String jobId,
-  String userId,
-  String title,
-  RxBool isSubmitted,
-) async {
-  if (isSubmitted.value) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Review has already been submitted.'),
-      ),
-    );
-    return; 
-  }
 
+  void editReview(
+    BuildContext context,
+    String reviewId,
+    String influencerId,
+    String creatorId,
+    String jobId,
+    String userId,
+    String title) async {
   var token = await storage.read(key: 'token');
   isLoading.value = true;
 
@@ -266,12 +256,9 @@ void submitReview(
       proof: proofUrls,
     );
 
-    final response = await apiClient.createReview(reviewPost, token);
+    final response = await apiClient.updateReview(reviewPost, token, reviewId);
     if (response.isOk) {
       Get.snackbar('Success', 'Review Submitted Successfully');
-      isSubmitted.value = true; 
-
-      isLoading.value = false; 
       Get.toNamed(AppRoutes.reviewAcceptedScreen,
           parameters: {'jobid': jobId});
 
@@ -280,14 +267,14 @@ void submitReview(
         try {
           await notificationClient.sendNotification(
             title,
-            'An influencer has submitted a Review',
+            'An influencer has edited a Review',
             userId,
             null,
           );
 
           await notificationService.createNotification(
             title,
-            'An influencer has submitted a Review',
+            'An influencer has edited a Review',
             userId,
             ImageConstant.logo,
           );
@@ -322,10 +309,10 @@ void submitReview(
       ),
     );
   } finally {
-    isLoading.value = false; 
+    isLoading.value = false;
   }
-} */
- 
+}  
+
 
 Future<String?> uploadPic(String filePath) async {
   try {

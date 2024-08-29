@@ -18,6 +18,8 @@ import 'package:iynfluencer/presentation/home_creator_container_screen/home_crea
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
 import 'package:iynfluencer/presentation/influencer_job_tab_screen/binding/influencer_job_tab_binding.dart';
 import 'package:iynfluencer/presentation/influencer_job_tab_screen/influencer_job_tab_screen.dart';
+import 'package:iynfluencer/presentation/job_accepted_screen/binding/job_accepted_binding.dart';
+import 'package:iynfluencer/presentation/job_accepted_screen/job_accepted_screen.dart';
 import 'package:iynfluencer/presentation/job_hired_screen/binding/job_hired_binding.dart';
 import 'package:iynfluencer/presentation/job_hired_screen/job_hired_screen.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
@@ -357,6 +359,8 @@ class AppRoutes {
 
   static const String requestAcceptedScreen = '/request_accepted_screen';
 
+  static const String jobAcceptedScreen = '/job_accepted_screen';
+
   static const String bidAcceptedScreen = '/bid_accepted_screen';
 
   static const String communityPostScreen = '/community_post_screen';
@@ -598,6 +602,13 @@ class AppRoutes {
       page: () => ReviewAcceptedScreen(),
       bindings: [
         ReviewAcceptedBinding(),
+      ],
+    ),
+    GetPage(
+      name: jobAcceptedScreen,
+      page: () => JobAcceptedScreen(),
+      bindings: [
+        JobAcceptedBinding(),
       ],
     ),
     GetPage(

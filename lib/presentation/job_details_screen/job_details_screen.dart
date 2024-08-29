@@ -1,5 +1,6 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
@@ -23,7 +24,7 @@ class JobDetailsScreen extends StatefulWidget {
     this.chatData,
   });
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final bool? fromBids;
   final ChatData? chatData;
 
@@ -76,8 +77,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    String countryCode = user.getCountryCode(user
-        .capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.country!));
+    String countryCode = user.getCountryCode(user.capitalizeFirstLetter(
+        widget.selectedJob?.creator?.user?.country!));
     print(countryCode);
 
     return SafeArea(
@@ -264,8 +265,8 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget
-                                        .selectedJob?.creator?.first.user?.avatar,
+                                    url: widget.selectedJob?.creator?.user
+                                        ?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -279,14 +280,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.creator?.first.user?.country}",
+                                                "${widget.selectedJob?.creator?.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
@@ -423,15 +424,25 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // chnage when the JobBids model is added
-              widget.selectedJob?.bids?.first.influencerId ==
-                      user.userModelObj.value.influencerId
+              widget.selectedJob?.bids != null &&
+                      widget.selectedJob!.bids!.isNotEmpty &&
+                      widget.selectedJob?.bids?.first.influencerId ==
+                          user.userModelObj.value.influencerId
                   ? CustomButton(
                       height: getVerticalSize(44),
                       text: "Edit bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
-                        onTapEdit(widget.selectedJob!);
+                        if (widget.selectedJob?.bids != null &&
+                            widget.selectedJob!.bids!.isNotEmpty) {
+                          onTapEdit(widget.selectedJob!);
+                        } else {
+                          Get.snackbar(
+                              'Sorry',
+                               'No Bid available to edit.',
+                               snackPosition: SnackPosition.BOTTOM,
+                         );
+                     }
                       },
                     )
                   : CustomButton(
@@ -453,19 +464,19 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
-  onTapBid(Job selectedJob) {
-    final id = widget.selectedJob?.bids?.first.influencerId ?? '';
-    final UserController user = Get.find();
-    final users = user.userModelObj.value.influencerId;
-    print("$id, $users");
+  onTapBid(Jobz selectedJob) {
+   // final id = widget.selectedJob?.bids?.first.influencerId ?? '';
+   // final UserController user = Get.find();
+   // final users = user.userModelObj.value.influencerId;
+   // print("$id, $users");
     Get.toNamed(AppRoutes.bidScreen, arguments: widget.selectedJob);
   }
 
-  onTapEdit(Job selectedJob) {
-    final id = widget.selectedJob?.bids?.first.influencerId ?? '';
-    final UserController user = Get.find();
-    final users = user.userModelObj.value.influencerId;
-    print("$id, $users");
+  onTapEdit(Jobz selectedJob) {
+   // final id = widget.selectedJob?.bids?.first.influencerId ?? '';
+   // final UserController user = Get.find();
+  //  final users = user.userModelObj.value.influencerId;
+  //  print("$id, $users");
     Get.toNamed(AppRoutes.editScreen, arguments: widget.selectedJob);
   }
 

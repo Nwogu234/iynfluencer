@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
@@ -52,7 +53,7 @@ class _CompleteJobScreenState extends State<CompleteJobScreen> {
   void initState() {
     super.initState();
     final ChatData? chatData = args.chatData;
-    final Job? selectedJob = args.selectedJob;
+    final Jobz? selectedJob = args.selectedJob;
     Get.put(ChatsInfluencerController(
         chatData: chatData ?? chatsData, selectedJob: selectedJob));
   }
@@ -60,7 +61,7 @@ class _CompleteJobScreenState extends State<CompleteJobScreen> {
   @override
   Widget build(BuildContext context) {
     final ChatData? chatData = args.chatData;
-    final Job? selectedJob = args.selectedJob;
+    final Jobz? selectedJob = args.selectedJob;
 
     return SafeArea(
         child: Scaffold(
@@ -171,7 +172,7 @@ class _CompleteJobScreenState extends State<CompleteJobScreen> {
     Get.back();
   }
 
-  void onSubmit(Job selectedJob, ChatData chatData) {
+  void onSubmit(Jobz selectedJob, ChatData chatData) {
     final ChatsInfluencerController chatControllers =
         Get.find<ChatsInfluencerController>();
     if (controller.formKey.currentState?.validate() ?? false) {

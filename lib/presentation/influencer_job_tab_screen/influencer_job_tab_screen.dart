@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/influencer_job_tab_screen/controller/influencer_job_tab_controller.dart';
@@ -17,12 +18,11 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
   InfluencerJobTabScreen({Key? key}) : super(key: key);
 
   final args = Get.arguments as JobArguments;
-    RxBool isSubmitted = false.obs;
 
   @override
   Widget build(BuildContext context) {
     final ChatData? chatData = args.chatData;
-    final Job? selectedJob = args.selectedJob;
+    final Jobz? selectedJob = args.selectedJob;
 
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
@@ -93,7 +93,7 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
                                       child: Row(children: [
                                         CustomImageView(
                                             url: selectedJob
-                                                ?.creator?.first.user?.avatar,
+                                                ?.creator?.user?.avatar ?? "",
                                             fit: BoxFit.cover,
                                             height: getSize(30),
                                             width: getSize(30),
@@ -105,7 +105,7 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
                                             child: Text(
                                                 // "${data!.influencer!.user!.firstName!.capitalize} ${data!.influencer!.user!.lastName!.capitalize}"
                                                 //    .tr,
-                                                "${capitalizeFirstLetter(selectedJob?.creator?.first.user?.firstName)} ${capitalizeFirstLetter(selectedJob?.creator?.first.user?.lastName)}",
+                                                "${capitalizeFirstLetter(selectedJob?.creator?.user?.firstName ?? 'Mark')} ${capitalizeFirstLetter(selectedJob?.creator?.user?.lastName ?? 'Adebayo')}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style: AppStyle
@@ -384,14 +384,43 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+           selectedJob?.review != null && selectedJob!.review!.isNotEmpty &&
+            selectedJob.review!.first.influencerId == controller.user.userModelObj.value.influencerId ?
+              CustomButton(
+           onTap: () {
+                if (selectedJob?.review != null && selectedJob!.review!.isNotEmpty) {
+                  controller.editReview(
+                     context,
+                     selectedJob!.review!.first.id,
+                      selectedJob?.influencerId ?? '',
+                    selectedJob?.creator?.creatorId ?? '',
+                    selectedJob?.jobId ?? '',
+                     selectedJob?.creator?.userId ?? '',
+                     selectedJob?.title ?? '',
+               );
+           } else {
+             Get.snackbar(
+                'Error',
+                 'No reviews available to edit.',
+                  snackPosition: SnackPosition.BOTTOM,
+                   );
+                 }
+               },
+                  height: getVerticalSize(44),
+                  text: "Edit review".tr,
+                  margin: getMargin(top: 10),
+                  variant: ButtonVariant.Neutral,
+                  padding: ButtonPadding.PaddingAll12,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
+                  :
               CustomButton(
                   onTap: () {
                     controller.submitReview(
                         context,
                        selectedJob?.influencerId ?? '',
-                        selectedJob?.creator?.first.creatorId ?? '',
+                        selectedJob?.creator?.creatorId ?? '',
                         selectedJob?.jobId ?? '',
-                        selectedJob?.creator?.first.userId ?? '',
+                        selectedJob?.creator?.userId ?? '',
                         selectedJob?.title ?? '',
                        // isSubmitted
                         );
@@ -401,7 +430,7 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
                   margin: getMargin(top: 10),
                   variant: ButtonVariant.Neutral,
                   padding: ButtonPadding.PaddingAll12,
-                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
             ],
           ),
         ),

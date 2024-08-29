@@ -8,6 +8,7 @@ import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
@@ -339,7 +340,7 @@ Future<List<Message>> loadMessages() async {
 
 class ChatsInfluencerController extends GetxController {
   final ChatData chatData;
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final String? query;
 
   ChatsInfluencerController(
@@ -582,7 +583,7 @@ class ChatsInfluencerController extends GetxController {
   }
 
   void onTapChatsCard(
-      Job? selectedJob, ChatData chatData, String? query) async {
+      Jobz? selectedJob, ChatData chatData, String? query) async {
     if (selectedJob == null) {
       print("selectedJob is null");
       return;
@@ -603,7 +604,7 @@ class ChatsInfluencerController extends GetxController {
             chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
 
         ChatData? existingsChat = chatList.firstWhereOrNull(
-            (chat) => chat.creatorId == selectedJob.creator?.first.id);
+            (chat) => chat.creatorId == selectedJob.creator?.id);
 
         if (existingsChat != null) {
           await fetchAllMessagesWithCreators(existingsChat.chatId);
@@ -633,9 +634,9 @@ class ChatsInfluencerController extends GetxController {
 
           ChatData newsChat = ChatData(
             id: '',
-            creatorId: selectedJob.creator?.first.id ?? '',
+            creatorId: selectedJob.creator?.id ?? '',
             influencerId: influencerId,
-            creatorUserId: selectedJob.creator?.first.userId ?? '',
+            creatorUserId: selectedJob.creator?.userId ?? '',
             influencerUserId: influencerUserId,
             unreadByCreator: 0,
             unreadByInfluencer: 0,
@@ -647,8 +648,8 @@ class ChatsInfluencerController extends GetxController {
             messages: [],
           );
 
-          final creatorId = selectedJob.creator?.first.id ?? '';
-          final creatorUserId = selectedJob.creator?.first.userId ?? '';
+          final creatorId = selectedJob.creator?.id ?? '';
+          final creatorUserId = selectedJob.creator?.userId ?? '';
 
           print('creatorId : $creatorId');
           print('creatorUserId : $creatorUserId');

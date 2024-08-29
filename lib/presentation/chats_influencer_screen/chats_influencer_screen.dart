@@ -6,6 +6,7 @@ import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
@@ -433,7 +434,7 @@ class ChatsInfluencerScreen extends StatefulWidget {
   ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData, this.query})
       : super(key: key);
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final ChatData chatData;
   final String? query;
 
@@ -474,7 +475,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     String? avatarUrl;
     if (widget.selectedJob != null) {
-      avatarUrl =  widget.selectedJob?.creator?.first.user?.avatar ?? '';
+      avatarUrl =  widget.selectedJob?.creator?.user?.avatar ?? '';
       //print(avatarUrl);
       //  avatarUrl =
       //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
@@ -492,7 +493,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     String? name;
     if (widget.selectedJob != null) {
       name =
-          "${capitalizeFirstLetter( widget.selectedJob?.creator?.first.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.first.user?.lastName ?? 'Adebayo')}";
+          "${capitalizeFirstLetter( widget.selectedJob?.creator?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName ?? 'Adebayo')}";
       // print(name);
       //  name = 'Mark Adebayo';
     } else if (widget.chatData != null) {

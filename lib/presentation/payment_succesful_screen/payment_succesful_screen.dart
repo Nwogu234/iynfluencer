@@ -1,6 +1,13 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/data/apiClient/notificationApi.dart';
+import 'package:iynfluencer/data/general_controllers/notification_service.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
 import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'controller/payment_succesful_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +22,14 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
         );
 
   final args = Get.arguments as BidsArguments;
+  final notificationClient = NotificationClient();
+  final NotificationService notificationService = Get.find();
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
+  
+  
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -104,8 +116,57 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
     );
   }
 
-  onTapAfter(BidsArguments bidsArguments) {
-    Get.toNamed(AppRoutes.creatorAfterJobDetailsScreen,
-        arguments: bidsArguments);
+  onTapAfter(BidsArguments bidsArguments) async{
+    final JobBids? data = args.jobBid;
+    final userId = data?.influencer?.userId ?? '';
+    final Job job = args.job;
+    final jobTitle = job.title;
+    final UserController user = Get.find();
+
+      String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
   }
-}
+    final names =
+        "${capitalizeFirstLetter(job.user?.first.firstName ?? '')} ${capitalizeFirstLetter(job.user?.first.lastName ?? '')}";
+        await OneSignal.login(userId);
+      if (jobTitle != null) {
+        try {
+          print('Sending notification to recipient');
+          await notificationClient.sendNotification(
+            'Job update: $jobTitle',
+            '$names has hired you', 
+             userId, 
+             null
+            );
+
+          await notificationService.createNotification(
+             'Job update: $jobTitle',
+             '$names', 
+            'Hire',
+             ImageConstant.logo
+          );
+          print('Notification sent and saved to Firestore');
+        } catch (e) {
+          print('Error sending notification: $e');
+        }
+      } else {
+        print('name is null');
+      }
+        if (user.userModelObj.value.creatorId != null) {
+      storage.write(key: "activeProfile", value: "Creator");
+      Get.delete<TabController>();
+      Get.offAllNamed(
+        AppRoutes.homeCreatorContainerScreen,
+      );
+      // controller.dispose();
+    } else {
+      Get.offAllNamed(
+        AppRoutes.completeProfileCreatorScreen,
+      );
+    }
+  }
+  }
+

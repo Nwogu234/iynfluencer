@@ -4,5 +4,5 @@ import 'package:iynfluencer/presentation/review_accepted_screen/model/review_mod
 
 
 class ReviewAcceptedController extends GetxController {
-  Rx<ReviewAcceptedModel > reviewAcceptedModelObj =ReviewAcceptedModel().obs;
+  Rx<ReviewAcceptedModel > reviewAcceptedModelObj = ReviewAcceptedModel().obs;
 }

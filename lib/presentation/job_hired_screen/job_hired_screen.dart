@@ -12,7 +12,7 @@ import 'package:iynfluencer/widgets/deliver_media.dart';
 import 'package:iynfluencer/widgets/media_file.dart';
 
 class JobHiredScreen extends StatelessWidget {
-   JobHiredScreen({this.selectedJob});
+  JobHiredScreen({this.selectedJob});
 
   final Job? selectedJob;
 
@@ -311,10 +311,10 @@ class JobHiredScreen extends StatelessWidget {
                   height: getVerticalSize(44),
                   text: "Mark complete".tr,
                   padding: ButtonPadding.PaddingAll12,
-                  onTap: () {
-                    controller.completeJobFunc(
-                      selectedJob?.jobId ?? '', 
-                      selectedJob);
+                  onTap: () async {
+                    await controller.completeJobFunc(
+                        context, selectedJob?.jobId ?? '', selectedJob);
+                    Get.back();
                   }),
               CustomButton(
                   height: getVerticalSize(44),

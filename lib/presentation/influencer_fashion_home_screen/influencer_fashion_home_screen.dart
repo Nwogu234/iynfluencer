@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/influencer_fashion_home_screen/controller/influencer_fashion_controller.dart';
@@ -143,7 +144,7 @@ void _onScroll() {
                                if (controller.isJobsLoading.value) {
                                  return InfluencerHomeItemSkeletonWidget();
                                } else {
-                                 Job model = controller.infJobsList[index];
+                                 Jobz model = controller.infJobsList[index];
                                  ChatData? chatData = 
                                          index < messagesController.chatList.length
                                         ? messagesController.chatList[index]

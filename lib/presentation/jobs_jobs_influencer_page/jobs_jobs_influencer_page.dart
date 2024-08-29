@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
@@ -150,7 +151,7 @@ JobsJobsInfluencerController controller = Get.put(
                                  ? 5  // Show 5 skeleton items if still loading
                             : controller.jobsJobsInfluencerModelObj.value.listclientItemList.length,  // Use the length of the job list
                           itemBuilder: (context, index) {
-                          Job? model = index <
+                          Jobz? model = index <
                               controller.jobsJobsInfluencerModelObj.value.listclientItemList.length
                             ? controller.jobsJobsInfluencerModelObj.value.listclientItemList[index]
                              : null;

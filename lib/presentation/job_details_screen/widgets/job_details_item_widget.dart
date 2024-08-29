@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 
 import '../controller/job_details_controller.dart';
@@ -12,7 +13,7 @@ class JobDetailsItemWidget extends StatelessWidget {
     required this.index,
   });
 
-  final Job jobDetailsItemModelObj;
+  final Jobz jobDetailsItemModelObj;
   final int index;
 
   var controller = Get.find<JobDetailsController>();
