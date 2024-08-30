@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/data/apiClient/api_client.dart';
 import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -25,11 +26,10 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
   final notificationClient = NotificationClient();
   final NotificationService notificationService = Get.find();
   final storage = new FlutterSecureStorage();
+  final apiClient = ApiClient();
 
   @override
   Widget build(BuildContext context) {
-  
-  
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -116,46 +116,51 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
     );
   }
 
-  onTapAfter(BidsArguments bidsArguments) async{
+  onTapAfter(BidsArguments bidsArguments) async {
     final JobBids? data = args.jobBid;
+    final bidId = data?.bidId ?? '';
     final userId = data?.influencer?.userId ?? '';
     final Job job = args.job;
     final jobTitle = job.title;
     final UserController user = Get.find();
 
-      String? capitalizeFirstLetter(String? text) {
-    if (text == null || text.isEmpty) {
-      return text;
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
     }
-    return text[0].toUpperCase() + text.substring(1);
-  }
+
     final names =
         "${capitalizeFirstLetter(job.user?.first.firstName ?? '')} ${capitalizeFirstLetter(job.user?.first.lastName ?? '')}";
-        await OneSignal.login(userId);
-      if (jobTitle != null) {
-        try {
-          print('Sending notification to recipient');
-          await notificationClient.sendNotification(
-            'Job update: $jobTitle',
-            '$names has hired you', 
-             userId, 
-             null
-            );
-
-          await notificationService.createNotification(
-             'Job update: $jobTitle',
-             '$names', 
-            'Hire',
-             ImageConstant.logo
-          );
-          print('Notification sent and saved to Firestore');
-        } catch (e) {
-          print('Error sending notification: $e');
-        }
-      } else {
-        print('name is null');
+    await OneSignal.login(userId);
+    Response response = Response();
+    var token = await storage.read(key: "token");
+    response = await apiClient.hireInfluencerForAJob(bidId, token);
+    if (response.isOk) {
+      if (response.body['status'] == 'SUCCESS') {
+        Get.snackbar('Success', 'Influencer Hired');
+        print('Success : Influencer Hired');
       }
-        if (user.userModelObj.value.creatorId != null) {
+    }
+
+    await OneSignal.login(userId);
+    if (jobTitle != null) {
+      try {
+        print('Sending notification to recipient');
+        await notificationClient.sendNotification(
+            'Job update: $jobTitle', '$names has hired you', userId, null);
+
+        await notificationService.createNotification(
+            'Job update: $jobTitle', '$names', 'Hire', ImageConstant.logo);
+        print('Notification sent and saved to Firestore');
+      } catch (e) {
+        print('Error sending notification: $e');
+      }
+    } else {
+      print('name is null');
+    }
+    if (user.userModelObj.value.creatorId != null) {
       storage.write(key: "activeProfile", value: "Creator");
       Get.delete<TabController>();
       Get.offAllNamed(
@@ -168,5 +173,4 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
       );
     }
   }
-  }
-
+}

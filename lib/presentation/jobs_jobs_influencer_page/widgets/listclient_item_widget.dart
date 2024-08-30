@@ -46,265 +46,267 @@ class ListclientItemWidget extends StatelessWidget {
           
         ));
       }),
-      child: SizedBox(
-          height: double.maxFinite,
-          width: getHorizontalSize(
-            336,
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                         
-                        '${listclientItemModelObj?.title != null && listclientItemModelObj!.title!.length > 25 
-                           ? listclientItemModelObj?.title!.substring(0, 25) 
-                         : listclientItemModelObj?.title ?? ''}',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold16.copyWith(
-                            fontSize: 19.sp
-                          )
-                        ),
+      child: Expanded(
+        child: SizedBox(
+            height: getVerticalSize(350),
+            width: getHorizontalSize(
+              336,
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                           
+                          '${listclientItemModelObj?.title != null && listclientItemModelObj!.title!.length > 25 
+                             ? listclientItemModelObj?.title!.substring(0, 25) 
+                           : listclientItemModelObj?.title ?? ''}',
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold16.copyWith(
+                              fontSize: 19.sp
+                            )
+                          ),
+                           CustomImageView(
+                            svgPath: ImageConstant.imgVector,
+                             height: getVerticalSize(
+                              13,
+                             ),
+                             width: getHorizontalSize(
+                              13,
+                             ),
+                            margin: getMargin(
+                              top: 11,
+                              bottom: 9,
+                              right: 5                     
+                             ),
+                            color: ColorConstant.black900,
+                          ),
+                        ],
+                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 14),
+                    child: Row(
+                      children: <Widget>[
                          CustomImageView(
-                          svgPath: ImageConstant.imgVector,
-                           height: getVerticalSize(
-                            13,
-                           ),
-                           width: getHorizontalSize(
-                            13,
-                           ),
-                          margin: getMargin(
-                            top: 11,
-                            bottom: 9,
-                            right: 5                     
-                           ),
-                          color: ColorConstant.black900,
+                          svgPath: ImageConstant.imgFrame,
+                          color: ColorConstant.cyan100,
+                          height: getVerticalSize(54),
+                          width: getHorizontalSize(58),
+                          radius: BorderRadius.circular(
+                            getHorizontalSize(6),
+                          ),
+                        ), 
+                        Expanded(
+                          child: Container(
+                            width: getHorizontalSize(
+                              240,
+                            ),
+                            margin: getMargin(
+                              left: 25,
+                              top: 6,
+                              bottom: 10,
+                            ),
+                            child: Text(
+                                truncateWithEllipsis(
+                                  myString: listclientItemModelObj?.description ?? '',
+                                  textLength: 90,
+                                   ),
+                               maxLines: null,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                               fontWeight: FontWeight.w700
+                               ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14),
-                  child: Row(
-                    children: <Widget>[
-                       CustomImageView(
-                        svgPath: ImageConstant.imgFrame,
-                        color: ColorConstant.cyan100,
-                        height: getVerticalSize(54),
-                        width: getHorizontalSize(58),
-                        radius: BorderRadius.circular(
-                          getHorizontalSize(6),
-                        ),
-                      ), 
-                      Expanded(
-                        child: Container(
-                          width: getHorizontalSize(
-                            240,
-                          ),
-                          margin: getMargin(
-                            left: 25,
-                            top: 6,
-                            bottom: 10,
-                          ),
-                          child: Text(
-                              truncateWithEllipsis(
-                                myString: listclientItemModelObj?.description ?? '',
-                                textLength: 90,
-                                 ),
-                             maxLines: null,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                             fontWeight: FontWeight.w700
-                             ),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-                 Padding(
-                   padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 18
-                    ),
-                   child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         mainAxisAlignment: MainAxisAlignment.start,
-                         children: [
-                           Padding(
-                             padding: const EdgeInsets.only(
-                              bottom: 14
+                   Padding(
+                     padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 18
+                      ),
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       crossAxisAlignment: CrossAxisAlignment.center,
+                       children: [
+                         Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           mainAxisAlignment: MainAxisAlignment.start,
+                           children: [
+                             Padding(
+                               padding: const EdgeInsets.only(
+                                bottom: 14
+                               ),
+                               child: Text(
+                                 "lbl_client".tr,
+                                 overflow: TextOverflow.ellipsis,
+                                 textAlign: TextAlign.left,
+                                 style: AppStyle.txtSatoshiBold14Gray900ab,
+                               ),
                              ),
-                             child: Text(
-                               "lbl_client".tr,
-                               overflow: TextOverflow.ellipsis,
-                               textAlign: TextAlign.left,
-                               style: AppStyle.txtSatoshiBold14Gray900ab,
-                             ),
-                           ),
-                           Row(
-                             children: [
-                               CustomImageView(
-                                fit: BoxFit.cover,
-                               //  imagePath: ImageConstant.imgGroup85237,
-                                 url: listclientItemModelObj?.creator?.user?.avatar,
-                                 height: getSize(
-                                   30,
-                                 ),
-                                 width: getSize(
-                                   30,
-                                 ),
-                                 radius: BorderRadius.circular(
-                                   getSize(
-                                     15.0,
+                             Row(
+                               children: [
+                                 CustomImageView(
+                                  fit: BoxFit.cover,
+                                 //  imagePath: ImageConstant.imgGroup85237,
+                                   url: listclientItemModelObj?.creator?.user?.avatar,
+                                   height: getSize(
+                                     30,
+                                   ),
+                                   width: getSize(
+                                     30,
+                                   ),
+                                   radius: BorderRadius.circular(
+                                     getSize(
+                                       15.0,
+                                     ),
                                    ),
                                  ),
+                                 Padding(
+                                   padding: getPadding(
+                                     left: 12,
+                                     top: 5,
+                                     bottom: 5,
+                                   ),
+                                   child: Text(
+                                        "${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.lastName)}",
+                                     overflow: TextOverflow.ellipsis,
+                                     textAlign: TextAlign.left,
+                                     style:AppStyle.txtSatoshiLight135Gray600,
+                                        // AppStyle.txtSatoshiBold14Gray900ab,
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ],
+                         ),
+                         Padding(
+                           padding: getPadding(
+                             left: 64,
+                             top: 2,
+                             bottom: 3,
+                           ),
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                               Text(
+                                 "lbl_project_status".tr,
+                                 overflow: TextOverflow.ellipsis,
+                                 textAlign: TextAlign.left,
+                                 style: AppStyle.txtSatoshiLight135Gray600,
+                               ),
+                               CustomButton(
+                                 height: getVerticalSize(
+                                   25,
+                                 ),
+                                 width: getHorizontalSize(
+                                   82,
+                                 ),
+                                 text: '${listclientItemModelObj?.status ?? 'In Progress'}'.tr,
+                                 margin: getMargin(
+                                   top: 3,
+                                 ),
+                                 variant: listclientItemModelObj?.status == 'Completed' 
+                               ? ButtonVariant.FillGreenA10099 :
+                                listclientItemModelObj?.status == 'In Progress' 
+                                ?  ButtonVariant.FillLime100b2 
+                                : ButtonVariant.FillRed10099,
+                                 shape: ButtonShapes.RoundedBorder12,
+                                 padding: ButtonPadding.PaddingAll4,
+                                 fontStyle: listclientItemModelObj?.status == 'In Progress' 
+                              ? ButtonFontStyle.SatoshiBold115 
+                              : listclientItemModelObj?.status == 'Completed' 
+                              ? ButtonFontStyle.SatoshiBold115Green700
+                              : ButtonFontStyle.SatoshiBold115Red700,
+                                 alignment: Alignment.center,
+                               ),
+                             ],
+                           ),
+                         ),
+                       ],
+                     ),
+                   ),
+                   Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Padding(
+                           padding: getPadding(
+                             top: 1,
+                           ),
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                               Text(
+                                 "lbl_project_cost".tr,
+                                 overflow: TextOverflow.ellipsis,
+                                 textAlign: TextAlign.left,
+                                 style: AppStyle.txtSatoshiLight135Gray600,
                                ),
                                Padding(
                                  padding: getPadding(
-                                   left: 12,
-                                   top: 5,
-                                   bottom: 5,
+                                   top: 7,
                                  ),
                                  child: Text(
-                                      "${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.firstName)}  ${capitalizeFirstLetter(listclientItemModelObj?.creator?.user?.lastName)}",
+                                   "\$${capitalizeFirstLetter(listclientItemModelObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(listclientItemModelObj?.budgetTo.toString())}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
-                                   style:AppStyle.txtSatoshiLight135Gray600,
-                                      // AppStyle.txtSatoshiBold14Gray900ab,
+                                   style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                                   fontWeight: FontWeight.w700
+                                  ),
                                  ),
                                ),
                              ],
                            ),
-                         ],
-                       ),
-                       Padding(
-                         padding: getPadding(
-                           left: 64,
-                           top: 2,
-                           bottom: 3,
                          ),
-                         child: Column(
+                         Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            mainAxisAlignment: MainAxisAlignment.start,
                            children: [
                              Text(
-                               "lbl_project_status".tr,
-                               overflow: TextOverflow.ellipsis,
-                               textAlign: TextAlign.left,
-                               style: AppStyle.txtSatoshiLight135Gray600,
-                             ),
-                             CustomButton(
-                               height: getVerticalSize(
-                                 25,
-                               ),
-                               width: getHorizontalSize(
-                                 82,
-                               ),
-                               text: '${listclientItemModelObj?.status ?? 'In Progress'}'.tr,
-                               margin: getMargin(
-                                 top: 3,
-                               ),
-                               variant: listclientItemModelObj?.status == 'completed' 
-                             ? ButtonVariant.FillGreenA10099 :
-                              listclientItemModelObj?.status == 'In Progress' 
-                              ?  ButtonVariant.FillLime100b2 
-                              : ButtonVariant.FillRed10099,
-                               shape: ButtonShapes.RoundedBorder12,
-                               padding: ButtonPadding.PaddingAll4,
-                               fontStyle: listclientItemModelObj?.status == 'In Progress' 
-                            ? ButtonFontStyle.SatoshiBold115 
-                            : listclientItemModelObj?.status == 'completed' 
-                            ? ButtonFontStyle.SatoshiBold115Green700
-                            : ButtonFontStyle.SatoshiBold115Red700,
-                               alignment: Alignment.center,
-                             ),
-                           ],
-                         ),
-                       ),
-                     ],
-                   ),
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                   child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Padding(
-                         padding: getPadding(
-                           top: 1,
-                         ),
-                         child: Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                             Text(
-                               "lbl_project_cost".tr,
+                               "lbl_deadline".tr,
                                overflow: TextOverflow.ellipsis,
                                textAlign: TextAlign.left,
                                style: AppStyle.txtSatoshiLight135Gray600,
                              ),
                              Padding(
                                padding: getPadding(
-                                 top: 7,
+                                 top: 9,
                                ),
                                child: Text(
-                                 "\$${capitalizeFirstLetter(listclientItemModelObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(listclientItemModelObj?.budgetTo.toString())}",
+                                 "$formattedDate".tr,
                                  overflow: TextOverflow.ellipsis,
                                  textAlign: TextAlign.left,
-                                 style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                                 fontWeight: FontWeight.w700
-                                ),
+                                 style: AppStyle.txtSatoshiBold125Gray900a7,
                                ),
                              ),
                            ],
                          ),
-                       ),
-                       Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         mainAxisAlignment: MainAxisAlignment.start,
-                         children: [
-                           Text(
-                             "lbl_deadline".tr,
-                             overflow: TextOverflow.ellipsis,
-                             textAlign: TextAlign.left,
-                             style: AppStyle.txtSatoshiLight135Gray600,
-                           ),
-                           Padding(
-                             padding: getPadding(
-                               top: 9,
-                             ),
-                             child: Text(
-                               "$formattedDate".tr,
-                               overflow: TextOverflow.ellipsis,
-                               textAlign: TextAlign.left,
-                               style: AppStyle.txtSatoshiBold125Gray900a7,
-                             ),
-                           ),
-                         ],
-                       ),
-                     ],
+                       ],
+                     ),
                    ),
-                 ),
-                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(
-                    thickness: 1.2,
-                  ))        
-              ],
-            ),
-          )),
+                   Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Divider(
+                      thickness: 1.2,
+                    ))        
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

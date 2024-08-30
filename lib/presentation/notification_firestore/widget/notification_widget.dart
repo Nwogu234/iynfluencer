@@ -177,7 +177,7 @@ class NotificationWidget extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Text('$body has hired an Influencer')
+                                  Text('$body')
                                 ]),
                         Text(
                            timeago.format(timeStamp!),
