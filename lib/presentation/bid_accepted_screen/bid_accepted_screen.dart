@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:iynfluencer/presentation/request_accepted_screen/controller/request_accepted_controller.dart';
+import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
 // ignore_for_file: must_be_immutable
@@ -11,7 +13,8 @@ class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
           key: key,
         );
 
- late final String jobId = Get.parameters['jobId'] ?? '';
+
+  late final String jobId = Get.parameters['jobId'] ?? '';
 
 
   @override
@@ -96,4 +99,6 @@ class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
       ),
     );
   }
+
+
 }

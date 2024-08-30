@@ -107,7 +107,7 @@ class CreatorHireslistController extends GetxController with SingleGetTickerProv
         print(jobResponseData);
 
         // Filter the jobs based on the hired status
-        final List<Job> hiredJob = jobResponse.data.docs.where((job) => job.hired == true).toList();
+        final List<Job> hiredJob = jobResponse.data.docs!.where((job) => job.hired == true).toList();
 
         if (hiredJob.isEmpty) {
           print('No hired jobs found.');

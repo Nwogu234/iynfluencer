@@ -1,4 +1,4 @@
-import 'package:iynfluencer/core/app_export.dart';
+  import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 
 class JobResponse {
@@ -31,7 +31,7 @@ class JobData {
   final int? nextPage;
 
   JobData({
-    required this.docs,
+   required this.docs,
     required this.totalDocs,
     required this.limit,
     required this.totalPages,
@@ -45,7 +45,7 @@ class JobData {
 
   factory JobData.fromJson(Map<String, dynamic> json) {
     return JobData(
-      docs: (json['docs'] as List).map((i) => Job.fromJson(i)).toList(),
+       docs: (json['docs'] as List<dynamic>).map((i) => Job.fromJson(i as Map<String, dynamic>)).toList(),
       totalDocs: json['totalDocs'],
       limit: json['limit'],
       totalPages: json['totalPages'],
@@ -71,16 +71,19 @@ class Job {
   final int? duration;
   final bool? public;
   final bool? hired;
+  final  String? influencerId;
   final bool? suspended;
   final String? jobId;
   final String? createdAt;
   final String? updatedAt;
   final int? version;
   final String? status;
+  final List<Influencerz>? influencerz;
   final List<JobBid>? bids;
-  final Creator? creator;
+  final List<Creator>? creator;
+  final List<Review>? review;
   final int? bidsCount;
-  final User? user;
+  final  User? user;
 
   Job(
       {this.id,
@@ -94,17 +97,19 @@ class Job {
       this.duration,
       this.public,
       this.hired,
+      this.influencerId,
       this.suspended,
       this.jobId,
       this.createdAt,
       this.updatedAt,
       this.version,
       this.status,
+      this.influencerz,
       this.bids,
       this.creator,
+      this.review,
       this.bidsCount,
-      this.user
-      });
+      this.user});
 
   Map<String, dynamic> toJson() {
     return {
@@ -116,6 +121,7 @@ class Job {
       'duration': duration,
       'id': id,
       'creatorId': creatorId,
+      'influencerId': influencerId,
       'public': public,
       'hired': hired,
       'suspended': suspended,
@@ -124,10 +130,12 @@ class Job {
       'updatedAt': updatedAt,
       'version': version,
       'status': status,
-      'bids': bids?.map((bids) => bids.toJson()).toList(),
+      'influencer':  influencerz?.map((b) => b.toJson()).toList(),
+      'bids': bids?.map((b) => b.toJson()).toList(),
       'bidsCount': bidsCount,
-      'creator': creator,
-      "user": user
+      'creator': creator?.map((b) => b.toJson()).toList(),
+      'review': review?.map((b) => b.toJson()).toList(),
+      'user': user?.toJson(),
     };
   }
 
@@ -137,11 +145,12 @@ class Job {
       creatorId: json['creatorId'],
       title: json['title'],
       description: json['description'],
-      responsibilities: List<String>.from(json['responsibilities']),
-      category: List<String>.from(json['category']),
+      responsibilities: (json['responsibilities'] as List?)?.map((e) => e as String).toList(),
+      category: (json['category'] as List?)?.map((e) => e as String).toList(),
       budgetFrom: json['budgetFrom'],
       budgetTo: json['budgetTo'],
       duration: json['duration'],
+      influencerId: json['influencerId'],
       public: json['public'],
       hired: json['hired'],
       suspended: json['suspended'],
@@ -150,21 +159,23 @@ class Job {
       updatedAt: json['updatedAt'],
       version: json['__v'],
       status: json['status'],
-      bids: json['bids'] != null
-          ? (json['bids'] as List).map((i) => JobBid.fromJson(i)).toList()
-          : null,
+      bids: json['bids'] is List
+        ? (json['bids'] as List<dynamic>?)?.map((i) => JobBid.fromJson(i)).toList()
+        : null,  
       bidsCount: json['bidsCount'],
-      // creator:
-      //     (json['creator'] as List).map((i) => Creator.fromJson(i)).toList(),
-      // user: (json['user'] as List?)!
-      //     .map((i) => User.fromJson(i as Map<String, dynamic>))
-      //     .toList(),
-      creator: json['creator'] != null
-          ? new Creator.fromJson(json['creator'])
-          : null,
-      user: json['user'] != null ? new User.fromJson(json['user']) : null,
+      influencerz: json['influencer'] is List
+        ? (json['influencer'] as List<dynamic>?)?.map((i) => Influencerz.fromJson(i)).toList()
+        : null,  
+      creator: json['creator'] is List
+        ? (json['creator'] as List<dynamic>?)?.map((e) => Creator.fromJson(e)).toList()
+        : null,  
+      review: json['review'] is List
+        ? (json['review'] as List<dynamic>?)?.map((e) => Review.fromJson(e)).toList()
+        : null,  
+         user: json['user'] != null ? User.fromJson(json['user']) : null,
     );
   }
+
 }
 
 class JobBid {
@@ -180,34 +191,32 @@ class JobBid {
   int? version;
   bool? paymentStatus;
 
-  JobBid({
-     this.id,
-     this.jobId,
-     this.influencerId,
-     this.coverLetter,
-     this.price,
-     this.status,
-     this.bidId,
-     this.createdAt,
-    this.updatedAt,
-    this.version,
-    this.paymentStatus
-  });
+  JobBid(
+      {this.id,
+      this.jobId,
+      this.influencerId,
+      this.coverLetter,
+      this.price,
+      this.status,
+      this.bidId,
+      this.createdAt,
+      this.updatedAt,
+      this.version,
+      this.paymentStatus});
 
   factory JobBid.fromJson(Map<String, dynamic> json) {
     return JobBid(
-      id: json['_id'],
-      jobId: json['jobId'],
-      influencerId: json['influencerId'],
-      coverLetter: json['coverLetter'],
-      price: json['price'],
-      status: json['status'],
-      bidId: json['bidId'],
-      createdAt : json['createdAt'],
-      updatedAt : json['updatedAt'],
-      version: json['version'],
-      paymentStatus: json['paymentStatus']
-    );
+        id: json['_id'],
+        jobId: json['jobId'],
+        influencerId: json['influencerId'],
+        coverLetter: json['coverLetter'],
+        price: json['price'],
+        status: json['status'],
+        bidId: json['bidId'],
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+        version: json['version'],
+        paymentStatus: json['paymentStatus']);
   }
 
   Map<String, dynamic> toJson() {
@@ -219,8 +228,8 @@ class JobBid {
       'price': price,
       'status': status,
       'bidId': bidId,
-      'createdAt' : createdAt,
-      'updatedAt' : updatedAt,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
       'version': version,
     };
   }
@@ -232,12 +241,7 @@ class Creator {
   final String? creatorId;
   final User? user;
 
-  Creator({
-    this.id,
-    this.userId,
-    this.creatorId,
-    this.user
-  });
+  Creator({this.id, this.userId, this.creatorId, this.user});
 
   factory Creator.fromJson(Map<String, dynamic> json) {
     return Creator(
@@ -246,6 +250,15 @@ class Creator {
       creatorId: json['creatorId'],
       user: json['user'] != null ? new User.fromJson(json['user']) : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'creatorId': creatorId,
+      'user': user?.toJson(), 
+    };
   }
 }
 
@@ -315,3 +328,80 @@ class SendJobRequest {
     return data;
   }
 }
+
+
+class Review {
+  final String id;
+  final String influencerId;
+  final String creatorId;
+  final String jobId;
+  final List<String> proof;
+  final String createdAt;
+  final String updatedAt;
+
+  Review({
+    required this.id,
+    required this.influencerId,
+    required this.creatorId,
+    required this.jobId,
+    required this.proof,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      id: json['_id'],
+      influencerId: json['influencerId'],
+      creatorId: json['creatorId'],
+      jobId: json['jobId'],
+      proof: List<String>.from(json['proof']),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'influencerId': influencerId,
+      'creatorId': creatorId,
+      'jobId': jobId,
+      'proof': proof,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      
+    };
+  }
+} 
+
+
+class Influencerz {
+  String id;
+  String userId;
+  String influencerId;
+
+  Influencerz({required this.id, required this.userId, required this.influencerId});
+
+  factory Influencerz.fromJson(Map<String, dynamic> json) {
+    return Influencerz(
+      id: json['_id'],
+      userId: json['userId'],
+      influencerId: json['influencerId'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'influencerId':influencerId
+    
+    };
+  }
+}
+
+
+
+
+

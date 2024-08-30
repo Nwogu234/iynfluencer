@@ -29,8 +29,10 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
   HomeCreatorContainerController homcont =
       Get.put(HomeCreatorContainerController());
 
+
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // Initialize creatorJobslistModelObj here
+  //Initialize creatorJobslistModelObj here
   final creatorJobslistModelObj = CreatorJobslistModel();
 
   late AnimationController animationController;
@@ -43,9 +45,9 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
       vsync: this,
     )..repeat();
     // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    controller = Get.put(CreatorJobslistController(
+     controller = Get.put(CreatorJobslistController(
       creatorJobslistModelObj.jobpostingItemList,
-    ));
+    )); 
   }
 
   @override

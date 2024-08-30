@@ -49,6 +49,8 @@ class ImageConstant {
 
   static String imgGrid = 'assets/images/img_grid.svg';
 
+  static String imgUpload = 'assets/images/uploadsvg.svg';
+
   static String imgGroup85221 = 'assets/images/img_group852_21.png';
 
   static String imgArrowdownGray600 =
@@ -73,6 +75,10 @@ class ImageConstant {
   static String imgVector = 'assets/images/img_vector.svg';
 
   static String imgArrowleft = 'assets/images/img_arrowleft.svg';
+
+  static String imgChevronRight = 'assets/images/chevron-right.svg';
+
+  static String imgInformation = 'assets/images/information-circle.svg';
 
   static String imgGroup8525 = 'assets/images/img_group852_5.png';
 

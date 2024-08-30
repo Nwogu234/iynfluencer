@@ -49,6 +49,7 @@ class PostPageController extends GetxController
   final UserController user = Get.find();
   final notificationClient = NotificationClient();
   Rx<bool> isLoading = false.obs;
+   final apiClient = ApiClient();
 
   // this is for the job category
 
@@ -323,6 +324,55 @@ class PostPageController extends GetxController
     }
   }
 
+/*  
+ 
+Future<String?> uploadUserPic(String filePath) async {
+  try {
+    Get.dialog(
+      Center(child: CircularProgressIndicator()), 
+      barrierDismissible: false, 
+    );
+
+    final token = await storage.read(key: "token");
+
+    // 1. Get the pre-signed URL from your backend
+    final response = await apiClient.getPicUrl(filePath, token!);
+
+    if (!response.isOk) {
+      Get.back();
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
+      print('Failed to obtain pre-signed URL');
+      return null;
+    } 
+
+    print(response.body);
+    String presignedUrl = response.body['data']['uploadUrl'];
+
+    // Posting the desired part directly to the API
+    final postResponse = await apiClient.postAvatar(presignedUrl, token);
+    if (postResponse.isOk) {
+      Get.back();
+      Get.snackbar('Success', 'Image uploaded');
+      print('Success: ${postResponse.body}');
+
+      // Assuming the response contains the URL to the uploaded image
+      return response.body['data']['url'];
+    } else {
+      Get.back();
+      Get.snackbar('Error', 'Failed to upload image. Please try again.');
+      print('Error: ${postResponse.body}');
+      print('Server error: ${postResponse.statusText}');
+      return null;
+    }
+  } catch (e) {
+    print(e);
+    Get.back();
+    Get.snackbar('Error', 'Failed to upload image. Please try again.');
+    return null;
+  }
+}
+
+ */
 
   @override
   void onInit() {

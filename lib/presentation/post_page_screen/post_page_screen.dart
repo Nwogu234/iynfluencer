@@ -115,7 +115,7 @@ class PostPageScreen extends GetWidget {
       allowedExtensions: [
         'pdf',
         'doc'
-        'docx',
+            'docx',
       ], // Add allowed document file extensions
     );
 
@@ -126,7 +126,7 @@ class PostPageScreen extends GetWidget {
       final String type = extension?.toLowerCase() ?? "";
       final File? file = docFile.path != null ? File(docFile.path!) : null;
 
-      if (type == "pdf" || type == "doc"  || type == "docx") {
+      if (type == "pdf" || type == "doc" || type == "docx") {
         controller.selectedMediaFiles
             .add(MediaFile(name: name, type: type, file: file!));
       } else {
@@ -465,7 +465,7 @@ class PostPageScreen extends GetWidget {
                                             ),
                                             onTap: () {
                                               // Show a dialog to display the media
-                                              showDialog(
+                                              /*  showDialog(
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
@@ -485,7 +485,11 @@ class PostPageScreen extends GetWidget {
                                                     ],
                                                   );
                                                 },
-                                              );
+                                              ); */
+                                             Get.to((
+                                              MediaFileWidget(
+                                                  mediaFile: mediaFile)
+                                             ));
                                             },
                                           );
                                         }).toList(),

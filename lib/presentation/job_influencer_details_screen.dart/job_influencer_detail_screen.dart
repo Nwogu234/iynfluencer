@@ -1,5 +1,6 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
@@ -20,10 +21,10 @@ class JobInfluencerDetailScreen extends StatefulWidget {
   JobInfluencerDetailScreen({
     this.selectedJob,
     this.fromBids = false,
-    this.chatData,
+   this.chatData,
   });
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final bool? fromBids;
   final ChatData? chatData;
 
@@ -54,7 +55,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
   @override
   void initState() {
     super.initState();
-    Get.put(ChatsInfluencerController(
+     Get.put(ChatsInfluencerController(
         chatData: widget.chatData ?? chatsData,
         selectedJob: widget.selectedJob));
   }
@@ -343,15 +344,17 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                     fontStyle: ButtonFontStyle.SatoshiBold13)
                               ])),
                           Padding(
-                              padding: getPadding(left: 20, top: 19),
-                              child: Row(children: [
+                              padding: getPadding(left: 23,right:23,top: 19),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                 Padding(
                                     padding: getPadding(top: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.end,
                                         children: [
                                           Text("lbl_13_jobs_posted".tr,
                                               overflow: TextOverflow.ellipsis,
@@ -393,7 +396,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                                   textAlign: TextAlign.left))
                                         ])),
                                 Padding(
-                                    padding: getPadding(left: 70, bottom: 1),
+                                    padding: getPadding( bottom: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -430,7 +433,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                       onTap: () {
                         onTapJob(
                           widget.selectedJob,
-                          widget.chatData
+                          chatControllers.chatData
                         );
                       },
                     )
@@ -450,7 +453,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
   onTapJob(selectedJob, chatData) {
   final args = JobArguments(selectedJob, chatData);
     Get.toNamed(
-        AppRoutes.completeJobScreen  , arguments:args);
+        AppRoutes.influencerJobTabScreen  , arguments:args);
   }
 
   /// Navigates to the previous screen.

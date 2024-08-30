@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
@@ -21,14 +22,12 @@ class JobsJobsInfluencerPage extends StatelessWidget {
           key: key,
         );
 
-  JobsJobsInfluencerController controller = Get.put(
-      JobsJobsInfluencerController(
-          JobsJobsInfluencerModel().listclientItemList));
+JobsJobsInfluencerController controller = Get.put(
+  JobsJobsInfluencerController()
+);
   late AnimationController animationController;
-   final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
-
-
+     final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs)); 
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +110,7 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                           },
                           itemCount: 4,
                           itemBuilder: (context, index) {
-                            return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                            return InfluencerJobBidItemSkeletonWidget(); 
                           },
                         );
                       } else {
@@ -126,12 +125,11 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                         } else if (controller.isEpty.value) {
                           return ResponsiveEmptyWidget(
                             errorMessage: 'You have no current Jobs ',
-                              smallMessage: 'Your past and present Jobs will appear here',
+                            smallMessage:
+                                'Your past and present Jobs will appear here',
                             buttonText: "Bid jobs!",
                             onRetry: () {
-                              controller.infTabcont.currentRoute.value=AppRoutes.influencerHomeScreen;
-                              Navigator.of(Get.nestedKey(3)!.currentState!.context).pushReplacementNamed(AppRoutes.influencerHomeScreen);
-                              controller.bumcont.selectedIndex.value=0;
+                              controller.getUser();
                             },
                             fullPage: true,
                           ); //
@@ -149,20 +147,23 @@ class JobsJobsInfluencerPage extends StatelessWidget {
                                 ),
                               );
                             },
-                            itemCount: controller
-                                .jobsJobsInfluencerModelObj.value.length,
-                            itemBuilder: (context, index) {
-                              Job model = controller
-                                  .jobsJobsInfluencerModelObj.value[index];
-                            ChatData? chatData = 
+                             itemCount: controller.isTrendLoading.value
+                                 ? 5  // Show 5 skeleton items if still loading
+                            : controller.jobsJobsInfluencerModelObj.value.listclientItemList.length,  // Use the length of the job list
+                          itemBuilder: (context, index) {
+                          Jobz? model = index <
+                              controller.jobsJobsInfluencerModelObj.value.listclientItemList.length
+                            ? controller.jobsJobsInfluencerModelObj.value.listclientItemList[index]
+                             : null;
+                              ChatData? chatData = 
                                          index < messagesController.chatList.length
                                         ? messagesController.chatList[index]
                                         : null;
-                              return ListclientItemWidget(
-                                model,
-                                chatData,
-                              );
-                            },
+                           return ListclientItemWidget(
+                             model,
+                             chatData
+                             );
+                             },
                           );
                         }
                       }

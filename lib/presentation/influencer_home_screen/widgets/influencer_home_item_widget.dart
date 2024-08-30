@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/widgets/custom_small_button.dart';
 import 'package:iynfluencer/widgets/custom_small_button2.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,7 +19,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
           key: key,
         );
 
-  Job _job;
+  Jobz _job;
 
   var controller = Get.find<InfluencerHomeController>();
 

@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'listclient_item_model.dart';
 
 /// This class defines the variables used in the [jobs_jobs_influencer_page],
 /// and is typically used to hold data that is passed between different parts of the application.
 class JobsJobsInfluencerModel {
-  Rx<List<Job>> listclientItemList = Rx(List.generate(3, (index) => Job(
-    bids: []
-  )));
+  RxList<Jobz> listclientItemList = RxList<Jobz>();
 }

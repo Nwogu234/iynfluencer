@@ -16,10 +16,18 @@ import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashio
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/binding/home_creator_container_binding.dart';
+import 'package:iynfluencer/presentation/influencer_job_tab_screen/binding/influencer_job_tab_binding.dart';
+import 'package:iynfluencer/presentation/influencer_job_tab_screen/influencer_job_tab_screen.dart';
+import 'package:iynfluencer/presentation/job_accepted_screen/binding/job_accepted_binding.dart';
+import 'package:iynfluencer/presentation/job_accepted_screen/job_accepted_screen.dart';
+import 'package:iynfluencer/presentation/job_hired_screen/binding/job_hired_binding.dart';
+import 'package:iynfluencer/presentation/job_hired_screen/job_hired_screen.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_page_influencer_page.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/presentation/notification_firestore/binding/notification_firestore_binding.dart';
 import 'package:iynfluencer/presentation/notification_firestore/notification_firestore.dart';
+import 'package:iynfluencer/presentation/review_accepted_screen/binding/review_accepted_binding.dart';
+import 'package:iynfluencer/presentation/review_accepted_screen/review_accepted_screen.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/social_media_home_page_binding.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/splash_screen/splash_screen.dart';
@@ -278,6 +286,12 @@ class AppRoutes {
 
   static const String jobDetailsScreen = '/job_details_screen';
 
+  static const String jobHiredScreen = '/job_hired_screen';
+
+  static const String reviewAcceptedScreen = '/review_accepted';
+
+  static const String influencerJobTabScreen = '/influencer_job_tab_screen';
+
   static const String creatorJobDetailsScreen = '/creator_job_details_screen';
 
   static const String jobsMyBidsInfluencerPage =
@@ -344,6 +358,8 @@ class AppRoutes {
   static const String requestAcceptedOneScreen = '/request_accepted_one_screen';
 
   static const String requestAcceptedScreen = '/request_accepted_screen';
+
+  static const String jobAcceptedScreen = '/job_accepted_screen';
 
   static const String bidAcceptedScreen = '/bid_accepted_screen';
 
@@ -509,48 +525,6 @@ class AppRoutes {
         NotificationFirestoreBinding(),
       ],
     ),
-/* 
-    GetPage(
-      name: allHomePage,
-      page: () => AllHomePage(),
-      bindings: [
-        AllHomePageBinding(),
-      ],
-    ),
-
-    GetPage(
-      name: fashionHomePage,
-      page: () => FashionHomePage(),
-      bindings: [
-        FashionHomePageBinding(),
-      ],
-    ),
-
-    GetPage(
-      name: technologyHomePage,
-      page: () => TechnologyHomePage(),
-      bindings: [
-        TechnologyHomePageBinding(),
-      ],
-    ),
-
-    GetPage(
-      name: technologyHomePage,
-      page: () => TechnologyHomePage(),
-      bindings: [
-        TechnologyHomePageBinding(),
-      ],
-    ),
-
-    GetPage(
-      name: socialMediaHomePage,
-      page: () => SocialMediaHomePage(),
-      bindings: [
-        SocialMediaHomePageBinding(),
-      ],
-    ),
-
- */
 
     GetPage(
       name: forgotPasswordScreen,
@@ -602,10 +576,39 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: jobHiredScreen,
+      page: () => JobHiredScreen(),
+      bindings: [
+        JobHiredBinding(),
+      ],
+    ),
+    GetPage(
+      name: influencerJobTabScreen,
+      page: () =>   InfluencerJobTabScreen(),
+      bindings: [
+        InfluencerJobTabBinding(),
+      ],
+    ),
+    GetPage(
       name: searchInfluncersScreen,
       page: () => SearchInfluncersScreen(),
       bindings: [
         SearchInfluncersBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: reviewAcceptedScreen,
+      page: () => ReviewAcceptedScreen(),
+      bindings: [
+        ReviewAcceptedBinding(),
+      ],
+    ),
+    GetPage(
+      name: jobAcceptedScreen,
+      page: () => JobAcceptedScreen(),
+      bindings: [
+        JobAcceptedBinding(),
       ],
     ),
     GetPage(

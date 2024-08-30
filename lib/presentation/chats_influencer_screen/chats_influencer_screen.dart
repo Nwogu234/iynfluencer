@@ -6,6 +6,7 @@ import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
@@ -433,7 +434,7 @@ class ChatsInfluencerScreen extends StatefulWidget {
   ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData, this.query})
       : super(key: key);
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final ChatData chatData;
   final String? query;
 
@@ -509,7 +510,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     controllers = ChatsInfluencerController(
         chatData: widget.chatData, 
         selectedJob: widget.selectedJob,
-         query: widget.query
+         query: widget.query ?? ''
         );
 
     // controllers.getUser(widget.chatData.chatId);
@@ -767,7 +768,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                 ? TextEditingController(text: widget.query) :
                                    controllers.messageController,
                                 closedController: controllers,
-                                query: widget.query,
+                                query: widget.query ?? '',
                               ),
                               show.value
                                   ? emojiSelect(controllers)

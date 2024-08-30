@@ -18,35 +18,36 @@ class UserModel {
   final String? creatorId;
   final String? country;
   // String? dob;
-   late String dob;
+  late String dob;
+  final int balance;
   final String? influencerId;
   final String? phone;
-  String?  countryCode;
+  String? countryCode;
 
-  UserModel({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.termsAndConditionsAgreement,
-    required this.isNewUser,
-    required this.isSocial,
-    required this.verified,
-    required this.verifiedEmail,
-    required this.followers,
-    required this.following,
-    required this.views,
-    required this.userId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.creatorId,
-    required this.influencerId,
-    required this.phone,
-    required this.country,
-    required this.dob,
-    required this.avatar,
-     this.countryCode
-  });
+  UserModel(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.termsAndConditionsAgreement,
+      required this.isNewUser,
+      required this.isSocial,
+      required this.verified,
+      required this.verifiedEmail,
+      required this.followers,
+      required this.following,
+      required this.views,
+      required this.userId,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.creatorId,
+      required this.influencerId,
+      required this.phone,
+      required this.country,
+      required this.dob,
+      required this.balance,
+      required this.avatar,
+      this.countryCode});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -63,14 +64,15 @@ class UserModel {
       following: json['following'] ?? 0,
       views: json['views'] ?? 0,
       userId: json['userId'] ?? '',
-      avatar: json['avatar']??'',
-      country: json["country"]??null,
-     // dob: json['dob'] != null ? json['dob'] : null,
-      dob: json['dob'] ?? '',  
+      avatar: json['avatar'] ?? '',
+      country: json["country"] ?? null,
+      // dob: json['dob'] != null ? json['dob'] : null,
+      dob: json['dob'] ?? '',
+      balance: json['balance'] ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String) ?? DateTime.now(),
       updatedAt: DateTime.parse(json['updatedAt'] as String) ?? DateTime.now(),
       creatorId: json['creatorId'] ?? null,
-      phone: json['phone']?? null,
+      phone: json['phone'] ?? null,
       influencerId: json['influencerId'] ?? null,
     );
   }
@@ -94,7 +96,7 @@ class UpdateUser {
       'username': userName,
       'phone': phoneNumber,
       'country': country,
-      'dob': dob, // Convert DateTime to string
+      'dob': dob,
     };
   }
 }

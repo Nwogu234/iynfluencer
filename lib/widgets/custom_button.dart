@@ -138,7 +138,10 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonPadding.PaddingAll4:
         return getPadding(
-          all: 4,
+          top:3,
+          bottom:3,
+          right:11,
+          left:11
         );
       case ButtonPadding.PaddingT4:
         return getPadding(
@@ -164,6 +167,13 @@ class CustomButton extends StatelessWidget {
           top: 32,
           right: 32,
           bottom: 32,
+        );
+      case ButtonPadding.PaddingT52:
+        return getPadding(
+          left: 12,
+          top: 8,
+          right: 12,
+          bottom: 8,
         );
       default:
         return getPadding(
@@ -200,6 +210,8 @@ class CustomButton extends StatelessWidget {
         return ColorConstant.gray20003;
       case ButtonVariant.FillRedA700:
         return ColorConstant.redA700;
+      case ButtonVariant.gray700:
+        return ColorConstant.gray100;
       case ButtonVariant.FillCyan30066:
         return ColorConstant.cyan30066;
       case ButtonVariant.OutlineIndigo50_3:
@@ -300,6 +312,12 @@ class CustomButton extends StatelessWidget {
             25.00,
           ),
         );
+      case ButtonShapes.RoundedBorder122:
+        return BorderRadius.circular(
+          getHorizontalSize(
+            30.00,
+          ),
+        );
       case ButtonShapes.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
@@ -366,7 +384,7 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonFontStyle.SatoshiBold115:
         return TextStyle(
-          color: ColorConstant.lime900,
+          color: ColorConstant.redA600,
           fontSize: getFontSize(
             11.5,
           ),
@@ -526,6 +544,7 @@ enum ButtonShapes {
   RoundedBorder7,
   RoundedBorder12,
   RoundedBorder3,
+  RoundedBorder122
 }
 
 enum ButtonPadding {
@@ -538,6 +557,7 @@ enum ButtonPadding {
   PaddingT13,
   PaddingT8,
   PaddingT32,
+  PaddingT52,
 }
 
 enum ButtonVariant {
@@ -558,7 +578,8 @@ enum ButtonVariant {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
-  yellow200
+  yellow200,
+  gray700
 }
 
 enum ButtonFontStyle {

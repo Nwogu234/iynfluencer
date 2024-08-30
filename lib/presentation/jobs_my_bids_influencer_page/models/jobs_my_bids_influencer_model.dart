@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 //import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'listmediainflue_item_model.dart';
@@ -16,7 +17,7 @@ class JobsMyBidsInfluencerModel {
   String? createdAt;
   String? updatedAt;
   int? iV;
-  Job? job;
+  Jobz? job;
   String? id;
 
   JobsMyBidsInfluencerModel(
@@ -44,7 +45,7 @@ class JobsMyBidsInfluencerModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    job = json['job'] != null ? new Job.fromJson(json['job']) : null;
+    job = json['job'] != null ? new Jobz.fromJson(json['job']) : null;
     id = json['id'];
   }
 

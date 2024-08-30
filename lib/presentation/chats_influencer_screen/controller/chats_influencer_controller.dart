@@ -8,6 +8,7 @@ import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
@@ -339,7 +340,7 @@ Future<List<Message>> loadMessages() async {
 
 class ChatsInfluencerController extends GetxController {
   final ChatData chatData;
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final String? query;
 
   ChatsInfluencerController(
@@ -582,7 +583,7 @@ class ChatsInfluencerController extends GetxController {
   }
 
   void onTapChatsCard(
-      Job? selectedJob, ChatData chatData, String? query) async {
+      Jobz? selectedJob, ChatData chatData, String? query) async {
     if (selectedJob == null) {
       print("selectedJob is null");
       return;

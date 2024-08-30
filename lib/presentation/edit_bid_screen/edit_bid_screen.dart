@@ -1,4 +1,5 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 
@@ -11,13 +12,12 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
+import 'package:iynfluencer/widgets/custoz_button.dart';
 
 class EditBidScreen extends GetWidget {
   EditBidScreen({Key? key}) : super(key: key);
-  
-   final Job selectedJob = Get.arguments as Job;
 
-  
+  final Jobz selectedJob = Get.arguments as Jobz;
 
   final EditBidController controller =
       Get.put(EditBidController(BidModel().obs));
@@ -134,7 +134,9 @@ class EditBidScreen extends GetWidget {
                         "lbl_cover_letter".tr,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight13Gray900,
+                        style: AppStyle.txtSatoshiLight13Gray900.copyWith(
+                          fontWeight: FontWeight.w600
+                        ),
                       ),
                       CustomTextFormField(
                         focusNode: FocusNode(),
@@ -156,7 +158,9 @@ class EditBidScreen extends GetWidget {
                       Text("lbl_project_charge".tr,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight13Gray900),
+                          style: AppStyle.txtSatoshiLight13Gray900.copyWith(
+                             fontWeight: FontWeight.w600
+                          )),
                       CustomTextFormField(
                         focusNode: FocusNode(),
                         autofocus: true,
@@ -174,13 +178,58 @@ class EditBidScreen extends GetWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "msg_terms_of_contract".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold14Gray900,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top:4),
+                                  child: Text(
+                                    "Add deliverables".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiBold14Gray900
+                                        .copyWith(
+                                            fontSize: 16,
+                                            color: ColorConstant.black900),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                CustomImageView(
+                                  margin: EdgeInsets.only(top: 5),
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.centerRight,
+                                  svgPath: ImageConstant.imgInformation,
+                                  width: getHorizontalSize(20),
+                                  height: getHorizontalSize(20),
+                                  color: ColorConstant.blueGray400,
+                                )
+                              ],
+                            ),
+                            CustomButton(
+                              height: getHorizontalSize(40),
+                              width: getHorizontalSize(70),
+                              prefixWidget: Text(
+                                "+",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.txtSatoshiBold14Gray900
+                                    .copyWith(
+                                        fontSize: 16,
+                                        color: ColorConstant.whiteA700),
+                              ),
+                              text: " Add",
+                              onTap: () {
+                                controller.startAddingTermsOfContract();
+                              },
+                              padding: ButtonPadding.PaddingT52,
+                              fontStyle: ButtonFontStyle.SatoshiBold13WhiteA700,
+                              shape: ButtonShapes.RoundedBorder122,
+                            )
+                          ],
                         ),
-                        CustomButton(
+/*                         CustomButton(
                           height: getVerticalSize(44.h),
                           text: "Add the Terms of Contract",
                           onTap: () {
@@ -195,7 +244,8 @@ class EditBidScreen extends GetWidget {
                             child: CustomImageView(
                                 svgPath: ImageConstant.imgFrameGray700),
                           ),
-                        ),
+                        ), */
+
                         Obx(() => controller.isAddingTermsOfContract.value
                             ? _buildAccountForm()
                             : _buildAccountChips()),
@@ -230,12 +280,11 @@ class EditBidScreen extends GetWidget {
                   loading: controller.isLoading.value,
                   onTap: () {
                     controller.editForm(
-                      context, 
-                      selectedJob.jobId ?? '', 
-                      selectedJob.bids?.first.bidId ?? '',
-                      selectedJob.creator?.userId ?? '',
-                      selectedJob.title!
-                      );
+                        context,
+                        selectedJob.jobId ?? '',
+                        selectedJob.bids?.first.bidId ?? '',
+                        selectedJob.creator?.userId ?? '',
+                        selectedJob.title!);
                   },
                 ),
               ),
@@ -258,10 +307,41 @@ class EditBidScreen extends GetWidget {
       child: Wrap(
         spacing: 8.0.w,
         children: responsibilitiesCopy.map((account) {
-          return Chip(
+          /*  return Chip(
             label: Text("${account.toString()}"),
             deleteIcon: Icon(Icons.close),
             onDeleted: () => controller.handleDelete(account),
+          ); */
+          return Padding(
+            padding: const EdgeInsets.only(
+              top:15
+            ),
+            child: CustozButton(
+              margin: EdgeInsets.symmetric(
+                vertical: 1
+              ),
+              height: getHorizontalSize(58),
+              width: double.infinity,
+              variant: ButtonVariantzz.gray700,
+              padding: ButtonPaddingzz.PaddingAll12,
+              prefixWidget: Text(
+                "${account.toString()}",
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold14Gray600ab.copyWith(
+                  fontSize: 14,
+                  color: ColorConstant.black9000,
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+              suffixWidget: Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                    onTap: () {
+                      controller.handleDelete(account);
+                    },
+                    child: Icon(Icons.close)),
+              ),
+            ),
           );
         }).toList(),
       ),

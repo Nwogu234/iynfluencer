@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -20,7 +22,7 @@ class CreatorJobslistController extends GetxController {
   Rx<bool> isRecommendedLoading = false.obs;
   final storage = new FlutterSecureStorage();
   var token;
-  bool empty=false;
+  bool empty = false;
   final apiClient = ApiClient();
   var error = ''.obs;
   List<Job> existingJobs = []; // Existing jobs
@@ -58,33 +60,41 @@ class CreatorJobslistController extends GetxController {
     }
   }
 
-  Future<void> getJobs() async {
-    try {
-      error('');
-      token = await storage.read(key: "token");
-      isTrendLoading.value = true;
-      Response response = await apiClient.getCreatorJobs(token);
+   Future<void> getJobs() async {
+  try {
+    error('');
+    token = await storage.read(key: "token");
+    isTrendLoading.value = true;
 
-      if (response.isOk) {
-        final responseJson = response.body;
-        final jobResponse = JobResponse.fromJson(responseJson);
-        if (jobResponse.data.docs.isEmpty){
-          empty=true;
-        }
-        existingJobs= jobResponse.data.docs;
-        error('');
-        isTrendLoading.value = false;
+    // Fetch jobs from the API
+    Response response = await apiClient.getCreatorJobs(token);
+
+    // Check if the response was successful
+    if (response.isOk) {
+      // Parse the JSON response directly
+      final Map<String, dynamic> responseJson = response.body;
+
+      // Convert the JSON to JobResponse and then extract the jobs list
+      final JobResponse jobResponse = JobResponse.fromJson(responseJson);
+
+      if (jobResponse.data.docs.isEmpty ) {
+        empty = true;
       } else {
-        error('Something went wrong');
-        isTrendLoading..value = false;
+        existingJobs = jobResponse.data.docs;
       }
-    } catch (e) {
-      print(e);
+
+      error('');
+      isTrendLoading.value = false;
+    } else {
       error('Something went wrong');
       isTrendLoading.value = false;
     }
+  } catch (e) {
+    print(e);
+    error('Something went wrong');
+    isTrendLoading.value = false;
   }
-
+}
 
   @override
   void onInit() {
