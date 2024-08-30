@@ -89,6 +89,8 @@ class InfluencerHomeController extends GetxController {
     }
   }
 
+  
+
   void onSearchSubmitted(String query) {
     print("Submitted query: $query");
   }

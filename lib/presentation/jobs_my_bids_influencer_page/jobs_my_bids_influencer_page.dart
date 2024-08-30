@@ -1,4 +1,7 @@
 
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
@@ -33,6 +36,8 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
 
   final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
   late AnimationController animationController;
+   final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs)); 
 
   @override
   void initState() {
@@ -175,10 +180,16 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                             itemBuilder: (context, index) {
                               JobsMyBidsInfluencerModel model = controller
                                   .jobsMyBidsInfluencerModelObj[index];
+                               ChatData? chatData = 
+                                         index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null;
                               print('-----');
                               print(model.coverLetter);
                               return ListmediainflueItemWidget(
                                 model,
+                                chatData
+                                
                               );
                             },
                           );

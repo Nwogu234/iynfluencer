@@ -1,4 +1,4 @@
- import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 
 class JobResponsez {
@@ -31,7 +31,7 @@ class JobDataz {
   final int? nextPage;
 
   JobDataz({
-   required this.docs,
+    required this.docs,
     required this.totalDocs,
     required this.limit,
     required this.totalPages,
@@ -45,7 +45,8 @@ class JobDataz {
 
   factory JobDataz.fromJson(Map<String, dynamic> json) {
     return JobDataz(
-        docs: (json['docs'] as List<dynamic>).map((i) => Jobz.fromJson(i)).toList(),
+      docs:
+          (json['docs'] as List<dynamic>).map((i) => Jobz.fromJson(i)).toList(),
       totalDocs: json['totalDocs'],
       limit: json['limit'],
       totalPages: json['totalPages'],
@@ -77,10 +78,12 @@ class Jobz {
   final String? createdAt;
   final String? updatedAt;
   final int? version;
+  final int? amount;
   final String? status;
   final List<JobBidz>? bids;
   final Creatorz? creator;
   final List<Review>? review;
+  final CreatorDetails? creatorDetails;
   final int? bidsCount;
   final User? user;
 
@@ -102,10 +105,12 @@ class Jobz {
       this.createdAt,
       this.updatedAt,
       this.version,
+      this.amount,
       this.status,
       this.bids,
       this.creator,
       this.review,
+      this.creatorDetails,
       this.bidsCount,
       this.user});
 
@@ -127,6 +132,8 @@ class Jobz {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'version': version,
+      'amount': amount,
+      'creatorDetails': creatorDetails?.toJson(),
       'status': status,
       'bids': bids?.map((b) => b.toJson()).toList(),
       'bidsCount': bidsCount,
@@ -156,12 +163,18 @@ class Jobz {
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       version: json['__v'],
+      amount: json['amount'],
+      creatorDetails: json['creatorDetails'] != null
+          ? CreatorDetails.fromJson(json['creatorDetails'])
+          : null,
       status: json['status'],
       bids: (json['bids'] as List?)?.map((i) => JobBidz.fromJson(i)).toList(),
       bidsCount: json['bidsCount'],
       creator:
           json['creator'] != null ? Creatorz.fromJson(json['creator']) : null,
-      review: (json['review'] as List<dynamic>?)?.map((e) => Review.fromJson(e)).toList(),
+      review: (json['review'] as List<dynamic>?)
+          ?.map((e) => Review.fromJson(e))
+          .toList(),
       user: json['user'] != null ? User.fromJson(json['user']) : null,
     );
   }
@@ -246,7 +259,7 @@ class Creatorz {
       'id': id,
       'userId': userId,
       'creatorId': creatorId,
-      'user': user?.toJson(), 
+      'user': user?.toJson(),
     };
   }
 }
@@ -318,7 +331,6 @@ class SendJobRequest {
   }
 }
 
-
 class Review {
   final String id;
   final String influencerId;
@@ -359,12 +371,49 @@ class Review {
       'proof': proof,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      
     };
   }
-} 
+}
+class CreatorDetails {
+  final String? id;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? userId;
+  final String? avatar;
+  final String? country;
 
+  CreatorDetails({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.userId,
+    this.avatar,
+    this.country,
+  });
 
+  factory CreatorDetails.fromJson(Map<String, dynamic> json) {
+    return CreatorDetails(
+      id: json['_id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      userId: json['userId'],
+      avatar: json['avatar'],
+      country: json['country'],
+    );
+  }
 
-
-
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'userId': userId,
+      'avatar': avatar,
+      'country': country,
+    };
+  }
+}

@@ -239,7 +239,7 @@ class HiresItemWidget extends StatelessWidget {
                               top: 7,
                             ),
                             child: Text(
-                             "\$${capitalizeFirstLetter(hiresItemlistObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(hiresItemlistObj?.budgetTo.toString())}",
+                             "\$${hiresItemlistObj?.amount}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold125Gray900a7,

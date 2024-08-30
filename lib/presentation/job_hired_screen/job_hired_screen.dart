@@ -94,8 +94,8 @@ class JobHiredScreen extends StatelessWidget {
                                       padding: getPadding(top: 5),
                                       child: Row(children: [
                                         CustomImageView(
-                                            imagePath:
-                                                ImageConstant.imgGroup85235x35,
+                                            url:
+                                                selectedJob?.user?.avatar ?? 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png',
                                             fit: BoxFit.cover,
                                             height: getSize(30),
                                             width: getSize(30),
@@ -105,9 +105,7 @@ class JobHiredScreen extends StatelessWidget {
                                             padding: getPadding(
                                                 left: 12, top: 7, bottom: 3),
                                             child: Text(
-                                                // "${selectedJob!.influencer!.user!.firstName!.capitalize} ${data!.influencer!.user!.lastName!.capitalize}"
-                                                //     .tr,
-                                                "Mark Adebayo",
+                                                 "${capitalizeFirstLetter(selectedJob?.user?.firstName ?? 'Mark')}-${capitalizeFirstLetter(selectedJob?.user?.lastName ?? 'Adebayo')}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style: AppStyle
@@ -179,7 +177,7 @@ class JobHiredScreen extends StatelessWidget {
                                       Padding(
                                           padding: getPadding(top: 7),
                                           child: Text(
-                                              "\$${capitalizeFirstLetter(selectedJob?.budgetFrom.toString())}-\$${capitalizeFirstLetter(selectedJob?.budgetTo.toString())}",
+                                               "\$${selectedJob?.amount ?? 0}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
@@ -307,6 +305,15 @@ class JobHiredScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              selectedJob?.status == 'Completed' ?
+                CustomButton(
+                  height: getVerticalSize(44),
+                  text: "This Job has been completed".tr,
+                  margin: getMargin(top: 10),
+                  variant: ButtonVariant.Neutral,
+                  padding: ButtonPadding.PaddingAll12,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
+                  onTap: () {}) :
               CustomButton(
                   height: getVerticalSize(44),
                   text: "Mark complete".tr,

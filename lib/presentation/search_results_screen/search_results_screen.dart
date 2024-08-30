@@ -114,9 +114,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                   return SingleChildScrollView(
                     controller: _scrollController,
                     child: Container(
-                      height: 380.h,
+                      height: 900.h,
                       child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
                                           itemCount: controller.isRecommendedLoading.value
                                           ? 5
                                           : controller
@@ -130,7 +129,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                                         } else {
                                return Padding(
                                         padding:
-                                                EdgeInsets.only(right: 10.w),
+                                                EdgeInsets.only(top: 2.h),
                                         child: TrendingResultItemWidget(
                                           influencer: controller.filteredInfluencers[index]
                                                 ),

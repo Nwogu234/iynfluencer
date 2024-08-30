@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -40,6 +41,7 @@ class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
+  final UserController user = Get.find();
   final ScrollController _scrollController = ScrollController();
 
   
@@ -72,6 +74,13 @@ void _onScroll() {
 
   @override
   Widget build(BuildContext context) {
+    final userName = '${user.userModelObj.value.firstName} ${user.userModelObj.value.lastName}';
+  
+  // Filter the jobs list
+  final filteredJobsList = controller.infJobsList.where((job) {
+    return '${job.creator?.user?.firstName} ${job.creator?.user?.lastName}' != userName;
+  }).toList();
+
     return SafeArea(
       child: Scaffold(
         key:_scaffoldKey,
@@ -88,7 +97,23 @@ void _onScroll() {
             ),
           ],
         );
-      } else if (controller.error.value.isNotEmpty) {
+      } else if (filteredJobsList.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 50,
+                horizontal: 20
+              ),
+              child: ResponsiveEmptyWidget(
+                       errorMessage: 'You have no current Jobs ',
+                       smallMessage:  'Your past and present Jobs will appear here',
+                       buttonText: "Retry",
+                       onRetry: () {
+                        controller.getUser();
+                     },
+                        fullPage: true,
+                         ),
+            ); //
+     }  else if (controller.error.value.isNotEmpty) {
         return PositionedDirectional(
           top: 150,
           start: 150,

@@ -104,8 +104,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
     ChatsOpenedController chatsController = Get.put(ChatsOpenedController(
         chatData: chatData, selectedInfluencer: selectedInfluencer));
 
-    String? avatarUrl =
-      selectedInfluencer.user?.first.avatar;
+    String? avatarUrl = selectedInfluencer.user?.first.avatar;
     String imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -166,6 +165,11 @@ class InfluencerProfileAboutPage extends StatelessWidget {
         return "$followers";
       }
     }
+
+    
+    int totalFollowers = selectedInfluencer.socials?.fold<int>(
+    0, (sum, social) => sum + (social.followersCount ?? 0)) ?? 0;
+
 
     return SafeArea(
         child: Scaffold(
@@ -232,7 +236,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                       bottom: 2,
                                     ),
                                     child: Text(
-                                      "190".tr,
+                                      selectedInfluencer.jobsDone.toString(),
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style: AppStyle.txtSatoshiBold16
@@ -242,6 +246,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                   Padding(
                                     padding: getPadding(
                                       top: 1,
+                                      right: 2
                                     ),
                                     child: Text("Jobs".tr,
                                         overflow: TextOverflow.ellipsis,
@@ -271,7 +276,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                       bottom: 2,
                                     ),
                                     child: Text(
-                                      "10+".tr,
+                                      formatFollowers(totalFollowers).tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                       style: AppStyle.txtSatoshiBold16
@@ -282,7 +287,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                     padding: getPadding(
                                       top: 1,
                                     ),
-                                    child: Text("Reviews".tr,
+                                    child: Text("Followers".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: AppStyle.txtSatoshiBold16
@@ -310,7 +315,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                       bottom: 2,
                                     ),
                                     child: Text(
-                                      "21.6k".tr,
+                                      '0',
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                       style: AppStyle.txtSatoshiBold16

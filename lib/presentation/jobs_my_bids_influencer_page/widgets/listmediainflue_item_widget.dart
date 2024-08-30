@@ -1,5 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/job_my_bids_detail_screen/job_my_bids_detail_screen.dart';
 import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../controller/jobs_my_bids_influencer_controller.dart';
@@ -11,13 +13,15 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class ListmediainflueItemWidget extends StatelessWidget {
   ListmediainflueItemWidget(
-    this.listmediainflueItemModelObj, {
+    this.listmediainflueItemModelObj, 
+     this.chatData,{
     Key? key,
   }) : super(
           key: key,
         );
 
   JobsMyBidsInfluencerModel? listmediainflueItemModelObj;
+   ChatData? chatData;
 
   // JobsMyBidsInfluencerController controller =
   //     Get.put<JobsMyBidsInfluencerController>();
@@ -35,9 +39,10 @@ class ListmediainflueItemWidget extends StatelessWidget {
     return GestureDetector(
         onTap: (() {
           Get.to(
-            JobDetailsScreen(
+            JobMyBidsDetailsScreen(
               selectedJob: listmediainflueItemModelObj?.job!,
-              fromBids: true,
+              jobMyBids: listmediainflueItemModelObj,
+              chatData: chatData,
             ),
           );
         }),
@@ -104,7 +109,8 @@ class ListmediainflueItemWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               CustomImageView(
-                                url: listmediainflueItemModelObj?.job?.user?.avatar ??  ImageConstant.imgGroup85233,
+                                fit: BoxFit.cover,
+                                url: listmediainflueItemModelObj?.job?.creatorDetails?.avatar ??  ImageConstant.imgGroup85233,
                                 height: getSize(
                                   30,
                                 ),
@@ -131,7 +137,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 ),
                               ),
                          Text(
-                              "${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.user?.lastName ?? 'Adebayo')}",
+                              "${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.creatorDetails?.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.creatorDetails?.lastName ?? 'Adebayo')}",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -243,7 +249,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                               child: CustomImageView(
                                 svgPath:  listmediainflueItemModelObj?.status == 'pending' ? 
                                 ImageConstant.imgClock :
-                                ImageConstant.imgSearchGreen700,
+                                ImageConstant.imgSearchGreen700, 
                               ),
                             ),
                           ),

@@ -32,7 +32,7 @@ class TrendingItemWidget extends StatelessWidget {
 
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = "${controller.user.baseUrl}$avatarUrl";
+      imageProvider = avatarUrl;
     } else {
       imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
     }

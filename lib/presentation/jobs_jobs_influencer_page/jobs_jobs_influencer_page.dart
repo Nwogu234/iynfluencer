@@ -148,7 +148,7 @@ JobsJobsInfluencerController controller = Get.put(
                               );
                             },
                              itemCount: controller.isTrendLoading.value
-                                 ? 5  // Show 5 skeleton items if still loading
+                                 ? 5  
                             : controller.jobsJobsInfluencerModelObj.value.listclientItemList.length,  // Use the length of the job list
                           itemBuilder: (context, index) {
                           Jobz? model = index <
