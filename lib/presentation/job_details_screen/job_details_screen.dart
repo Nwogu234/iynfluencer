@@ -156,7 +156,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                     return Padding(
                                         padding: getPadding(top: 7),
                                         child: Text(
-                                            mediaFile, //duration,budget,list of r4
+                                            mediaFile, 
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle

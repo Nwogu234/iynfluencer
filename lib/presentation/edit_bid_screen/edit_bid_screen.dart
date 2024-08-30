@@ -1,4 +1,5 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 
@@ -16,7 +17,7 @@ import 'package:iynfluencer/widgets/custoz_button.dart';
 class EditBidScreen extends GetWidget {
   EditBidScreen({Key? key}) : super(key: key);
 
-  final Job selectedJob = Get.arguments as Job;
+  final Jobz selectedJob = Get.arguments as Jobz;
 
   final EditBidController controller =
       Get.put(EditBidController(BidModel().obs));
@@ -282,7 +283,7 @@ class EditBidScreen extends GetWidget {
                         context,
                         selectedJob.jobId ?? '',
                         selectedJob.bids?.first.bidId ?? '',
-                        selectedJob.creator?.first.userId ?? '',
+                        selectedJob.creator?.userId ?? '',
                         selectedJob.title!);
                   },
                 ),

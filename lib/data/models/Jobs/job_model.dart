@@ -83,7 +83,7 @@ class Job {
   final List<Creator>? creator;
   final List<Review>? review;
   final int? bidsCount;
-  final List <User>? user;
+  final  User? user;
 
   Job(
       {this.id,
@@ -135,7 +135,7 @@ class Job {
       'bidsCount': bidsCount,
       'creator': creator?.map((b) => b.toJson()).toList(),
       'review': review?.map((b) => b.toJson()).toList(),
-      'user': user?.map((b) => b.toJson()).toList(),
+      'user': user?.toJson(),
     };
   }
 
@@ -172,9 +172,7 @@ class Job {
       review: json['review'] is List
         ? (json['review'] as List<dynamic>?)?.map((e) => Review.fromJson(e)).toList()
         : null,  
-      user: json['user'] is List
-        ? (json['user'] as List<dynamic>?)?.map((e) => User.fromJson(e)).toList()
-        : null,  
+         user: json['user'] != null ? User.fromJson(json['user']) : null,
     );
   }
 

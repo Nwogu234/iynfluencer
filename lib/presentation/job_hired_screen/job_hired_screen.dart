@@ -139,7 +139,7 @@ class JobHiredScreen extends StatelessWidget {
                                             selectedJob?.status ?? ''),
                                         margin: getMargin(top: 3),
                                         variant: selectedJob?.status ==
-                                                'completed'
+                                                'Completed'
                                             ? ButtonVariant.FillGreenA10099
                                             : selectedJob?.status ==
                                                     'In Progress'
@@ -150,7 +150,7 @@ class JobHiredScreen extends StatelessWidget {
                                         fontStyle: selectedJob?.status ==
                                                 'In Progress'
                                             ? ButtonFontStyle.SatoshiBold115
-                                            : selectedJob?.status == 'completed'
+                                            : selectedJob?.status == 'Completed'
                                                 ? ButtonFontStyle
                                                     .SatoshiBold115Green700
                                                 : ButtonFontStyle

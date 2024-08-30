@@ -44,7 +44,7 @@ class JobHiredController extends GetxController {
     final userId = selectedJob?.creator?.first.userId ?? '';
     final jobTitle = selectedJob?.title ?? '';
     final names =
-        "${capitalizeFirstLetter(selectedJob?.user?.first.firstName ?? '')} ${capitalizeFirstLetter(selectedJob?.user?.first.lastName ?? '')}";
+        "${capitalizeFirstLetter(selectedJob?.user?.firstName ?? '')} ${capitalizeFirstLetter(selectedJob?.user?.lastName ?? '')}";
     Response response = Response();
     try {
       error('');

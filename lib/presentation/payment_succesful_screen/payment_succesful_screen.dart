@@ -132,7 +132,7 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
     }
 
     final names =
-        "${capitalizeFirstLetter(job.user?.first.firstName ?? '')} ${capitalizeFirstLetter(job.user?.first.lastName ?? '')}";
+        "${capitalizeFirstLetter(job.user?.firstName ?? '')} ${capitalizeFirstLetter(job.user?.lastName ?? '')}";
     await OneSignal.login(userId);
     Response response = Response();
     var token = await storage.read(key: "token");

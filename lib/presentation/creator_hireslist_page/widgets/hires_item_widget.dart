@@ -37,7 +37,7 @@ class HiresItemWidget extends StatelessWidget {
 
     String? avatarUrl = 
   // 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${hiresItemlistObj?.user.first.}-avatar.jpeg' ?? ImageConstant.imgGroup85235x35;
-    hiresItemlistObj?.user?.first.avatar ?? ImageConstant.imgGroup85235x35;
+    hiresItemlistObj?.user?.avatar ?? ImageConstant.imgGroup85235x35;
     String imageProvider;
 
     print(avatarUrl);
@@ -50,7 +50,7 @@ class HiresItemWidget extends StatelessWidget {
 
 
     return SizedBox(
-      width: double.maxFinite,
+      width: getHorizontalSize(336),
       child: GestureDetector(
         onTap: () {
           onTapBidcard?.call();
@@ -77,6 +77,7 @@ class HiresItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomImageView(
+                      fit: BoxFit.cover,
                       url: imageProvider,
                       height: getSize(
                         50,
@@ -101,7 +102,7 @@ class HiresItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(          
-                          "\$${capitalizeFirstLetter(hiresItemlistObj?.user?.first.firstName)}-\$${capitalizeFirstLetter(hiresItemlistObj?.user?.first.lastName)}",
+                          "${capitalizeFirstLetter(hiresItemlistObj?.user?.firstName)}-${capitalizeFirstLetter(hiresItemlistObj?.user?.lastName)}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.txtSatoshiBold145,
@@ -130,7 +131,7 @@ class HiresItemWidget extends StatelessWidget {
                                     left: 3,
                                   ),
                                   child: Text(
-                                    hiresItemlistObj?.user?.first.country ??
+                                    hiresItemlistObj?.user?.country ??
                                         "lbl_lagos_nigeria".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
@@ -201,7 +202,7 @@ class HiresItemWidget extends StatelessWidget {
                             margin: getMargin(
                               top: 3,
                             ),
-                            variant: hiresItemlistObj?.status == 'completed' 
+                            variant: hiresItemlistObj?.status == 'Completed' 
                              ? ButtonVariant.FillGreenA10099 :
                               hiresItemlistObj?.status == 'In Progress' 
                               ?  ButtonVariant.FillLime100b2 
@@ -210,7 +211,7 @@ class HiresItemWidget extends StatelessWidget {
                             padding: ButtonPadding.PaddingAll4,
                             fontStyle: hiresItemlistObj?.status == 'In Progress' 
                             ? ButtonFontStyle.SatoshiBold115 
-                            : hiresItemlistObj?.status == 'completed' 
+                            : hiresItemlistObj?.status == 'Completed' 
                             ? ButtonFontStyle.SatoshiBold115Green700
                             : ButtonFontStyle.SatoshiBold115Red700,
                           ),

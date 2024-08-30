@@ -510,7 +510,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     controllers = ChatsInfluencerController(
         chatData: widget.chatData, 
         selectedJob: widget.selectedJob,
-         query: widget.query
+         query: widget.query ?? ''
         );
 
     // controllers.getUser(widget.chatData.chatId);
@@ -768,7 +768,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                 ? TextEditingController(text: widget.query) :
                                    controllers.messageController,
                                 closedController: controllers,
-                                query: widget.query,
+                                query: widget.query ?? '',
                               ),
                               show.value
                                   ? emojiSelect(controllers)

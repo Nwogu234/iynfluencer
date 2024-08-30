@@ -61,7 +61,7 @@ class CreatorAfterJobDetailsController extends GetxController {
     final Job job = bidsArguments.job;
     final jobTitle = job.title;
     final names =
-        "${capitalizeFirstLetter(job.user?.first.firstName ?? '')} ${capitalizeFirstLetter(job.user?.first.lastName ?? '')}";
+        "${capitalizeFirstLetter(job.user?.firstName ?? '')} ${capitalizeFirstLetter(job.user?.lastName ?? '')}";
     Response response = Response();
     try {
       error('');

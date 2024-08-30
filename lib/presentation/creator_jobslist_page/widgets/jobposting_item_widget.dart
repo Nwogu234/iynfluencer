@@ -23,7 +23,7 @@ class JobpostingItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
-    String? avatarUrl = creatorJobslistModelObj.user?.first.avatar;
+    String? avatarUrl = creatorJobslistModelObj.user?.avatar;
     ImageProvider imageProvider;
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -61,7 +61,11 @@ class JobpostingItemWidget extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Text("${creatorJobslistModelObj.title}",
+                      child: Text(
+                           truncateWithEllipsis(
+                                  myString: creatorJobslistModelObj.title ?? '',
+                                  textLength: 30,
+                                   ),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold16

@@ -273,7 +273,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 bottom: 20
                               ),
                               child: Text(
-                                '\$${listmediainflueItemModelObj?.price?.toString()}',
+                                '\$${((listmediainflueItemModelObj?.price ?? 0) / 100).toString()}',
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold125Gray900a7,
