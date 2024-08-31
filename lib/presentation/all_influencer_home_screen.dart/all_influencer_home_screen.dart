@@ -74,12 +74,7 @@ void _onScroll() {
 
   @override
   Widget build(BuildContext context) {
-    final userName = '${user.userModelObj.value.firstName} ${user.userModelObj.value.lastName}';
-  
-  // Filter the jobs list
-  final filteredJobsList = controller.infJobsList.where((job) {
-    return '${job.creator?.user?.firstName} ${job.creator?.user?.lastName}' != userName;
-  }).toList();
+   
 
     return SafeArea(
       child: Scaffold(
@@ -97,23 +92,7 @@ void _onScroll() {
             ),
           ],
         );
-      } else if (filteredJobsList.isEmpty) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 50,
-                horizontal: 20
-              ),
-              child: ResponsiveEmptyWidget(
-                       errorMessage: 'You have no current Jobs ',
-                       smallMessage:  'Your past and present Jobs will appear here',
-                       buttonText: "Retry",
-                       onRetry: () {
-                        controller.getUser();
-                     },
-                        fullPage: true,
-                         ),
-            ); //
-     }  else if (controller.error.value.isNotEmpty) {
+      }  else if (controller.error.value.isNotEmpty) {
         return PositionedDirectional(
           top: 150,
           start: 150,

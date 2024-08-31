@@ -70,6 +70,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
 
     final ChatsInfluencerController chatControllers =
         Get.find<ChatsInfluencerController>();
+        
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
         return text;

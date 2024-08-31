@@ -72,11 +72,15 @@ class InfluencerHomeController extends GetxController {
         jobsList = jobResponse.data.docs!;
         infJobsList = jobsList
             .where(
-                (item) => item.creatorId != user.userModelObj.value.creatorId)
+                (item) =>  item.creator!.creatorId != user.userModelObj.value.creatorId)
+                
+         //       item.creatorId != user.userModelObj.value.creatorId)
             .toList();
         print(jobsList); // List of Influencers
         error('');
         isJobsLoading.value = false;
+        
+
       } else {
         error('Something went wrong');
         isJobsLoading.value = false;
