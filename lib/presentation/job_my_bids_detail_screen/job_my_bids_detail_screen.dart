@@ -4,8 +4,7 @@ import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
-import 'package:iynfluencer/presentation/job_influencer_details_screen.dart/controller/job_influencer_detail_controller.dart';
-import 'package:iynfluencer/presentation/job_influencer_details_screen.dart/model/job_arguement.dart';
+import 'package:iynfluencer/presentation/job_my_bids_detail_screen/controller/job_my_bids_details_screen_controller.dart';
 import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -17,22 +16,22 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class JobInfluencerDetailScreen extends StatefulWidget {
-  JobInfluencerDetailScreen({
+class JobMyBidsDetailsScreen extends StatefulWidget {
+  JobMyBidsDetailsScreen({
     this.selectedJob,
-    this.fromBids = false,
-   this.chatData,
+    this.chatData,
+    this.jobMyBids
   });
 
   final Jobz? selectedJob;
-  final bool? fromBids;
   final ChatData? chatData;
+  JobsMyBidsInfluencerModel? jobMyBids;
 
   @override
-  State<JobInfluencerDetailScreen> createState() => _JobInfluencerDetailScreenState();
+  State<JobMyBidsDetailsScreen> createState() => _JobDetailsScreenState();
 }
 
-class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
+class _JobDetailsScreenState extends State<JobMyBidsDetailsScreen> {
   final UserController user = Get.find();
 
   final chatsData = ChatData(
@@ -55,12 +54,12 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
   @override
   void initState() {
     super.initState();
-     Get.put(ChatsInfluencerController(
+    Get.put(ChatsInfluencerController(
         chatData: widget.chatData ?? chatsData,
         selectedJob: widget.selectedJob));
   }
 
-  JobInfluencerDetailController controller = Get.put(JobInfluencerDetailController());
+  JobMyBidsDetailsController controller = Get.put(JobMyBidsDetailsController());
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,6 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
 
     final ChatsInfluencerController chatControllers =
         Get.find<ChatsInfluencerController>();
-        
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
         return text;
@@ -78,8 +76,8 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    String countryCode = user.getCountryCode(
-        user.capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country!));
+    String countryCode = user.getCountryCode(user.capitalizeFirstLetter(
+        widget.selectedJob?.creatorDetails?.country!));
     print(countryCode);
 
     return SafeArea(
@@ -157,7 +155,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                     return Padding(
                                         padding: getPadding(top: 7),
                                         child: Text(
-                                            mediaFile, //duration,budget,list of r4
+                                            mediaFile, 
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle
@@ -266,7 +264,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                               child: Row(children: [
                                 CustomImageView(
                                     fit: BoxFit.cover,
-                                    url: widget.selectedJob?.creator?.user?.avatar,
+                                    url: widget.selectedJob?.creatorDetails?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -280,14 +278,14 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creatorDetails?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creatorDetails?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${widget.selectedJob?.creator?.user?.country}",
+                                                "${widget.selectedJob?.creatorDetails?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
@@ -330,11 +328,10 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                 Spacer(),
                                 CustomButton(
                                     onTap: () {
-                                      chatControllers.onTapChatsCard(
+                                      chatControllers.onTapChatsBid(
                                           widget.selectedJob,
                                           chatControllers.chatData,
-                                          null
-                                          );
+                                          null);
                                     },
                                     height: getVerticalSize(30),
                                     width: getHorizontalSize(86),
@@ -345,17 +342,15 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                     fontStyle: ButtonFontStyle.SatoshiBold13)
                               ])),
                           Padding(
-                              padding: getPadding(left: 23,right:23,top: 19),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
+                              padding: getPadding(left: 20, top: 19),
+                              child: Row(children: [
                                 Padding(
                                     padding: getPadding(top: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Text("lbl_13_jobs_posted".tr,
                                               overflow: TextOverflow.ellipsis,
@@ -397,7 +392,7 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                                   textAlign: TextAlign.left))
                                         ])),
                                 Padding(
-                                    padding: getPadding( bottom: 1),
+                                    padding: getPadding(left: 70, bottom: 1),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -427,17 +422,22 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-                   CustomButton(
+              widget.jobMyBids?.status == 'pending' 
+                  ? CustomButton(
                       height: getVerticalSize(44),
-                      text: "Complete Job".tr,
+                      text: "Edit bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
-                        onTapJob(
-                          widget.selectedJob,
-                          chatControllers.chatData
-                        );
+                         onTapEdit(widget.selectedJob!);
                       },
                     )
+                  : CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Job no longer avaliable".tr,
+                       variant: ButtonVariant.Neutral,
+                      padding: ButtonPadding.PaddingAll12,
+                       fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
+                    ),
             ],
           ),
         ),
@@ -449,12 +449,14 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
 
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
+ 
 
-
-  onTapJob(selectedJob, chatData) {
-  final args = JobArguments(selectedJob, chatData);
-    Get.toNamed(
-        AppRoutes.influencerJobTabScreen  , arguments:args);
+  onTapEdit(Jobz selectedJob) {
+   // final id = widget.selectedJob?.bids?.first.influencerId ?? '';
+   // final UserController user = Get.find();
+  //  final users = user.userModelObj.value.influencerId;
+  //  print("$id, $users");
+    Get.toNamed(AppRoutes.editScreen, arguments: widget.selectedJob);
   }
 
   /// Navigates to the previous screen.

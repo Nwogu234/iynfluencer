@@ -431,7 +431,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
  */
 
 class ChatsInfluencerScreen extends StatefulWidget {
-  ChatsInfluencerScreen({Key? key, this.selectedJob, required this.chatData, this.query})
+  ChatsInfluencerScreen(
+      {Key? key, this.selectedJob, required this.chatData, this.query})
       : super(key: key);
 
   final Jobz? selectedJob;
@@ -473,13 +474,18 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
       vsync: this,
     )..repeat();
 
+
     String? avatarUrl;
-    if (widget.selectedJob != null) {
-      avatarUrl =  widget.selectedJob?.creator?.user?.avatar ?? '';
+    if (widget.selectedJob?.creatorDetails != null) {
+      avatarUrl = widget.selectedJob?.creatorDetails?.avatar ?? '';
+      // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
+    } else if (widget.selectedJob != null) {
+      avatarUrl = widget.selectedJob?.creator?.user?.avatar ?? '';
       //print(avatarUrl);
       //  avatarUrl =
       //     'https://res.cloudinary.com/djiuzlqfn/image/upload/v1714592279/m7qg5kq7l2zi0ujpwmfc.jpg';
-    } else if (widget.chatData != null) {
+    }
+    else if (widget.chatData != null) {
       avatarUrl = widget.chatData.creatorUser!.avatar;
       // avatarUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg';
     }
@@ -491,14 +497,17 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     }
 
     String? name;
-    if (widget.selectedJob != null) {
+     if (widget.selectedJob?.creatorDetails != null) {
       name =
-          "${capitalizeFirstLetter( widget.selectedJob?.creator?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName ?? 'Adebayo')}";
+          "${capitalizeFirstLetter(widget.selectedJob?.creatorDetails?.firstName ?? 'Mark')} ${capitalizeFirstLetter(widget.selectedJob?.creatorDetails?.lastName ?? 'Adebayo')}";
+    } else if (widget.selectedJob != null) {
+      name =
+          "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName ?? 'Mark')}  ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName ?? 'Adebayo')}";
       // print(name);
       //  name = 'Mark Adebayo';
-    } else if (widget.chatData != null) {
+    }  else if (widget.chatData != null) {
       name =
-          "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName)}";
+          "${capitalizeFirstLetter(widget.chatData.creatorUser?.firstName ?? 'Mark')} ${capitalizeFirstLetter(widget.chatData.creatorUser?.lastName ?? 'Adebayo')}";
     }
 
     if (name != null && name.isNotEmpty) {
@@ -508,10 +517,9 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     }
 
     controllers = ChatsInfluencerController(
-        chatData: widget.chatData, 
+        chatData: widget.chatData,
         selectedJob: widget.selectedJob,
-         query: widget.query ?? ''
-        );
+        query: widget.query ?? '');
 
     // controllers.getUser(widget.chatData.chatId);
     controllers.onInit();
@@ -763,10 +771,12 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                   focusNode.canRequestFocus = false;
                                   show.value = !show.value;
                                 },
-                                messageController: widget.query != null
-                               //  ? controllers.queryController  :      
-                                ? TextEditingController(text: widget.query) :
-                                   controllers.messageController,
+                                messageController:
+
+                                    /// widget.query != null
+                                    //  ? controllers.queryController  :
+                                    //  ? TextEditingController(text: widget.query) :
+                                    controllers.messageController,
                                 closedController: controllers,
                                 query: widget.query ?? '',
                               ),

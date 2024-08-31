@@ -30,7 +30,7 @@ class InfluencerHomeController extends GetxController {
   Rx<bool> isJobsLoading = false.obs;
   List<Jobz> jobsList = <Jobz>[].obs;
   List<Jobz> infJobsList = <Jobz>[].obs;
-
+  bool empty = false;
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
@@ -70,15 +70,22 @@ class InfluencerHomeController extends GetxController {
         final responseJson = response.body;
         final jobResponse = JobResponsez.fromJson(responseJson);
         jobsList = jobResponse.data.docs!;
-        infJobsList = jobsList
+       infJobsList = jobsList
             .where(
-                (item) => item.creatorId != user.userModelObj.value.creatorId)
+                (item) =>  item.creator!.creatorId != user.userModelObj.value.creatorId)
+                
+         //       item.creatorId != user.userModelObj.value.creatorId)
             .toList();
         print(jobsList); // List of Influencers
         error('');
         isJobsLoading.value = false;
+        if(infJobsList.isEmpty){
+            error("No Job Posts Found");
+            isJobsLoading.value = false;
+        }
+        
       } else {
-        error('Something went wrong');
+        error('Check your connection');
         isJobsLoading.value = false;
       }
     } catch (e) {
@@ -88,6 +95,8 @@ class InfluencerHomeController extends GetxController {
       isJobsLoading.value = false;
     }
   }
+
+  
 
   void onSearchSubmitted(String query) {
     print("Submitted query: $query");

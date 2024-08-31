@@ -77,6 +77,7 @@ class Job {
   final String? createdAt;
   final String? updatedAt;
   final int? version;
+  final int? amount;
   final String? status;
   final List<Influencerz>? influencerz;
   final List<JobBid>? bids;
@@ -103,6 +104,7 @@ class Job {
       this.createdAt,
       this.updatedAt,
       this.version,
+      this.amount,
       this.status,
       this.influencerz,
       this.bids,
@@ -129,6 +131,7 @@ class Job {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'version': version,
+      'amount': amount,
       'status': status,
       'influencer':  influencerz?.map((b) => b.toJson()).toList(),
       'bids': bids?.map((b) => b.toJson()).toList(),
@@ -158,6 +161,7 @@ class Job {
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       version: json['__v'],
+      amount: json['amount'],
       status: json['status'],
       bids: json['bids'] is List
         ? (json['bids'] as List<dynamic>?)?.map((i) => JobBid.fromJson(i)).toList()

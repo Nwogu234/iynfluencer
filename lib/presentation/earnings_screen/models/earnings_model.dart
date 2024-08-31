@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'earnings_item_model.dart';
 
@@ -6,5 +7,5 @@ import 'earnings_item_model.dart';
 /// and is typically used to hold data that is passed between different parts of the application.
 class EarningsModel {
   
-  RxList<Job> earningsItemList = RxList<Job>();
+  RxList<Jobz> earningsItemList = RxList<Jobz>();
 }

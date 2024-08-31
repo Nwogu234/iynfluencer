@@ -685,6 +685,109 @@ class ChatsInfluencerController extends GetxController {
     }
   }
 
+  void onTapChatsBid(
+      Jobz? selectedJob, ChatData chatData, String? query) async {
+    if (selectedJob == null) {
+      print("selectedJob is null");
+      return;
+    }
+
+    isLoading.value = true;
+    error('');
+    token = await storage.read(key: "token");
+
+    try {
+      //  await Future.delayed(Duration(seconds: 10));
+      Response existingsChatResponse =
+          await apiClient.getAllChatsWithCreators(token!);
+      if (existingsChatResponse.isOk && existingsChatResponse.body != null) {
+        //  final List<dynamic>? responseData = existingChatResponse.body;
+        List<dynamic> chatListMaps = existingsChatResponse.body['data']['docs'];
+        List<ChatData> chatList =
+            chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
+
+        ChatData? existingsChat = chatList.firstWhereOrNull(
+            (chat) => chat.creatorId == selectedJob.creator?.id);
+
+        if (existingsChat != null) {
+          await fetchAllMessagesWithCreators(existingsChat.chatId);
+          Get.to(ChatsInfluencerScreen(
+              selectedJob: selectedJob,
+              chatData: existingsChat,
+              query: query != null ? query : ''));
+          return;
+        } else {
+          print("No existing chat found for the selected creator");
+          // No existing chat, proceed to create a new one
+          final now = DateTime.now();
+          final formattedTime = DateFormat('HH:mm').format(now);
+          final createdAt = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            int.parse(formattedTime.substring(0, 2)),
+            int.parse(formattedTime.substring(3)),
+            0,
+          );
+
+          String chatId = Uuid().v4();
+          String influencerId = user.userModelObj.value.id;
+          String influencerUserId = user.userModelObj.value.userId;
+          print('non-null: $influencerId + $influencerUserId');
+
+          ChatData newsChat = ChatData(
+            id: '',
+            creatorId: selectedJob.creatorDetails?.id ?? '',
+            influencerId: influencerId,
+            creatorUserId: selectedJob.creatorDetails?.userId ?? '',
+            influencerUserId: influencerUserId,
+            unreadByCreator: 0,
+            unreadByInfluencer: 0,
+            blockedByCreator: false,
+            blockedByInfluencer: false,
+            chatId: chatId,
+            createdAt: createdAt,
+            updatedAt: createdAt,
+            messages: [],
+          );
+
+          final creatorId = selectedJob.creator?.id ?? selectedJob.creatorDetails?.id ?? '';
+          final creatorUserId = selectedJob.creator?.userId ?? selectedJob.creatorDetails?.userId ?? '';
+
+          print('creatorId : $creatorId');
+          print('creatorUserId : $creatorUserId');
+          print('influencerId : $influencerId');
+          print('influencerUserId : $influencerUserId');
+
+          // Create the new chat
+          Response createChatResponse =
+              await apiClient.createChat(newsChat, token);
+          if (createChatResponse.isOk) {
+            print('Chat created successfully');
+            Map<String, dynamic> chatDataMap = createChatResponse.body;
+            ChatData createdChat = ChatData.fromJson(chatDataMap);
+
+            // Navigate to the chat screen with the new chat data
+            Get.to(ChatsInfluencerScreen(
+                selectedJob: selectedJob,
+                chatData: createdChat,
+                query: query != null ? query : ''));
+          } else {
+            print("Failed to create chat: ${createChatResponse.statusCode}");
+          }
+        }
+      } else {
+        print(
+            "Failed to fetch existing chats: ${existingsChatResponse.statusCode}");
+      }
+    } catch (e) {
+      print("Error creating or fetching chat: $e");
+      error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> sendMessage(
       BuildContext context, String messageText, bool isCompleteMessage) async {
     FocusScope.of(context).unfocus();
@@ -747,10 +850,10 @@ class ChatsInfluencerController extends GetxController {
       final response = await apiClient.sendMessage(newMessage, token);
 
       if (response.isOk) {
-        query != null
-            ? TextEditingController(text: query).clear()
-            : messageController.clear();
-        //  messageController.clear();
+       // query != null
+       //     ? TextEditingController(text: query).clear()
+       //     : messageController.clear();
+          messageController.clear();
 
         if (!isDuplicateMessage(newMessage.messageId)) {
           UpdateList(newMessage);

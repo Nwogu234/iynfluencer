@@ -66,215 +66,229 @@ class Listgroup855ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Container(
-        padding: getPadding(
-          left: 2,
-          right: 2,
-        ),
-        decoration: AppDecoration.outlineIndigo501,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: getPadding(
-                right: 7,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.imgGroup85240,
-                    height: getSize(
-                      45,
-                    ),
-                    width: getSize(
-                      45,
-                    ),
-                    radius: BorderRadius.circular(
-                      getSize(
-                        22.5,
+
+   String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 20
+      ),
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Container(
+          padding: getPadding(
+            left: 2,
+            right: 2,
+          ),
+          decoration: AppDecoration.outlineIndigo501,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: getPadding(
+                  right: 7,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomImageView(
+                      fit: BoxFit.cover,
+                      url: listgroup855ItemModelObj.creatorUserData?.avatar ?? '',
+                      height: getSize(
+                        45,
+                      ),
+                      width: getSize(
+                        45,
+                      ),
+                      radius: BorderRadius.circular(
+                        getSize(
+                          22.5,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: getPadding(
-                      left: 16,
-                      top: 4,
-                      bottom: 1,
+                    Padding(
+                      padding: getPadding(
+                        left: 16,
+                        top: 4,
+                        bottom: 1,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              "${capitalizeFirstLetter(listgroup855ItemModelObj.creatorUserData?.firstName)} ${capitalizeFirstLetter(listgroup855ItemModelObj.creatorUserData?.lastName)}",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold145,
+                          ),
+                          Padding(
+                            padding: getPadding(
+                              left: 1,
+                              top: 1,
+                            ),
+                            child: Text(
+                               listgroup855ItemModelObj.creatorUserData?.country ?? 'Nigeria',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiLight13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Column(
+                    Spacer(),
+                    CustomImageView(
+                      svgPath: ImageConstant.imgVector,
+                      height: getVerticalSize(
+                        1,
+                      ),
+                      width: getHorizontalSize(
+                        13,
+                      ),
+                      margin: getMargin(
+                        top: 15,
+                        bottom: 28,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: getPadding(
+                  top: 20,
+                ),
+                child: Text(
+                  listgroup855ItemModelObj.job?.title ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  style: AppStyle.txtSatoshiBold14Gray900ab,
+                ),
+              ),
+              Container(
+                width: getHorizontalSize(
+                  321,
+                ),
+                margin: getMargin(
+                  left: 1,
+                  top: 8,
+                  right: 9,
+                ),
+                child: Text(
+                  listgroup855ItemModelObj.job?.description ?? '',
+                  maxLines: null,
+                  textAlign: TextAlign.left,
+                  style: AppStyle.txtSatoshiLight14Gray900ab,
+                ),
+              ),
+              Padding(
+                padding: getPadding(
+                  top: 14,
+                  right: 62,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Name',
+                          "lbl_budget".tr,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold145,
+                          style: AppStyle.txtSatoshiLight135Gray600,
                         ),
                         Padding(
                           padding: getPadding(
-                            left: 1,
-                            top: 1,
+                            top: 3,
                           ),
                           child: Text(
-                            '2 Weeks',
+                            '${listgroup855ItemModelObj.job?.budgetFrom} ${listgroup855ItemModelObj.job?.budgetTo}',
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiLight13,
+                            style: AppStyle.txtSatoshiBold125Gray900a7,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Spacer(),
-                  CustomImageView(
-                    svgPath: ImageConstant.imgVector,
-                    height: getVerticalSize(
-                      1,
-                    ),
-                    width: getHorizontalSize(
-                      13,
-                    ),
-                    margin: getMargin(
-                      top: 15,
-                      bottom: 28,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: getPadding(
-                top: 20,
-              ),
-              child: Text(
-                listgroup855ItemModelObj.job?.title ?? '',
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.left,
-                style: AppStyle.txtSatoshiBold14Gray900ab,
-              ),
-            ),
-            Container(
-              width: getHorizontalSize(
-                321,
-              ),
-              margin: getMargin(
-                left: 1,
-                top: 8,
-                right: 9,
-              ),
-              child: Text(
-                listgroup855ItemModelObj.job?.description ?? '',
-                maxLines: null,
-                textAlign: TextAlign.left,
-                style: AppStyle.txtSatoshiLight14Gray900ab,
-              ),
-            ),
-            Padding(
-              padding: getPadding(
-                top: 14,
-                right: 62,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "lbl_budget".tr,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600,
-                      ),
-                      Padding(
-                        padding: getPadding(
-                          top: 3,
-                        ),
-                        child: Text(
-                          '${listgroup855ItemModelObj.job?.budgetFrom} ${listgroup855ItemModelObj.job?.budgetTo}',
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "msg_project_duration".tr,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold125Gray900a7,
+                          style: AppStyle.txtSatoshiLight135Gray600,
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "msg_project_duration".tr,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight135Gray600,
-                      ),
-                      Padding(
-                        padding: getPadding(
-                          top: 3,
+                        Padding(
+                          padding: getPadding(
+                            top: 3,
+                          ),
+                          child: Text(
+                            '${listgroup855ItemModelObj.job!.duration!.toString()} weeks',
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiBold125Gray900a7,
+                          ),
                         ),
-                        child: Text(
-                          '${listgroup855ItemModelObj.job!.duration!.toString()} weeks',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiBold125Gray900a7,
-                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: getPadding(
+                  top: 20,
+                  bottom: 16,
+                ),
+                child: Row(
+                  children: [
+                    CustomButton(
+                      height: getVerticalSize(
+                        32,
                       ),
-                    ],
-                  ),
-                ],
+                      width: getHorizontalSize(
+                        90,
+                      ),
+                      text: "lbl_view_details".tr,
+                      fontStyle: ButtonFontStyle.SatoshiBold12,
+                      onTap: () {
+                        Get.to(RequestDetailScreen(
+                          jobrequest: listgroup855ItemModelObj,
+                        ));
+                        // Get.toNamed(
+                        //   AppRoutes.requestDetailScreen,
+                        // );
+                      },
+                    ),
+                    CustomButton(
+                      height: getVerticalSize(
+                        32,
+                      ),
+                      width: getHorizontalSize(
+                        72,
+                      ),
+                      text: "lbl_dismiss".tr,
+                      margin: getMargin(
+                        left: 12,
+                      ),
+                      onTap: () => _showAlertDialog(context),
+                      variant: ButtonVariant.OutlineIndigo50_2,
+                      fontStyle: ButtonFontStyle.SatoshiBold12Gray900ab,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: getPadding(
-                top: 20,
-                bottom: 16,
-              ),
-              child: Row(
-                children: [
-                  CustomButton(
-                    height: getVerticalSize(
-                      32,
-                    ),
-                    width: getHorizontalSize(
-                      90,
-                    ),
-                    text: "lbl_view_details".tr,
-                    fontStyle: ButtonFontStyle.SatoshiBold12,
-                    onTap: () {
-                      Get.to(RequestDetailScreen(
-                        jobrequest: listgroup855ItemModelObj,
-                      ));
-                      // Get.toNamed(
-                      //   AppRoutes.requestDetailScreen,
-                      // );
-                    },
-                  ),
-                  CustomButton(
-                    height: getVerticalSize(
-                      32,
-                    ),
-                    width: getHorizontalSize(
-                      72,
-                    ),
-                    text: "lbl_dismiss".tr,
-                    margin: getMargin(
-                      left: 12,
-                    ),
-                    onTap: () => _showAlertDialog(context),
-                    variant: ButtonVariant.OutlineIndigo50_2,
-                    fontStyle: ButtonFontStyle.SatoshiBold12Gray900ab,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -8,6 +8,7 @@ class JobsRequestsInfluencerModel {
   String? sId;
   String? jobId;
   String? creatorId;
+  String? creatorUserId; 
   String? influencerId;
   String? status;
   bool? declined;
@@ -16,26 +17,31 @@ class JobsRequestsInfluencerModel {
   String? updatedAt;
   int? iV;
   Job? job;
+  CreatorUserData? creatorUserData; 
   String? id;
 
-  JobsRequestsInfluencerModel(
-      {this.sId,
-      this.jobId,
-      this.creatorId,
-      this.influencerId,
-      this.status,
-      this.declined,
-      this.jobRequestId,
-      this.createdAt,
-      this.updatedAt,
-      this.iV,
-      this.job,
-      this.id});
+  JobsRequestsInfluencerModel({
+    this.sId,
+    this.jobId,
+    this.creatorId,
+    this.creatorUserId,
+    this.influencerId,
+    this.status,
+    this.declined,
+    this.jobRequestId,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+    this.job,
+    this.creatorUserData,
+    this.id,
+  });
 
   JobsRequestsInfluencerModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     jobId = json['jobId'];
     creatorId = json['creatorId'];
+    creatorUserId = json['creatorUserId'];
     influencerId = json['influencerId'];
     status = json['status'];
     declined = json['declined'];
@@ -43,26 +49,71 @@ class JobsRequestsInfluencerModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    job = json['job'] != null ? new Job.fromJson(json['job']) : null;
+    job = json['job'] != null ? Job.fromJson(json['job']) : null;
+    creatorUserData = json['creatorUserData'] != null 
+        ? CreatorUserData.fromJson(json['creatorUserData'])
+        : null;
     id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['jobId'] = this.jobId;
-    data['creatorId'] = this.creatorId;
-    data['influencerId'] = this.influencerId;
-    data['status'] = this.status;
-    data['declined'] = this.declined;
-    data['jobRequestId'] = this.jobRequestId;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    if (this.job != null) {
-      data['job'] = this.job!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['jobId'] = jobId;
+    data['creatorId'] = creatorId;
+    data['creatorUserId'] = creatorUserId; // New field
+    data['influencerId'] = influencerId;
+    data['status'] = status;
+    data['declined'] = declined;
+    data['jobRequestId'] = jobRequestId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    if (job != null) {
+      data['job'] = job!.toJson();
     }
-    data['id'] = this.id;
+    if (creatorUserData != null) {
+      // New field
+      data['creatorUserData'] = creatorUserData!.toJson();
+    }
+    data['id'] = id;
+    return data;
+  }
+}
+
+class CreatorUserData {
+  String? sId;
+  String? firstName;
+  String? lastName;
+  String? userId;
+  String? avatar;
+  String? country;
+
+  CreatorUserData({
+    this.sId,
+    this.firstName,
+    this.lastName,
+    this.userId,
+    this.country,
+  });
+
+  CreatorUserData.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    userId = json['userId'];
+    avatar = json['avatar'];
+    avatar = json['country'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['userId'] = userId;
+    data['avatar'] = avatar;
+    data['country'] = country;
     return data;
   }
 }

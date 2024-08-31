@@ -261,7 +261,8 @@ class ListclientItemWidget extends StatelessWidget {
                                    top: 7,
                                  ),
                                  child: Text(
-                                   "\$${capitalizeFirstLetter(listclientItemModelObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(listclientItemModelObj?.budgetTo.toString())}",
+                                        '\$${listclientItemModelObj?.amount.toString() ?? 0}',
+                                //   "\$${capitalizeFirstLetter(listclientItemModelObj?.budgetFrom.toString())}-\$${capitalizeFirstLetter(listclientItemModelObj?.budgetTo.toString())}",
                                    overflow: TextOverflow.ellipsis,
                                    textAlign: TextAlign.left,
                                    style: AppStyle.txtSatoshiLight135Gray600.copyWith(

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -40,6 +41,7 @@ class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
+  final UserController user = Get.find();
   final ScrollController _scrollController = ScrollController();
 
   
@@ -72,6 +74,8 @@ void _onScroll() {
 
   @override
   Widget build(BuildContext context) {
+   
+
     return SafeArea(
       child: Scaffold(
         key:_scaffoldKey,
@@ -88,12 +92,14 @@ void _onScroll() {
             ),
           ],
         );
-      } else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-          top: 150,
-          start: 150,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+      }  else if (controller.error.value.isNotEmpty) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            bottom: 350
+          ),
+          child: Center(
             child: ResponsiveErrorWidget(
               errorMessage: controller.error.value,
               onRetry: controller.getUser,

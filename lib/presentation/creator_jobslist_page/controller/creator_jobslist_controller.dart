@@ -60,27 +60,27 @@ class CreatorJobslistController extends GetxController {
     }
   }
 
-   Future<void> getJobs() async {
+Future<void> getJobs() async {
   try {
     error('');
     token = await storage.read(key: "token");
     isTrendLoading.value = true;
 
-    // Fetch jobs from the API
     Response response = await apiClient.getCreatorJobs(token);
 
-    // Check if the response was successful
     if (response.isOk) {
-      // Parse the JSON response directly
       final Map<String, dynamic> responseJson = response.body;
-
-      // Convert the JSON to JobResponse and then extract the jobs list
+      
       final JobResponse jobResponse = JobResponse.fromJson(responseJson);
 
-      if (jobResponse.data.docs.isEmpty ) {
-        empty = true;
+      List<Job> filteredJobs = jobResponse.data.docs.where((job) => job.hired == false).toList();
+
+      if (filteredJobs.isEmpty) {
+           print('No hired jobs found.');
+          error.value = 'No hired jobs found.';
+          empty = true;
       } else {
-        existingJobs = jobResponse.data.docs;
+        existingJobs = filteredJobs;
       }
 
       error('');
@@ -95,6 +95,11 @@ class CreatorJobslistController extends GetxController {
     isTrendLoading.value = false;
   }
 }
+
+ Future<void> refreshItems() async {
+    await Future.delayed(Duration(seconds: 1));
+    getUser();
+  }
 
   @override
   void onInit() {
