@@ -1,3 +1,4 @@
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 
 import '../controller/earnings_controller.dart';
@@ -14,7 +15,7 @@ class EarningsItemWidget extends StatelessWidget {
           key: key,
         );
 
-  Job? earningsItemModelObj;
+  Jobz? earningsItemModelObj;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +32,11 @@ class EarningsItemWidget extends StatelessWidget {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-    return Row(
-      children: [
-        Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: SizedBox(
+        width: getHorizontalSize(358),
+        child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -63,9 +66,9 @@ class EarningsItemWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '${earningsItemModelObj?.title != null && earningsItemModelObj!.title!.length > 25 
-                                   ? earningsItemModelObj?.title!.substring(0, 25) 
-                                 : earningsItemModelObj?.title ?? ''}',
+                        (earningsItemModelObj?.title ?? '').length > 25
+                         ? (earningsItemModelObj?.title?.substring(0, 25) ?? '')
+                         : (earningsItemModelObj?.title ?? ''),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiBold135Gray900ab,
@@ -78,7 +81,7 @@ class EarningsItemWidget extends StatelessWidget {
                         child: Text(
                            truncateWithEllipsis(
                               myString: earningsItemModelObj?.description ?? '',
-                              textLength: 30,
+                              textLength: 25,
                             ),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
@@ -128,7 +131,7 @@ class EarningsItemWidget extends StatelessWidget {
                     color: ColorConstant.indigo50))
           ],
         ),
-      ],
+      ),
     );
   }
 }

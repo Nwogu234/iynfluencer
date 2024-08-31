@@ -1,6 +1,8 @@
 import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 
 import '../earnings_screen/widgets/earnings_item_widget.dart';
@@ -13,8 +15,6 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-
-
 class EarningsScreen extends StatefulWidget {
   EarningsScreen({Key? key}) : super(key: key);
 
@@ -22,9 +22,26 @@ class EarningsScreen extends StatefulWidget {
   State<EarningsScreen> createState() => _EarningsScreenState();
 }
 
-class _EarningsScreenState extends State<EarningsScreen> {
+class _EarningsScreenState extends State<EarningsScreen>
+    with SingleTickerProviderStateMixin {
   final UserController user = Get.find();
+   late AnimationController animationController;
   final EarningsController controller = Get.put(EarningsController());
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +71,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
               child: Obx(() {
                 if (controller.isLoading.value) {
                   return Center(
-                    child: CircularProgressIndicator(
-                      color: ColorConstant.gray100,
+                    child: CustomLoadingWidget(
+                      animationController: animationController,
                     ),
                   );
                 } else if (controller.error.value.isNotEmpty) {
@@ -64,12 +81,10 @@ class _EarningsScreenState extends State<EarningsScreen> {
                     onRetry: () => controller.getUser(),
                     fullPage: true,
                   );
-                } else if (controller.isEpty.value) {
-                  return Center(child: Text('No Jobs have been completed.'));
                 } else {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min, // Ensure the Column only takes needed space
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Align(
                         alignment: Alignment.center,
@@ -106,7 +121,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                   margin: getMargin(right: 8),
                                   variant: ButtonVariant.FillGray200ab,
                                   padding: ButtonPadding.PaddingAll12,
-                                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
+                                  fontStyle:
+                                      ButtonFontStyle.SatoshiBold14Gray900,
                                 ),
                               ),
                               Flexible(
@@ -115,7 +131,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                   text: "lbl_withdraw".tr,
                                   margin: getMargin(left: 8),
                                   padding: ButtonPadding.PaddingAll12,
-                                  fontStyle: ButtonFontStyle.SatoshiBold14Gray100,
+                                  fontStyle:
+                                      ButtonFontStyle.SatoshiBold14Gray100,
                                 ),
                               ),
                             ],
@@ -127,7 +144,6 @@ class _EarningsScreenState extends State<EarningsScreen> {
                         decoration: AppDecoration.outlineIndigo501,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Ensure the Column only takes needed space
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,8 +172,9 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                 Padding(
                                   padding: getPadding(top: 1),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min, // Ensure the Column only takes needed space
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Align(
                                         alignment: Alignment.center,
@@ -165,7 +182,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                           "lbl_4k".tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiLight12Bluegray600,
+                                          style: AppStyle
+                                              .txtSatoshiLight12Bluegray600,
                                         ),
                                       ),
                                       Align(
@@ -176,7 +194,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                             "lbl_3k".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiLight12Bluegray600,
+                                            style: AppStyle
+                                                .txtSatoshiLight12Bluegray600,
                                           ),
                                         ),
                                       ),
@@ -188,7 +207,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                             "lbl_2k".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiLight12Bluegray600,
+                                            style: AppStyle
+                                                .txtSatoshiLight12Bluegray600,
                                           ),
                                         ),
                                       ),
@@ -200,19 +220,22 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                             "lbl_1k".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiLight12Bluegray600,
+                                            style: AppStyle
+                                                .txtSatoshiLight12Bluegray600,
                                           ),
                                         ),
                                       ),
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Padding(
-                                          padding: getPadding(top: 29, right: 2),
+                                          padding:
+                                              getPadding(top: 29, right: 2),
                                           child: Text(
                                             "lbl_02".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
-                                            style: AppStyle.txtSatoshiLight12Bluegray600,
+                                            style: AppStyle
+                                                .txtSatoshiLight12Bluegray600,
                                           ),
                                         ),
                                       ),
@@ -222,7 +245,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                               ],
                             ),
                             Padding(
-                              padding: getPadding(left: 1, top: 5, right: 40, bottom: 20),
+                              padding: getPadding(
+                                  left: 1, top: 5, right: 40, bottom: 20),
                               child: Row(
                                 children: [
                                   Padding(
@@ -231,7 +255,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_jan".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                   Padding(
@@ -240,7 +265,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_feb".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                   Padding(
@@ -249,7 +275,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_mar".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                   Padding(
@@ -258,7 +285,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_apr".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                   Padding(
@@ -267,7 +295,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_may".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                   Padding(
@@ -276,7 +305,8 @@ class _EarningsScreenState extends State<EarningsScreen> {
                                       "lbl_jun".tr,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiLight12Bluegray600,
+                                      style:
+                                          AppStyle.txtSatoshiLight12Bluegray600,
                                     ),
                                   ),
                                 ],
@@ -287,30 +317,20 @@ class _EarningsScreenState extends State<EarningsScreen> {
                               child: Container(
                                 height: getVerticalSize(220),
                                 child: ListView.builder(
-                                   itemCount: controller
-                                                    .isTrendLoading.value
-                                                ? 5 
-                                                : controller
-                                                    .earningsModelObj
-                                                    .value
-                                                    .earningsItemList
-                                                    .length, 
-                                            itemBuilder: (context, index) {
-                                              Job? model = index <
-                                                      controller
-                                                          .earningsModelObj
-                                                          .value
-                                                          .earningsItemList
-                                                          .length
-                                                  ? controller
-                                                      .earningsModelObj
-                                                      .value
-                                                      .earningsItemList[index]
-                                                  : null;
-                                              return EarningsItemWidget(
-                                                  earningsItemModelObj: model);
-                                            },
-                                 
+                                  itemCount: controller.isTrendLoading.value
+                                      ? 5
+                                      : controller.earningsModelObj.value
+                                          .earningsItemList.length,
+                                  itemBuilder: (context, index) {
+                                    Jobz? model = index <
+                                            controller.earningsModelObj.value
+                                                .earningsItemList.length
+                                        ? controller.earningsModelObj.value
+                                            .earningsItemList[index]
+                                        : null;
+                                    return EarningsItemWidget(
+                                        earningsItemModelObj: model);
+                                  },
                                 ),
                               ),
                             ),
@@ -332,4 +352,3 @@ class _EarningsScreenState extends State<EarningsScreen> {
     Get.back();
   }
 }
- 

@@ -93,11 +93,13 @@ void _onScroll() {
           ],
         );
       }  else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-          top: 150,
-          start: 150,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            bottom: 350
+          ),
+          child: Center(
             child: ResponsiveErrorWidget(
               errorMessage: controller.error.value,
               onRetry: controller.getUser,
