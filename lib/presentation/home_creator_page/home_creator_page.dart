@@ -77,6 +77,17 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   @override
   Widget build(BuildContext context) {
+    String? avatarUrl = controller.user.userModelObj.value.avatar;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+    }
+
     ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
 
     String capitalize(String text) {
@@ -103,7 +114,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                   ),
                   child: AppbarCircleimage(
                     fit: BoxFit.cover,
-                    url: controller.user.userModelObj.value.avatar,
+                    url: imageProvider,
                     margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
                     onTap: openDrawer,
                      radius: BorderRadius.circular(

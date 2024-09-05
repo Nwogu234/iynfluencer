@@ -93,7 +93,7 @@ class CustomSearchView extends StatelessWidget {
   _buildDecoration() {
     return InputDecoration(
       hintText: hintText ?? "",
-      hintStyle: _setFontStyle(),
+      hintStyle: _setHintStyle(),
       border: _setBorderStyle(),
       enabledBorder: _setBorderStyle(),
       focusedBorder: _setBorderStyle(),
@@ -119,6 +119,20 @@ class CustomSearchView extends StatelessWidget {
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w500,
+        );
+    }
+  }
+
+  _setHintStyle() {
+    switch (fontStyle) {
+      default:
+        return TextStyle(
+          color: Colors.black,
+          fontSize: getFontSize(
+            15,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w300,
         );
     }
   }

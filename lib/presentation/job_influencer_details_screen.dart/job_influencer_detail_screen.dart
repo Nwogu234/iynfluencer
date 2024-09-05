@@ -427,6 +427,14 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              widget.selectedJob?.status == 'Completed' 
+              ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Job Completed".tr,
+                       variant: ButtonVariant.Neutral,
+                       padding: ButtonPadding.PaddingAll12,
+                       fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
+                    )  :
                    CustomButton(
                       height: getVerticalSize(44),
                       text: "Complete Job".tr,

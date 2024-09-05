@@ -110,13 +110,12 @@ class SignUpScreen extends GetWidget<SignUpController> {
                             controller
                                 .countryController=value.name!;
                             print(value.name);
+                            print('Selected country: ${controller.countryController}');
                           },
                           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                           initialSelection: 'GB',
                           favorite: ['+44','GB'],
-                          // optional. Shows only country name and flag
                           showCountryOnly: true,
-                          // optional. Shows only country name and flag when popup is closed.
                           showOnlyCountryWhenClosed: true,
                           // optional. aligns the flag and the Text left
                           alignLeft: true,

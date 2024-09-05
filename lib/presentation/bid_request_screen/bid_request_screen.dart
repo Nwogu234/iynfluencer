@@ -192,35 +192,31 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                                               .txtSatoshiBold125Gray900a7))
                                 ])
                           ])),
-
                   Padding(
                       padding: getPadding(top: 29),
                       child: Text("Deliverables".tr,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold14Gray900)),
-
-                      Align(
-                         alignment: Alignment.topLeft,
-                        child: Container(
-                           width: getHorizontalSize(334),
-                          margin: getMargin(left: 20, top: 9, right: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:
-                                data.terms!.map((mediaFile) {
-                                  return Padding(
-                                        padding: getPadding(top: 7),
-                                        child: Text(
-                                            mediaFile, //duration,budget,list of r4
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: AppStyle
-                                                .txtSatoshiLight13Gray900ab));
-                                  }).toList(),
-                          ),
-                        ),
-                      ), 
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: getHorizontalSize(334),
+                      margin: getMargin(left: 20, top: 9, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: data.terms!.map((mediaFile) {
+                          return Padding(
+                              padding: getPadding(top: 7),
+                              child: Text(
+                                  mediaFile, //duration,budget,list of r4
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiLight13Gray900ab));
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                   Padding(
                       padding: getPadding(top: 29),
                       child: Text("msg_about_influencer".tr,
@@ -294,7 +290,7 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-               data.paymentStatus == true || data.status == "accepted"
+              data.paymentStatus == true || data.status == "accepted"
                   ? CustomButton(
                       height: getVerticalSize(44),
                       text: "Job has been paid".tr,
@@ -310,8 +306,11 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                         onTapPay(args);
                         //   controller.hireInfluencerFunc(data!.bidId!, args);
                       },
-                  ),
+                    ),
               CustomButton(
+                  onTap: () {
+                    Get.back();
+                  },
                   height: getVerticalSize(44),
                   text: "lbl_decline".tr,
                   margin: getMargin(top: 10),

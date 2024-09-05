@@ -104,12 +104,13 @@ class LogInScreen extends GetWidget<LogInController> {
                                                       right: 15,
                                                       bottom: 14),
                                                   child: CustomImageView(
+                                                      color: ColorConstant.gray600,
                                                       svgPath: controller
                                                               .isShowPassword
                                                               .value
                                                           ? ImageConstant.imgEye
                                                           : ImageConstant
-                                                              .imgEye))),
+                                                              .imgFrameEye))),
                                           suffixConstraints: BoxConstraints(
                                               maxHeight: getVerticalSize(48)),
                                           // validator: (value) {

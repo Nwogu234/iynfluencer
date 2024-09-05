@@ -17,8 +17,7 @@ class EditProfileListedJobsTabTwoContainerController extends GetxController
       editProfileListedJobsTabTwoContainerModelObj =
       EditProfileListedJobsTabTwoContainerModel().obs;
  */
-  late TabController tabviewController =
-      Get.put(TabController(vsync: this, length: 2));
+  late TabController tabviewController;
 
   final storage = new FlutterSecureStorage();
   var token;
@@ -30,7 +29,7 @@ class EditProfileListedJobsTabTwoContainerController extends GetxController
   Future<CreatorProfile?> getProfile() async {
     token = await storage.read(key: 'token');
     try {
-      print ("this is running");
+      print("this is running");
       var response = await client.getCreatorProfile(token);
 
       Map<String, dynamic> jsonResponse;
@@ -50,21 +49,20 @@ class EditProfileListedJobsTabTwoContainerController extends GetxController
     }
   }
 
-
-
   @override
   void onInit() {
     super.onInit();
+    tabviewController = TabController(vsync: this, length: 2);
     _profile.listen((p) {
       print("Profile updated: $p");
+      
     });
     getProfile();
   }
 
-    @override
-    void onClose() {
-      super.onClose();
-      tabviewController.dispose();
-    }
+  @override
+  void onClose() {
+    super.onClose();
+    tabviewController.dispose();
   }
-
+}

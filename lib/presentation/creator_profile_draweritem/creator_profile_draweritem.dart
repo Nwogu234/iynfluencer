@@ -31,6 +31,16 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     String? avatarUrl = controller.user.userModelObj.value.avatar;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+    }
     return Drawer(
         backgroundColor: Colors.white,
         child: SingleChildScrollView(
@@ -46,7 +56,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                     children: [
                       CustomImageView(
                         fit: BoxFit.cover,
-                          url: controller.user.userModelObj.value.avatar,
+                          url: imageProvider,
                           height: getSize(50),
                           width: getSize(50),
                           radius: BorderRadius.circular(24.r),

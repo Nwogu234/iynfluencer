@@ -14,9 +14,22 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 import '../../data/general_controllers/user_controller.dart';
 
 class EditProfileListedJobsTabTwoContainerScreen
-    extends GetWidget<EditProfileListedJobsTabTwoContainerController> {
-  const EditProfileListedJobsTabTwoContainerScreen({Key? key})
+    extends StatefulWidget {
+  EditProfileListedJobsTabTwoContainerScreen({Key? key})
       : super(key: key);
+
+
+  @override
+  State<EditProfileListedJobsTabTwoContainerScreen> createState() => __EditProfileListedJobsTabTwoContainerScreenState();
+}
+
+class __EditProfileListedJobsTabTwoContainerScreenState extends State<EditProfileListedJobsTabTwoContainerScreen> {
+
+  final controller = Get.put(EditProfileListedJobsTabTwoContainerController());
+
+  final args = Get.put(UserController());
+
+   GlobalKey<ScaffoldState> _profileKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +39,26 @@ class EditProfileListedJobsTabTwoContainerScreen
       }
       return text[0].toUpperCase() + text.substring(1);
     }
-    final args = Get.put(UserController());
+   
     final name =
         "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
     final country = args.userModelObj.value.country;
     final profileImageFile = args.userModelObj.value.avatar;
 
+    String? avatarUrl = args.userModelObj.value.avatar;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = 'assets/images/image_not_found.png';
+    }
+
     return SafeArea(
         child: Scaffold(
+          key: _profileKey,
             backgroundColor: ColorConstant.whiteA700,
             body: SizedBox(
                 width: size.width,
@@ -83,7 +108,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                             MainAxisAlignment.start,
                                         children: [
                                           CustomImageView(
-                                              url: args.userModelObj.value.avatar,
+                                              url: imageProvider,
                                               fit: BoxFit.cover,
                                               height: getSize(85),
                                               width: getSize(85),
@@ -260,6 +285,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                 onTap: () {
                   onTapEditprofile();
                 })));
+  
   }
 
   /// Navigates to the previous screen.
@@ -293,4 +319,5 @@ class EditProfileListedJobsTabTwoContainerScreen
       AppRoutes.editProfileDetailsScreen,
     );
   }
+
 }

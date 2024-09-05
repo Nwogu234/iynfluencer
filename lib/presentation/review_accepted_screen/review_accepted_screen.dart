@@ -72,7 +72,7 @@ class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   bottom: 5,
                 ),
                 child: Text(
-                  "You have successfully submitted Your Review $jobId".tr,
+                  "You have successfully submitted Your Review for Job ID $jobId".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtH2Gray600,

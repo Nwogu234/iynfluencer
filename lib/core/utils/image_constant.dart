@@ -529,6 +529,8 @@ class ImageConstant {
 
   static String imgFrame20x20 = 'assets/images/img_frame_20x20.svg';
 
+  static String imgFrameEye = 'assets/images/img_eye_big.svg';
+
   static String imgFrameBlueGray40018x18 =
       'assets/images/img_frame_blue_gray_400_18x18.svg';
 

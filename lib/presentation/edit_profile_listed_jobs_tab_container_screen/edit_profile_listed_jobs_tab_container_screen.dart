@@ -20,7 +20,9 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class EditProfileListedJobsTabContainerScreen
     extends GetWidget<EditProfileListedJobsTabContainerController> {
-  const EditProfileListedJobsTabContainerScreen({Key? key}) : super(key: key);
+      
+      
+    final args = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ class EditProfileListedJobsTabContainerScreen
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    final args = Get.put(UserController());
     final name =
         "${capitalizeFirstLetter(args.userModelObj.value.firstName)} ${capitalizeFirstLetter(args.userModelObj.value.lastName)}";
     final country = capitalizeFirstLetter(args.userModelObj.value.country);
@@ -342,6 +343,20 @@ class EditProfileListedJobsTabContainerScreen
                                 JobsRequestsInfluencerPage(),
                               ]))
                     ]))),
+                bottomNavigationBar: CustomButton(
+                height: getVerticalSize(34),
+                width: getHorizontalSize(110),
+                text: "lbl_edit_profile".tr,
+                margin: getMargin(top: 13),
+                variant:
+                ButtonVariant.FillGray200ab,
+                padding:
+                ButtonPadding.PaddingAll4,
+                fontStyle: ButtonFontStyle
+                    .SatoshiBold15Gray900,
+                onTap: () {
+                  onTapEditprofile();
+                })
             ));
   }
 

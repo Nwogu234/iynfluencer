@@ -16,11 +16,12 @@ import '../influencer_home_screen/controller/influencer_home_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class InfluencerDraweritem extends StatelessWidget {
-
   final FlutterSecureStorage storage = FlutterSecureStorage();
-  final influencerTabCont = Get.put(JobsJobsInfluencerTabContainerController(JobsJobsInfluencerTabContainerModel().obs));
+  final influencerTabCont = Get.put(JobsJobsInfluencerTabContainerController(
+      JobsJobsInfluencerTabContainerModel().obs));
 
- final InfluencerHomeController controller = Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
+  final InfluencerHomeController controller =
+      Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +36,23 @@ class InfluencerDraweritem extends StatelessWidget {
         "${capitalize(controller.user.userModelObj.value.firstName)} ${capitalize(controller.user.userModelObj.value.lastName)}";
 
     final img = controller.user.userModelObj.value.avatar;
+
+    String? avatarUrl =
+        (controller.updatedProfileImage.value as String?) ?? img;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+    }
     return Drawer(
         child: SingleChildScrollView(
             child: Container(
-                 decoration: BoxDecoration(
-                   color:Colors.white
-                  ),
-              //  margin: EdgeInsets.only(right: 20.w),
+                decoration: BoxDecoration(color: Colors.white),
+                //  margin: EdgeInsets.only(right: 20.w),
                 padding: EdgeInsets.only(left: 19.w, top: 74.h, right: 19.w),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,9 +60,7 @@ class InfluencerDraweritem extends StatelessWidget {
                     children: [
                       CustomImageView(
                           fit: BoxFit.cover,
-                          url: (controller.updatedProfileImage.value
-                                  as String?) ??
-                              img,
+                          url: imageProvider,
                           height: 48.h,
                           width: 48.w,
                           radius: BorderRadius.circular(24.r),
@@ -64,14 +73,14 @@ class InfluencerDraweritem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16)),
-                       Padding(
+                      Padding(
                           padding: EdgeInsets.only(left: 1.w),
                           child: Text(
-                             "@${controller.user.userModelObj.value.firstName}"
+                              "@${controller.user.userModelObj.value.firstName}"
                                   .tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiLight125Gray600ab)), 
+                              style: AppStyle.txtSatoshiLight125Gray600ab)),
                       Padding(
                           padding: EdgeInsets.only(top: 27.h),
                           child: Divider(
@@ -199,6 +208,7 @@ class InfluencerDraweritem extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           storage.write(key: 'token', value: null);
+                          storage.write(key: 'activeProfile', value: null);
                           Get.offAllNamed(AppRoutes.logInScreen);
                         },
                         child: Padding(

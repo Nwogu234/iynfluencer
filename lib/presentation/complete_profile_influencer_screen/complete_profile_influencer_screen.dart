@@ -40,11 +40,11 @@ class CompleteProfileInfluencerScreen
               onTap: () {
                 onTapArrowleft1();
               }),
-          actions: [
+          /* actions: [
             AppbarSubtitle2(
                 text: "lbl_skip".tr,
                 margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 17.h))
-          ],
+          ], */
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {

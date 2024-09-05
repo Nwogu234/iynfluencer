@@ -150,7 +150,7 @@ class _CreatorHireslistTabContainerPageState extends State<CreatorHireslistTabCo
                 ),
                 Expanded(
                   child: TabBarView(
-                    controller: controller.tabiewController??controller.tabiewController,
+                    controller: controller.tabiewController?? controller.tabiewController,
                     children: [
                       CreatorJobslistPage(),
                       CreatorHireslistPage(),

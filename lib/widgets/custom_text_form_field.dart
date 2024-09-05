@@ -122,7 +122,7 @@ class CustomTextFormField extends StatelessWidget {
     return InputDecoration(
       labelText: label ?? null,
       hintText: hintText ?? "",
-      hintStyle: _setFontStyle(),
+      hintStyle: _setHintStyle(),
       border: _setBorderStyle(),
       enabledBorder: _setBorderStyle(),
       focusedBorder: _setBorderStyle(),
@@ -139,6 +139,83 @@ class CustomTextFormField extends StatelessWidget {
   }
 
   _setFontStyle() {
+    switch (fontStyle) {
+      case TextFormFieldFontStyle.SatoshiLight14:
+        return TextStyle(
+          color: ColorConstant.black900,
+          fontSize: getFontSize(
+            14,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w400,
+        );
+      case TextFormFieldFontStyle.SatoshiBold22:
+        return TextStyle(
+          color: ColorConstant.gray600,
+          fontSize: getFontSize(
+            22,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
+      case TextFormFieldFontStyle.SatoshiBold10:
+        return TextStyle(
+          color: ColorConstant.whiteA700,
+          fontSize: getFontSize(
+            15,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
+      case TextFormFieldFontStyle.SatoshiLight14Gray600:
+        return TextStyle(
+          color: ColorConstant.gray600,
+          fontSize: getFontSize(
+            14,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w300,
+        );
+      case TextFormFieldFontStyle.SatoshiBold13:
+        return TextStyle(
+          color: ColorConstant.gray900,
+          fontSize: getFontSize(
+            13,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
+      case TextFormFieldFontStyle.SatoshiLight13:
+        return TextStyle(
+          color: ColorConstant.gray600,
+          fontSize: getFontSize(
+            13,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w300,
+        );
+      case TextFormFieldFontStyle.SatoshiLight20:
+        return TextStyle(
+          color: ColorConstant.gray600,
+          fontSize: getFontSize(
+            20,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w300,
+        );
+      default:
+        return TextStyle(
+          color: ColorConstant.black900,
+          fontSize: getFontSize(
+            14,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w400,
+        );
+    }
+  }
+  
+  _setHintStyle() {
     switch (fontStyle) {
       case TextFormFieldFontStyle.SatoshiLight14:
         return TextStyle(

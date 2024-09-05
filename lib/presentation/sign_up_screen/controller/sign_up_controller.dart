@@ -11,7 +11,7 @@ class SignUpController extends GetxController {
   final lastnameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String countryController = "";
+   String countryController = "United Kingdom";
   final apiClient = ApiClient();
 
 //for focus node
@@ -50,6 +50,13 @@ class SignUpController extends GetxController {
     passwordFocusNode.dispose();
     super.onClose();
   }
+
+   @override
+  void onInit() {
+    super.onInit();
+    countryController = "United Kingdom";
+  }
+
   var storage = FlutterSecureStorage();
   var showPasswordInstructions = false.obs;
   var showCheckBoxError = false.obs;
@@ -68,8 +75,8 @@ class SignUpController extends GetxController {
     });
 
     Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
-      barrierDismissible: false, // user must not close it manually
+      Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
     );
 
     try {

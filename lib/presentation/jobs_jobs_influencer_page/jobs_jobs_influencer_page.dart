@@ -86,88 +86,91 @@ JobsJobsInfluencerController controller = Get.put(
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: getPadding(
-                      top: 18,
-                    ),
-                    child: Obx(() {
-                      if (controller.isLoading.value) {
-                        // return CustomLoadingWidget(
-                        //   animationController: animationController,
-                        // ); // Your custom loading widget
-                        return ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: false,
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return SizedBox(
-                              height: getVerticalSize(
-                                10,
-                              ),
-                            );
-                          },
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            return InfluencerJobBidItemSkeletonWidget(); 
-                          },
-                        );
-                      } else {
-                        if (controller.error.value.isNotEmpty) {
-                          return ResponsiveErrorWidget(
-                            errorMessage: controller.error.value,
-                            onRetry: () {
-                              controller.getUser();
-                            },
-                            fullPage: true,
-                          ); // Your error widget
-                        } else if (controller.isEpty.value) {
-                          return ResponsiveEmptyWidget(
-                            errorMessage: 'You have no current Jobs ',
-                            smallMessage:
-                                'Your past and present Jobs will appear here',
-                            buttonText: "Bid jobs!",
-                            onRetry: () {
-                              controller.getUser();
-                            },
-                            fullPage: true,
-                          ); //
-                        } else {
+                  child: SizedBox(
+                    height: getVerticalSize(360),
+                    child: Padding(
+                      padding: getPadding(
+                        top: 18,
+                      ),
+                      child: Obx(() {
+                        if (controller.isLoading.value) {
+                          // return CustomLoadingWidget(
+                          //   animationController: animationController,
+                          // ); // Your custom loading widget
                           return ListView.separated(
                             physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
+                            shrinkWrap: false,
                             separatorBuilder: (
                               context,
                               index,
                             ) {
                               return SizedBox(
                                 height: getVerticalSize(
-                                  23,
+                                  10,
                                 ),
                               );
                             },
-                             itemCount: controller.isTrendLoading.value
-                                 ? 5  
-                            : controller.jobsJobsInfluencerModelObj.value.listclientItemList.length,  // Use the length of the job list
-                          itemBuilder: (context, index) {
-                          Jobz? model = index <
-                              controller.jobsJobsInfluencerModelObj.value.listclientItemList.length
-                            ? controller.jobsJobsInfluencerModelObj.value.listclientItemList[index]
-                             : null;
-                              ChatData? chatData = 
-                                         index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null;
-                           return ListclientItemWidget(
-                             model,
-                             chatData
-                             );
-                             },
+                            itemCount: 4,
+                            itemBuilder: (context, index) {
+                              return InfluencerJobBidItemSkeletonWidget(); 
+                            },
                           );
+                        } else {
+                          if (controller.error.value.isNotEmpty) {
+                            return ResponsiveErrorWidget(
+                              errorMessage: controller.error.value,
+                              onRetry: () {
+                                controller.getUser();
+                              },
+                              fullPage: true,
+                            ); // Your error widget
+                          } else if (controller.isEpty.value) {
+                            return ResponsiveEmptyWidget(
+                              errorMessage: 'You have no current Jobs ',
+                              smallMessage:
+                                  'Your past and present Jobs will appear here',
+                              buttonText: "Bid jobs!",
+                              onRetry: () {
+                                controller.getUser();
+                              },
+                              fullPage: true,
+                            ); //
+                          } else {
+                            return ListView.separated(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              separatorBuilder: (
+                                context,
+                                index,
+                              ) {
+                                return SizedBox(
+                                  height: getVerticalSize(
+                                    23,
+                                  ),
+                                );
+                              },
+                               itemCount: controller.isTrendLoading.value
+                                   ? 5  
+                              : controller.jobsJobsInfluencerModelObj.value.listclientItemList.length,  // Use the length of the job list
+                            itemBuilder: (context, index) {
+                            Jobz? model = index <
+                                controller.jobsJobsInfluencerModelObj.value.listclientItemList.length
+                              ? controller.jobsJobsInfluencerModelObj.value.listclientItemList[index]
+                               : null;
+                                ChatData? chatData = 
+                                           index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null;
+                             return ListclientItemWidget(
+                               model,
+                               chatData
+                               );
+                               },
+                            );
+                          }
                         }
-                      }
-                    }),
+                      }),
+                    ),
                   ),
                 ),
               ],

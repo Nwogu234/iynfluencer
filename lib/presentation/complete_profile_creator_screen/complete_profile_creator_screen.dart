@@ -42,7 +42,7 @@ class CompleteProfileCreatorScreen
                     onTap: () {
                       onTapArrowleft();
                     }),
-                actions: [
+/*                 actions: [
                   AppbarSubtitle2(
                     text: "lbl_skip".tr,
                     margin:
@@ -50,7 +50,7 @@ class CompleteProfileCreatorScreen
                         28.w, 17.h, 28.w, 17.h
                     ),
                   )
-                ]),
+                ] */),
             body: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(

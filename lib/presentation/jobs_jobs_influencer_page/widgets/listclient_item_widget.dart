@@ -48,7 +48,7 @@ class ListclientItemWidget extends StatelessWidget {
       }),
       child: Expanded(
         child: SizedBox(
-            height: getVerticalSize(350),
+            height: getVerticalSize(360),
             width: getHorizontalSize(
               336,
             ),

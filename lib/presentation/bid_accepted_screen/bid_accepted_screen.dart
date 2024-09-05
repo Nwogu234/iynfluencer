@@ -72,7 +72,7 @@ class BidAcceptedScreen extends GetWidget<RequestAcceptedController> {
                   bottom: 5,
                 ),
                 child: Text(
-                  "You have successfully bid Job with JobId;  $jobId".tr,
+                  "You have successfully bid Job for Job ID;  $jobId".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtH2Gray600,

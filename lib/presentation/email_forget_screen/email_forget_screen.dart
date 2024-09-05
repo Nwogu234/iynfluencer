@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/presentation/email_code/email_code_controller/email_code_controller.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'email_code_controller/email_code_controller.dart';
-
-class EmailCodeScreen extends GetWidget<EmailCodeController> {
-  EmailCodeScreen({Key? key}) : super(key: key);
+class EmailForgetScreen extends GetWidget<EmailCodeController> {
+  EmailForgetScreen({Key? key}) : super(key: key);
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -113,7 +112,7 @@ class EmailCodeScreen extends GetWidget<EmailCodeController> {
                     ])),
             bottomNavigationBar: CustomButton(
                 height: getVerticalSize(50),
-                text: "lbl_done".tr,
+                text: "Continue".tr,
                 margin: getMargin(left: 20, right: 20, bottom: 43),
                 padding: ButtonPadding.PaddingAll15,
                 onTap: () {
@@ -142,7 +141,7 @@ class EmailCodeScreen extends GetWidget<EmailCodeController> {
        print(controller.otpController.value.text);
       Get.snackbar('Verified', 'Your email was verified successfully');
       Get.toNamed(
-        AppRoutes.chooseProfile,
+        AppRoutes.resetPasswordScreen
       );
     } else {
       print(await controller.myauth

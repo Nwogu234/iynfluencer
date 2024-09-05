@@ -12,6 +12,7 @@ import 'package:iynfluencer/presentation/creator_after_job_detail_screen/creator
 import 'package:iynfluencer/presentation/edit_bid_screen/binding/edit_binding.dart';
 import 'package:iynfluencer/presentation/edit_bid_screen/edit_bid_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
+import 'package:iynfluencer/presentation/email_forget_screen/email_forget_screen.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashion_home_screen_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
@@ -26,6 +27,8 @@ import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/presentation/notification_firestore/binding/notification_firestore_binding.dart';
 import 'package:iynfluencer/presentation/notification_firestore/notification_firestore.dart';
+import 'package:iynfluencer/presentation/reset_password_screen/binding/reset_password_binding.dart';
+import 'package:iynfluencer/presentation/reset_password_screen/reset_password_screen.dart';
 import 'package:iynfluencer/presentation/review_accepted_screen/binding/review_accepted_binding.dart';
 import 'package:iynfluencer/presentation/review_accepted_screen/review_accepted_screen.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/social_media_home_page_binding.dart';
@@ -185,6 +188,8 @@ class AppRoutes {
 
   static const String emailCodeScreen = '/email_code_screen/:param1/:param2';
 
+  static const String emailForgetScreen = '/email_forget_screen/:param1/:param2';
+
   static const String completeProfileCreatorScreen =
       '/complete_profile_creator_screen';
 
@@ -192,6 +197,8 @@ class AppRoutes {
       '/complete_profile_influencer_screen';
 
   static const String forgotPasswordScreen = '/forgot_password_screen';
+
+  static const String resetPasswordScreen = '/reset_password_screen';
 
   static const String creatorJobslistPage = '/creator_jobslist_page';
 
@@ -476,6 +483,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: emailForgetScreen,
+      page: () => EmailForgetScreen(),
+      bindings: [
+        EmailCodeBinding(),
+      ],
+    ),
+    GetPage(
       name: logInScreen,
       page: () => LogInScreen(),
       bindings: [
@@ -531,6 +545,13 @@ class AppRoutes {
       page: () => ForgotPasswordScreen(),
       bindings: [
         ForgotPasswordBinding(),
+      ],
+    ),
+    GetPage(
+      name: resetPasswordScreen,
+      page: () => ResetPasswordScreen(),
+      bindings: [
+        ResetPasswordBinding(),
       ],
     ),
     GetPage(

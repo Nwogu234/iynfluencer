@@ -297,7 +297,11 @@ class BidScreen extends GetWidget {
               variant: ButtonVariantzz.gray700,
               padding: ButtonPaddingzz.PaddingAll12,
               prefixWidget: Text(
-                "${account.toString()}",
+              //  "${account.toString()}",
+              truncateWithEllipsis(
+                  myString: "${account.toString()}",
+                  textLength: 33,
+                  ),
                 textAlign: TextAlign.left,
                 style: AppStyle.txtSatoshiBold14Gray600ab.copyWith(
                   fontSize: 14,

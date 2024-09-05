@@ -136,7 +136,7 @@ class MessagesController extends GetxController {
       chatModelObj.value = chatList;
       error('');
     } if (chatList.isEmpty) {
-        error('You don\'s have Influencers in your chats');
+        error('You don\'ts have Influencers in your chats');
         empty = true;
         print('No chat data available.');
       } 
