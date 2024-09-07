@@ -671,6 +671,33 @@ Future<Response> uploadFile(String filePath, String token) async {
     }
   }
 
+  Future<Response> deleteBid(String bidId, String token) async {
+  Response response;
+  try {
+    
+    response = await delete(
+      'creators/me/deletebids/$bidId',
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      },
+    );
+
+    if (response.isOk) {
+      print('Bid deleted successfully');
+      return response;
+    } else {
+      print('Failed to delete bid');
+      print(response.body);
+      print(response.statusCode);
+      throw Exception('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+    }
+  } catch (e) {
+    print('$e from deleting bid');
+    throw Exception('Server error');
+  }
+}
+
 
 //this is for getting list of bids
   Future<Response> getInfluencerJobsBids(var token) async {

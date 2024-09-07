@@ -566,7 +566,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorConstant.gray5001,
         appBar: CustomAppBar(
-          height: getVerticalSize(54),
+          height: getVerticalSize(60),
           leadingWidth: 52,
           leading: AppbarImage(
             height: getSize(30),

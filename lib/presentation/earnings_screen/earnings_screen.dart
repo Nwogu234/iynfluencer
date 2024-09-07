@@ -14,6 +14,7 @@ import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class EarningsScreen extends StatefulWidget {
   EarningsScreen({Key? key}) : super(key: key);
@@ -24,8 +25,9 @@ class EarningsScreen extends StatefulWidget {
 
 class _EarningsScreenState extends State<EarningsScreen>
     with SingleTickerProviderStateMixin {
+  //  late  EarningsController controller;
   final UserController user = Get.find();
-   late AnimationController animationController;
+  late AnimationController animationController;
   final EarningsController controller = Get.put(EarningsController());
 
   @override
@@ -35,6 +37,7 @@ class _EarningsScreenState extends State<EarningsScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+
   }
 
   @override
@@ -140,12 +143,140 @@ class _EarningsScreenState extends State<EarningsScreen>
                         ),
                       ),
                       Container(
-                        margin: getMargin(left: 2, top: 15),
+                        margin: getMargin(left: 2, top: 20, bottom: 30),
                         decoration: AppDecoration.outlineIndigo501,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.lightBlueAccent,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: SizedBox(
+                                  height: getVerticalSize(250),
+                                  width: double.infinity,
+                                  child: Padding(
+                                      padding: getPadding(
+                                          top: 20,
+                                          bottom: 20,
+                                          right: 10,
+                                          left: 10),
+                                      child: AspectRatio(
+                                          aspectRatio: 3,
+                                          child: LineChart(LineChartData(
+                                            lineBarsData: [
+                                              LineChartBarData(
+                                                spots: controller
+                                                    .getEarningsData(),
+                                                isCurved: true,
+                                                color: Colors.white,
+                                                barWidth: 3,
+                                                belowBarData: BarAreaData(
+                                                  show: true,
+                                                  color: ColorConstant.gray200,
+                                                ),
+                                                dotData: FlDotData(show: true),
+                                              ),
+                                            ],
+                                            titlesData: FlTitlesData(
+                                                rightTitles: AxisTitles(
+                                                    sideTitles: SideTitles(
+                                                  showTitles: false,
+                                                )),
+                                                topTitles: AxisTitles(
+                                                    sideTitles: SideTitles(
+                                                  showTitles: false,
+                                                )),
+                                                leftTitles: AxisTitles(
+                                                    sideTitles: SideTitles(
+                                                  showTitles: true,
+                                                  getTitlesWidget:
+                                                      (value, meta) {
+                                                    return Text(
+                                                        "\$${value.toInt()}");
+                                                  },
+                                                  interval: 1,
+                                                )),
+                                                bottomTitles: AxisTitles(
+                                                    sideTitles: 
+                                                       controller.bottomTitles)),
+                                            gridData: FlGridData(show: true),
+                                            borderData: FlBorderData(
+                                                border: const Border(
+                                                    bottom: BorderSide(),
+                                                    left: BorderSide())),
+                                                    
+                                            lineTouchData: LineTouchData(
+                                              touchTooltipData:
+                                                  LineTouchTooltipData(
+                                                getTooltipColor:
+                                                    (touchedSpot) =>
+                                                        Colors.white,
+                                              ),
+                                              touchCallback: (FlTouchEvent
+                                                      event,
+                                                  LineTouchResponse? response) {
+                                                if (!event
+                                                        .isInterestedForInteractions ||
+                                                    response == null ||
+                                                    response.lineBarSpots ==
+                                                        null) {
+                                                  return;
+                                                }
+                                                // Handle touch events here
+                                              },
+                                              handleBuiltInTouches: true,
+                                            ),
+                                          ))))),
+                            ),
+
+                            Padding(
+                              padding: getPadding(top: 5),
+                              child: Container(
+                                height: getVerticalSize(220),
+                                child: ListView.builder(
+                                  itemCount: controller.isTrendLoading.value
+                                      ? 5
+                                      : controller.earningsModelObj.value
+                                          .earningsItemList.length,
+                                  itemBuilder: (context, index) {
+                                    Jobz? model = index <
+                                            controller.earningsModelObj.value
+                                                .earningsItemList.length
+                                        ? controller.earningsModelObj.value
+                                            .earningsItemList[index]
+                                        : null;
+                                    return EarningsItemWidget(
+                                        earningsItemModelObj: model);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  
+
+
+  void onTapArrowleft25() {
+    Get.back();
+  }
+}
+
+/* 
+
+    /*                        Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
@@ -311,44 +442,4 @@ class _EarningsScreenState extends State<EarningsScreen>
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: getPadding(top: 5),
-                              child: Container(
-                                height: getVerticalSize(220),
-                                child: ListView.builder(
-                                  itemCount: controller.isTrendLoading.value
-                                      ? 5
-                                      : controller.earningsModelObj.value
-                                          .earningsItemList.length,
-                                  itemBuilder: (context, index) {
-                                    Jobz? model = index <
-                                            controller.earningsModelObj.value
-                                                .earningsItemList.length
-                                        ? controller.earningsModelObj.value
-                                            .earningsItemList[index]
-                                        : null;
-                                    return EarningsItemWidget(
-                                        earningsItemModelObj: model);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              }),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void onTapArrowleft25() {
-    Get.back();
-  }
-}
+                            ), */ */

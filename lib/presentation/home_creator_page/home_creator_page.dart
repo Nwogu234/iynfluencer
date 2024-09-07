@@ -77,18 +77,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
 
   @override
   Widget build(BuildContext context) {
-    String? avatarUrl = controller.user.userModelObj.value.avatar;
-    String imageProvider;
-
-    print(avatarUrl);
-
-    if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = avatarUrl;
-    } else {
-      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
-    }
-
-    ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: false);
+    ScreenUtil.init(context, designSize: Size(375, 812), minTextAdapt: false);
 
     String capitalize(String text) {
       if (text == null || text.isEmpty) {
@@ -107,21 +96,28 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
             leading: Obx(() {
               if (controller.isLoading.value)
                 return Container();
-              else
+              else {
+                String? avatarUrl = controller.user.userModelObj.value.avatar;
+                String imageProvider;
+
+                if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                  imageProvider = avatarUrl;
+                } else {
+                  imageProvider =
+                      'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+                }
+
                 return Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle
-                  ),
+                  decoration: BoxDecoration(shape: BoxShape.circle),
                   child: AppbarCircleimage(
                     fit: BoxFit.cover,
                     url: imageProvider,
                     margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
                     onTap: openDrawer,
-                     radius: BorderRadius.circular(
-                       getSize(25.r),
-                        ),
+                    radius: BorderRadius.circular(getSize(25.r)),
                   ),
                 );
+              }
             }),
             leadingWidth: 60,
             actions: [
@@ -162,13 +158,13 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                               totalRepeatCount: 3,
                               animatedTexts: [
                                 TypewriterAnimatedText(
-                                    'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
-                                    textStyle: AppStyle.txtSatoshiBold16
-                                    .copyWith(
-                                  fontSize: 16.sp,
-                                  color: ColorConstant.black900,
-                                  fontWeight: FontWeight.w600,
-                                ), ),
+                                  'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
+                                  textStyle: AppStyle.txtSatoshiBold16.copyWith(
+                                    fontSize: 16.sp,
+                                    color: ColorConstant.black900,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ],
                             );
                         }),

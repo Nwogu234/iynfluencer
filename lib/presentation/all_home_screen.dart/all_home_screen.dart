@@ -115,7 +115,7 @@ class _AllHomePageState extends State<AllHomePage>
         return SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(
-            padding: getPadding(left: 10, top: 10),
+            padding: getPadding(left: 15, top: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

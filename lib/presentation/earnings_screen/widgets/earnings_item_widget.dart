@@ -1,6 +1,6 @@
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
-
+import 'package:fl_chart/fl_chart.dart';
 import '../controller/earnings_controller.dart';
 import '../models/earnings_item_model.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,7 @@ class EarningsItemWidget extends StatelessWidget {
                           right: 1,
                         ),
                         child: Text(
-                          '...',
+                          '\$${((earningsItemModelObj?.amount ?? 0) / 100).toString()}',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold135Gray900ab,
@@ -134,4 +134,9 @@ class EarningsItemWidget extends StatelessWidget {
       ),
     );
   }
+
+  
 }
+
+
+

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/api_client.dart';
@@ -80,10 +81,34 @@ class BidsController extends GetxController {
       error('Something went wrong');
       isLoading.value = false;
     }
-  } 
+  }
 
+  onDeleteBids(String bidId) async {
+    Get.dialog(
+      Center(
+          child: CircularProgressIndicator(
+        color: ColorConstant.cyan100,
+      )),
+      barrierDismissible: false,
+    );
+    try {
+      token = await storage.read(key: "token");
+      isLoading.value = true;
+      Response response = await apiClient.deleteBid(bidId, token);
 
-
+      Get.back();
+      if (response.isOk) {
+        Get.back();
+        Get.snackbar('Success', 'Bid dismissed successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to dismiss the bid');
+      }
+    } catch (e) {
+      // Close the dialog and show an error message if the request fails
+      Get.back();
+      Get.snackbar('Error', 'Something went wrong: $e');
+    }
+  }
 
 /* 
 getAllJobsBids(String jobId) async {

@@ -445,6 +445,7 @@ class ChatsOpenedController extends GetxController {
 }
  */
 
+
 class ChatsOpenedController extends GetxController {
   final ChatData chatData;
   final Influencer? selectedInfluencer;
@@ -592,7 +593,7 @@ class ChatsOpenedController extends GetxController {
         if (chatDataList != null) {
           for (var chatDataJson in chatDataList) {
             final Message message = Message.fromJson(
-                chatDataJson); // Assuming there's a method to parse JSON to Message
+                chatDataJson); 
             messages.add(message);
           }
 

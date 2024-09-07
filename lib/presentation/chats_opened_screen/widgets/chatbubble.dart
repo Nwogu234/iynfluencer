@@ -24,6 +24,7 @@ class ChatMessageBubble extends StatefulWidget {
   final String timestamp;
   final String? leadingImagePath;
   final String? trailingImagePath;
+  MessageStatus? messageStatus;
   ChatData? chatData;
   final ValueChanged<Message> onSwipedMessage;
   final bool isCompleteMessage;
@@ -37,6 +38,7 @@ class ChatMessageBubble extends StatefulWidget {
     this.timestamp = '',
     this.leadingImagePath,
     this.trailingImagePath,
+    this.messageStatus,
     this.chatData,
     required this.isCompleteMessage,
     Key? key,
@@ -104,52 +106,45 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                     ),
                   ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 9, horizontal: 15),
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.7,
-                  ),
-                  decoration: BoxDecoration(
-                    color: bubbleColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: widget.isReceived
-                          ? Radius.circular(0)
-                          : Radius.circular(20),
-                      bottomRight: widget.isReceived
-                          ? Radius.circular(20)
-                          : Radius.circular(0),
+                    padding: EdgeInsets.symmetric(vertical: 9, horizontal: 15),
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.7,
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(widget.messageText,
-                          style: TextStyle(
-                              color: widget.isReceived
-                                  ? Colors.black87
-                                  : Colors.white)),
-                      widget.isReceived && widget.isCompleteMessage == true
-                          ? InkWell(
-                              onTap: () {
-                                onTapJob();
-                              },
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: ColorConstant.cyan100,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text('Mark Job has Completed',
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              ),
-                            )
-                          : SizedBox.shrink()
-                    ],
-                  ),
-                ),
+                    decoration: BoxDecoration(
+                      color: bubbleColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: widget.isReceived
+                            ? Radius.circular(0)
+                            : Radius.circular(20),
+                        bottomRight: widget.isReceived
+                            ? Radius.circular(20)
+                            : Radius.circular(0),
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Text(widget.messageText,
+                                style: TextStyle(
+                                    color: widget.isReceived
+                                        ? Colors.black87
+                                        : Colors.white)),
+
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                        child: widget.isReceived
+                          ? SizedBox.shrink()
+                          : _buildMessageStatusIcon(),
+                      ),
+             
+                          ],
+                        ),
+                      ],
+                    )),
                 if (!widget.isReceived && widget.trailingImagePath != null)
                   GestureDetector(
                     onTap: () {
@@ -228,9 +223,21 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     });
   }
 
-  onTapJob() {
-    Get.to(
-      CreatorMarkJobDetailsScreen()
-    );
+   Widget _buildMessageStatusIcon() {
+    if (widget.messageStatus == MessageStatus.sending) {
+      return Icon(Icons.access_time, size: 10, color: Colors.white);
+    } else if (widget.messageStatus == MessageStatus.sent) {
+      return Icon(Icons.check, size: 10, color: Colors.white);
+    } else if (widget.messageStatus == MessageStatus.failed) {
+      return Icon(Icons.error, size: 10, color: Colors.red);
+    } else {
+      return SizedBox.shrink();
+    }
   }
+}
+
+enum MessageStatus {
+  sending,
+  sent,
+  failed,
 }

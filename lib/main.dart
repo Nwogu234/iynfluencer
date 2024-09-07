@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
@@ -15,6 +16,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'core/app_export.dart';
 import 'data/general_controllers/sockect_client.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:sizer/sizer.dart';
 
 final storage = FlutterSecureStorage();
 
@@ -34,7 +36,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Future<void> configOneSignal() async{
+Future<void> configOneSignal() async {
   OneSignal.Debug.setLogLevel(OSLogLevel.debug);
 
   OneSignal.initialize(appId);
@@ -57,6 +59,7 @@ Future<void> main() async {
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print('fcmToken: $fcmToken');
 
+
   final storage = FlutterSecureStorage();
   await storage.write(key: 'fcmToken', value: fcmToken.toString());
 
@@ -69,6 +72,22 @@ Future<void> main() async {
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   await configOneSignal();
+
+   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+       // overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom ]
+    ); 
+  
+  
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, 
+        statusBarBrightness:
+            Brightness.light,  
+        statusBarIconBrightness:
+            Brightness.dark, 
+      ),
+    );  
+     
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {
@@ -81,34 +100,45 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return ScreenUtilInit(
-      designSize: Size(375, 812), // your design size
-      builder: (context, widget) => GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.cyan,
-          primarySwatch: Colors.cyan,
-          visualDensity: VisualDensity.standard,
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.cyan,
-            backgroundColor: Colors.white,
-          ).copyWith(
-              secondary: Colors.cyan,
-              onSecondary: Colors.white,
-              background: Colors.white),
-        ),
-        translations: AppLocalization(),
-        locale: Get.deviceLocale, //for setting localization strings
-        fallbackLocale: Locale('en', 'US'),
-        title: 'iynfluencer',
-        initialBinding: InitialBindings(),
-        initialRoute: AppRoutes.initialRoute,
-        getPages: AppRoutes.pages,
-        home: widget,
-      ),
+      designSize: Size(375, 812), // Your design size
+      builder: (context, widget) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return OrientationBuilder(
+              builder: (context, orientation) {
+                return GetMaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    primaryColor: Colors.cyan,
+                    primarySwatch: Colors.cyan,
+                    visualDensity: VisualDensity.standard,
+                    colorScheme: ColorScheme.fromSwatch(
+                      primarySwatch: Colors.cyan,
+                      backgroundColor: Colors.white,
+                    ).copyWith(
+                      secondary: Colors.cyan,
+                      onSecondary: Colors.white,
+                      background: Colors.white,
+                    ),
+                  ),
+                  translations: AppLocalization(),
+                  locale: Get.deviceLocale, // For setting localization strings
+                  fallbackLocale: Locale('en', 'US'),
+                  title: 'iynfluencer',
+                  initialBinding: InitialBindings(),
+                  initialRoute: AppRoutes.initialRoute,
+                  getPages: AppRoutes.pages,
+                  home: widget, // Pass the home widget for the app
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
