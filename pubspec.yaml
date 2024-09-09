@@ -35,6 +35,8 @@ dependencies:
   flutter_switch: ^0.3.2
   font_awesome_flutter: ^10.7.0
   get: ^4.6.5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   http: ^1.1.0
   http_parser: ^4.0.2
   image_picker: ^1.0.1
@@ -63,6 +65,8 @@ dev_dependencies:
   animated_text_kit: ^4.2.2
   fl_chart: ^0.69.0
   flutter_stripe: ^9.5.0+1
+  build_runner: ^2.4.9
+  hive_generator: ^2.0.1
   flutter_test:
     sdk: flutter
   focused_menu: ^1.0.5

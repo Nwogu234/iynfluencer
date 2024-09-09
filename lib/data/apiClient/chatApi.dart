@@ -1,5 +1,6 @@
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
 
 class ApiClients extends GetConnect {
   // Configure the base URL

@@ -1,10 +1,12 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
@@ -450,14 +452,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 }
  */
 
+enum MessageStatus { sending, sent, failed }
 
 class ChatsOpenedScreen extends StatefulWidget {
-  ChatsOpenedScreen({
-    Key? key,
-    this.selectedInfluencer,
-    required this.chatData,
-    this.selectedJob
-  }) : super(key: key);
+  ChatsOpenedScreen(
+      {Key? key,
+      this.selectedInfluencer,
+      required this.chatData,
+      this.selectedJob})
+      : super(key: key);
 
   final Influencer? selectedInfluencer;
   // ChatData chatData;
@@ -474,7 +477,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   final MessagesController messageController =
       Get.put(MessagesController(MessagesModel().obs));
 
-
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
   late String imageProvider;
@@ -483,10 +485,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   RxBool show = false.obs;
   FocusNode focusNode = FocusNode();
   late ChatsOpenedController controller;
-  final scrollController = ScrollController();
-   List<Widget> chatList = [];
- // final  ChatsOpenedController controller = Get.find<ChatsOpenedController>();
-
+  List<Widget> chatList = [];
+  final ScrollController _scrollController = ScrollController();
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -494,7 +494,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     }
     return text[0].toUpperCase() + text.substring(1);
   }
-
 
   @override
   void initState() {
@@ -506,13 +505,13 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 
     String? avatarUrl;
     if (widget.selectedInfluencer != null) {
-             avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
-     // avatarUrl =
-     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+      avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
+      // avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
     } else if (widget.chatData != null) {
-       avatarUrl = widget.chatData.influencerUser!.avatar;
-    //  avatarUrl =
-     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
+      avatarUrl = widget.chatData.influencerUser!.avatar;
+      //  avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
     }
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -536,12 +535,21 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
       titleName = "Mark Adebayo";
     }
 
-     controller = ChatsOpenedController(
+    controller = ChatsOpenedController(
       chatData: widget.chatData,
       selectedInfluencer: widget.selectedInfluencer,
-       ); 
+    );
 
-     controller.onInit();
+    controller.onInit();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!controller.isLoading.value && controller.isLoadingMore.value) {
+          controller.loadMessagesOrFetch(widget.chatData.chatId);
+        }
+      }
+    });
   }
 
   Future<void> _refresh() async {
@@ -551,14 +559,14 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   @override
   void dispose() {
     animationController.dispose();
-    scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
     final String chatId = widget.chatData.chatId;
+    //  final Rx<MessageStatus> messageStatusRx = MessageStatus.sending.obs;
 
     return SafeArea(
       child: Scaffold(
@@ -566,7 +574,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorConstant.gray5001,
         appBar: CustomAppBar(
-          height: getVerticalSize(60),
+          height: getVerticalSize(50),
           leadingWidth: 52,
           leading: AppbarImage(
             height: getSize(30),
@@ -574,7 +582,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
             svgPath: ImageConstant.imgArrowleftGray600,
             margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
             onTap: () {
-              onTapArrowleft8();
+              onTapArrowleft8(widget.chatData);
             },
           ),
           title: Padding(
@@ -583,7 +591,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
               children: [
                 AppbarCircleimage(
                   url: imageProvider,
-                  margin: getMargin(left: 10, top: 5, bottom: 20),
+                  margin: getMargin(left: 10, top: 15, bottom: 20),
                 ),
                 AppbarSubtitle(
                   text: titleName.tr,
@@ -613,12 +621,13 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
               return ResponsiveErrorWidget(
                 errorMessage: controller.error.value,
                 onRetry: () {
-                  controller.getUser(chatId);
+                  controller.fetchAllMessagesWithInfluencer(chatId);
                 },
                 fullPage: true,
               );
             } else {
-              Map<String, List<Message>> groupedMessages = controller.groupMessagesByDate(controller.messageModelObj);
+              Map<String, List<Message>> groupedMessages =
+                  controller.groupMessagesByDate(controller.messageModelObj);
               return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
@@ -628,8 +637,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                       SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
-                          controller: scrollController,
-                          reverse: true,
+                          //  controller: _scrollController,
+                          reverse: controller.isReverse.value,
                           itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
                             String date = groupedMessages.keys.elementAt(index);
@@ -638,32 +647,44 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 messages.isNotEmpty
-                                    ?  DateLable(
-                                  dateTime: DateTime.parse(date),
-                                )  : DateLable(
+                                    ? DateLable(
+                                        dateTime: DateTime.parse(date),
+                                      )
+                                    : DateLable(
                                         dateTime: widget.chatData.createdAt,
-                                  ),
+                                      ),
                                 ListView.builder(
-                                  controller: scrollController,
+                                  controller: _scrollController,
                                   shrinkWrap: true,
-                                  reverse: true,
+                                  reverse: controller.isReverse.value,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
                                     final message = messages[subIndex];
-                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
+                                    Rx<MessageStatus> messageStatusRx =
+                                        controller
+                                            .intToMessageStatus(
+                                                message.status ?? 0)
+                                            .obs;
+                                    String formattedDateTime =
+                                        DateFormat.jm('en_US')
+                                            .format(message.createdAt);
                                     return ChatMessageBubble(
-                                      isCompleteMessage: message.isCompleteMessage ?? false,
+                                      isCompleteMessage:
+                                          message.isCompleteMessage ?? false,
                                       controller: controller,
                                       messageText: message.text,
-                                      isReceived: message.authorUserId != widget.chatData.creatorUserId,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
                                       timestamp: formattedDateTime,
                                       leadingImagePath: ImageConstant.imgVector,
-                                      trailingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
                                       messageModelObj: message.messageId,
-                                      onSwipedMessage: (message) {
+                                      onSwipedMessage: (messages) {
                                         replyToMessage(message);
                                         focusNode.requestFocus();
                                       },
+                                      messageStatus: messageStatusRx,
                                     );
                                   },
                                 ),
@@ -715,8 +736,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   ),
                 ),
               );
-
-
             }
           }),
         ),
@@ -739,15 +758,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     );
   }
 
-  void replyToMessage(Message message) {
-    widget.replyMessage.value = message;
+  void replyToMessage(Message messages) {
+    widget.replyMessage.value = messages;
   }
 
   void cancelReply() {
     widget.replyMessage.value = null;
   }
 
-  onTapArrowleft8() {
+  onTapArrowleft8(ChatData chatData) async {
     messageController.onInit();
     messageController.setUnreadCreator(0);
     Get.back(result: true);

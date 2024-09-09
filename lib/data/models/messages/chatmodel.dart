@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
+
 class ChatResponse {
   final String status;
   final String message;
@@ -141,6 +143,7 @@ class ChatData {
   }
 }
 
+/* 
 class Message {
   final String id;
   final String chatId;
@@ -195,7 +198,7 @@ class Message {
       'isCompleteMessage': isCompleteMessage
     };
   }
-}
+} */
 
 class UserModel {
   String? id;

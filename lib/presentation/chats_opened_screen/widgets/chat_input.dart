@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/widgets/reply_message_widget.dart';
 import 'package:uuid/uuid.dart';
@@ -441,7 +442,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                 child: CustomTextFormField(
                   width: getHorizontalSize(334),
                   focusNode: EmojiWidgetShown ? null : widget.focusNode,
-                  autofocus: true,
+                  autofocus: false,
                   onChanged: (value) {
                     sendButton.value = value.isNotEmpty;
                   },

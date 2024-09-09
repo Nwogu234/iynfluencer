@@ -8,8 +8,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/env.dart';
 import 'package:iynfluencer/firebase_options.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -17,6 +19,8 @@ import 'core/app_export.dart';
 import 'data/general_controllers/sockect_client.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:sizer/sizer.dart';
+import 'package:hive/hive.dart';
+
 
 final storage = FlutterSecureStorage();
 
@@ -47,6 +51,8 @@ Future<void> configOneSignal() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+   Hive.registerAdapter(MessageAdapter());
   Stripe.publishableKey = stripePublishableKey;
   await Stripe.instance.applySettings();
   // Ensure Firebase is initialized only once

@@ -11,6 +11,7 @@ import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dar
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/model/chat_influencer_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';

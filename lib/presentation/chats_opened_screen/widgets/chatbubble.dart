@@ -6,6 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/data/models/messages/hive_message.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/creator_mark_job_details_screen/creator_mark_job_detail_screen.dart';
@@ -24,7 +26,7 @@ class ChatMessageBubble extends StatefulWidget {
   final String timestamp;
   final String? leadingImagePath;
   final String? trailingImagePath;
-  MessageStatus? messageStatus;
+   final Rx<MessageStatus> messageStatus;
   ChatData? chatData;
   final ValueChanged<Message> onSwipedMessage;
   final bool isCompleteMessage;
@@ -38,7 +40,7 @@ class ChatMessageBubble extends StatefulWidget {
     this.timestamp = '',
     this.leadingImagePath,
     this.trailingImagePath,
-    this.messageStatus,
+    required this.messageStatus,
     this.chatData,
     required this.isCompleteMessage,
     Key? key,
@@ -55,6 +57,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   Widget build(BuildContext context) {
     Color bubbleColor =
         widget.isReceived ? ColorConstant.gray200 : ColorConstant.cyan100;
+
+     ValueNotifier<MessageStatus> messageStatusNotifier = ValueNotifier<MessageStatus>(MessageStatus.sending);
     if (isDeleted.value == true) {
       return Obx(() {
         return Container(
@@ -123,28 +127,18 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                             : Radius.circular(0),
                       ),
                     ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          children: [
-                            Text(widget.messageText,
-                                style: TextStyle(
-                                    color: widget.isReceived
-                                        ? Colors.black87
-                                        : Colors.white)),
-
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                        child: widget.isReceived
-                          ? SizedBox.shrink()
-                          : _buildMessageStatusIcon(),
-                      ),
-             
-                          ],
-                        ),
-                      ],
-                    )),
+                    child: Text(widget.messageText,
+                        style: TextStyle(
+                            color: widget.isReceived
+                                ? Colors.black87
+                                : Colors.white))),
+                     Padding(
+                  padding: const EdgeInsets.only(top: 35, left: 5),
+                  child: widget.isReceived
+                      ? SizedBox.shrink()
+                      : _buildMessageStatusIcon(widget.controller)
+                ), 
+                                 
                 if (!widget.isReceived && widget.trailingImagePath != null)
                   GestureDetector(
                     onTap: () {
@@ -223,21 +217,25 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     });
   }
 
-   Widget _buildMessageStatusIcon() {
-    if (widget.messageStatus == MessageStatus.sending) {
-      return Icon(Icons.access_time, size: 10, color: Colors.white);
-    } else if (widget.messageStatus == MessageStatus.sent) {
-      return Icon(Icons.check, size: 10, color: Colors.white);
-    } else if (widget.messageStatus == MessageStatus.failed) {
-      return Icon(Icons.error, size: 10, color: Colors.red);
-    } else {
-      return SizedBox.shrink();
+  /*  Widget _buildMessageStatusIcon(MessageStatus status) {
+    switch (status) {
+      case MessageStatus.sending:
+        return Icon(Icons.access_time, size: 10, color: Colors.grey);
+      case MessageStatus.sent:
+        return Icon(Icons.done_all, size: 10, color: Colors.grey);
+      case MessageStatus.failed:
+        return Icon(Icons.error, size: 10, color: Colors.grey);
+      default:
+        return SizedBox.shrink();
     }
-  }
+  } */
+
+ Widget _buildMessageStatusIcon(ChatsOpenedController controller) {
+  return Obx(() {
+    return controller.isSent.value
+        ? Icon(Icons.done_all, size: 17, color: Colors.grey)
+        : Icon(Icons.error, size: 17, color: Colors.red);
+  });
+}
 }
 
-enum MessageStatus {
-  sending,
-  sent,
-  failed,
-}
