@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/apiClient/notificationApi.dart';
@@ -371,8 +373,23 @@ class ChatsInfluencerController extends GetxController {
   late final RxBool isDeleted = false.obs;
   Timer? keepAliveTimer;
   Set<String> processedMessageIds = {};
- final notificationClient = NotificationClient();
- 
+  final notificationClient = NotificationClient();
+  RxBool isLoadingMore = true.obs;
+  int pageSize = 10;
+  ScrollController _scrollController = ScrollController();
+  final RxBool isReverse = false.obs;
+  final RxBool isSent = true.obs;
+  int currentPage = 0;
+
+
+  
+void scrollToBottom() {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  });
+}
+
+
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     final String chatId = chatData.chatId;
@@ -435,7 +452,7 @@ class ChatsInfluencerController extends GetxController {
   }
 
   Future<void> getUser(String chatId) async {
-    isLoading.value = true;
+    // isLoading.value = true;
     error.value = '';
     token = await storage.read(key: "token");
     try {
@@ -447,7 +464,7 @@ class ChatsInfluencerController extends GetxController {
       } else {
         error('');
         // loadMessages(chatId);
-        fetchAllMessagesWithCreators(chatId).then((value) {
+        loadMessagesOrFetch(chatId).then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
@@ -460,6 +477,39 @@ class ChatsInfluencerController extends GetxController {
       print('Error in getUser: $e');
       error.value = 'Failed to fetch messages';
       isLoading.value = false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> loadMessagesOrFetch(String chatId) async {
+    isLoading.value = false;
+    try {
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
+      final List<Message> storedMessages = messageBox.values.toList();
+
+      if (storedMessages.isNotEmpty) {
+        int batchSize = 10;
+        for (var i = 0; i < storedMessages.length; i += batchSize) {
+          List<Message> batch = storedMessages.skip(i).take(batchSize).toList();
+          messageModelObjs.addAll(batch);
+          await Future.delayed(Duration(milliseconds: 50));
+        }
+        print('Messages loaded successfully from Hive for chat ID: $chatId');
+      } else {
+        isLoading.value = true;
+        await fetchAllMessagesWithCreators(chatId);
+      }
+
+      final userId = user.userModelObj().userId;
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      print('fcmToken: $fcmToken');
+      await storeFcmToken(userId, fcmToken);
+      print('Stored FCM Token for $userId: $fcmToken');
+    } catch (e) {
+      print('Error loading or fetching messages: $e');
+      error.value = 'Failed to load messages';
     } finally {
       isLoading.value = false;
     }
@@ -484,7 +534,7 @@ class ChatsInfluencerController extends GetxController {
             messages.add(message);
           }
           messageModelObjs.assignAll(messages);
-          saveMessages(messages, chatId);
+           await saveMessages(messages, chatId);
         } else {
           error('Failed to fetch messages: Data not available');
         }
@@ -499,48 +549,6 @@ class ChatsInfluencerController extends GetxController {
     }
   }
 
-  Future<void> saveMessages(List<Message> messages, String chatId) async {
-    try {
-      final List<String> serializedMessages =
-          messages.map((message) => jsonEncode(message.toJson())).toList();
-      final String serializedMessagesString = jsonEncode(serializedMessages);
-      await storage.write(
-          key: 'messages_$chatId', value: serializedMessagesString);
-      print('Messages saved successfully for chat ID: $chatId');
-    } catch (e) {
-      print('Error saving messages: $e');
-      // Handle error as needed
-    }
-  }
-
-  /* Future<List<Message>> loadMessages(String chatId) async {
-    final serializedMessagesString =
-        await storage.read(key: 'messages_$chatId');
-
-    if (serializedMessagesString != null &&
-        serializedMessagesString.isNotEmpty) {
-      final List<dynamic> decodedList = jsonDecode(serializedMessagesString);
-
-      // Check if the decoded data is a list
-      if (decodedList is List) {
-        final List<Map<String, dynamic>> serializedMessages =
-            decodedList.cast<Map<String, dynamic>>();
-
-        // Map each Map<String, dynamic> to a Message object using Message.fromJson
-        final List<Message> messages =
-            serializedMessages.map((map) => Message.fromJson(map)).toList();
-
-        return messages;
-      } else {
-        print('Invalid JSON format: $serializedMessagesString');
-        return [];
-      }
-    } else {
-      print('No messages found for chatId: $chatId');
-      return [];
-    }
-  } */
-
   Future<void> deleteIdMessage(String deleteMessage) async {
     try {
       final token = await storage.read(key: "token");
@@ -551,6 +559,10 @@ class ChatsInfluencerController extends GetxController {
       if (response.isOk) {
         print('Message deleted successfully');
         isDeleted.value = true;
+
+        final Box<Message> messageBox =
+            await Hive.openBox<Message>('messages_$chatId');
+        await messageBox.delete(deleteMessage);
         // Remove the deleted message from the list
         messageModelObjs
             .removeWhere((message) => message.messageId == deleteMessage);
@@ -752,8 +764,11 @@ class ChatsInfluencerController extends GetxController {
             messages: [],
           );
 
-          final creatorId = selectedJob.creator?.id ?? selectedJob.creatorDetails?.id ?? '';
-          final creatorUserId = selectedJob.creator?.userId ?? selectedJob.creatorDetails?.userId ?? '';
+          final creatorId =
+              selectedJob.creator?.id ?? selectedJob.creatorDetails?.id ?? '';
+          final creatorUserId = selectedJob.creator?.userId ??
+              selectedJob.creatorDetails?.userId ??
+              '';
 
           print('creatorId : $creatorId');
           print('creatorUserId : $creatorUserId');
@@ -789,11 +804,51 @@ class ChatsInfluencerController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(
-      BuildContext context, String messageText, bool isCompleteMessage) async {
-    FocusScope.of(context).unfocus();
+  Future<void> saveMessages(List<Message> messages, String chatId) async {
     try {
-      messageText = messageText.trim();
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
+      await messageBox.clear();
+
+      for (var message in messages) {
+        await messageBox.put(message.messageId, message);
+      }
+      print('Messages saved successfully for chat ID: $chatId');
+    } catch (e) {
+      print('Error saving messages: $e');
+    }
+  }
+
+  Future<void> loadMessages(String chatId) async {
+    try {
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
+      final List<Message> storedMessages = messageBox.values.toList();
+
+      if (storedMessages.isNotEmpty) {
+        // Sort messages by createdAt in ascending order (latest at the bottom)
+        storedMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+        messageModelObjs.assignAll(storedMessages);
+        print(
+            'Messages loaded and sorted successfully from Hive for chat ID: $chatId');
+      } else {
+        print('No messages found in Hive for chat ID: $chatId');
+      }
+    } catch (e) {
+      print('Error loading messages from Hive: $e');
+    }
+  }
+
+  Future<void> sendMessage(
+    BuildContext context, String messageText, bool isCompleteMessage) async {
+    FocusScope.of(context).unfocus();
+    
+    if (messageText.isEmpty) {
+      return;
+    }
+
+     messageText = messageText.trim();
 
       final now = DateTime.now();
       final formattedTime = DateFormat('HH:mm').format(now);
@@ -842,84 +897,135 @@ class ChatsInfluencerController extends GetxController {
       print('updatedAts  : $updatedAts');
       print('isCompleteMessage  : $isCompletesMessage');
 
-      final token = await storage.read(key: "token");
+      messageController.clear();
+      isReverse.value = true;
 
+      if (!isDuplicateMessage(newMessage.messageId)) {
+        UpdateList(newMessage);
+      }
+
+      final boxName = 'messages_$chatId';
+      Box<Message>? messageBox;
+
+      try {
+        messageBox = Hive.isBoxOpen(boxName)
+            ? Hive.box<Message>(boxName)
+            : await Hive.openBox<Message>(boxName);
+        await messageBox.put(messageId, newMessage);
+      } catch (e) {
+        print('Error opening or accessing Hive box: $e');
+      }
+      final token = await storage.read(key: "token");
       if (token == null) {
         print("Authorization token is not available");
         return;
       }
-      final response = await apiClient.sendMessage(newMessage, token);
 
-      if (response.isOk) {
-       // query != null
-       //     ? TextEditingController(text: query).clear()
-       //     : messageController.clear();
-          messageController.clear();
+    var connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = connectivityResult != ConnectivityResult.none;
 
-        if (!isDuplicateMessage(newMessage.messageId)) {
-          UpdateList(newMessage);
-        }
-        print('Message sent and stored successfully');
-        socketClient.sendMessage(chatData, messageText);
+    if (isConnected) {
+      try {
+        final response = await apiClient.sendMessage(newMessage, token);
 
-        final name =
-            "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
-         await OneSignal.login(chatData.creatorUserId);
-        final avatar = user.userModelObj.value.avatar;
-        if (name != null) {
-          try {
-            print('Sending notification to recipient'); // Debug log
-            await notificationClient.sendNotification(
-              name,
-              messageText,
-              chatData.creatorUserId,
-              avatar
-            ); 
+        if (response.isOk) {
+           isSent.value = true;
+          print('Message sent and stored successfully');
+          socketClient.sendMessage(chatData, messageText);
+          final name =
+              "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+          await OneSignal.login(chatData.influencerUserId);
+          final avatar = user.userModelObj.value.avatar;
+          if (name != null) {
+            try {
+              print('Sending notification to recipient');
+              await notificationClient.sendNotification(
+                  name, messageText, chatData.influencerUserId, avatar);
 
-             await notificationService.createNotification(
-              name,
-              messageText,
-              'Message',
-              avatar
-            );
-            print('Notification sent and saved to database');
-          } catch (e) {
-            print('Error sending notification: $e');
+              await notificationService.createNotification(
+                  name, messageText, 'Message', avatar);
+              print('Notification sent and saved to database');
+            } catch (e) {
+              print('Error sending notification: $e');
+            }
+          } else {
+            print('name is null');
           }
         } else {
-          print('Recipient token is null');
+          print('Failed to send message: ${response.statusText}');
+          scheduleRetry(newMessage, messageBox, token, messageText);
         }
-      } else {
-        print('Failed to send message: ${response.statusText}');
-        print('Sent Message: $messageText');
+      } catch (e) {
+        print('Error sending message: $e');
+        scheduleRetry(newMessage, messageBox, token, messageText);
       }
-    } catch (e) {
-      print('Error sending message: $e');
+    } else {
+      print("No internet connection. Message will be retried automatically.");
+      scheduleRetry(newMessage, messageBox, token, messageText);
     }
+
   }
 
   void UpdateList(Message message) {
     messageModelObjs.insert(0, message);
+    scrollToBottom();
     update();
   }
 
-/* 
-void saveMessages(List<Message> messages) async {
-  final List<String> serializedMessages = messages.map((message) => jsonEncode(message.toJson())).toList();
-  final String serializedMessagesString = jsonEncode(serializedMessages);
-  await storage.write(key: 'messages_${chatData.chatId}', value: serializedMessagesString);
-}
- */
-/* 
-Future<List<Message>> loadMessages() async {
-  final String? serializedMessagesString = await storage.read(key: 'messages_${widget.chatData.chatId}');
-  if (serializedMessagesString != null) {
-    final List<dynamic> serializedMessages = jsonDecode(serializedMessagesString);
-    return serializedMessages.map((json) => Message.fromJson(json)).toList();
-  } else {
-    return [];
+
+   void scheduleRetry(
+  Message message, Box<Message>? messageBox, String token, String messageText) {
+    const retryInterval = Duration(seconds: 10);
+    const retryDuration = Duration(minutes: 2);
+    final endTime = DateTime.now().add(retryDuration);
+
+    Timer.periodic(retryInterval, (Timer timer) async {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = connectivityResult != ConnectivityResult.none;
+
+      if (isConnected) {
+        try {
+          final retryResponse = await apiClient.sendMessage(message, token);
+          if (retryResponse.isOk) {
+             isSent.value = true;
+            socketClient.sendMessage(chatData, message.text);
+            final name =
+                "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
+            await OneSignal.login(chatData.influencerUserId);
+            final avatar = user.userModelObj.value.avatar;
+            if (name != null) {
+              try {
+                print('Sending notification to recipient');
+                await notificationClient.sendNotification(
+                    name, messageText, chatData.influencerUserId, avatar);
+
+                await notificationService.createNotification(
+                    name, messageText, 'Message', avatar);
+                print('Notification sent and saved to database');
+              } catch (e) {
+                print('Error sending notification: $e');
+              }
+            } else {
+              print('name is null');
+            }
+            timer.cancel();
+          } else {
+            print('Retry failed: ${retryResponse.statusText}');
+          }
+        } catch (e) {
+          print('Retry error: $e');
+        }
+      }
+
+      if (DateTime.now().isAfter(endTime)) {
+        message.status = MessageStatus.failed.index;
+         isSent.value = false;
+        await messageBox?.delete(message.messageId);
+        timer.cancel();
+      }
+    });
   }
-} */
+
 
   String formatDateTime(String createdAt) {
     DateTime dateTime = DateTime.parse(createdAt);

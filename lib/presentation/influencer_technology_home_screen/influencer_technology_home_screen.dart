@@ -90,7 +90,7 @@ void _onScroll() {
           padding: const EdgeInsets.only(
             left: 25,
             right: 25,
-            bottom: 350
+            bottom: 450
           ),
           child: ResponsiveErrorWidget(
             errorMessage: controller.error.value,

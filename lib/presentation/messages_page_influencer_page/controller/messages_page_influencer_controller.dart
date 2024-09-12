@@ -211,38 +211,43 @@ var messages = <String>[].obs;
 
 
   
-  /* Future<void> getCreatorsChat() async {
-    try {
-      error('');
-      isTrendLoading.value = true;
-      token = await storage.read(key: "token");
-      final Response response =
-          await apiClient.getAllChatsWithCreators(token);
-      List<dynamic> chatJsonList = response.body['data']['docs'];
-      chatList.clear();
-      print(chatJsonList.length);
-      print(chatJsonList);
-      if (chatJsonList.length > 0) {
-        chatJsonList.forEach((e) {
-          chatList.add(ChatData.fromJson(e));
-        });
-      }
-      if (chatList.isEmpty) {
-        error( 'You don\'s have Creators in your chats');
-        empty = true;
-        print('No chat data available.');
-      } else {
+  
+  void infcSearch(String query) {
+    searchController.text = query;
+
+    final lowerQuery = query.toLowerCase();
+    print('This is the search query: $query');
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (lowerQuery.isEmpty) {
         chatModelObj.value = chatList;
-        error('');
-        isTrendLoading.value = false;
+      } else {
+        chatModelObj.value = chatList.where((chat) {
+          final firstName = chat.creatorUser?.firstName?.toLowerCase() ?? '';
+          final lastName = chat.creatorUser?.lastName?.toLowerCase() ?? '';
+          final lastMessageText = chat.messages.isNotEmpty
+              ? chat.messages.last.text.toLowerCase()
+              : '';
+
+          return firstName.contains(lowerQuery) ||
+              lastName.contains(lowerQuery) ||
+              lastMessageText.contains(lowerQuery);
+        }).toList();
       }
-      isTrendLoading.value = false;
-    } catch (e) {
-      print('Error fetching influencers chat: $e');
-      error('Something went wrong');
-      isTrendLoading.value = false;
-    }
-  } */
+
+      if (chatModelObj.isEmpty) {
+        error('No Results Found');
+        Get.snackbar(
+          'No Results Found',
+          'No chats match your search query.',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 2),
+        );
+      }
+      searchController.clear();
+    });
+  }
+
 
   
   Future<void> getCreatorsChat() async {
@@ -264,7 +269,7 @@ var messages = <String>[].obs;
       chatModelObj.value = chatList;
       error('');
     } if (chatList.isEmpty) {
-        error('You don\'s have Influencers in your chats');
+        error('You dont\'s have Influencers in your chats');
         empty = true;
         print('No chat data available.');
       } 

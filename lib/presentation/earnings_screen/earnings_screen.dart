@@ -150,7 +150,7 @@ class _EarningsScreenState extends State<EarningsScreen>
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: Colors.lightBlueAccent,
+                                  color: ColorConstant.gray200Ab,
                                   borderRadius: BorderRadius.circular(20)),
                               child: SizedBox(
                                   height: getVerticalSize(250),
@@ -169,11 +169,11 @@ class _EarningsScreenState extends State<EarningsScreen>
                                                 spots: controller
                                                     .getEarningsData(),
                                                 isCurved: true,
-                                                color: Colors.white,
+                                                color: ColorConstant.cyan100,
                                                 barWidth: 3,
                                                 belowBarData: BarAreaData(
                                                   show: true,
-                                                  color: ColorConstant.gray200,
+                                                  color: ColorConstant.cyan100,
                                                 ),
                                                 dotData: FlDotData(show: true),
                                               ),
@@ -193,7 +193,12 @@ class _EarningsScreenState extends State<EarningsScreen>
                                                   getTitlesWidget:
                                                       (value, meta) {
                                                     return Text(
-                                                        "\$${value.toInt()}");
+                                                        "\$${value.toInt()}",
+                                                        style: TextStyle(
+                                                          color: ColorConstant.cyan100,
+                                                          fontWeight: FontWeight.w900
+                                                        ),
+                                                        );
                                                   },
                                                   interval: 1,
                                                 )),
@@ -211,7 +216,7 @@ class _EarningsScreenState extends State<EarningsScreen>
                                                   LineTouchTooltipData(
                                                 getTooltipColor:
                                                     (touchedSpot) =>
-                                                        Colors.white,
+                                                        ColorConstant.cyan100,
                                               ),
                                               touchCallback: (FlTouchEvent
                                                       event,
@@ -227,7 +232,9 @@ class _EarningsScreenState extends State<EarningsScreen>
                                               },
                                               handleBuiltInTouches: true,
                                             ),
-                                          ))))),
+                                          )))
+                                          )
+                                          ),
                             ),
 
                             Padding(

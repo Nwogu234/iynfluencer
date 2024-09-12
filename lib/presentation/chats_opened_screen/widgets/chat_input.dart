@@ -470,7 +470,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                                 color: ColorConstant.black900,
                                 size: 24.0,
                               )
-                            : CustomImageView(
+                            : /* CustomImageView(
                                 onTap: () {
                                   popTime = 3;
                                   Get.to(CameraScreen());
@@ -479,7 +479,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
                                 width: 24,
                                 svgPath: ImageConstant.imgCamera,
                                 // Add any other necessary properties and styling for CustomImageView
-                              ),
+                              ), */
+                              Icon(
+                                Icons.send,
+                                color: ColorConstant.black900,
+                                size: 24.0,
+                              )
                       ),
                     );
                   }),

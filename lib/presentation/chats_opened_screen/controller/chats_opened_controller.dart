@@ -554,6 +554,7 @@ class ChatsOpenedController extends GetxController {
     getUser(chatId);
   }
 
+
 void scrollToBottom() {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);

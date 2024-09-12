@@ -573,7 +573,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
         key: _scaffoldKey,
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorConstant.gray5001,
-        appBar: CustomAppBar(
+        appBar: /* CustomAppBar(
           height: getVerticalSize(50),
           leadingWidth: 52,
           leading: AppbarImage(
@@ -601,6 +601,45 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
             ),
           ),
           styleType: Style.bgOutlineIndigo50_1,
+        ), */
+
+        CustomAppBar(
+          centerTitle: true,
+          height: getVerticalSize(50),
+          leadingWidth: 52,
+          leading: AppbarImage(
+            height: getSize(30),
+            width: getSize(30),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
+            onTap: () {
+              onTapArrowleft8(widget.chatData);
+            },
+          ),
+          title: Padding(
+            padding: getPadding(left: 2, top: 3),
+            child: AppbarSubtitle(
+              text: titleName.tr,
+              margin: getMargin( //left: 14,
+               top: 5,
+               bottom: 10,
+               right:10
+               ),
+            ),
+          ),
+
+          actions: [
+             AppbarCircleimage(
+                  url: imageProvider,
+                 margin: getMargin( 
+                  right: 10,
+                  bottom: 5
+                 )
+                  //left: 10,
+                 //  top: 15, bottom: 20),
+                ),
+          ],
+          styleType: Style.bgOutlineIndigo50_1,
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
@@ -621,7 +660,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
               return ResponsiveErrorWidget(
                 errorMessage: controller.error.value,
                 onRetry: () {
-                  controller.fetchAllMessagesWithInfluencer(chatId);
+                  controller.getUser(chatId);
                 },
                 fullPage: true,
               );

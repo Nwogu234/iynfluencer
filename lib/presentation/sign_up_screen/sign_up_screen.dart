@@ -164,7 +164,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                             svgPath:
                                                 controller.isShowPassword.value
                                                     ? ImageConstant.imgEye
-                                                    : ImageConstant.imgEye))),
+                                                    : ImageConstant.imgFrameEye))),
                                 suffixConstraints: BoxConstraints(
                                     maxHeight: getVerticalSize(48)),
                                 validator: (value) {

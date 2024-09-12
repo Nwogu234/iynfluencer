@@ -230,6 +230,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     }
   } */
 
+
  Widget _buildMessageStatusIcon(ChatsOpenedController controller) {
   return Obx(() {
     return controller.isSent.value

@@ -100,10 +100,15 @@ void _onScroll() {
             bottom: 350
           ),
           child: Center(
-            child: ResponsiveErrorWidget(
-              errorMessage: controller.error.value,
-              onRetry: controller.getUser,
-              fullPage: true,
+            child: Padding(
+               padding: const EdgeInsets.only(
+               bottom: 120,
+               ),
+              child: ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: controller.getUser,
+                fullPage: true,
+              ),
             ),
           ),
         );

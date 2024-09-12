@@ -201,7 +201,6 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
 
  */
 
-
 class MessagesPageInfluencerPage extends StatefulWidget {
   MessagesPageInfluencerPage({Key? key})
       : super(
@@ -224,7 +223,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BottomBarController bottomBarController = Get.put(BottomBarController());
 
-    InfluencerHomeOneController influencerOneController =
+  InfluencerHomeOneController influencerOneController =
       Get.put(InfluencerHomeOneController());
 
   late AnimationController animationController;
@@ -245,11 +244,9 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     super.dispose();
   }
 
-  
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +256,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
           resizeToAvoidBottomInset: false,
           backgroundColor: ColorConstant.whiteA700,
           body: RefreshIndicator(
-           onRefresh: _refresh,
+            onRefresh: _refresh,
             child: SingleChildScrollView(
                 child: Container(
                     width: double.maxFinite,
@@ -271,7 +268,8 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 22, vertical: 10),
                               child: Row(
-                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   DefaultTextStyle(
                                     style: AppStyle.txtSatoshiLight135Gray600
@@ -302,9 +300,12 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                       }),
                                 ],
                               )),
-                          AppbarSearchview(
+                          AppbarSearchview1(
                             hintText: "Search Chats".tr,
                             controller: controller.searchController,
+                            onTap: (query) {
+                              controller.infcSearch(query);
+                            },
                           ),
                           SizedBox(height: 10),
                           Divider(),
@@ -337,53 +338,56 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                   PositionedDirectional(
                                     top: 150,
                                     start: 150,
-                                    child:
-                                        SizedBox(), 
+                                    child: SizedBox(),
                                   ),
                                 ],
                               );
-                            }  else {
-                               return SizedBox(
-                          width: size.width,
-                       //   height: getVerticalSize(800),
-                          child: Padding(
-                            padding: getPadding(
-                              bottom: 5,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Obx(
-                                  () => ListView.separated(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        height: getVerticalSize(
-                                          1,
+                            } else {
+                              return SizedBox(
+                                width: size.width,
+                                //   height: getVerticalSize(800),
+                                child: Padding(
+                                  padding: getPadding(
+                                    bottom: 5,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Obx(
+                                        () => ListView.separated(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          separatorBuilder: (context, index) {
+                                            return SizedBox(
+                                              height: getVerticalSize(
+                                                1,
+                                              ),
+                                            );
+                                          },
+                                          itemCount: controller
+                                                  .isTrendLoading.value
+                                              ? 5
+                                              : controller.chatModelObj.length,
+                                          itemBuilder: (context, index) {
+                                            if (controller
+                                                .isTrendLoading.value) {
+                                              return BidsListWidgetSkeleton();
+                                            } else {
+                                              ChatData model = controller
+                                                  .chatModelObj[index];
+                                              return Listgroup883ItemWidget(
+                                                  listgroup883ItemModelObj:
+                                                      model);
+                                            }
+                                          },
                                         ),
-                                      );
-                                    },
-                                    itemCount: controller.isTrendLoading.value
-                                        ? 5
-                                        : controller.chatList.length,
-                                    itemBuilder: (context, index) {
-                                      if (controller.isTrendLoading.value) {
-                                        return BidsListWidgetSkeleton();
-                                      } else {
-                                        ChatData model =
-                                            controller.chatList[index];
-                                        return Listgroup883ItemWidget(
-                                          listgroup883ItemModelObj: model);
-                                      }
-                                    },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
+                              );
                             }
                           })
                         ]))),
@@ -395,4 +399,3 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     _scaffoldKey.currentState?.openDrawer();
   }
 }
- 

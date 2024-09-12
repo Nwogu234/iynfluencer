@@ -79,10 +79,15 @@ class _FashionHomePageState extends State<FashionHomePage>
           animationController: animationController,
         );
       } else if (controller.error.value.isNotEmpty) {
-        return ResponsiveErrorWidget(
-          errorMessage: controller.error.value,
-          onRetry: controller.getUser,
-          fullPage: true,
+        return Padding(
+          padding: const EdgeInsets.only(
+            bottom: 120,
+          ),
+          child: ResponsiveErrorWidget(
+            errorMessage: controller.error.value,
+            onRetry: controller.getUser,
+            fullPage: true,
+          ),
         );
       } else {
         return SingleChildScrollView(

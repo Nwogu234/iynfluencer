@@ -77,20 +77,6 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-
-    String? avatarUrl = (controller.updatedProfileImage.value as String?) ??
-        controller.user.userModelObj.value.avatar;
-
-    String imageProvider;
-
-    print(avatarUrl);
-
-    if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = avatarUrl;
-    } else {
-      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
-    }
-
     return SafeArea(
         child: Scaffold(
       key: _scaffoldKey,
@@ -114,13 +100,30 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                             style: AppStyle.txtSatoshiLight135Gray600.copyWith(
                                 fontSize: 24.sp, fontWeight: FontWeight.bold),
                           ),
-                             AppbarCircleimage(
-                              url: imageProvider,
-                              margin: EdgeInsets.only(
-                                  left: 20.w, top: 14.h, bottom: 14.h),
-                              onTap: () {
-                                openDrawer();
-                              }), 
+                          Obx(() {
+                            if (controller.isLoading.value)
+                              return Container();
+                            else {
+                              String? avatarUrl = (controller
+                                      .updatedProfileImage.value as String?) ??
+                                  controller.user.userModelObj.value.avatar;
+                              String imageProvider;
+
+                              if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                                imageProvider = avatarUrl;
+                              } else {
+                                imageProvider =
+                                    'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+                              }
+                              return AppbarCircleimage(
+                                  url: imageProvider,
+                                  margin: EdgeInsets.only(
+                                      left: 20.w, top: 14.h, bottom: 14.h),
+                                  onTap: () {
+                                    openDrawer();
+                                  });
+                            }
+                          })
 /* 
                           Padding(
                             padding: EdgeInsets.only(

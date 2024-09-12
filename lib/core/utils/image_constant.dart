@@ -62,6 +62,9 @@ class ImageConstant {
   static String imgArrowMark =
       'assets/images/img_mark.svg';
 
+  static String imgError =
+      'assets/images/img_errorFrame.svg';
+
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
 
   static String imgSearchGray600 = 'assets/images/img_search_gray_600.svg';

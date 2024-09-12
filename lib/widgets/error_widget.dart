@@ -27,7 +27,7 @@ class ResponsiveErrorWidget extends StatelessWidget {
           color: ColorConstant.gray100,
         ),
         width: 330.w,
-        height: 230.h, 
+        height: 250.h, 
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -35,6 +35,18 @@ class ResponsiveErrorWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15, top:5),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CustomImageView(
+                      svgPath: ImageConstant.imgError,
+                      width: getHorizontalSize(30),
+                      height: getVerticalSize(30),
+                      color: ColorConstant.cyan100,
+                    )
+                  ),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -67,7 +79,7 @@ class ResponsiveErrorWidget extends StatelessWidget {
               ),
                   ),
                 ),
-                SizedBox(height: 20.h), // Responsive height
+                SizedBox(height: 20.h),
                 CustomButtonTwo(
                   height: getVerticalSize(45),
                   width: getHorizontalSize(120),

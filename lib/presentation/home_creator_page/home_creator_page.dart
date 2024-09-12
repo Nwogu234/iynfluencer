@@ -10,6 +10,7 @@ import 'package:iynfluencer/presentation/search_influncers_screen/search_influnc
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/social_media_home_page.dart';
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/theme/app_decoration.dart';
+import 'package:iynfluencer/widgets/app_bar/appbar_searchview_1.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
@@ -107,14 +108,14 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                       'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
                 }
 
-                return Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle),
+                return Align(
+                  alignment: Alignment.centerLeft,
                   child: AppbarCircleimage(
-                    fit: BoxFit.cover,
+                   // fit: BoxFit.cover,
                     url: imageProvider,
-                    margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
+                   margin: EdgeInsets.only(left: 20, top: 16, bottom: 16),
                     onTap: openDrawer,
-                    radius: BorderRadius.circular(getSize(25.r)),
+                   // radius: BorderRadius.circular(getSize(25.r)),
                   ),
                 );
               }

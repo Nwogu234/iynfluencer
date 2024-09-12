@@ -125,15 +125,22 @@ JobsJobsInfluencerController controller = Get.put(
                               fullPage: true,
                             ); // Your error widget
                           } else if (controller.isEpty.value) {
-                            return ResponsiveEmptyWidget(
-                              errorMessage: 'You have no current Jobs ',
-                              smallMessage:
-                                  'Your past and present Jobs will appear here',
-                              buttonText: "Bid jobs!",
-                              onRetry: () {
-                                controller.getUser();
-                              },
-                              fullPage: true,
+                            return Padding(
+                            padding: const EdgeInsets.only(
+                               bottom: 350
+                             ),
+                              child: Center(
+                                child: ResponsiveEmptyWidget(
+                                  errorMessage: 'You have no current Jobs ',
+                                  smallMessage:
+                                      'Your past and present Jobs will appear here',
+                                  buttonText: "Retry Now",
+                                  onRetry: () {
+                                    controller.getUser();
+                                  },
+                                  fullPage: true,
+                                ),
+                              ),
                             ); //
                           } else {
                             return ListView.separated(

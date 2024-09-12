@@ -11,10 +11,10 @@ class SignUpController extends GetxController {
   final lastnameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-   String countryController = "United Kingdom";
+   String countryController = "united Kingdom";
   final apiClient = ApiClient();
 
-//for focus node
+
 
   final FocusNode firstnameFocusNode = FocusNode();
   final FocusNode lastnameFocusNode = FocusNode();

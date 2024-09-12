@@ -9,7 +9,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../data/general_controllers/sockect_client.dart';
 
-
 class MessagesController extends GetxController {
   MessagesController(this.messagesModelObj);
 
@@ -32,14 +31,14 @@ class MessagesController extends GetxController {
   Rx<ChatData?> lastMessage = Rx<ChatData?>(null);
   RxInt unreadCreator = 0.obs;
 
-
+  RxList<ChatData> filteredChatList = <ChatData>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    
+
     socketClient.connect();
-  
+
     socketClient.socket.on('connected', (data) {
       messages.add(data.toString());
       update();
@@ -52,7 +51,43 @@ class MessagesController extends GetxController {
     getUser();
   }
 
-  
+
+  void search(String query) {
+    searchController.text = query;
+
+    final lowerQuery = query.toLowerCase();
+    print('This is the search query: $query');
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (lowerQuery.isEmpty) {
+        chatModelObj.value = chatList;
+      } else {
+        chatModelObj.value = chatList.where((chat) {
+          final firstName = chat.influencerUser?.firstName?.toLowerCase() ?? '';
+          final lastName = chat.influencerUser?.lastName?.toLowerCase() ?? '';
+          final lastMessageText = chat.messages.isNotEmpty
+              ? chat.messages.last.text.toLowerCase()
+              : '';
+
+          return firstName.contains(lowerQuery) ||
+              lastName.contains(lowerQuery) ||
+              lastMessageText.contains(lowerQuery);
+        }).toList();
+      }
+
+      if (chatModelObj.isEmpty) {
+        error('No Results Found');
+        Get.snackbar(
+          'No Results Found',
+          'No chats match your search query.',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 2),
+        );
+      }
+      searchController.clear();
+    });
+  }
+
   getUser() async {
     isLoading.value = true;
     token = await storage.read(key: "token");
@@ -75,14 +110,11 @@ class MessagesController extends GetxController {
     }
   }
 
-
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     getUser();
   }
 
-  
-/* 
   Future<void> getInfluencersChat() async {
     try {
       isTrendLoading.value = true;
@@ -93,19 +125,22 @@ class MessagesController extends GetxController {
       chatList.clear();
       print(chatJsonList.length);
       print(chatJsonList);
-      if (chatJsonList.length > 0) {
-        chatJsonList.forEach((e) {
-          chatList.add(ChatData.fromJson(e));
+      if (chatJsonList.isNotEmpty) {
+        chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+        chatList.sort((a, b) {
+          final aLastMessageTime =
+              a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
+          final bLastMessageTime =
+              b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
+          return bLastMessageTime.compareTo(aLastMessageTime);
         });
-      }
-      if (chatList.isEmpty) {
-        error('You don\'s have Influencers in your chats');
-        empty = true;
-        print('No chat data available.');
-      } else {
         chatModelObj.value = chatList;
         error('');
-        isTrendLoading.value = false;
+      }
+      if (chatList.isEmpty) {
+        error('You don\'ts have Influencers in your chats');
+        empty = true;
+        print('No chat data available.');
       }
       isTrendLoading.value = false;
     } catch (e) {
@@ -114,48 +149,14 @@ class MessagesController extends GetxController {
       isTrendLoading.value = false;
     }
   }
- */
-
-
-  Future<void> getInfluencersChat() async {
-  try {
-    isTrendLoading.value = true;
-    token = await storage.read(key: "token");
-    final Response response = await apiClient.getAllChatsWithInfluencers(token);
-    List<dynamic> chatJsonList = response.body['data']['docs'];
-    chatList.clear();
-    print(chatJsonList.length);
-    print(chatJsonList);
-    if (chatJsonList.isNotEmpty) {
-      chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
-      chatList.sort((a, b) {
-        final aLastMessageTime = a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
-        final bLastMessageTime = b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
-        return bLastMessageTime.compareTo(aLastMessageTime);
-      });
-      chatModelObj.value = chatList;
-      error('');
-    } if (chatList.isEmpty) {
-        error('You don\'ts have Influencers in your chats');
-        empty = true;
-        print('No chat data available.');
-      } 
-    isTrendLoading.value = false;
-  } catch (e) {
-    print('Error fetching influencers chat: $e');
-    error('Something went wrong');
-    isTrendLoading.value = false;
-  }
-}
 
   void setUnreadCreator(int value) {
     unreadCreator.value = value;
   }
 
-
   @override
   void onClose() {
-   // socketClient.disconnect();
+    // socketClient.disconnect();
     searchController.dispose();
     super.onClose();
   }

@@ -78,7 +78,9 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage>
       }
       if (!controller.error.value.isEmpty) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.only(
+            bottom: 120,
+          ),
           child: ResponsiveErrorWidget(
             errorMessage: controller.error.value,
             onRetry: controller.getUser,

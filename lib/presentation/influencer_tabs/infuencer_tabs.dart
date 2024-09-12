@@ -27,8 +27,9 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
                     transition: Transition.fadeIn)),
             bottomNavigationBar:
                 InfluencerBottomBar(onChanged: (BottomBarEnum type) {
-              controller.currentRoute.value = getCurrentRoute(type);
+               controller.currentRoute.value = getCurrentRoute(type);
               Get.toNamed(getCurrentRoute(type), id: 3);
+           //   Get.toNamed(newRoute, id: 1);
             })));
   }
 }

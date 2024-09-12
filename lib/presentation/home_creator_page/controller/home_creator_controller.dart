@@ -130,7 +130,7 @@ class HomeCreatorController extends GetxController {
       isTrendLoading.value = true;
       trendingInfluencers = await apiClient.getInfluencers(1, 15, token);
       if (trendingInfluencers.isEmpty) {
-        error('Something went wrong');
+        error('No influencers found for this category');
         isTrendLoading.value = false;
       } else {
         error('');

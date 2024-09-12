@@ -8,6 +8,7 @@ import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_m
 import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview.dart';
+import 'package:iynfluencer/widgets/app_bar/appbar_searchview_1.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_icon_button.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -48,6 +49,7 @@ class _MessagesPageState extends State<MessagesPage>
       vsync: this,
     )..repeat();
     controller.onInit();
+    
   }
 
   @override
@@ -105,17 +107,12 @@ class _MessagesPageState extends State<MessagesPage>
                       ],
                     ),
                   ),
-                  AppbarSearchview(
+                  AppbarSearchview1(
                     hintText: "Search Chats".tr,
                     controller: controller.searchController,
-                    /*   onSubmitted: 
-                    (query) async {
-                       Get.to(() => SearchCreatorScreen(
-                            query: query,
-                            trendingInfluencers:
-                                homeController.trendingInfluencers,
-                          ));  
-                    }*/
+                     onTap: (query) {
+                    controller.search(query);
+                    }, 
                   ),
                   SizedBox(height: 10),
                   Divider(),
@@ -126,12 +123,17 @@ class _MessagesPageState extends State<MessagesPage>
                         animationController: animationController,
                       );
                     } else if (controller.error.value.isNotEmpty) {
-                      return ResponsiveErrorWidget(
-                        errorMessage: controller.error.value,
-                        onRetry: () {
-                          controller.getUser();
-                        },
-                        fullPage: true,
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          top: 120,
+                           ),
+                        child: ResponsiveErrorWidget(
+                          errorMessage: controller.error.value,
+                          onRetry: () {
+                            controller.getUser();
+                          },
+                          fullPage: true,
+                        ),
                       );
                     } else {
                       return SizedBox(
@@ -158,13 +160,13 @@ class _MessagesPageState extends State<MessagesPage>
                                   },
                                   itemCount: controller.isTrendLoading.value
                                       ? 5
-                                      : controller.chatList.length,
+                                      : controller.chatModelObj.length,
                                   itemBuilder: (context, index) {
                                     if (controller.isTrendLoading.value) {
                                       return BidsListWidgetSkeleton();
                                     } else {
                                       ChatData model =
-                                          controller.chatList[index];
+                                          controller.chatModelObj[index];
                                       return MessagesPageItemWidget(
                                           messagesPageItemModelObj: model);
                                     }
