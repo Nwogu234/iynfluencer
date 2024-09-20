@@ -6,7 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';

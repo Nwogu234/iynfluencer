@@ -44,7 +44,10 @@ class ListclientItemWidget extends StatelessWidget {
           selectedJob: listclientItemModelObj,
           chatData: chatData,
           
-        ));
+        ),
+         transition: Transition.zoom,
+         duration: Duration(seconds:1)
+        );
       }),
       child: Expanded(
         child: SizedBox(

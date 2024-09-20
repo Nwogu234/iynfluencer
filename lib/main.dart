@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/env.dart';
 import 'package:iynfluencer/firebase_options.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -21,8 +20,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:sizer/sizer.dart';
 import 'package:hive/hive.dart';
 
-
 final storage = FlutterSecureStorage();
+bool _isHiveInitialized = false;
 
 @pragma("vm:entry-point")
 Future<void> _firebaseMessagingHandler(RemoteMessage remoteMessage) async {
@@ -51,8 +50,17 @@ Future<void> configOneSignal() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-   Hive.registerAdapter(MessageAdapter());
+
+  if (!_isHiveInitialized) {
+    await Hive.initFlutter();
+    Hive.registerAdapter(ChatDataAdapter());
+    Hive.registerAdapter(UserModelAdapter());
+    Hive.registerAdapter(MessageAdapter());
+    _isHiveInitialized = true;
+  }
+
+  // await Hive.deleteBoxFromDisk('chats');
+
   Stripe.publishableKey = stripePublishableKey;
   await Stripe.instance.applySettings();
   // Ensure Firebase is initialized only once
@@ -64,7 +72,6 @@ Future<void> main() async {
   }
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print('fcmToken: $fcmToken');
-
 
   final storage = FlutterSecureStorage();
   await storage.write(key: 'fcmToken', value: fcmToken.toString());
@@ -79,21 +86,21 @@ Future<void> main() async {
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   await configOneSignal();
 
-   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-       // overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom ]
-    ); 
-  
-  
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent, 
-        statusBarBrightness:
-            Brightness.light,  
-        statusBarIconBrightness:
-            Brightness.dark, 
-      ),
-    );  
-     
+   SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  );
+
+ 
+
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {
@@ -108,9 +115,8 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return ScreenUtilInit(
-      designSize: Size(375, 812), // Your design size
+      designSize: Size(375, 812),
       builder: (context, widget) {
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -138,7 +144,7 @@ class MyApp extends StatelessWidget {
                   initialBinding: InitialBindings(),
                   initialRoute: AppRoutes.initialRoute,
                   getPages: AppRoutes.pages,
-                  home: widget, // Pass the home widget for the app
+                  home: widget,
                 );
               },
             );

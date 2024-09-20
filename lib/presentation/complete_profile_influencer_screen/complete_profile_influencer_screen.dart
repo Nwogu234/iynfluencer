@@ -29,7 +29,7 @@ class CompleteProfileInfluencerScreen
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: ColorConstant.whiteA70001,
-        appBar: CustomAppBar(
+      /*   appBar: CustomAppBar(
           height: 54.h,
           leadingWidth: 50.w,
           leading: AppbarImage(
@@ -45,7 +45,7 @@ class CompleteProfileInfluencerScreen
                 text: "lbl_skip".tr,
                 margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 17.h))
           ], */
-        ),
+        ), */
         body: LayoutBuilder(
           builder: (context, constraints) {
             return FadeTransition(

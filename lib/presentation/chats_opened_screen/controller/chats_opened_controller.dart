@@ -12,7 +12,6 @@ import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:flutter/material.dart';
@@ -521,7 +520,7 @@ class ChatsOpenedController extends GetxController {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  void handleNewMessage(dynamic data) {
+  void handleNewMessage(dynamic data) async{
     print('this is working');
     print('Received data: $data');
     try {
@@ -534,6 +533,22 @@ class ChatsOpenedController extends GetxController {
         return;
       }
       UpdateMessage(newMessage);
+       final chatId = newMessage.chatId;
+        final messageId = newMessage.messageId;
+  
+        try {
+         final boxName = 'messages_$chatId';
+          Box<Message>? messageBox;
+          messageBox = Hive.isBoxOpen(boxName) ? Hive.box<Message>(boxName) : await Hive.openBox<Message>(boxName);
+        await messageBox.put(messageId, newMessage);
+        } catch (e) {
+         print('Error opening or accessing Hive box: $e');
+        }
+         final token = await storage.read(key: "token");
+       if (token == null) {
+         print("Authorization token is not available");
+         return;
+       }   
     } catch (e) {
       print('Error parsing message data: $e');
     }
@@ -630,11 +645,6 @@ Future<void> loadMessagesOrFetch(String chatId) async {
       await fetchAllMessagesWithInfluencer(chatId);
     }
 
-    final userId = user.userModelObj().userId;
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    print('fcmToken: $fcmToken');
-    await storeFcmToken(userId, fcmToken);
-    print('Stored FCM Token for $userId: $fcmToken');
   } catch (e) {
     print('Error loading or fetching messages: $e');
     error.value = 'Failed to load messages';
@@ -1098,7 +1108,7 @@ Future<void> loadMessagesOrFetch(String chatId) async {
   }
 
   @override
-  void onInit() {
+  void onInit() async{
     _socketClient.connect();
     print(_socketClient.isConnected);
     // _socketClient.socket.emit('onChatJoin', {'message': 'user just joined'});

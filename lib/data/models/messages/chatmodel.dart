@@ -1,4 +1,7 @@
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
+import 'package:hive/hive.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
+
+ part 'chatmodel.g.dart';
 
 class ChatResponse {
   final String status;
@@ -62,21 +65,37 @@ class Chat {
   }
 }
 
-class ChatData {
+@HiveType(typeId: 0)
+class ChatData extends HiveObject {
+   @HiveField(0)
   final String id;
+   @HiveField(1)
   final String creatorId;
+   @HiveField(2)
   final String influencerId;
+    @HiveField(3)
   final String creatorUserId;
+    @HiveField(4)
   final String influencerUserId;
+    @HiveField(5)
   final int unreadByCreator;
+    @HiveField(6)
   final int unreadByInfluencer;
+    @HiveField(7)
   final bool blockedByCreator;
+     @HiveField(8)
   final bool blockedByInfluencer;
+     @HiveField(9)
   final String chatId;
+     @HiveField(10)
   final DateTime createdAt;
+     @HiveField(11)
   final DateTime updatedAt;
-  final List<Message> messages;
+     @HiveField(12)
+   List<Message> messages;
+      @HiveField(13)
   final UserModel? creatorUser;
+      @HiveField(14)
   final UserModel? influencerUser;
 
   ChatData({
@@ -143,88 +162,56 @@ class ChatData {
   }
 }
 
-/* 
-class Message {
-  final String id;
-  final String chatId;
-  final String authorId;
-  final String text;
-  final String authorUserId;
-  final bool blockedByRecipient;
-  final String messageId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool? isCompleteMessage;
-
-  Message({
-    required this.id,
-    required this.chatId,
-    required this.authorId,
-    required this.text,
-    required this.authorUserId,
-    required this.blockedByRecipient,
-    required this.messageId,
-    required this.createdAt,
-    required this.updatedAt,
-    this.isCompleteMessage,
-  });
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      id: json['_id'],
-      chatId: json['chatId'],
-      authorId: json['authorId'],
-      text: json['text'],
-      authorUserId: json['authorUserId'],
-      blockedByRecipient: json['blockedByRecipient'],
-      messageId: json['messageId'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      isCompleteMessage: json['isCompleteMessage'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'chatId': chatId,
-      'authorId': authorId,
-      'text': text,
-      'authorUserId': authorUserId,
-      'blockedByRecipient': blockedByRecipient,
-      'messageId': messageId,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'isCompleteMessage': isCompleteMessage
-    };
-  }
-} */
-
-class UserModel {
+@HiveType(typeId: 1)
+class UserModel extends HiveObject{
+   @HiveField(0)
   String? id;
+   @HiveField(1)
   String? firstName;
+    @HiveField(2)
   String? lastName;
+    @HiveField(3)
   String? email;
+    @HiveField(4)
   String? password;
+    @HiveField(5)
   bool? termsAndConditionsAgreement;
+    @HiveField(6)
   bool? isNewUser;
+    @HiveField(7)
   bool? isSocial;
+    @HiveField(8)
   bool? verified;
+    @HiveField(9)
   bool? verifiedEmail;
+    @HiveField(10)
   int? followers;
+    @HiveField(11)
   int? following;
+    @HiveField(12)
   int? views;
+    @HiveField(13)
   String? userId;
+    @HiveField(14)
   String? createdAt;
+    @HiveField(15)
   String? updatedAt;
+    @HiveField(16)
   String? creatorId;
+    @HiveField(17)
   String? influencerId;
+    @HiveField(18)
   String? country;
+    @HiveField(19)
   String? dob;
+    @HiveField(20)
   String? phone;
+    @HiveField(21)
   String? username;
+    @HiveField(22)
   String? avatar;
-  String? cover;
+    @HiveField(23)
+   String? cover;
 
   UserModel({
     this.id,
@@ -310,3 +297,118 @@ class UserModel {
     return data;
   }
 }
+
+
+
+@HiveType(typeId: 2)
+class Message extends HiveObject {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String chatId;
+  @HiveField(2)
+  final String authorId;
+  @HiveField(3)
+  final String text;
+  @HiveField(4)
+  final String authorUserId;
+  @HiveField(5)
+  final bool blockedByRecipient;
+  @HiveField(6)
+  final String messageId;
+  @HiveField(7)
+   DateTime createdAt;
+  @HiveField(8)
+   DateTime updatedAt;
+  @HiveField(9)
+  final bool? isCompleteMessage;
+
+ @HiveField(10)
+   int? status;
+
+  
+  Message({
+    required this.id,
+    required this.chatId,
+    required this.authorId,
+    required this.text,
+    required this.authorUserId,
+    required this.blockedByRecipient,
+    required this.messageId,
+    required this.createdAt,
+    required this.updatedAt,
+    this.isCompleteMessage,
+    this.status = 0, 
+  });
+
+ 
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      id: json['_id'],
+      chatId: json['chatId'],
+      authorId: json['authorId'],
+      text: json['text'],
+      authorUserId: json['authorUserId'],
+      blockedByRecipient: json['blockedByRecipient'],
+      messageId: json['messageId'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      isCompleteMessage: json['isCompleteMessage'],
+      status: _messageStatusFromString(json['status']),
+    );
+  }
+
+ 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'chatId': chatId,
+      'authorId': authorId,
+      'text': text,
+      'authorUserId': authorUserId,
+      'blockedByRecipient': blockedByRecipient,
+      'messageId': messageId,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'isCompleteMessage': isCompleteMessage,
+      'status': _messageStatusToString(),
+    };
+  }
+
+  
+  String _messageStatusToString() {
+    switch (status) {
+      case 1:
+        return 'sent';
+      case 2:
+        return 'failed';
+      default:
+        return 'sending';
+    }
+  }
+
+ 
+  static int _messageStatusFromString(String? status) {
+    switch (status) {
+      case 'sent':
+        return 1;
+      case 'failed':
+        return 2;
+      default:
+        return 0; 
+    }
+  }
+
+  Rx<MessageStatus> get messageStatus {
+    switch (status) {
+       case 1:
+        return MessageStatus.sent.obs;
+      case 2:
+       return MessageStatus.failed.obs;
+     default:
+      return MessageStatus.sending.obs;
+    }
+  }
+}
+
+

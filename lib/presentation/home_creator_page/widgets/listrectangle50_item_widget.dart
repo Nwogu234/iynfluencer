@@ -297,7 +297,10 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
     Get.to(
       InfluencerProfileAboutPage(
           chatData: chatData ?? chatsData, selectedInfluencer: listrectangle50),
+        transition: Transition.zoom,
+        duration: Duration(seconds:1)
     );
+
   }
 
   @override

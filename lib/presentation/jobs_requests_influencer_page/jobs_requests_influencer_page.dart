@@ -83,12 +83,17 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                       );
                     } else {
                       if (controller.isError.value) {
-                        return ResponsiveErrorWidget(
-                          errorMessage: controller.error.value,
-                          onRetry: () {
-                            controller.getUser();
-                          },
-                          fullPage: true,
+                        return Padding(
+                           padding: const EdgeInsets.only(
+                            bottom: 350
+                          ),
+                          child: ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser();
+                            },
+                            fullPage: true,
+                          ),
                         ); // Your error widget
                       } else if (controller
                               .jobsRequestsInfluencerModelObj.isEmpty &&

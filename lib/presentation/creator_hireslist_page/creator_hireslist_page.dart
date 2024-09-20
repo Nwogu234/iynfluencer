@@ -144,7 +144,10 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
     );
   }
   onTapBidcard(model) {
-    Get.to(JobHiredScreen(selectedJob: model));
+    Get.to(JobHiredScreen(selectedJob: model),
+     transition: Transition.zoom,
+     duration: Duration(seconds:1)
+    );
   }
 } 
 

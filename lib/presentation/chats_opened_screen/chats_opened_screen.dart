@@ -6,7 +6,6 @@ import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chatbubble.dart';
@@ -695,7 +694,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                                 ListView.builder(
                                   controller: _scrollController,
                                   shrinkWrap: true,
-                                  reverse: controller.isReverse.value,
+                                  reverse: true,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
                                     final message = messages[subIndex];

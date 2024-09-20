@@ -61,6 +61,8 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
     jobDetailsController.setSelectedJob(selectedJob);
     Get.to(
       () => CreatorJobDetailsScreen(selectedJob: selectedJob),
+       transition: Transition.zoom,
+       duration: Duration(seconds:1)
     );
   }
 

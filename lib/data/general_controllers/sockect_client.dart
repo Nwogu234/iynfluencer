@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'dart:async';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketClient extends GetxService {

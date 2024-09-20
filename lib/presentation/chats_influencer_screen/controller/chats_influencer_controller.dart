@@ -13,7 +13,6 @@ import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dar
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/model/chat_influencer_model.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
@@ -425,7 +424,7 @@ void scrollToBottom() {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  void handleNewMessage(dynamic data) {
+  void handleNewMessage(dynamic data) async {
     print('this is working');
     print('Received data: $data');
     try {
@@ -436,7 +435,23 @@ void scrollToBottom() {
         print('Duplicate message detected: ${newMessage.messageId}');
         return;
       }
-      UpdateMessage(newMessage);
+        UpdateMessage(newMessage);
+        final chatId = newMessage.chatId;
+        final messageId = newMessage.messageId;
+  
+        try {
+         final boxName = 'messages_$chatId';
+          Box<Message>? messageBox;
+          messageBox = Hive.isBoxOpen(boxName) ? Hive.box<Message>(boxName) : await Hive.openBox<Message>(boxName);
+          await messageBox.put(messageId, newMessage);
+        } catch (e) {
+         print('Error opening or accessing Hive box: $e');
+        }
+         final token = await storage.read(key: "token");
+       if (token == null) {
+         print("Authorization token is not available");
+         return;
+       }   
     } catch (e) {
       print('Error parsing message data: $e');
     }

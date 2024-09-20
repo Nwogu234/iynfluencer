@@ -27,7 +27,7 @@ class CompleteProfileCreatorScreen
         child: Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: ColorConstant.whiteA70001,
-            appBar: CustomAppBar(
+/*             appBar: CustomAppBar(
                 height: 54.h,
                 leadingWidth: 50.w,
                 leading: AppbarImage(
@@ -50,7 +50,7 @@ class CompleteProfileCreatorScreen
                         28.w, 17.h, 28.w, 17.h
                     ),
                   )
-                ] */),
+                ] */), */
             body: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(

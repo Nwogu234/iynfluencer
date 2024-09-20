@@ -44,6 +44,8 @@ class ListmediainflueItemWidget extends StatelessWidget {
               jobMyBids: listmediainflueItemModelObj,
               chatData: chatData,
             ),
+             transition: Transition.zoom,
+             duration: Duration(seconds:1)
           );
         }),
         child: SizedBox(

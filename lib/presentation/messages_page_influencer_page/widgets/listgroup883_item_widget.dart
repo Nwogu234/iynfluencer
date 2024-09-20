@@ -26,27 +26,25 @@ class Listgroup883ItemWidget extends StatelessWidget {
 
   final storage = new FlutterSecureStorage();
 
-    
-String formatDateTime(DateTime dateTime) {
-  final now = DateTime.now();
-  final difference = now.difference(dateTime);
+  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
 
-  if (difference.inDays < 1) {
-    return DateFormat.jm('en_US').format(dateTime); 
-  } else if (difference.inDays == 1) {
-    return 'YESTERDAY';
-  } else if (difference.inDays < 365) {
-    return DateFormat('MMM d').format(dateTime);
-  } else {
-    return DateFormat('MMM d, yyyy').format(dateTime); 
+    if (difference.inDays < 1) {
+      return DateFormat.jm('en_US').format(dateTime);
+    } else if (difference.inDays == 1) {
+      return 'YESTERDAY';
+    } else if (difference.inDays < 365) {
+      return DateFormat('MMM d').format(dateTime);
+    } else {
+      return DateFormat('MMM d, yyyy').format(dateTime);
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
-   // final data = listgroup883ItemModelObj.unreadByCreator;
-   String formattedDateTime = listgroup883ItemModelObj.messages.isNotEmpty
+    // final data = listgroup883ItemModelObj.unreadByCreator;
+    String formattedDateTime = listgroup883ItemModelObj.messages.isNotEmpty
         ? formatDateTime(listgroup883ItemModelObj.messages.last.createdAt)
         : '';
     final bool isOnline = false;
@@ -54,8 +52,7 @@ String formatDateTime(DateTime dateTime) {
         ? listgroup883ItemModelObj.messages.last.text
         : " ";
 
-    String? avatarUrl =
-        listgroup883ItemModelObj.creatorUser!.avatar;
+    String? avatarUrl = listgroup883ItemModelObj.creatorUser!.avatar;
     // Assuming this is a String
     String imageProvider;
 
@@ -73,119 +70,122 @@ String formatDateTime(DateTime dateTime) {
     }
 
     return FutureBuilder<int?>(
-      future: getData(),
-      builder: (context, snapshot){
-          final int? unreadByInfluencerValue = snapshot.data;
+        future: getData(),
+        builder: (context, snapshot) {
+            final int? unreadByInfluencerValue = snapshot.data;
 
-          final data = unreadByInfluencerValue != null
-              ? unreadByInfluencerValue
-              : listgroup883ItemModelObj.unreadByCreator;
+          final data = // listgroup883ItemModelObj.unreadByCreator;
+            unreadByInfluencerValue != null
+                ? unreadByInfluencerValue
+               : listgroup883ItemModelObj.unreadByCreator;
 
-    return InkWell(
-      splashColor: ColorConstant.cyan100,
-      onTap: () {
-        saveData(0);
-        Get.to(
-          ChatsInfluencerScreen(
-          chatData: listgroup883ItemModelObj,
-        ));
-      },
-      child: Container(
-        width: double.maxFinite,
-        padding: getPadding(left: 20, top: 16, right: 20, bottom: 16),
-        decoration: AppDecoration.outlineIndigo501,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              children: [
-                CustomImageView(
-                  fit: BoxFit.cover,
-                  url: imageProvider,
-                  height: getSize(55),
-                  width: getSize(55),
-                  radius: BorderRadius.circular(getSize(27.5)),
-                ),
-                isOnline == true
-                    ? Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                        ))
-                    : SizedBox.shrink()
-              ],
-            ),
-            SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+          return InkWell(
+            splashColor: ColorConstant.cyan100,
+            onTap: () {
+              saveData(0);
+              Get.to(ChatsInfluencerScreen(
+                chatData: listgroup883ItemModelObj,
+              ));
+            },
+            child: Container(
+              width: double.maxFinite,
+              padding: getPadding(left: 20, top: 16, right: 20, bottom: 16),
+              decoration: AppDecoration.outlineIndigo501,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "${capitalizeFirstLetter(listgroup883ItemModelObj.creatorUser?.firstName)}-${capitalizeFirstLetter(listgroup883ItemModelObj.creatorUser?.lastName)}",
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiBold14Gray900,
+                  Stack(
+                    children: [
+                      CustomImageView(
+                        fit: BoxFit.cover,
+                        url: imageProvider,
+                        height: getSize(55),
+                        width: getSize(55),
+                        radius: BorderRadius.circular(getSize(27.5)),
+                      ),
+                      isOnline == true
+                          ? Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                              ))
+                          : SizedBox.shrink()
+                    ],
                   ),
-                 listgroup883ItemModelObj.messages.isNotEmpty  ? SizedBox(height: 10) :SizedBox.shrink(),
-                  Text(
-                    messageText,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiLight14Gray900a2
-                        .copyWith(fontWeight: FontWeight.w600, fontSize: 13),
+                  SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${capitalizeFirstLetter(listgroup883ItemModelObj.creatorUser?.firstName)}-${capitalizeFirstLetter(listgroup883ItemModelObj.creatorUser?.lastName)}",
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiBold14Gray900,
+                        ),
+                        listgroup883ItemModelObj.messages.isNotEmpty
+                            ? SizedBox(height: 10)
+                            : SizedBox.shrink(),
+                        Text(
+                          messageText,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiLight14Gray900a2.copyWith(
+                              fontWeight: FontWeight.w600, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: listgroup883ItemModelObj.messages.isNotEmpty
+                              ? 0
+                              : 15,
+                        ),
+                        child: Text(
+                          formattedDateTime,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiLight14Gray900a2,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      data == 0
+                          ? const SizedBox.shrink()
+                          : Container(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: ColorConstant.cyan100,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                "${data > 99 ? '99=' : data.toString()}".tr,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                    ],
                   ),
                 ],
               ),
             ),
-            SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                    bottom: listgroup883ItemModelObj.messages.isNotEmpty ? 0 : 15,
-                    ),
-                  child: Text(
-                    formattedDateTime,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: AppStyle.txtSatoshiLight14Gray900a2,
-                  ),
-                ),
-                SizedBox(height: 6),
-                data == 0
-                    ? const SizedBox.shrink()
-                    : Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: ColorConstant.cyan100,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          "${data > 99 ? '99=' : data.toString()}".tr,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-
-      }
-      );
+          );
+        });
   }
 
-    void saveData(int value) async {
+  void saveData(int value) async {
     await storage.write(key: 'unreadByCreator', value: value.toString());
   }
 

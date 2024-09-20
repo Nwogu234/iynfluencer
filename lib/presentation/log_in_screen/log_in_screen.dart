@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 
 import 'controller/log_in_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class LogInScreen extends GetWidget<LogInController> {
 
   @override
   Widget build(BuildContext context) {
+
     final space = MediaQuery.of(context).viewInsets.bottom;
 
     return SafeArea(

@@ -9,7 +9,6 @@ import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/data/models/messages/hive_message.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chatbubblez.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/widgets/chats_inputz.dart';

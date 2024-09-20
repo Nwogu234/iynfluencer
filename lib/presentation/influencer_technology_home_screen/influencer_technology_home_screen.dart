@@ -178,6 +178,9 @@ void _onScroll() {
     Get.to(JobDetailsScreen(
       selectedJob: model,
       chatData: chatData,
-    ));
+    ),
+     transition: Transition.zoom,
+    duration: Duration(seconds:1)
+    );
   }
 }
