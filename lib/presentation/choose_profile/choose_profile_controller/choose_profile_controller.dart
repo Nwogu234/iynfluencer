@@ -45,8 +45,8 @@ class ChooseProfileController extends GetxController {
 
   onTapSignupasa() async {
     Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
-      barrierDismissible: false, // user must not close it manually
+      Center(child: CircularProgressIndicator()), 
+      barrierDismissible: false, 
     );
     final storage = new FlutterSecureStorage();
     var token = await storage.read(key: "token");

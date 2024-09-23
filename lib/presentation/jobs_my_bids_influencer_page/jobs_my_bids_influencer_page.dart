@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
@@ -195,7 +196,9 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
                                       : null;
                               print('-----');
                               print(model.coverLetter);
-                              return ListmediainflueItemWidget(model, chatData);
+                              return Animate(
+                                 effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                child: ListmediainflueItemWidget(model, chatData));
                             },
                           );
                         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
@@ -71,7 +72,7 @@ class _FashionHomePageState extends State<FashionHomePage>
   Widget build(BuildContext context) {
     // final messagesController = Get.find<MessagesController>();
 
-    return SafeArea(child: Scaffold(
+    return Scaffold(
        //  key: _scaffoldKey,
         body: Obx(() {
       if (controller.isLoading.value) {
@@ -129,12 +130,15 @@ class _FashionHomePageState extends State<FashionHomePage>
                           } else {
                             return Padding(
                               padding: EdgeInsets.only(right: 10.w),
-                              child: TrendinghorizonItemWidget(
-                                  controller.trendingInfluencers[index],
-                                 index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
-                                  ),
+                              child: Animate(
+                                effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                child: TrendinghorizonItemWidget(
+                                    controller.trendingInfluencers[index],
+                                   index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                    ),
+                              ),
                             );
                           }
                         },
@@ -174,12 +178,15 @@ class _FashionHomePageState extends State<FashionHomePage>
                           padding: EdgeInsets.only(bottom: 24.h),
                           child: controller.isRecommendedLoading.value
                               ? Listrectangle50ItemSkeletonWidget()
-                              : Listrectangle50ItemWidget(
-                                  controller.recommendedInfluencers[index],
-                                  index < messagesController.chatList.length
-                                      ? messagesController.chatList[index]
-                                      : null,
-                                ),
+                              : Animate(
+                                 effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                child: Listrectangle50ItemWidget(
+                                    controller.recommendedInfluencers[index],
+                                    index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null,
+                                  ),
+                              ),
                         ),
                     ],
                   ),
@@ -189,6 +196,6 @@ class _FashionHomePageState extends State<FashionHomePage>
           ),
         );
       }
-    })));
+    }));
   }
 }

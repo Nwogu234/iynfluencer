@@ -87,10 +87,11 @@ Future<void> main() async {
   await configOneSignal();
 
    SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.immersiveSticky,
-  );
+    SystemUiMode.manual,
+    overlays: [
+    SystemUiOverlay.top, 
+  ]);
 
- 
 
 
   SystemChrome.setSystemUIOverlayStyle(

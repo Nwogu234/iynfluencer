@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/influencer_drawer_item/controller/influencer_drawer_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -88,20 +89,26 @@ class InfluencerDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001,
                               indent: 1.w)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 27.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgBookmarkBlueGray400,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 1.h),
-                                child: Text("msg_saved_influencers".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray900))
-                          ])),
+                      GestureDetector(
+                        onTap: () {
+                          onTapMenutab04();
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 1.w, top: 27.h),
+                            child: Row(children: [
+                              CustomImageView(
+                                  svgPath: ImageConstant.imgUser,
+                                  height: 24.h,
+                                  width: 24.w),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 14.w, top: 1.h),
+                                  child: Text("Earnings".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray900))
+                            ])),
+                      ),
                       GestureDetector(
                           onTap: () {
                             onTapMenutab03();
@@ -148,34 +155,47 @@ class InfluencerDraweritem extends StatelessWidget {
                               thickness: 1.h,
                               color: ColorConstant.blueGray10001,
                               indent: 1.w)),
-                      Padding(
-                          padding: EdgeInsets.only(left: 1.w, top: 24.h),
-                          child: Row(children: [
-                            CustomImageView(
-                                svgPath: ImageConstant.imgSettings,
-                                height: 24.h,
-                                width: 24.w),
-                            Padding(
-                                padding: EdgeInsets.only(left: 14.w, top: 2.h),
-                                child: Text("lbl_settings".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtH2Gray900))
-                          ])),
-                      Padding(
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.settingsScreen,
+                              arguments: EditProfileArguments(
+                                  controller.user.userModelObj.value.firstName,
+                                  controller.user.userModelObj.value.lastName,
+                                  controller.user.userModelObj.value.country ??
+                                      '',
+                                  controller.user.userModelObj.value.avatar,
+                                  "No bio passing yet"));
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 1.w, top: 24.h),
+                            child: Row(children: [
+                              CustomImageView(
+                                  svgPath: ImageConstant.imgSettings,
+                                  height: 24.h,
+                                  width: 24.w),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 14.w, top: 2.h),
+                                  child: Text("lbl_settings".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray900))
+                            ])),
+                      ),
+                      /* Padding(
                           padding: EdgeInsets.only(left: 1.w, top: 19.h),
                           child: Row(children: [
                             CustomImageView(
                                 svgPath: ImageConstant.imgFrame4,
                                 height: 24.h,
                                 width: 24.w),
-                            Padding(
+                             Padding(
                                 padding: EdgeInsets.only(left: 14.w, top: 2.h),
                                 child: Text("lbl_help_centre".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtH2Gray900))
-                          ])),
+                          ])),  */
                       CustomButton(
                           height: 46.h,
                           text: "Hire an Influencer",
@@ -229,6 +249,13 @@ class InfluencerDraweritem extends StatelessWidget {
                             ])),
                       )
                     ]))));
+  }
+
+  
+  onTapMenutab04() {
+     Get.toNamed(
+      AppRoutes.earningMenuTabScreen,
+    );
   }
 
   onTapImgFrame901() {

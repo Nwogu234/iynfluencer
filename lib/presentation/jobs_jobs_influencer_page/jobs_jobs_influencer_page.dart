@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
@@ -173,10 +174,13 @@ JobsJobsInfluencerController controller = Get.put(
                                            index < messagesController.chatList.length
                                           ? messagesController.chatList[index]
                                           : null;
-                             return ListclientItemWidget(
-                               model,
-                               chatData
-                               );
+                             return Animate(
+                               effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                               child: ListclientItemWidget(
+                                 model,
+                                 chatData
+                                 ),
+                             );
                                },
                             );
                           }

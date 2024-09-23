@@ -172,7 +172,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                       style: AppStyle.txtH2Gray900))
                             ])),
                       ),
-                      Padding(
+                     /*  Padding(
                           padding: EdgeInsets.only(left: 1.w, top: 19.h),
                           child: Row(children: [
                             CustomImageView(
@@ -185,7 +185,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtH2Gray900))
-                          ])),
+                          ])), */
                       CustomButton(
                           height: 46.h,
                           text: "msg_become_an_influencer".tr,

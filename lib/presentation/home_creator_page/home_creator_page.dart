@@ -87,247 +87,244 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
       return text[0].toUpperCase() + text.substring(1).toLowerCase();
     }
 
-    return SafeArea(
-      child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorConstant.whiteA700,
-          drawer: CreatorProfileDraweritem(),
-          appBar: CustomAppBar(
-            height: getVerticalSize(70),
-            leading: Obx(() {
-              if (controller.isLoading.value)
-                return Container();
-              else {
-                String? avatarUrl = controller.user.userModelObj.value.avatar;
-                String imageProvider;
+    return Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: ColorConstant.whiteA700,
+        drawer: CreatorProfileDraweritem(),
+        appBar: CustomAppBar(
+          height: getVerticalSize(70),
+          leading: Obx(() {
+            if (controller.isLoading.value)
+              return Container();
+            else {
+              String? avatarUrl = controller.user.userModelObj.value.avatar;
+              String imageProvider;
 
-                if (avatarUrl != null && avatarUrl.isNotEmpty) {
-                  imageProvider = avatarUrl;
-                } else {
-                  imageProvider =
-                      'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
-                }
-
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: AppbarCircleimage(
-                   // fit: BoxFit.cover,
-                    url: imageProvider,
-                   margin: EdgeInsets.only(left: 20, top: 16, bottom: 16),
-                    onTap: openDrawer,
-                   // radius: BorderRadius.circular(getSize(25.r)),
-                  ),
-                );
+              if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                imageProvider = avatarUrl;
+              } else {
+                imageProvider =
+                    'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
               }
-            }),
-            leadingWidth: 60,
-            actions: [
-              Container(
-                child: AppbarSearchview(
-                    hintText: "Search influencers".tr,
-                    controller: controller.searchController,
-                    onTap: () {
-                      onTapSubmit();
-                    }),
-              ),
-            ],
-          ),
-          body: RefreshIndicator(
-            onRefresh: _refresh,
-            child: SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Divider(
-                      thickness: 0.1,
+
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: AppbarCircleimage(
+                  // fit: BoxFit.cover,
+                  url: imageProvider,
+                  margin: EdgeInsets.only(left: 20, top: 16, bottom: 16),
+                  onTap: openDrawer,
+                  // radius: BorderRadius.circular(getSize(25.r)),
+                ),
+              );
+            }
+          }),
+          leadingWidth: 60,
+          actions: [
+            Container(
+              child: AppbarSearchview(
+                  hintText: "Search influencers".tr,
+                  controller: controller.searchController,
+                  onTap: () {
+                    onTapSubmit();
+                  }),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Divider(
+                    thickness: 0.1,
+                  ),
+                  Padding(
+                    padding: getPadding(left: 15, top: 10),
+                    child: DefaultTextStyle(
+                      style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                          fontSize: getFontSize(17),
+                          fontWeight: FontWeight.bold),
+                      child: Obx(() {
+                        if (controller.isLoading.value)
+                          return Container();
+                        else
+                          return AnimatedTextKit(
+                            repeatForever: true,
+                            pause: Duration(milliseconds: 6000),
+                            isRepeatingAnimation: true,
+                            totalRepeatCount: 3,
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
+                                textStyle: AppStyle.txtSatoshiBold16.copyWith(
+                                  fontSize: 16.sp,
+                                  color: ColorConstant.black900,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          );
+                      }),
                     ),
-                    Padding(
-                      padding: getPadding(left: 15, top: 10),
-                      child: DefaultTextStyle(
-                        style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                            fontSize: getFontSize(17),
-                            fontWeight: FontWeight.bold),
-                        child: Obx(() {
-                          if (controller.isLoading.value)
-                            return Container();
-                          else
-                            return AnimatedTextKit(
-                              repeatForever: true,
-                              pause: Duration(milliseconds: 6000),
-                              isRepeatingAnimation: true,
-                              totalRepeatCount: 3,
-                              animatedTexts: [
-                                TypewriterAnimatedText(
-                                  'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
-                                  textStyle: AppStyle.txtSatoshiBold16.copyWith(
-                                    fontSize: 16.sp,
-                                    color: ColorConstant.black900,
-                                    fontWeight: FontWeight.w600,
+                  ),
+                  Padding(
+                    padding: getPadding(left: 15, bottom: 5),
+                    child: Text("What do you want to promote?".tr,
+                        textAlign: TextAlign.start,
+                        style: AppStyle.txtSatoshiMedium),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 60,
+                    width: double.maxFinite,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TabBar(
+                          tabAlignment: TabAlignment.center,
+                          isScrollable: true,
+                          controller: _tabController,
+                          indicator: BoxDecoration(
+                              color: ColorConstant.cyan100,
+                              borderRadius: BorderRadius.circular(getSize(20))),
+                          indicatorPadding: EdgeInsets.symmetric(vertical: 7),
+                          labelColor: ColorConstant.whiteA700,
+                          labelStyle: TextStyle(
+                            fontSize: getFontSize(
+                              14.5,
+                            ),
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w800,
+                          ),
+                          unselectedLabelColor: ColorConstant.black900,
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: getFontSize(
+                              14,
+                            ),
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w500,
+                          ),
+                          onTap: (bool) {
+                            setState(() {
+                              isselected = true;
+                            });
+                          },
+                          tabs: [
+                            Tab(
+                                child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : (selectedIndex == 0
+                                              ? ColorConstant.cyan100
+                                              : ColorConstant.gray300B2),
+                                      width: isselected
+                                          ? 0.0
+                                          : (selectedIndex == 1 ? 1.0 : 0.0)),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 13, vertical: 2),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'All'.tr,
+                                    //    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                              ],
-                            );
-                        }),
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(left: 15, bottom: 5),
-                      child: Text("What do you want to promote?".tr,
-                          textAlign: TextAlign.start,
-                          style: AppStyle.txtSatoshiMedium),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 60,
-                      width: double.maxFinite,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TabBar(
-                            tabAlignment: TabAlignment.center,
-                            isScrollable: true,
-                            controller: _tabController,
-                            indicator: BoxDecoration(
-                                color: ColorConstant.cyan100,
-                                borderRadius:
-                                    BorderRadius.circular(getSize(20))),
-                            indicatorPadding: EdgeInsets.symmetric(vertical: 7),
-                            labelColor: ColorConstant.whiteA700,
-                            labelStyle: TextStyle(
-                              fontSize: getFontSize(
-                                14.5,
                               ),
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w800,
-                            ),
-                            unselectedLabelColor: ColorConstant.black900,
-                            unselectedLabelStyle: TextStyle(
-                              fontSize: getFontSize(
-                                14,
-                              ),
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w500,
-                            ),
-                            onTap: (bool) {
-                              setState(() {
-                                isselected = true;
-                              });
-                            },
-                            tabs: [
-                              Tab(
-                                  child: Container(
+                            )),
+                            Tab(
+                              child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: isselected
-                                            ? ColorConstant.cyan100
-                                            : (selectedIndex == 0
-                                                ? ColorConstant.cyan100
-                                                : ColorConstant.gray300B2),
-                                        width: isselected
-                                            ? 0.0
-                                            : (selectedIndex == 1 ? 1.0 : 0.0)),
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 13, vertical: 2),
+                                      horizontal: 13, vertical: 5),
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      'All'.tr,
+                                      "Fashion".tr,
                                       //    overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
-                              )),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Fashion".tr,
-                                        //    overflow: TextOverflow.ellipsis,
-                                      ),
+                              ),
+                            ),
+                            Tab(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 5),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Technologies".tr,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
                               ),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Technologies".tr,
-                                        // overflow: TextOverflow.ellipsis,
-                                      ),
+                            ),
+                            Tab(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 5),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Social Media".tr,
+                                      //  overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
                               ),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Social Media".tr,
-                                        //  overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                      ),
+                            ),
+                          ]),
                     ),
-                    Container(
-                      height: 600,
-                      // Use Expanded to allow TabBarView to take all available space
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          AllHomePage(),
-                          FashionHomePage(),
-                          TechnologyHomePage(),
-                          SocialMediaHomePage()
-                        ],
-                      ),
+                  ),
+                  Container(
+                    height: 600,
+                    // Use Expanded to allow TabBarView to take all available space
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        AllHomePage(),
+                        FashionHomePage(),
+                        TechnologyHomePage(),
+                        SocialMediaHomePage()
+                      ],
                     ),
-                  ]),
-            ),
-          )),
-    );
+                  ),
+                ]),
+          ),
+        ));
   }
 
   openDrawer() {

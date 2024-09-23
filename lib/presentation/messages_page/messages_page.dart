@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -167,8 +168,11 @@ class _MessagesPageState extends State<MessagesPage>
                                     } else {
                                       ChatData model =
                                           controller.chatModelObj[index];
-                                      return MessagesPageItemWidget(
-                                          messagesPageItemModelObj: model);
+                                      return Animate(
+                                        effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                        child: MessagesPageItemWidget(
+                                            messagesPageItemModelObj: model),
+                                      );
                                     }
                                   },
                                 ),

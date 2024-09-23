@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
@@ -285,16 +286,21 @@ class TrendinghorizonItemWidget extends StatelessWidget {
                                     onTap: () => _launchURL(social.platformUrl),
                                     child: Container(
                                       width: 20
-                                          .w, // Exact width of the touchable area
+                                          .w,
                                       height: 20
-                                          .h, // Exact height of the touchable area
+                                          .h, 
                                       color: Colors
-                                          .transparent, // Optional: makes it easier to see the touch area during development
+                                          .transparent,
                                       child: Icon(iconData,
                                           color: Colors.black,
                                           size: 15
-                                              .sp), // Your icon with controlled size
+                                              .sp), 
                                     ),
+                                  ).animate(
+                                    delay: Duration(seconds: 1),  
+                                    onPlay: (controller) => controller.repeat(period: Duration(seconds: 3)), 
+                                  ).shakeY(
+                                  delay:Duration(seconds:1)
                                   ),
                                   Text(formatFollowers(socialname),
                                       style: TextStyle(

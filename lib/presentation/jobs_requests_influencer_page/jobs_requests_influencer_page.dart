@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -133,8 +134,11 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                           itemBuilder: (context, index) {
                             JobsRequestsInfluencerModel model = controller
                                 .jobsRequestsInfluencerModelObj.value[index];
-                            return Listgroup855ItemWidget(
-                              model,
+                            return Animate(
+                               effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                              child: Listgroup855ItemWidget(
+                                model,
+                              ),
                             );
                           },
                         );

@@ -30,10 +30,10 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: SafeArea(
+        child: Container(
           width: double.maxFinite,
           padding: getPadding(
             left: 20,
@@ -97,21 +97,21 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-          onTap: () {
-            onTapAfter(args);
-          },
-          height: getVerticalSize(
-            46,
-          ),
-          text: "lbl_done".tr,
-          margin: getMargin(
-            left: 20,
-            right: 20,
-            bottom: 31,
-          ),
-          padding: ButtonPadding.PaddingAll15,
+      ),
+      bottomNavigationBar: CustomButton(
+        onTap: () {
+          onTapAfter(args);
+        },
+        height: getVerticalSize(
+          46,
         ),
+        text: "lbl_done".tr,
+        margin: getMargin(
+          left: 20,
+          right: 20,
+          bottom: 31,
+        ),
+        padding: ButtonPadding.PaddingAll15,
       ),
     );
   }

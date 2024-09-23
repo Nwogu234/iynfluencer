@@ -22,6 +22,7 @@ dependencies:
   firebase_messaging: ^14.9.3
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.0
   flutter_custom_tabs: ^2.0.0+1
   flutter_hooks: ^0.20.5
   flutter_inappwebview: ^6.0.0

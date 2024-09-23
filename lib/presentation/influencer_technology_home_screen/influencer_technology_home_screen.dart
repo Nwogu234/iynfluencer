@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
@@ -152,13 +153,16 @@ void _onScroll() {
                                          index < messagesController.chatList.length
                                         ? messagesController.chatList[index]
                                         : null;
-                                 return InfluencerHomeItemWidget(model,
-                                     onTapJobpost: () {
-                                   onTapJobpost(
-                                    model,
-                                    chatData
-                                    );
-                                 });
+                                 return Animate(
+                                  effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                   child: InfluencerHomeItemWidget(model,
+                                       onTapJobpost: () {
+                                     onTapJobpost(
+                                      model,
+                                      chatData
+                                      );
+                                   }),
+                                 );
                                }
                              },
                            ),

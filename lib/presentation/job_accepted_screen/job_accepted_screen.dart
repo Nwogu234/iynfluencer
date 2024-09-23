@@ -17,10 +17,10 @@ class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: SafeArea(
+        child: Container(
           width: double.maxFinite,
           padding: getPadding(
             left: 20,
@@ -79,21 +79,21 @@ class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-          onTap: () {
-            Get.back();
-          },
-          height: getVerticalSize(
-            46,
-          ),
-          text: "Done".tr,
-          margin: getMargin(
-            left: 20,
-            right: 20,
-            bottom: 31,
-          ),
-          padding: ButtonPadding.PaddingAll15,
+      ),
+      bottomNavigationBar: CustomButton(
+        onTap: () {
+          Get.back();
+        },
+        height: getVerticalSize(
+          46,
         ),
+        text: "Done".tr,
+        margin: getMargin(
+          left: 20,
+          right: 20,
+          bottom: 31,
+        ),
+        padding: ButtonPadding.PaddingAll15,
       ),
     );
   }

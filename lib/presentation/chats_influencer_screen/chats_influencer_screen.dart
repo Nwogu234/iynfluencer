@@ -546,272 +546,270 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
   Widget build(BuildContext context) {
     final String chatId = widget.chatData.chatId;
 
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: true,
-        backgroundColor: ColorConstant.gray5001,
-        appBar: CustomAppBar(
-          centerTitle: true,
-          height: getVerticalSize(50),
-          leadingWidth: 52,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
-            onTap: () {
-              onTapArrowleft8();
-            },
-          ),
-          title: Padding(
-            padding: getPadding(left: 2, top: 3),
-            child: AppbarSubtitle(
-              text: titleName.tr,
-              margin: getMargin( //left: 14,
-               top: 5,
-               bottom: 10,
-               right:10
-               ),
-            ),
-          ),
-
-          actions: [
-             AppbarCircleimage(
-                  url: imageProvider,
-                 margin: getMargin( 
-                  right: 10,
-                  bottom: 5
-                 )
-                  //left: 10,
-                 //  top: 15, bottom: 20),
-                ),
-          ],
-          styleType: Style.bgOutlineIndigo50_1,
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ColorConstant.gray5001,
+      appBar: CustomAppBar(
+        centerTitle: true,
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
+          onTap: () {
+            onTapArrowleft8();
+          },
         ),
-        body: RefreshIndicator(
-          onRefresh: controllers.refreshItems,
-          child: Obx(() {
-            if (controllers.isLoading.value) {
-              return Stack(
-                children: [
-                  PositionedDirectional(
-                    top: 150,
-                    start: 150,
-                    child: CustomLoadingWidget(
-                      animationController: animationController,
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: AppbarSubtitle(
+            text: titleName.tr,
+            margin: getMargin( //left: 14,
+             top: 5,
+             bottom: 10,
+             right:10
+             ),
+          ),
+        ),
+    
+        actions: [
+           AppbarCircleimage(
+                url: imageProvider,
+               margin: getMargin( 
+                right: 10,
+                bottom: 5
+               )
+                //left: 10,
+               //  top: 15, bottom: 20),
+              ),
+        ],
+        styleType: Style.bgOutlineIndigo50_1,
+      ),
+      body: RefreshIndicator(
+        onRefresh: controllers.refreshItems,
+        child: Obx(() {
+          if (controllers.isLoading.value) {
+            return Stack(
+              children: [
+                PositionedDirectional(
+                  top: 150,
+                  start: 150,
+                  child: CustomLoadingWidget(
+                    animationController: animationController,
+                  ),
+                ),
+              ],
+            );
+          } else if (controllers.error.value.isNotEmpty) {
+            return ResponsiveErrorWidget(
+              errorMessage: controllers.error.value,
+              onRetry: () {
+                controllers.getUser(chatId);
+              },
+              fullPage: true,
+            );
+          } else {
+            /*              return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Padding(
+                padding: getPadding(left: 19, right: 19),
+                child: Column(
+                  children: [
+                    //  SizedBox(height: 16), Adjust spacing
+                    SizedBox(height: 16),
+                    DateLable(
+                      dateTime: widget.chatData.createdAt,
                     ),
-                  ),
-                ],
-              );
-            } else if (controllers.error.value.isNotEmpty) {
-              return ResponsiveErrorWidget(
-                errorMessage: controllers.error.value,
-                onRetry: () {
-                  controllers.getUser(chatId);
-                },
-                fullPage: true,
-              );
-            } else {
-              /*              return GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Padding(
-                  padding: getPadding(left: 19, right: 19),
-                  child: Column(
-                    children: [
-                      //  SizedBox(height: 16), Adjust spacing
-                      SizedBox(height: 16),
-                      DateLable(
-                        dateTime: widget.chatData.createdAt,
-                      ),
-                      SizedBox(height: 16),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          reverse: true,
-                          itemCount: controllers.messageModelObjs.length,
-                          itemBuilder: (context, index) {
-                            final message = controllers.messageModelObjs[index];
-                            String formattedDateTime = DateFormat.jm('en_US')
-                                .format(message.createdAt);
-                            if (controllers.messageModelObjs.isEmpty) {
-                              return SizedBox.shrink();
-                            }
-                            return ChatMessageBubblez(
-                                controller: controllers,
-                                messageText: message.text,
-                                isReceived: message.authorUserId !=
-                                    widget.chatData.influencerUserId,
-                                timestamp: formattedDateTime,
-                                leadingImagePath: ImageConstant.imgVector,
-                                trailingImagePath: ImageConstant.imgVector,
-                                messageModelObjs: message.messageId,
-                                onSwipedMessage: (message) {
-                                  replyToMessage(message);
-                                  focusNode.requestFocus();
-                                });
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10), // Adjust spacing
-                      PopScope(
-                        canPop: true,
-                        onPopInvoked: (didPop) {
-                          if (show.value) {
-                            // if show is true
-                            show.value = false;
-                          } else {
-                            Navigator.of(context);
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        reverse: true,
+                        itemCount: controllers.messageModelObjs.length,
+                        itemBuilder: (context, index) {
+                          final message = controllers.messageModelObjs[index];
+                          String formattedDateTime = DateFormat.jm('en_US')
+                              .format(message.createdAt);
+                          if (controllers.messageModelObjs.isEmpty) {
+                            return SizedBox.shrink();
                           }
+                          return ChatMessageBubblez(
+                              controller: controllers,
+                              messageText: message.text,
+                              isReceived: message.authorUserId !=
+                                  widget.chatData.influencerUserId,
+                              timestamp: formattedDateTime,
+                              leadingImagePath: ImageConstant.imgVector,
+                              trailingImagePath: ImageConstant.imgVector,
+                              messageModelObjs: message.messageId,
+                              onSwipedMessage: (message) {
+                                replyToMessage(message);
+                                focusNode.requestFocus();
+                              });
                         },
-                        child: SafeArea(
-                          bottom: true,
-                          top: false,
-                          child: Column(
-                            children: [
-                              ChatInputsBar(
-                                replyMessages: widget.replyMessages,
-                                onCancelReply: () {
-                                  cancelReply();
-                                },
-                                focusNode: focusNode,
-                                chatData: widget.chatData,
-                                icon: Icons.emoji_emotions_outlined,
-                                onPressed: () {
-                                  focusNode.unfocus();
-                                  focusNode.canRequestFocus = false;
-                                  show.value = !show.value;
-                                },
-                                messageController:
-                                    controllers.messageController,
-                                closedController: controllers,
-                              ),
-                              show.value
-                                  ? emojiSelect(controllers)
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
+                      ),
+                    ),
+                    SizedBox(height: 10), // Adjust spacing
+                    PopScope(
+                      canPop: true,
+                      onPopInvoked: (didPop) {
+                        if (show.value) {
+                          // if show is true
+                          show.value = false;
+                        } else {
+                          Navigator.of(context);
+                        }
+                      },
+                      child: SafeArea(
+                        bottom: true,
+                        top: false,
+                        child: Column(
+                          children: [
+                            ChatInputsBar(
+                              replyMessages: widget.replyMessages,
+                              onCancelReply: () {
+                                cancelReply();
+                              },
+                              focusNode: focusNode,
+                              chatData: widget.chatData,
+                              icon: Icons.emoji_emotions_outlined,
+                              onPressed: () {
+                                focusNode.unfocus();
+                                focusNode.canRequestFocus = false;
+                                show.value = !show.value;
+                              },
+                              messageController:
+                                  controllers.messageController,
+                              closedController: controllers,
+                            ),
+                            show.value
+                                ? emojiSelect(controllers)
+                                : const SizedBox.shrink(),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ); */
-
-              Map<String, List<Message>> groupedMessages =
-                  controllers.groupMessagesByDate(controllers.messageModelObjs);
-              return GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Padding(
-                  padding: getPadding(left: 19, right: 19),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 16),
-                      Expanded(
-                        child: ListView.builder(
-                         // controller: _scrollController,
-                          reverse: controllers.isReverse.value,
-                          itemCount: groupedMessages.length,
-                          itemBuilder: (context, index) {
-                            String date = groupedMessages.keys.elementAt(index);
-                            List<Message> messages = groupedMessages[date]!;
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                messages.isNotEmpty
-                                    ? DateLable(
-                                        dateTime: DateTime.parse(date),
-                                      )
-                                    : DateLable(
-                                        dateTime: widget.chatData.createdAt,
-                                      ),
-                                SizedBox(height: 16),
-                                ListView.builder(
-                                  controller: _scrollController,
-                                  reverse: true,
-                                  shrinkWrap: true,
-                                  itemCount: messages.length,
-                                  itemBuilder: (context, subIndex) {
-                                    final message = messages[subIndex];
-                                    String formattedDateTime =
-                                        DateFormat.jm('en_US')
-                                            .format(message.createdAt);
-                                    if (messages.isEmpty) {
-                                      return SizedBox.shrink();
-                                    }
-                                    return ChatMessageBubblez(
-                                        controller: controllers,
-                                        messageText: message.text,
-                                        isReceived: message.authorUserId !=
-                                            widget.chatData.influencerUserId,
-                                        timestamp: formattedDateTime,
-                                        leadingImagePath:
-                                            ImageConstant.imgVector,
-                                        trailingImagePath:
-                                            ImageConstant.imgVector,
-                                        messageModelObjs: message.messageId,
-                                        onSwipedMessage: (messages) {
-                                          replyToMessage(message);
-                                          focusNode.requestFocus();
-                                        });
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      PopScope(
-                        canPop: true,
-                        onPopInvoked: (didPop) {
-                          if (show.value) {
-                            show.value = false;
-                          } else {
-                            Navigator.of(context);
-                          }
+              ),
+            ); */
+    
+            Map<String, List<Message>> groupedMessages =
+                controllers.groupMessagesByDate(controllers.messageModelObjs);
+            return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Padding(
+                padding: getPadding(left: 19, right: 19),
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                       // controller: _scrollController,
+                        reverse: controllers.isReverse.value,
+                        itemCount: groupedMessages.length,
+                        itemBuilder: (context, index) {
+                          String date = groupedMessages.keys.elementAt(index);
+                          List<Message> messages = groupedMessages[date]!;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              messages.isNotEmpty
+                                  ? DateLable(
+                                      dateTime: DateTime.parse(date),
+                                    )
+                                  : DateLable(
+                                      dateTime: widget.chatData.createdAt,
+                                    ),
+                              SizedBox(height: 16),
+                              ListView.builder(
+                                controller: _scrollController,
+                                reverse: true,
+                                shrinkWrap: true,
+                                itemCount: messages.length,
+                                itemBuilder: (context, subIndex) {
+                                  final message = messages[subIndex];
+                                  String formattedDateTime =
+                                      DateFormat.jm('en_US')
+                                          .format(message.createdAt);
+                                  if (messages.isEmpty) {
+                                    return SizedBox.shrink();
+                                  }
+                                  return ChatMessageBubblez(
+                                      controller: controllers,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.influencerUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath:
+                                          ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
+                                      messageModelObjs: message.messageId,
+                                      onSwipedMessage: (messages) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      });
+                                },
+                              ),
+                            ],
+                          );
                         },
-                        child: SafeArea(
-                          bottom: true,
-                          top: false,
-                          child: Column(
-                            children: [
-                              ChatInputsBar(
-                                replyMessages: widget.replyMessages,
-                                onCancelReply: () {
-                                  cancelReply();
-                                },
-                                focusNode: focusNode,
-                                chatData: widget.chatData,
-                                icon: Icons.emoji_emotions_outlined,
-                                onPressed: () {
-                                  focusNode.unfocus();
-                                  focusNode.canRequestFocus = false;
-                                  show.value = !show.value;
-                                },
-                                messageController:
-
-                                    /// widget.query != null
-                                    //  ? controllers.queryController  :
-                                    //  ? TextEditingController(text: widget.query) :
-                                    controllers.messageController,
-                                closedController: controllers,
-                                query: widget.query ?? '',
-                              ),
-                              show.value
-                                  ? emojiSelect(controllers)
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    PopScope(
+                      canPop: true,
+                      onPopInvoked: (didPop) {
+                        if (show.value) {
+                          show.value = false;
+                        } else {
+                          Navigator.of(context);
+                        }
+                      },
+                      child: SafeArea(
+                        bottom: true,
+                        top: false,
+                        child: Column(
+                          children: [
+                            ChatInputsBar(
+                              replyMessages: widget.replyMessages,
+                              onCancelReply: () {
+                                cancelReply();
+                              },
+                              focusNode: focusNode,
+                              chatData: widget.chatData,
+                              icon: Icons.emoji_emotions_outlined,
+                              onPressed: () {
+                                focusNode.unfocus();
+                                focusNode.canRequestFocus = false;
+                                show.value = !show.value;
+                              },
+                              messageController:
+    
+                                  /// widget.query != null
+                                  //  ? controllers.queryController  :
+                                  //  ? TextEditingController(text: widget.query) :
+                                  controllers.messageController,
+                              closedController: controllers,
+                              query: widget.query ?? '',
+                            ),
+                            show.value
+                                ? emojiSelect(controllers)
+                                : const SizedBox.shrink(),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }
-          }),
-        ),
+              ),
+            );
+          }
+        }),
       ),
     );
   }

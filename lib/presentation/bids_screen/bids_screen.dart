@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
@@ -27,147 +28,148 @@ class BidsScreen extends GetWidget<BidsController> {
   @override
   Widget build(BuildContext context) {
     String? jobId = selectedJob.jobId;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        appBar: CustomAppBar(
-            height: getVerticalSize(48),
-            leadingWidth: 50,
-            leading: AppbarImage(
-                height: getSize(30),
-                width: getSize(30),
-                svgPath: ImageConstant.imgArrowleftGray600,
-                margin: getMargin(left: 20, top: 9, bottom: 9),
-                onTap: () {
-                  onTapArrowleft2();
-                }),
-            centerTitle: true,
-            title: AppbarTitle(text: "lbl_all_bids".tr),
-            styleType: Style.bgOutlineIndigo50),
-        body: Container(
-          width: double.maxFinite,
-          padding: getPadding(top: 14, bottom: 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: getPadding(left: 22),
-                child: Row(
-                     children: [
-                       RichText(
-                           text: TextSpan(children: [
-                            TextSpan(
-                                text: "lbl_all_bids2".tr,
-                                style: TextStyle(
-                                    color: ColorConstant.gray900,
-                                    fontSize: getFontSize(14),
-                                     fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700)),
-                             TextSpan(
-                                text: "  ".tr,
-                                style: TextStyle(
-                                    color: ColorConstant.gray600,
-                                    fontSize: getFontSize(14),
-                                    fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700)),
-                             TextSpan(
-                                text: selectedJob.bidsCount.toString().tr,
-                                style: TextStyle(
-                                     color: ColorConstant.gray600,
-                                    fontSize: getFontSize(13),
-                                     fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w700))
-                           ]),
-                           textAlign: TextAlign.left),
-                       CustomImageView(
-                         svgPath: ImageConstant.imgArrowup,
-                        height: getSize(20),
-                         width: getSize(20),
-                         margin: getMargin(left: 6),
-                      ),
-                    ],
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      appBar: CustomAppBar(
+          height: getVerticalSize(48),
+          leadingWidth: 50,
+          leading: AppbarImage(
+              height: getSize(30),
+              width: getSize(30),
+              svgPath: ImageConstant.imgArrowleftGray600,
+              margin: getMargin(left: 20, top: 9, bottom: 9),
+              onTap: () {
+                onTapArrowleft2();
+              }),
+          centerTitle: true,
+          title: AppbarTitle(text: "lbl_all_bids".tr),
+          styleType: Style.bgOutlineIndigo50),
+      body: Container(
+        width: double.maxFinite,
+        padding: getPadding(top: 14, bottom: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: getPadding(left: 22),
+              child: Row(
+                   children: [
+                     RichText(
+                         text: TextSpan(children: [
+                          TextSpan(
+                              text: "lbl_all_bids2".tr,
+                              style: TextStyle(
+                                  color: ColorConstant.gray900,
+                                  fontSize: getFontSize(14),
+                                   fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700)),
+                           TextSpan(
+                              text: "  ".tr,
+                              style: TextStyle(
+                                  color: ColorConstant.gray600,
+                                  fontSize: getFontSize(14),
+                                  fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700)),
+                           TextSpan(
+                              text: selectedJob.bidsCount.toString().tr,
+                              style: TextStyle(
+                                   color: ColorConstant.gray600,
+                                  fontSize: getFontSize(13),
+                                   fontFamily: 'Satoshi',
+                                  fontWeight: FontWeight.w700))
+                         ]),
+                         textAlign: TextAlign.left),
+                     CustomImageView(
+                       svgPath: ImageConstant.imgArrowup,
+                      height: getSize(20),
+                       width: getSize(20),
+                       margin: getMargin(left: 6),
                     ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: getPadding(top: 4, left: 7, right: 7),
-                  child: Obx(
-                    () {
-                      if (controller.isLoading.value) {
-                        // return CustomLoadingWidget(
-                        //   animationController: animationController,
-                        // );
+                  ],
+                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: getPadding(top: 4, left: 7, right: 7),
+                child: Obx(
+                  () {
+                    if (controller.isLoading.value) {
+                      // return CustomLoadingWidget(
+                      //   animationController: animationController,
+                      // );
+                      return ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: false,
+                        separatorBuilder: (
+                          context,
+                          index,
+                        ) {
+                          return SizedBox(
+                            height: getVerticalSize(
+                              10,
+                            ),
+                          );
+                        },
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
+                        },
+                      );
+                    } else {
+                      if (controller.isError.value) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
+                            onRetry: () {
+                              controller.getUser(jobId);
+                            },
+                            fullPage: true,
+                          ),
+                        ); // Your error widget
+                      } else if (controller.allJobBids.isEmpty &&
+                          !controller.isLoading.value) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: ResponsiveEmptyWidget(
+                            errorMessage: 'No Job Bids Available',
+                            buttonText: "Refresh now!",
+                            onRetry: () {
+                              controller.getUser(jobId);
+                            },
+                            fullPage: true,
+                          ),
+                        );
+                      } // Your error widget
+                      else {
                         return ListView.separated(
                           physics: BouncingScrollPhysics(),
-                          shrinkWrap: false,
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return SizedBox(
-                              height: getVerticalSize(
-                                10,
-                              ),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: getVerticalSize(1));
+                          },
+                          itemCount: controller.allJobBids.length,
+                          itemBuilder: (context, index) {
+                            JobBids model = controller.allJobBids[index];
+                            ChatData? chatData =
+                                index < messagesController.chatList.length
+                                    ? messagesController.chatList[index]
+                                    : null;
+                            return Animate(
+                              effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                              child: BidsItemWidget(
+                                  model, selectedJob, chatData),
                             );
                           },
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            return InfluencerJobBidItemSkeletonWidget(); // Skeleton widget
-                          },
                         );
-                      } else {
-                        if (controller.isError.value) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: ResponsiveErrorWidget(
-                              errorMessage: controller.error.value,
-                              onRetry: () {
-                                controller.getUser(jobId);
-                              },
-                              fullPage: true,
-                            ),
-                          ); // Your error widget
-                        } else if (controller.allJobBids.isEmpty &&
-                            !controller.isLoading.value) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: ResponsiveEmptyWidget(
-                              errorMessage: 'No Job Bids Available',
-                              buttonText: "Refresh now!",
-                              onRetry: () {
-                                controller.getUser(jobId);
-                              },
-                              fullPage: true,
-                            ),
-                          );
-                        } // Your error widget
-                        else {
-                          return ListView.separated(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: getVerticalSize(1));
-                            },
-                            itemCount: controller.allJobBids.length,
-                            itemBuilder: (context, index) {
-                              JobBids model = controller.allJobBids[index];
-                              ChatData? chatData =
-                                  index < messagesController.chatList.length
-                                      ? messagesController.chatList[index]
-                                      : null;
-                              return BidsItemWidget(
-                                  model, selectedJob, chatData);
-                            },
-                          );
-                        }
                       }
-                    },
-                  ),
+                    }
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

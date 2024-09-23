@@ -16,21 +16,20 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
   var currentRoute = AppRoutes.influencerHomeScreen.obs;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: ColorConstant.whiteA700,
-            body: Navigator(
-                key: Get.nestedKey(3),
-                initialRoute: controller.currentRoute.value,
-                onGenerateRoute: (routeSetting) => GetPageRoute(
-                    page: () => getCurrentPage(controller.currentRoute.value),
-                    transition: Transition.fadeIn)),
-            bottomNavigationBar:
-                InfluencerBottomBar(onChanged: (BottomBarEnum type) {
-               controller.currentRoute.value = getCurrentRoute(type);
-              Get.toNamed(getCurrentRoute(type), id: 3);
-           //   Get.toNamed(newRoute, id: 1);
-            })));
+    return Scaffold(
+        backgroundColor: ColorConstant.whiteA700,
+        body: Navigator(
+            key: Get.nestedKey(3),
+            initialRoute: controller.currentRoute.value,
+            onGenerateRoute: (routeSetting) => GetPageRoute(
+                page: () => getCurrentPage(controller.currentRoute.value),
+                transition: Transition.fadeIn)),
+        bottomNavigationBar:
+            InfluencerBottomBar(onChanged: (BottomBarEnum type) {
+           controller.currentRoute.value = getCurrentRoute(type);
+          Get.toNamed(getCurrentRoute(type), id: 3);
+       //   Get.toNamed(newRoute, id: 1);
+        }));
   }
 }
 

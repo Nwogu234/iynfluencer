@@ -567,216 +567,214 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     final String chatId = widget.chatData.chatId;
     //  final Rx<MessageStatus> messageStatusRx = MessageStatus.sending.obs;
 
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: true,
-        backgroundColor: ColorConstant.gray5001,
-        appBar: /* CustomAppBar(
-          height: getVerticalSize(50),
-          leadingWidth: 52,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
-            onTap: () {
-              onTapArrowleft8(widget.chatData);
-            },
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ColorConstant.gray5001,
+      appBar: /* CustomAppBar(
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
+          onTap: () {
+            onTapArrowleft8(widget.chatData);
+          },
+        ),
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: Row(
+            children: [
+              AppbarCircleimage(
+                url: imageProvider,
+                margin: getMargin(left: 10, top: 15, bottom: 20),
+              ),
+              AppbarSubtitle(
+                text: titleName.tr,
+                margin: getMargin(left: 14, top: 5, bottom: 20),
+              ),
+            ],
           ),
-          title: Padding(
-            padding: getPadding(left: 2, top: 3),
-            child: Row(
+        ),
+        styleType: Style.bgOutlineIndigo50_1,
+      ), */
+    
+      CustomAppBar(
+        centerTitle: true,
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
+          onTap: () {
+            onTapArrowleft8(widget.chatData);
+          },
+        ),
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: AppbarSubtitle(
+            text: titleName.tr,
+            margin: getMargin( //left: 14,
+             top: 5,
+             bottom: 10,
+             right:10
+             ),
+          ),
+        ),
+    
+        actions: [
+           AppbarCircleimage(
+                url: imageProvider,
+               margin: getMargin( 
+                right: 10,
+                bottom: 5
+               )
+                //left: 10,
+               //  top: 15, bottom: 20),
+              ),
+        ],
+        styleType: Style.bgOutlineIndigo50_1,
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Stack(
               children: [
-                AppbarCircleimage(
-                  url: imageProvider,
-                  margin: getMargin(left: 10, top: 15, bottom: 20),
-                ),
-                AppbarSubtitle(
-                  text: titleName.tr,
-                  margin: getMargin(left: 14, top: 5, bottom: 20),
+                PositionedDirectional(
+                  top: 150,
+                  start: 150,
+                  child: CustomLoadingWidget(
+                    animationController: animationController,
+                  ),
                 ),
               ],
-            ),
-          ),
-          styleType: Style.bgOutlineIndigo50_1,
-        ), */
-
-        CustomAppBar(
-          centerTitle: true,
-          height: getVerticalSize(50),
-          leadingWidth: 52,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
-            onTap: () {
-              onTapArrowleft8(widget.chatData);
-            },
-          ),
-          title: Padding(
-            padding: getPadding(left: 2, top: 3),
-            child: AppbarSubtitle(
-              text: titleName.tr,
-              margin: getMargin( //left: 14,
-               top: 5,
-               bottom: 10,
-               right:10
-               ),
-            ),
-          ),
-
-          actions: [
-             AppbarCircleimage(
-                  url: imageProvider,
-                 margin: getMargin( 
-                  right: 10,
-                  bottom: 5
-                 )
-                  //left: 10,
-                 //  top: 15, bottom: 20),
-                ),
-          ],
-          styleType: Style.bgOutlineIndigo50_1,
-        ),
-        body: RefreshIndicator(
-          onRefresh: _refresh,
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return Stack(
-                children: [
-                  PositionedDirectional(
-                    top: 150,
-                    start: 150,
-                    child: CustomLoadingWidget(
-                      animationController: animationController,
-                    ),
-                  ),
-                ],
-              );
-            } else if (controller.error.value.isNotEmpty) {
-              return ResponsiveErrorWidget(
-                errorMessage: controller.error.value,
-                onRetry: () {
-                  controller.getUser(chatId);
-                },
-                fullPage: true,
-              );
-            } else {
-              Map<String, List<Message>> groupedMessages =
-                  controller.groupMessagesByDate(controller.messageModelObj);
-              return GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Padding(
-                  padding: getPadding(left: 19, right: 19),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 16),
-                      Expanded(
-                        child: ListView.builder(
-                          //  controller: _scrollController,
-                          reverse: controller.isReverse.value,
-                          itemCount: groupedMessages.length,
-                          itemBuilder: (context, index) {
-                            String date = groupedMessages.keys.elementAt(index);
-                            List<Message> messages = groupedMessages[date]!;
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                messages.isNotEmpty
-                                    ? DateLable(
-                                        dateTime: DateTime.parse(date),
-                                      )
-                                    : DateLable(
-                                        dateTime: widget.chatData.createdAt,
-                                      ),
-                                ListView.builder(
-                                  controller: _scrollController,
-                                  shrinkWrap: true,
-                                  reverse: true,
-                                  itemCount: messages.length,
-                                  itemBuilder: (context, subIndex) {
-                                    final message = messages[subIndex];
-                                    Rx<MessageStatus> messageStatusRx =
-                                        controller
-                                            .intToMessageStatus(
-                                                message.status ?? 0)
-                                            .obs;
-                                    String formattedDateTime =
-                                        DateFormat.jm('en_US')
-                                            .format(message.createdAt);
-                                    return ChatMessageBubble(
-                                      isCompleteMessage:
-                                          message.isCompleteMessage ?? false,
-                                      controller: controller,
-                                      messageText: message.text,
-                                      isReceived: message.authorUserId !=
-                                          widget.chatData.creatorUserId,
-                                      timestamp: formattedDateTime,
-                                      leadingImagePath: ImageConstant.imgVector,
-                                      trailingImagePath:
-                                          ImageConstant.imgVector,
-                                      messageModelObj: message.messageId,
-                                      onSwipedMessage: (messages) {
-                                        replyToMessage(message);
-                                        focusNode.requestFocus();
-                                      },
-                                      messageStatus: messageStatusRx,
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      PopScope(
-                        canPop: true,
-                        onPopInvoked: (didPop) {
-                          if (show.value) {
-                            show.value = false;
-                          } else {
-                            Navigator.of(context);
-                          }
-                        },
-                        child: SafeArea(
-                          bottom: true,
-                          top: false,
-                          child: Column(
+            );
+          } else if (controller.error.value.isNotEmpty) {
+            return ResponsiveErrorWidget(
+              errorMessage: controller.error.value,
+              onRetry: () {
+                controller.getUser(chatId);
+              },
+              fullPage: true,
+            );
+          } else {
+            Map<String, List<Message>> groupedMessages =
+                controller.groupMessagesByDate(controller.messageModelObj);
+            return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Padding(
+                padding: getPadding(left: 19, right: 19),
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        //  controller: _scrollController,
+                        reverse: controller.isReverse.value,
+                        itemCount: groupedMessages.length,
+                        itemBuilder: (context, index) {
+                          String date = groupedMessages.keys.elementAt(index);
+                          List<Message> messages = groupedMessages[date]!;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ChatInputBar(
-                                replyMessage: widget.replyMessage,
-                                onCancelReply: () {
-                                  cancelReply();
+                              messages.isNotEmpty
+                                  ? DateLable(
+                                      dateTime: DateTime.parse(date),
+                                    )
+                                  : DateLable(
+                                      dateTime: widget.chatData.createdAt,
+                                    ),
+                              ListView.builder(
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                reverse: true,
+                                itemCount: messages.length,
+                                itemBuilder: (context, subIndex) {
+                                  final message = messages[subIndex];
+                                  Rx<MessageStatus> messageStatusRx =
+                                      controller
+                                          .intToMessageStatus(
+                                              message.status ?? 0)
+                                          .obs;
+                                  String formattedDateTime =
+                                      DateFormat.jm('en_US')
+                                          .format(message.createdAt);
+                                  return ChatMessageBubble(
+                                    isCompleteMessage:
+                                        message.isCompleteMessage ?? false,
+                                    controller: controller,
+                                    messageText: message.text,
+                                    isReceived: message.authorUserId !=
+                                        widget.chatData.creatorUserId,
+                                    timestamp: formattedDateTime,
+                                    leadingImagePath: ImageConstant.imgVector,
+                                    trailingImagePath:
+                                        ImageConstant.imgVector,
+                                    messageModelObj: message.messageId,
+                                    onSwipedMessage: (messages) {
+                                      replyToMessage(message);
+                                      focusNode.requestFocus();
+                                    },
+                                    messageStatus: messageStatusRx,
+                                  );
                                 },
-                                focusNode: focusNode,
-                                chatData: widget.chatData,
-                                icon: Icons.emoji_emotions_outlined,
-                                onPressed: () {
-                                  controller.hideEmojiWidget();
-                                  focusNode.unfocus();
-                                  focusNode.canRequestFocus = false;
-                                  show.value = !show.value;
-                                },
-                                messageController: controller.messageController,
-                                openedController: controller,
                               ),
-                              show.value
-                                  ? emojiSelect(controller)
-                                  : const SizedBox.shrink(),
                             ],
-                          ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    PopScope(
+                      canPop: true,
+                      onPopInvoked: (didPop) {
+                        if (show.value) {
+                          show.value = false;
+                        } else {
+                          Navigator.of(context);
+                        }
+                      },
+                      child: SafeArea(
+                        bottom: true,
+                        top: false,
+                        child: Column(
+                          children: [
+                            ChatInputBar(
+                              replyMessage: widget.replyMessage,
+                              onCancelReply: () {
+                                cancelReply();
+                              },
+                              focusNode: focusNode,
+                              chatData: widget.chatData,
+                              icon: Icons.emoji_emotions_outlined,
+                              onPressed: () {
+                                controller.hideEmojiWidget();
+                                focusNode.unfocus();
+                                focusNode.canRequestFocus = false;
+                                show.value = !show.value;
+                              },
+                              messageController: controller.messageController,
+                              openedController: controller,
+                            ),
+                            show.value
+                                ? emojiSelect(controller)
+                                : const SizedBox.shrink(),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }
-          }),
-        ),
+              ),
+            );
+          }
+        }),
       ),
     );
   }

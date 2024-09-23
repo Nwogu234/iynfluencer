@@ -15,6 +15,7 @@ import '../controller/home_creator_controller.dart';
 import '../models/listrectangle50_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 /* // ignore: must_be_immutable
 class Listrectangle50ItemWidget extends StatefulWidget {
@@ -404,15 +405,25 @@ class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
                                       padding: getPadding(
                                         left: 4,
                                       ),
-                                      child: Text(
-                                          "${widget.listrectangle50.jobsDone.toString()} Jobs Completed"
-                                              .tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiMedium
-                                              .copyWith(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 10.sp)),
+                                      child: AnimatedTextKit(
+                                        repeatForever: true,
+                                        pause: Duration(milliseconds: 6000),
+                                        isRepeatingAnimation: true,
+                                        totalRepeatCount: 3,
+                                        animatedTexts: [
+                                       TypewriterAnimatedText(
+                                         "${widget.listrectangle50.jobsDone.toString()} Jobs Completed"
+                                                .tr,
+                                       //  overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        textStyle: AppStyle.txtSatoshiMedium
+                                                .copyWith(
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 10.sp),
+                                ),
+                              ],
+                                        
+                                      ),
                                     ),
                                   ],
                                 ),

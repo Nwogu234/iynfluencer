@@ -43,123 +43,122 @@ class _TransactionScreenState extends State<TransactionScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: ColorConstant.whiteA700,
-            appBar: CustomAppBar(
-              height: getVerticalSize(48),
-              leadingWidth: 50,
-              leading: AppbarImage(
-                height: getSize(30),
-                width: getSize(30),
-                svgPath: ImageConstant.imgArrowleftGray600,
-                margin: getMargin(left: 20, top: 6, bottom: 12),
-                onTap: () {
-                  onTapArrowleft12();
-                },
-              ),
-              centerTitle: true,
-              title: AppbarTitle(text: "Transactions".tr),
-              styleType: Style.bgOutlineIndigo50,
-            ),
-            body: RefreshIndicator(
-              onRefresh: _refresh,
-              child: Container(
-                width: double.maxFinite,
-                padding: getPadding(top: 14, bottom: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: getPadding(left: 24),
-                      child: Row(
-                        children: [
-                          Text("Recent".tr,
-                              style: TextStyle(
-                                  color: ColorConstant.gray900,
-                                  fontSize: getFontSize(16),
-                                  fontFamily: 'Satoshi',
-                                  fontWeight: FontWeight.w500)),
-                          CustomImageView(
-                              svgPath: ImageConstant.imgArrowdownGray600,
-                              height: getSize(20),
-                              width: getSize(20),
-                              margin: getMargin(left: 6, top: 1)),
-                          SizedBox(width: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 1),
-                            child: Text("All Status".tr,
-                                style: TextStyle(
-                                    color: ColorConstant.gray900,
-                                    fontSize: getFontSize(16),
-                                    fontFamily: 'Satoshi',
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                          CustomImageView(
-                              svgPath: ImageConstant.imgArrowdownGray600,
-                              height: getSize(20),
-                              width: getSize(20),
-                              margin: getMargin(left: 6))
-                        ],
+    return Scaffold(
+        backgroundColor: ColorConstant.whiteA700,
+        appBar: CustomAppBar(
+          height: getVerticalSize(48),
+          leadingWidth: 50,
+          leading: AppbarImage(
+            height: getSize(30),
+            width: getSize(30),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 20, top: 6, bottom: 12),
+            onTap: () {
+              onTapArrowleft12();
+            },
+          ),
+          centerTitle: true,
+          title: AppbarTitle(text: "Transactions".tr),
+          styleType: Style.bgOutlineIndigo50,
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Container(
+            width: double.maxFinite,
+            padding: getPadding(top: 14, bottom: 14),
+            child: Column(
+              children: [
+                Padding(
+                  padding: getPadding(left: 24),
+                  child: Row(
+                    children: [
+                      Text("Recent".tr,
+                          style: TextStyle(
+                              color: ColorConstant.gray900,
+                              fontSize: getFontSize(16),
+                              fontFamily: 'Satoshi',
+                              fontWeight: FontWeight.w500)),
+                      CustomImageView(
+                          svgPath: ImageConstant.imgArrowdownGray600,
+                          height: getSize(20),
+                          width: getSize(20),
+                          margin: getMargin(left: 6, top: 1)),
+                      SizedBox(width: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 1),
+                        child: Text("All Status".tr,
+                            style: TextStyle(
+                                color: ColorConstant.gray900,
+                                fontSize: getFontSize(16),
+                                fontFamily: 'Satoshi',
+                                fontWeight: FontWeight.w500)),
                       ),
-                    ),
-                    Expanded(
-                      child: Obx(() {
-                        if (controller.isLoading.value) {
-                          return Center(
-                            child: CustomLoadingWidget(
-                                animationController: animationController),
-                          );
-                        } else if (controller.error.value.isNotEmpty) {
-                          return Center(
-                            child: ResponsiveErrorWidget(
-                              errorMessage: controller.error.value,
-                              onRetry: () {
-                                controller.getUser();
-                              },
-                              fullPage: true,
-                            ),
-                          );
-                        } /* else if (controller.payments.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 22,
-                              vertical: 40
-                            ),
-                            child: ResponsiveEmptyWidget(
-                              errorMessage: 'No Transactions found',
-                              smallMessage: 'Your Transactions will appear here',
-                              buttonText: "Ooops",
-                              onRetry: () {
-                                _refresh();
-                              },
-                              fullPage: true,
-                            ),
-                          );
-                        }  */
-                        else {
-                          return ListView.separated(
-                            physics: BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            separatorBuilder: (context, index) =>
-                                Divider(thickness: 0.1),
-                            itemCount: controller.payments.length,
-                            itemBuilder: (context, index) {
-                              Payment payment = controller.payments[index];
-                              return TransactionWidget(
-                                  payment: payment,
-                                  onTapTransCard: () {
-                                    onTapTransCard(payment);
-                                  });
-                            },
-                          );
-                        }
-                      }),
-                    ),
-                  ],
+                      CustomImageView(
+                          svgPath: ImageConstant.imgArrowdownGray600,
+                          height: getSize(20),
+                          width: getSize(20),
+                          margin: getMargin(left: 6))
+                    ],
+                  ),
                 ),
-              ),
-            )));
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return Center(
+                        child: CustomLoadingWidget(
+                            animationController: animationController),
+                      );
+                    } else if (controller.error.value.isNotEmpty) {
+                      return Center(
+                        child: ResponsiveErrorWidget(
+                          errorMessage: controller.error.value,
+                          onRetry: () {
+                            controller.getUser();
+                          },
+                          fullPage: true,
+                        ),
+                      );
+                    } /* else if (controller.payments.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 22,
+                          vertical: 40
+                        ),
+                        child: ResponsiveEmptyWidget(
+                          errorMessage: 'No Transactions found',
+                          smallMessage: 'Your Transactions will appear here',
+                          buttonText: "Ooops",
+                          onRetry: () {
+                            _refresh();
+                          },
+                          fullPage: true,
+                        ),
+                      );
+                    }  */
+                    else {
+                      return ListView.separated(
+                        physics: BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        separatorBuilder: (context, index) =>
+                            Divider(thickness: 0.1),
+                        itemCount: controller.payments.length,
+                        itemBuilder: (context, index) {
+                          Payment payment = controller.payments[index];
+                          return TransactionWidget(
+                              payment: payment,
+                              onTapTransCard: () {
+                                onTapTransCard(payment);
+                              });
+                        },
+                      );
+                    }
+                  }),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   void onTapArrowleft12() {

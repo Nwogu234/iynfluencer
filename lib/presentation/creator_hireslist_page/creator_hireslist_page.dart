@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
@@ -124,11 +125,14 @@ class _CreatorHireslistPageState extends State<CreatorHireslistPage>
                           itemCount: controller.hiredJobs.length,
                           itemBuilder: (context, index) {
                             Job model = controller.hiredJobs[index];
-                            return HiresItemWidget(
-                             hiresItemlistObj: model,
-                              onTapBidcard: () {
-                                onTapBidcard(model);
-                              },
+                            return Animate(
+                              effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                              child: HiresItemWidget(
+                               hiresItemlistObj: model,
+                                onTapBidcard: () {
+                                  onTapBidcard(model);
+                                },
+                              ),
                             );
                           },
                         );

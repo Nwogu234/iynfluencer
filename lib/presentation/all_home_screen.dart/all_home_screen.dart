@@ -22,7 +22,7 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import 'package:iynfluencer/widgets/staggerd_widget.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../data/models/Influencer/influencer_response_model.dart';
 
 class AllHomePage extends StatefulWidget {
@@ -95,7 +95,7 @@ class _AllHomePageState extends State<AllHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
+    return Scaffold(
       //   key: _scaffoldKey,
         body: Obx(() {
       if (controller.isLoading.value) {
@@ -137,11 +137,14 @@ class _AllHomePageState extends State<AllHomePage>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
-                    child: StaggeredGrid.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                      children: controller.tiles,
+                    child: Animate(
+                       effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                      child: StaggeredGrid.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        children: controller.tiles,
+                      ),
                     ),
                   ),
                 ),
@@ -182,12 +185,15 @@ class _AllHomePageState extends State<AllHomePage>
                             } else {
                               return Padding(
                                 padding: EdgeInsets.only(right: 10.w),
-                                child: TrendinghorizonItemWidget(
-                                    controller.trendingInfluencers[index],
-                                    index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
-                                    ),
+                                child: Animate(
+                                    effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                  child: TrendinghorizonItemWidget(
+                                      controller.trendingInfluencers[index],
+                                      index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                      ),
+                                ),
                               );
                             }
                           },
@@ -247,12 +253,15 @@ class _AllHomePageState extends State<AllHomePage>
                             padding: EdgeInsets.only(bottom: 24.h),
                             child: controller.isRecommendedLoading.value
                                 ? Listrectangle50ItemSkeletonWidget()
-                                : Listrectangle50ItemWidget(
-                                    controller.recommendedInfluencers[index],
-                                    index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
-                                  )),
+                                : Animate(
+                                   effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                  child: Listrectangle50ItemWidget(
+                                      controller.recommendedInfluencers[index],
+                                      index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                    ),
+                                )),
                     ],
                   ),
                 ),
@@ -261,6 +270,6 @@ class _AllHomePageState extends State<AllHomePage>
           ),
         );
       }
-    })));
+    }));
   }
 }

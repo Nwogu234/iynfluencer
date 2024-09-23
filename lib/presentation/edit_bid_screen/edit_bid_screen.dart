@@ -91,205 +91,203 @@ class EditBidScreen extends GetWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: ColorConstant.whiteA700,
-        appBar: CustomAppBar(
-            height: getVerticalSize(48),
-            leadingWidth: 50,
-            leading: AppbarImage(
-                height: getSize(30),
-                width: getSize(30),
-                svgPath: ImageConstant.imgArrowleftGray600,
-                margin: getMargin(left: 20, top: 9, bottom: 9),
-                onTap: () {
-                  onTapArrowleft17();
-                }),
-            centerTitle: true,
-            title: AppbarTitle(text: "Edit bid".tr),
-            styleType: Style.bgOutlineIndigo50_1),
-        body: Container(
-          width: double.maxFinite,
-          padding: getPadding(all: 20),
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "msg_gaming_app_influencer2".tr,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold18,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: ColorConstant.whiteA700,
+      appBar: CustomAppBar(
+          height: getVerticalSize(48),
+          leadingWidth: 50,
+          leading: AppbarImage(
+              height: getSize(30),
+              width: getSize(30),
+              svgPath: ImageConstant.imgArrowleftGray600,
+              margin: getMargin(left: 20, top: 9, bottom: 9),
+              onTap: () {
+                onTapArrowleft17();
+              }),
+          centerTitle: true,
+          title: AppbarTitle(text: "Edit bid".tr),
+          styleType: Style.bgOutlineIndigo50_1),
+      body: Container(
+        width: double.maxFinite,
+        padding: getPadding(all: 20),
+        child: Form(
+          key: controller.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "msg_gaming_app_influencer2".tr,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold18,
+              ),
+              Padding(
+                padding: getPadding(top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "lbl_cover_letter".tr,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: AppStyle.txtSatoshiLight13Gray900.copyWith(
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    CustomTextFormField(
+                      focusNode: FocusNode(),
+                      autofocus: true,
+                      controller: controller.frametwelveController,
+                      hintText: "msg_explain_briefly".tr,
+                      margin: getMargin(top: 7),
+                      padding: TextFormFieldPadding.PaddingT38,
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: getPadding(top: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "lbl_cover_letter".tr,
+              ),
+              Padding(
+                padding: getPadding(top: 19),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("lbl_project_charge".tr,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtSatoshiLight13Gray900.copyWith(
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                      CustomTextFormField(
-                        focusNode: FocusNode(),
-                        autofocus: true,
-                        controller: controller.frametwelveController,
-                        hintText: "msg_explain_briefly".tr,
-                        margin: getMargin(top: 7),
-                        padding: TextFormFieldPadding.PaddingT38,
-                      )
-                    ],
-                  ),
+                           fontWeight: FontWeight.w600
+                        )),
+                    CustomTextFormField(
+                      focusNode: FocusNode(),
+                      autofocus: true,
+                      controller: controller.priceController,
+                      hintText: "lbl_300".tr,
+                      margin: getMargin(top: 6),
+                      textInputAction: TextInputAction.done,
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: getPadding(top: 19),
+              ),
+              Padding(
+                  padding: getPadding(top: 27, bottom: 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("lbl_project_charge".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight13Gray900.copyWith(
-                             fontWeight: FontWeight.w600
-                          )),
-                      CustomTextFormField(
-                        focusNode: FocusNode(),
-                        autofocus: true,
-                        controller: controller.priceController,
-                        hintText: "lbl_300".tr,
-                        margin: getMargin(top: 6),
-                        textInputAction: TextInputAction.done,
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: getPadding(top: 27, bottom: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top:4),
-                                  child: Text(
-                                    "Add deliverables".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiBold14Gray900
-                                        .copyWith(
-                                            fontSize: 16,
-                                            color: ColorConstant.black900),
-                                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top:4),
+                                child: Text(
+                                  "Add deliverables".tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Gray900
+                                      .copyWith(
+                                          fontSize: 16,
+                                          color: ColorConstant.black900),
                                 ),
-                                const SizedBox(width: 8),
-                                CustomImageView(
-                                  margin: EdgeInsets.only(top: 5),
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.centerRight,
-                                  svgPath: ImageConstant.imgInformation,
-                                  width: getHorizontalSize(20),
-                                  height: getHorizontalSize(20),
-                                  color: ColorConstant.blueGray400,
-                                )
-                              ],
-                            ),
-                            CustomButton(
-                              height: getHorizontalSize(40),
-                              width: getHorizontalSize(70),
-                              prefixWidget: Text(
-                                "+",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold14Gray900
-                                    .copyWith(
-                                        fontSize: 16,
-                                        color: ColorConstant.whiteA700),
                               ),
-                              text: " Add",
-                              onTap: () {
-                                controller.startAddingTermsOfContract();
-                              },
-                              padding: ButtonPadding.PaddingT52,
-                              fontStyle: ButtonFontStyle.SatoshiBold13WhiteA700,
-                              shape: ButtonShapes.RoundedBorder122,
-                            )
-                          ],
-                        ),
-/*                         CustomButton(
-                          height: getVerticalSize(44.h),
-                          text: "Add the Terms of Contract",
-                          onTap: () {
-                            controller.startAddingTermsOfContract();
-                          },
-                          margin: getMargin(top: 24.h),
-                          variant: ButtonVariant.OutlineGray300b2,
-                          padding: ButtonPadding.PaddingT12,
-                          fontStyle: ButtonFontStyle.SatoshiLight14,
-                          prefixWidget: Container(
-                            margin: getMargin(right: 6.w),
-                            child: CustomImageView(
-                                svgPath: ImageConstant.imgFrameGray700),
+                              const SizedBox(width: 8),
+                              CustomImageView(
+                                margin: EdgeInsets.only(top: 5),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.centerRight,
+                                svgPath: ImageConstant.imgInformation,
+                                width: getHorizontalSize(20),
+                                height: getHorizontalSize(20),
+                                color: ColorConstant.blueGray400,
+                              )
+                            ],
                           ),
-                        ), */
-
-                        Obx(() => controller.isAddingTermsOfContract.value
-                            ? _buildAccountForm()
-                            : _buildAccountChips()),
-                        if (controller.errorText.value != null)
-                          Obx(
-                            () => Text(
-                              controller.errorText.value,
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 10.sp,
-                              ),
+                          CustomButton(
+                            height: getHorizontalSize(40),
+                            width: getHorizontalSize(70),
+                            prefixWidget: Text(
+                              "+",
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold14Gray900
+                                  .copyWith(
+                                      fontSize: 16,
+                                      color: ColorConstant.whiteA700),
                             ),
+                            text: " Add",
+                            onTap: () {
+                              controller.startAddingTermsOfContract();
+                            },
+                            padding: ButtonPadding.PaddingT52,
+                            fontStyle: ButtonFontStyle.SatoshiBold13WhiteA700,
+                            shape: ButtonShapes.RoundedBorder122,
                           )
-                      ],
-                    )),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          margin: getMargin(left: 20, right: 20, bottom: 20),
-          decoration: AppDecoration.outlineIndigo507,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Obx(
-                () => CustomButton(
-                  height: getVerticalSize(44),
-                  text: "lbl_submit_bid2".tr,
-                  padding: ButtonPadding.PaddingAll12,
-                  loading: controller.isLoading.value,
-                  onTap: () {
-                    controller.editForm(
-                        context,
-                        selectedJob.jobId ?? '',
-                        selectedJob.bids?.first.bidId ?? '',
-                        selectedJob.creator?.userId ?? '',
-                        selectedJob.title!);
-                  },
-                ),
-              ),
+                        ],
+                      ),
+    /*                         CustomButton(
+                        height: getVerticalSize(44.h),
+                        text: "Add the Terms of Contract",
+                        onTap: () {
+                          controller.startAddingTermsOfContract();
+                        },
+                        margin: getMargin(top: 24.h),
+                        variant: ButtonVariant.OutlineGray300b2,
+                        padding: ButtonPadding.PaddingT12,
+                        fontStyle: ButtonFontStyle.SatoshiLight14,
+                        prefixWidget: Container(
+                          margin: getMargin(right: 6.w),
+                          child: CustomImageView(
+                              svgPath: ImageConstant.imgFrameGray700),
+                        ),
+                      ), */
+    
+                      Obx(() => controller.isAddingTermsOfContract.value
+                          ? _buildAccountForm()
+                          : _buildAccountChips()),
+                      if (controller.errorText.value != null)
+                        Obx(
+                          () => Text(
+                            controller.errorText.value,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        )
+                    ],
+                  )),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: getMargin(left: 20, right: 20, bottom: 20),
+        decoration: AppDecoration.outlineIndigo507,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Obx(
+              () => CustomButton(
+                height: getVerticalSize(44),
+                text: "lbl_submit_bid2".tr,
+                padding: ButtonPadding.PaddingAll12,
+                loading: controller.isLoading.value,
+                onTap: () {
+                  controller.editForm(
+                      context,
+                      selectedJob.jobId ?? '',
+                      selectedJob.bids?.first.bidId ?? '',
+                      selectedJob.creator?.userId ?? '',
+                      selectedJob.title!);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

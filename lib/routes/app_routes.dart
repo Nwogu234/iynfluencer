@@ -9,6 +9,8 @@ import 'package:iynfluencer/presentation/complete_job_screen/binding/complete_jo
 import 'package:iynfluencer/presentation/complete_job_screen/complete_job_screen.dart';
 import 'package:iynfluencer/presentation/creator_after_job_detail_screen/binding/creator_after_job_detail_binding.dart';
 import 'package:iynfluencer/presentation/creator_after_job_detail_screen/creator_after_job_detail_screen.dart';
+import 'package:iynfluencer/presentation/earning_menu_tab/binding/earning_tab_binding.dart';
+import 'package:iynfluencer/presentation/earning_menu_tab/earning_menu_tab_screen.dart';
 import 'package:iynfluencer/presentation/edit_bid_screen/binding/edit_binding.dart';
 import 'package:iynfluencer/presentation/edit_bid_screen/edit_bid_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
@@ -374,6 +376,8 @@ class AppRoutes {
 
   static const String notificationFirestore = '/notification_firestore';
 
+  static const String earningMenuTabScreen = '/earning_menu_tab_screen';
+
   static const String allHomePage = '/all_home_screen';
 
   static const String creatorAfterJobDetailsScreen = '/creator_after_job_details_screen';
@@ -537,6 +541,14 @@ class AppRoutes {
       page: () => NotificationFirestore(),
       bindings: [
         NotificationFirestoreBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: earningMenuTabScreen,
+      page: () =>  EarningMenuTabScreen(),
+      bindings: [
+        EarningTabBinding(),
       ],
     ),
 

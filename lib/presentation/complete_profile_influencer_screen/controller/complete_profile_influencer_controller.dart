@@ -47,6 +47,11 @@ class CompleteProfileInfluencerController extends GetxController
   RxList<SelectionPopupModel> selectedNiches = <SelectionPopupModel>[].obs;
   Rxn<File> profileImage = Rxn<File>();
 
+   Rx<bool> isLoading = false.obs;
+  var token;
+  var error = ''.obs;
+  RxString avatar = ''.obs;
+
   final List<SelectionPopupModel> dropdownItems = [
     SelectionPopupModel(id: 0, title: "Select Niche"),
     SelectionPopupModel(
@@ -196,6 +201,30 @@ class CompleteProfileInfluencerController extends GetxController
     update();
   }
 
+  
+  getUser() async {
+    isLoading.value = true;
+    error('');
+    token = await storage.read(key: "token");
+    try {
+      await user.getUser();
+      if (user.userModelObj.value.firstName.isEmpty) {
+        error('Something went wrong');
+        isLoading.value = false;
+      } else {
+        error('');
+        print(user.userModelObj.value.avatar);
+        print(user.userModelObj.value.userId);
+        isLoading.value = false;
+        avatar.value = user.userModelObj.value.avatar;
+      }
+    } catch (e) {
+      print(e);
+      error('Something went wrong');
+      isLoading.value = false;
+    }
+  }
+
   ///this is the function called to create the creator profile on the backend
   Future<void> completeProfile() async {
     completeProfileInfluencerModelObj.update((val) {
@@ -270,6 +299,7 @@ class CompleteProfileInfluencerController extends GetxController
         id: 0, title: "Select Platform", value: "Select Platform");
 
     print(nicheToDisplay.value);
+    getUser();
   }
 
   @override

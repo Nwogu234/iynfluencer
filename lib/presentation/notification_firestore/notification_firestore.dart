@@ -38,65 +38,63 @@ class _NotificationFirestoreState extends State<NotificationFirestore>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        appBar: CustomAppBar(
-          height: getVerticalSize(48),
-          leadingWidth: 50,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 20, top: 6, bottom: 12),
-            onTap: () {
-              onTapArrowleft12();
-            },
-          ),
-          centerTitle: true,
-          title: AppbarTitle(text: "lbl_notifications".tr),
-          styleType: Style.bgOutlineIndigo50,
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      appBar: CustomAppBar(
+        height: getVerticalSize(48),
+        leadingWidth: 50,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 20, top: 6, bottom: 12),
+          onTap: () {
+            onTapArrowleft12();
+          },
         ),
-        body: RefreshIndicator(
-          onRefresh: _refresh,
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return Center(
-                child: CustomLoadingWidget(
-                  animationController: animationController,
-                ),
-              );
-            } else if (controller.error.value.isNotEmpty) {
-              return Center(
-                child: ResponsiveErrorWidget(
-                  errorMessage: controller.error.value,
-                  onRetry: () {
-                    controller.getUser();
-                  },
-                  fullPage: true,
-                ),
-              );
-            } else if (controller.notifications.isEmpty) {
-              return ResponsiveEmptyWidget(
-                  errorMessage: 'No Notifications found',
-                  smallMessage: 'Your Notifications will appear here',
-                  buttonText: "Ooops",
-                  onRetry: () {});
-            } else {
-              return ListView.separated(
-                physics: BouncingScrollPhysics(),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                itemCount: controller.notifications.length,
-                separatorBuilder: (context, index) => Divider(thickness: 0.1),
-                itemBuilder: (context, index) {
-                  MNotification notification = controller.notifications[index];
-                  return NotificationWidget(notication: notification);
+        centerTitle: true,
+        title: AppbarTitle(text: "lbl_notifications".tr),
+        styleType: Style.bgOutlineIndigo50,
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return Center(
+              child: CustomLoadingWidget(
+                animationController: animationController,
+              ),
+            );
+          } else if (controller.error.value.isNotEmpty) {
+            return Center(
+              child: ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  controller.getUser();
                 },
-              );
-            }
-          }),
-        ),
+                fullPage: true,
+              ),
+            );
+          } else if (controller.notifications.isEmpty) {
+            return ResponsiveEmptyWidget(
+                errorMessage: 'No Notifications found',
+                smallMessage: 'Your Notifications will appear here',
+                buttonText: "Ooops",
+                onRetry: () {});
+          } else {
+            return ListView.separated(
+              physics: BouncingScrollPhysics(),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              itemCount: controller.notifications.length,
+              separatorBuilder: (context, index) => Divider(thickness: 0.1),
+              itemBuilder: (context, index) {
+                MNotification notification = controller.notifications[index];
+                return NotificationWidget(notication: notification);
+              },
+            );
+          }
+        }),
       ),
     );
   }

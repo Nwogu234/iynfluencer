@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/controller/job_details_controller.dart';
@@ -139,12 +140,15 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
                               return TrendinghorizonItemSkeletonWidget();
                             } else {
                               Job model = controller.existingJobs[index];
-                              return JobpostingItemWidget(
-                                creatorJobslistModelObj: model,
-                                index: index,
-                                onTapDetailcard: () {
-                                  onTapDetailcard(model);
-                                },
+                              return Animate(
+                               effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                child: JobpostingItemWidget(
+                                  creatorJobslistModelObj: model,
+                                  index: index,
+                                  onTapDetailcard: () {
+                                    onTapDetailcard(model);
+                                  },
+                                ),
                               );
                             }
                           },
