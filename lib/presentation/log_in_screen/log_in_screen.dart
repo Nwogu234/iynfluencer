@@ -16,7 +16,6 @@ class LogInScreen extends GetWidget<LogInController> {
 
   @override
   Widget build(BuildContext context) {
-
     final space = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
@@ -60,13 +59,11 @@ class LogInScreen extends GetWidget<LogInController> {
                               hintText: "lbl_email_username".tr,
                               margin: getMargin(top: 36),
                               variant: TextFormFieldVariant.Neutral,
-                              fontStyle:
-                                  TextFormFieldFontStyle.SatoshiLight14,
+                              fontStyle: TextFormFieldFontStyle.SatoshiLight14,
                               textInputType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value == null ||
-                                    (!isValidEmail(value,
-                                        isRequired: true))) {
+                                    (!isValidEmail(value, isRequired: true))) {
                                   return "Please enter valid email";
                                 }
                                 return null;
@@ -78,8 +75,7 @@ class LogInScreen extends GetWidget<LogInController> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Obx(() => CustomTextFormField(
-                                        focusNode:
-                                            controller.passwordFocusNode,
+                                        focusNode: controller.passwordFocusNode,
                                         autofocus: true,
                                         controller:
                                             controller.passwordController,
@@ -94,8 +90,7 @@ class LogInScreen extends GetWidget<LogInController> {
                                             TextInputType.visiblePassword,
                                         suffix: InkWell(
                                             onTap: () {
-                                              controller
-                                                      .isShowPassword.value =
+                                              controller.isShowPassword.value =
                                                   !controller
                                                       .isShowPassword.value;
                                             },
@@ -106,7 +101,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                                     right: 15,
                                                     bottom: 14),
                                                 child: CustomImageView(
-                                                    color: ColorConstant.gray600,
+                                                    color:
+                                                        ColorConstant.gray600,
                                                     svgPath: controller
                                                             .isShowPassword
                                                             .value
@@ -133,11 +129,10 @@ class LogInScreen extends GetWidget<LogInController> {
                                             padding: getPadding(top: 9),
                                             child: Text(
                                                 "msg_forgot_password".tr,
-                                                overflow:
-                                                    TextOverflow.ellipsis,
+                                                overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
-                                                style: AppStyle
-                                                    .txtSatoshiBold13)))
+                                                style:
+                                                    AppStyle.txtSatoshiBold13)))
                                   ])),
                           CustomButton(
                               onTap: onTapContinue,
@@ -152,8 +147,8 @@ class LogInScreen extends GetWidget<LogInController> {
                                   child: RichText(
                                       text: TextSpan(children: [
                                         TextSpan(
-                                            text: "msg_don_t_have_an_account2"
-                                                .tr,
+                                            text:
+                                                "msg_don_t_have_an_account2".tr,
                                             style: TextStyle(
                                                 color: ColorConstant.gray600,
                                                 fontSize: getFontSize(14),
@@ -174,7 +169,7 @@ class LogInScreen extends GetWidget<LogInController> {
                                                 fontWeight: FontWeight.w700))
                                       ]),
                                       textAlign: TextAlign.left))),
-              
+
                           ///This commented code id for the sign authentication with google for when we decide to implement it.
                           // Padding(
                           //     padding: getPadding(top: 68),
@@ -216,18 +211,24 @@ class LogInScreen extends GetWidget<LogInController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        CustomImageView(
-                                            svgPath: ImageConstant.imgGoogle,
-                                            height: getSize(32),
-                                            width: getSize(32)),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller
+                                                .checkForStoredCredentials();
+                                          },
+                                          child: CustomImageView(
+                                              svgPath: ImageConstant
+                                                  .imgFaceId, // face
+                                              height: getSize(32),
+                                              width: getSize(32)),
+                                        ),
                                         Container(
                                             height: getSize(28),
                                             width: getSize(28),
                                             margin: getMargin(
                                                 left: 34, top: 2, bottom: 2),
                                             child: Stack(
-                                                alignment:
-                                                    Alignment.topCenter,
+                                                alignment: Alignment.topCenter,
                                                 children: [
                                                   CustomImageView(
                                                       svgPath: ImageConstant
@@ -242,20 +243,23 @@ class LogInScreen extends GetWidget<LogInController> {
                                                       height:
                                                           getVerticalSize(16),
                                                       width:
-                                                          getHorizontalSize(
-                                                              14),
+                                                          getHorizontalSize(14),
                                                       alignment:
                                                           Alignment.topCenter,
-                                                      margin:
-                                                          getMargin(top: 5))
+                                                      margin: getMargin(top: 5))
                                                 ])),
-                                        CustomImageView(
-                                            svgPath:
-                                                ImageConstant.imgFacebook,
-                                            height: getSize(32),
-                                            width: getSize(32),
-                                            margin: getMargin(left: 34),
-                                            alignment: Alignment.topCenter)
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller
+                                                .checkForStoredCredentials();
+                                          },
+                                          child: CustomImageView(
+                                              svgPath: ImageConstant.imgFinger,
+                                              height: getSize(32),
+                                              width: getSize(32),
+                                              margin: getMargin(left: 34),
+                                              alignment: Alignment.topCenter),
+                                        )
                                       ])))
                         ])),
               )),

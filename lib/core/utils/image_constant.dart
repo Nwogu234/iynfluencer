@@ -67,6 +67,10 @@ class ImageConstant {
 
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
 
+  static String imgFaceId = 'assets/images/img_face.svg';
+
+  static String imgFinger = 'assets/images/img_fingerprint.svg';
+
   static String imgSearchGray600 = 'assets/images/img_search_gray_600.svg';
 
   static String imgFrame1 = 'assets/images/img_frame_1.svg';
