@@ -41,13 +41,27 @@ class MessagesPageItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDateTime = messagesPageItemModelObj.messages.isNotEmpty
-        ? formatDateTime(messagesPageItemModelObj.messages.last.createdAt)
-        : '';
+    String formattedDateTime =
+        (messagesPageItemModelObj.lastMessage?.isNotEmpty ?? false)
+            ? formatDateTime(messagesPageItemModelObj.lastMessageTime ?? messagesPageItemModelObj.messages.last.createdAt)
+           //     messagesPageItemModelObj.messages.last.createdAt
+           : "";
+      // messagesPageItemModelObj.messages.isNotEmpty
+      //  ? formatDateTime(messagesPageItemModelObj.messages.last.createdAt)
+      //  : '';
     final bool isOnline = false;
-    String messageText = messagesPageItemModelObj.messages.isNotEmpty
-        ? messagesPageItemModelObj.messages.last.text
-        : " ";
+    String messageText = 
+      messagesPageItemModelObj.lastMessage ??
+       // messagesPageItemModelObj.messages.last.text ??
+        "";
+    // (messagesPageItemModelObj.lastMessage?.isNotEmpty ?? false)
+     //     ? messagesPageItemModelObj.lastMessage ??
+    //         messagesPageItemModelObj.messages.last.text
+    //     : "";
+
+   //  messagesPageItemModelObj.messages.isNotEmpty
+   //    ? messagesPageItemModelObj.messages.last.text
+   //     : " ";
 
     String? avatarUrl = messagesPageItemModelObj.influencerUser!.avatar;
 
@@ -73,10 +87,10 @@ class MessagesPageItemWidget extends StatelessWidget {
         builder: (context, snapshot) {
           final int? unreadByCreatorValue = snapshot.data;
 
-          final data = // messagesPageItemModelObj.unreadByInfluencer;
-            unreadByCreatorValue != null
-                ? unreadByCreatorValue
-               : messagesPageItemModelObj.unreadByInfluencer;
+          final data =  messagesPageItemModelObj.unreadByInfluencer;
+             // unreadByCreatorValue != null
+             //     ? unreadByCreatorValue
+             //     : messagesPageItemModelObj.unreadByInfluencer;
           return InkWell(
             splashColor: ColorConstant.cyan100,
             onTap: () {

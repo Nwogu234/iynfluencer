@@ -80,20 +80,22 @@ class ReviewAcceptedScreen extends GetWidget<RequestAcceptedController> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomButton(
-        onTap: () {
-          Get.back();
-        },
-        height: getVerticalSize(
-          46,
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
+          onTap: () {
+            Get.back();
+          },
+          height: getVerticalSize(
+            46,
+          ),
+          text: "Done".tr,
+          margin: getMargin(
+            left: 20,
+            right: 20,
+            bottom: 31,
+          ),
+          padding: ButtonPadding.PaddingAll15,
         ),
-        text: "Done".tr,
-        margin: getMargin(
-          left: 20,
-          right: 20,
-          bottom: 31,
-        ),
-        padding: ButtonPadding.PaddingAll15,
       ),
     );
   }

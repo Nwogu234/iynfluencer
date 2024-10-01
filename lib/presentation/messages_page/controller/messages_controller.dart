@@ -28,6 +28,7 @@ class MessagesController extends GetxController {
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   List<ChatData> chatList = <ChatData>[].obs;
+  List<ChatData> uniqueList = <ChatData>[].obs;
   late RxList<ChatData> chatModelObj = <ChatData>[].obs;
   Rx<ChatData?> lastMessage = Rx<ChatData?>(null);
   RxInt unreadCreator = 0.obs;
@@ -97,7 +98,7 @@ class MessagesController extends GetxController {
         error('Something went wrong');
         isLoading.value = false;
       } else {
-        await getInfluencersChat().then((value) {
+        await loadChatsFromHive().then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
@@ -114,6 +115,49 @@ class MessagesController extends GetxController {
     await Future.delayed(Duration(seconds: 1));
     getUser();
   }
+
+
+Future<void> fetchAndDisplayChats() async {
+  isLoading.value = true;
+  try {
+    await getInfluencersChat(); 
+    print('Fetched chat list: $chatList');
+    final Set<String> uniqueInfluencerUserIds = {};
+    uniqueList.clear();
+
+
+    for (var chat in chatList) {
+      if (chat is ChatData) {
+        final String influencerUserId = chat.influencerUserId;
+
+        if (!uniqueInfluencerUserIds.contains(influencerUserId)) {
+          uniqueInfluencerUserIds.add(influencerUserId);
+
+          uniqueList.add(chat);
+        }
+      } else {
+        print('Warning: Expected ChatData instance but got ${chat.runtimeType}'); 
+      }
+    }
+
+    chatModelObj.value = uniqueList; 
+
+    await saveChats(uniqueList); 
+
+    print('Chat model object: ${chatModelObj.value.toString()}');
+
+    if (chatModelObj.isEmpty) {
+      error('You don\'t have Influencers in your chats');
+      empty = true;
+    }
+  } catch (e) {
+    print('Error in fetchAndDisplayChats: $e');
+    error('Something went wrong');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
   Future<void> getInfluencersChat() async {
     try {
@@ -136,7 +180,7 @@ class MessagesController extends GetxController {
         });
         chatModelObj.value = chatList;
         error('');
-        saveChats(chatList);
+        // saveChats(chatList);
       }
       if (chatList.isEmpty) {
         error('You don\'ts have Influencers in your chats');
@@ -153,7 +197,7 @@ class MessagesController extends GetxController {
 
   Future<void> saveChats(List<ChatData> chats) async {
     try {
-      final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chats');
+      final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
       await chatBox.clear();
       await chatBox.addAll(chats);
 
@@ -163,125 +207,40 @@ class MessagesController extends GetxController {
     }
   }
 
-
-/* 
-Future<void> loadChatOrFetch() async {
-  isLoading.value = false; 
-  
-  try {
-    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chats');
-    final List<ChatData> storedChats = chatBox.values.toList();
-
-    for (ChatData chat in storedChats) {
-      final String chatId = chat.chatId;
-      final Box<Message> messageBox = await Hive.openBox<Message>('messages_$chatId');
-      final List<Message> storedMessages = messageBox.values.toList();
-
-      if (storedMessages.isNotEmpty) {
-        final lastMessage = storedMessages.last;
-
-        final updatedMessages = List<Message>.from(chat.messages);
-        updatedMessages.removeLast();
-        updatedMessages.add(lastMessage); 
-
-        chat.messages = updatedMessages; 
-       //  final lastMessage = storedMessages.last;
-        chat.messages.last = lastMessage; 
-        chat.messages.last.createdAt = lastMessage.createdAt; 
-        await chatBox.put(chat.chatId, chat);
-      }
-    }
-
-     final List<ChatData> updatedChats = chatBox.values.toList();
-    chatList.clear();
-    chatList.addAll(updatedChats);
-    chatModelObj.value = chatList;
-
-    print('Chats and messages loaded successfully from local storage.');
-    
-
-    if (storedChats.isEmpty) {
-      isLoading.value = true;
-      await getInfluencersChat();
-      print('Fetched chats from the API.');
-    }
-  } catch (e) {
-    print('Error loading or fetching chats and messages: $e');
-    error.value = 'Failed to load chats';
-  } finally {
+  Future<void> loadChatsFromHive() async {
     isLoading.value = false;
-  }
-}
- */
+    try {
+      final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
+      final List<ChatData> storedChats = chatBox.values
+          .where((chat) => chat.creatorUserId == user.userModelObj.value.userId)
+          .toList();
 
-Future<void> loadChatOrFetch() async {
-  isLoading.value = false; 
+      if (storedChats.isNotEmpty) {
+        storedChats.sort((a, b) {
+          final DateTime? aLastMessageTime = a.lastMessageTime ?? a.updatedAt;
+          final DateTime? bLastMessageTime = b.lastMessageTime ?? b.updatedAt;
 
-  try {
-    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chats');
-    final List<ChatData> storedChats = chatBox.values.toList();
+          return (bLastMessageTime ?? DateTime.now())
+              .compareTo(aLastMessageTime ?? DateTime.now());
+        });
 
-    for (ChatData chat in storedChats) {
-      final String chatId = chat.chatId;
-      final Box<Message> messageBox = await Hive.openBox<Message>('messages_$chatId');
-      final List<Message> storedMessages = messageBox.values.toList();
+        chatList.clear();
+        chatList.addAll(storedChats);
+        chatModelObj.value = chatList;
 
-      if (storedMessages.isNotEmpty) {
-        final lastMessage = storedMessages.last;
-
-        // Copy the messages and chat data to avoid modifying the same object in Hive
-        final updatedMessages = List<Message>.from(chat.messages);
-        
-        if (updatedMessages.isNotEmpty) {
-          updatedMessages.removeLast(); // Remove old last message
-        }
-        updatedMessages.add(lastMessage); // Add the new last message
-
-       
-         final ChatData updatedChat = ChatData(
-          id: chat.id,
-          chatId: chat.chatId,
-          creatorId: chat.creatorId,
-          influencerId: chat.influencerId,
-          creatorUserId: chat.creatorUserId,
-          influencerUserId: chat.influencerUserId,
-          unreadByCreator: chat.unreadByCreator,
-          unreadByInfluencer: chat.unreadByInfluencer,
-          blockedByCreator: chat.blockedByCreator,
-          blockedByInfluencer: chat.blockedByInfluencer,
-          updatedAt: chat.updatedAt,
-          createdAt: chat.createdAt,
-          messages: updatedMessages, // Assign updated messages here
-        );
-
-        // Save the updated chat data back to Hive with the correct chatId
-        await chatBox.put(updatedChat.chatId, updatedChat);
+        error('');
+        print('Loaded chats from Hive');
+      } else {
+        print('No chats found in Hive. Fetching from API...');
+        await fetchAndDisplayChats();
       }
+    } catch (e) {
+      print('Error loading chats from Hive: $e');
+      error('Failed to load chats from local storage.');
+    } finally {
+      isLoading.value = false;
     }
-
-    // If there are no chats in the local storage, fetch them from the API
-    if (storedChats.isEmpty) {
-      isLoading.value = true;
-      await getInfluencersChat();
-      print('Fetched chats from the API.');
-    }
-
-    // After everything is processed, update the chat model
-    final List<ChatData> updatedChats = chatBox.values.toList();
-    chatModelObj.clear();
-    chatModelObj.addAll(updatedChats);
-
-    print('Chats and messages loaded successfully from local storage.');
-
-  } catch (e) {
-    print('Error loading or fetching chats and messages: $e');
-    error.value = 'Failed to load chats';
-  } finally {
-    isLoading.value = false;
   }
-}
-
-
 
   void setUnreadCreator(int value) {
     unreadCreator.value = value;
@@ -294,6 +253,3 @@ Future<void> loadChatOrFetch() async {
     super.onClose();
   }
 }
-
-
-

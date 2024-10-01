@@ -414,30 +414,32 @@ class _JobDetailsScreenState extends State<JobMyBidsDetailsScreen> {
                                       ]))
                             ]))
                       ])))),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            widget.jobMyBids?.status == 'pending' 
-                ? CustomButton(
-                    height: getVerticalSize(44),
-                    text: "Edit bid".tr,
-                    padding: ButtonPadding.PaddingAll12,
-                    onTap: () {
-                       onTapEdit(widget.selectedJob!);
-                    },
-                  )
-                : CustomButton(
-                    height: getVerticalSize(44),
-                    text: "Job no longer avaliable".tr,
-                     variant: ButtonVariant.Neutral,
-                    padding: ButtonPadding.PaddingAll12,
-                     fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
-                  ),
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.jobMyBids?.status == 'pending' 
+                  ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Edit bid".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                         onTapEdit(widget.selectedJob!);
+                      },
+                    )
+                  : CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Job no longer avaliable".tr,
+                       variant: ButtonVariant.Neutral,
+                      padding: ButtonPadding.PaddingAll12,
+                       fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
+                    ),
+            ],
+          ),
         ),
       ),
     );

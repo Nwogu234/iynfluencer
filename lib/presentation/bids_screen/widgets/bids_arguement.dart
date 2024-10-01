@@ -5,7 +5,7 @@ import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 class BidsArguments {
   final JobBids jobBid;
   final Job job;
-  final ChatData chatData;
+  final ChatData? chatData;
 
   BidsArguments(this.jobBid, this.job, this.chatData);
 }

@@ -77,20 +77,22 @@ class ChargeScreen extends GetWidget<ChargeController> {
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold14Gray900))
                 ])),
-        bottomNavigationBar: Container(
-            margin: getMargin(left: 20, right: 20, bottom: 20),
-            decoration: AppDecoration.outlineIndigo507,
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomButton(
-                      height: getVerticalSize(44),
-                      text: "lbl_send".tr,
-                      variant: ButtonVariant.Neutral,
-                      padding: ButtonPadding.PaddingAll12,
-                      fontStyle: ButtonFontStyle.SatoshiBold14Gray600)
-                ])));
+        bottomNavigationBar: SafeArea(
+          child: Container(
+              margin: getMargin(left: 20, right: 20, bottom: 20),
+              decoration: AppDecoration.outlineIndigo507,
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomButton(
+                        height: getVerticalSize(44),
+                        text: "lbl_send".tr,
+                        variant: ButtonVariant.Neutral,
+                        padding: ButtonPadding.PaddingAll12,
+                        fontStyle: ButtonFontStyle.SatoshiBold14Gray600)
+                  ])),
+        ));
   }
 
   /// Navigates to the previous screen.

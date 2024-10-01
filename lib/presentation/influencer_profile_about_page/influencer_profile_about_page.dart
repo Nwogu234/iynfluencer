@@ -27,7 +27,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
       {required this.chatData, required this.selectedInfluencer});
 
   final Influencer selectedInfluencer;
-  final ChatData chatData;
+  final ChatData? chatData;
 
   ChatData chatsData = ChatData(
     id: 'id',
@@ -102,7 +102,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     int socialname = 0;
     ChatsOpenedController chatsController = Get.put(ChatsOpenedController(
-        chatData: chatData, selectedInfluencer: selectedInfluencer));
+        chatData: chatData ?? chatsData, selectedInfluencer: selectedInfluencer));
 
     String? avatarUrl = selectedInfluencer.user?.first.avatar;
     String imageProvider;
@@ -428,11 +428,15 @@ class InfluencerProfileAboutPage extends StatelessWidget {
                                 backgroundColor: ColorConstant.whiteA700),
                             fontStyle: ButtonFontStylez.SatoshiBold15,
                           ),
+                          chatsController.isLoading.value == true ?
+                          CircularProgressIndicator() :
+
                           CustomButton(
+                               loading: chatsController.isLoading.value,
                               shape: ButtonShapes.RoundedBorder12,
                               onTap: () {
                                 chatsController.onTapChatCard(
-                                    selectedInfluencer, chatData);
+                                    selectedInfluencer, chatData ?? chatsData);
                               },
                               height: getVerticalSize(50),
                               width: getHorizontalSize(161),

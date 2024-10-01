@@ -78,9 +78,9 @@ class ChatData extends HiveObject {
     @HiveField(4)
   final String influencerUserId;
     @HiveField(5)
-  final int unreadByCreator;
+   int unreadByCreator;
     @HiveField(6)
-  final int unreadByInfluencer;
+   int unreadByInfluencer;
     @HiveField(7)
   final bool blockedByCreator;
      @HiveField(8)
@@ -97,6 +97,10 @@ class ChatData extends HiveObject {
   final UserModel? creatorUser;
       @HiveField(14)
   final UserModel? influencerUser;
+      @HiveField(15)
+   String? lastMessage;
+      @HiveField(16)
+   DateTime? lastMessageTime;
 
   ChatData({
     required this.id,
@@ -114,6 +118,8 @@ class ChatData extends HiveObject {
     required this.messages,
     this.creatorUser,
     this.influencerUser,
+    this.lastMessage,
+    this.lastMessageTime,
   });
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
@@ -138,7 +144,12 @@ class ChatData extends HiveObject {
             : null,
         influencerUser: json['influencerUser'] != null
             ? new UserModel.fromJson(json['influencerUser'])
-            : null);
+            : null,
+         lastMessage: json['lastMessage'] as String?,
+         lastMessageTime : json['lastMessageTime'] != null
+          ? DateTime.parse(json['lastMessageTime'])  // Parse only if not null
+          : null,
+            );
   }
 
   Map<String, dynamic> toJson() {
@@ -158,6 +169,8 @@ class ChatData extends HiveObject {
       'messages': messages.map((message) => message.toJson()).toList(),
       'creatorUser': creatorUser?.toJson(),
       'influencerUser': influencerUser?.toJson(),
+       'lastMessage':  lastMessage,
+       'lastMessageTime':  lastMessageTime
     };
   }
 }

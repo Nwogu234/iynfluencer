@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:iynfluencer/presentation/search_creator_screen/search_creator_screen.dart';
@@ -35,7 +36,7 @@ class _MessagesPageState extends State<MessagesPage>
   final MessagesController controller =
       Get.put(MessagesController(MessagesModel().obs));
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey2 = GlobalKey<ScaffoldState>();
 
   final HomeCreatorController homeController =
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
@@ -67,8 +68,9 @@ class _MessagesPageState extends State<MessagesPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: _scaffoldKey,
+        key: _scaffoldKey2,
         backgroundColor: ColorConstant.whiteA700,
+        drawer: CreatorProfileDraweritem(),
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: SingleChildScrollView(
@@ -204,6 +206,6 @@ class _MessagesPageState extends State<MessagesPage>
   }
 
   openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
+    _scaffoldKey2.currentState?.openDrawer();
   }
 }

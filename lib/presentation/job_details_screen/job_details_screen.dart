@@ -286,7 +286,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                                 .txtSatoshiBold13Gray900ab),
                                         Row(children: [
                                           Text(
-                                              "${widget.selectedJob?.creator?.user?.country}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.country)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style:
@@ -328,6 +328,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                       ])),
                               Spacer(),
                               CustomButton(
+                                 loading: controller.isLoading.value,
                                   onTap: () {
                                     chatControllers.onTapChatsCard(
                                         widget.selectedJob,
@@ -343,8 +344,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                   fontStyle: ButtonFontStyle.SatoshiBold13)
                             ])),
                         Padding(
-                            padding: getPadding(left: 20, top: 19),
-                            child: Row(children: [
+                            padding: getPadding(left: 20, top: 19, right:40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                               Padding(
                                   padding: getPadding(top: 1),
                                   child: Column(
@@ -376,7 +379,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                                           fontWeight:
                                                               FontWeight
                                                                   .w300)),
-                                                  TextSpan(
+                                            /*       TextSpan(
                                                       text: "lbl_view".tr,
                                                       style: TextStyle(
                                                           color: ColorConstant
@@ -388,7 +391,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                                               'Satoshi',
                                                           fontWeight:
                                                               FontWeight
-                                                                  .w300))
+                                                                  .w300)) */
                                                 ]),
                                                 textAlign: TextAlign.left))
                                       ])),
@@ -416,43 +419,45 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                                       ]))
                             ]))
                       ])))),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            widget.selectedJob?.bids != null &&
-                    widget.selectedJob!.bids!.isNotEmpty &&
-                    widget.selectedJob?.bids?.first.influencerId ==
-                        user.userModelObj.value.influencerId
-                ? CustomButton(
-                    height: getVerticalSize(44),
-                    text: "Edit bid".tr,
-                    padding: ButtonPadding.PaddingAll12,
-                    onTap: () {
-                      if (widget.selectedJob?.bids != null &&
-                          widget.selectedJob!.bids!.isNotEmpty) {
-                        onTapEdit(widget.selectedJob!);
-                      } else {
-                        Get.snackbar(
-                            'Sorry',
-                             'No Bid available to edit.',
-                             snackPosition: SnackPosition.BOTTOM,
-                       );
-                   }
-                    },
-                  )
-                : CustomButton(
-                    height: getVerticalSize(44),
-                    text: "lbl_bid".tr,
-                    padding: ButtonPadding.PaddingAll12,
-                    onTap: () {
-                      onTapBid(widget.selectedJob!);
-                    },
-                  ),
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.selectedJob?.bids != null &&
+                      widget.selectedJob!.bids!.isNotEmpty &&
+                      widget.selectedJob?.bids?.first.influencerId ==
+                          user.userModelObj.value.influencerId
+                  ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Edit bid".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        if (widget.selectedJob?.bids != null &&
+                            widget.selectedJob!.bids!.isNotEmpty) {
+                          onTapEdit(widget.selectedJob!);
+                        } else {
+                          Get.snackbar(
+                              'Sorry',
+                               'No Bid available to edit.',
+                               snackPosition: SnackPosition.BOTTOM,
+                         );
+                     }
+                      },
+                    )
+                  : CustomButton(
+                      height: getVerticalSize(44),
+                      text: "lbl_bid".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        onTapBid(widget.selectedJob!);
+                      },
+                    ),
+            ],
+          ),
         ),
       ),
     );

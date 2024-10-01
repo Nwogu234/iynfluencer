@@ -342,20 +342,22 @@ class EditProfileListedJobsTabContainerScreen
                             JobsRequestsInfluencerPage(),
                           ]))
                 ]))),
-            bottomNavigationBar: CustomButton(
-            height: getVerticalSize(34),
-            width: getHorizontalSize(110),
-            text: "lbl_edit_profile".tr,
-            margin: getMargin(top: 13),
-            variant:
-            ButtonVariant.FillGray200ab,
-            padding:
-            ButtonPadding.PaddingAll4,
-            fontStyle: ButtonFontStyle
-                .SatoshiBold15Gray900,
-            onTap: () {
-              onTapEditprofile();
-            })
+            bottomNavigationBar: SafeArea(
+              child: CustomButton(
+              height: getVerticalSize(34),
+              width: getHorizontalSize(110),
+              text: "lbl_edit_profile".tr,
+              margin: getMargin(top: 13),
+              variant:
+              ButtonVariant.FillGray200ab,
+              padding:
+              ButtonPadding.PaddingAll4,
+              fontStyle: ButtonFontStyle
+                  .SatoshiBold15Gray900,
+              onTap: () {
+                onTapEditprofile();
+              }),
+            )
         );
   }
 

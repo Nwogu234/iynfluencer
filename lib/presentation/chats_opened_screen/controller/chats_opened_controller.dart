@@ -469,6 +469,7 @@ class ChatsOpenedController extends GetxController {
   Rx<bool> isLoading = false.obs;
   Rx<bool> isTrendLoading = false.obs;
   RxList<Message> messageModelObj = <Message>[].obs;
+  RxList<Message> pendingMessages = <Message>[].obs;
   final message = ''.obs;
   late final RxBool isDeleted = false.obs;
   RxBool isEmojiWidgetShown = false.obs;
@@ -481,11 +482,10 @@ class ChatsOpenedController extends GetxController {
   int pageSize = 10;
   ScrollController _scrollController = ScrollController();
   final RxBool isReverse = false.obs;
-  final RxBool isSent = true.obs; 
+  final RxBool isSent = true.obs;
   int currentPage = 0;
 
-
-  void updateMessageStatus(MessageStatus  status) {
+  void updateMessageStatus(MessageStatus status) {
     messageStatus.value = status;
   }
 
@@ -520,7 +520,7 @@ class ChatsOpenedController extends GetxController {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  void handleNewMessage(dynamic data) async{
+  void handleNewMessage(dynamic data) async {
     print('this is working');
     print('Received data: $data');
     try {
@@ -528,34 +528,65 @@ class ChatsOpenedController extends GetxController {
 
       final Message newMessage = Message.fromJson(messageMap);
 
+      if (!SocketClient.to.isConnected.value) {
+        print('Storing message while offline: ${newMessage.messageId}');
+        updatePendingMessage(newMessage);
+        return;
+      }
+
       if (isDuplicateMessage(newMessage.messageId)) {
         print('Duplicate message detected: ${newMessage.messageId}');
         return;
       }
-      UpdateMessage(newMessage);
-       final chatId = newMessage.chatId;
-        final messageId = newMessage.messageId;
-  
-        try {
-         final boxName = 'messages_$chatId';
-          Box<Message>? messageBox;
-          messageBox = Hive.isBoxOpen(boxName) ? Hive.box<Message>(boxName) : await Hive.openBox<Message>(boxName);
+      updateMessage(newMessage);
+      final chatId = newMessage.chatId;
+      final messageId = newMessage.messageId;
+
+      try {
+        final boxName = 'messages_$chatId';
+        Box<Message>? messageBox;
+        messageBox = Hive.isBoxOpen(boxName)
+            ? Hive.box<Message>(boxName)
+            : await Hive.openBox<Message>(boxName);
         await messageBox.put(messageId, newMessage);
-        } catch (e) {
-         print('Error opening or accessing Hive box: $e');
-        }
-         final token = await storage.read(key: "token");
-       if (token == null) {
-         print("Authorization token is not available");
-         return;
-       }   
+      } catch (e) {
+        print('Error opening or accessing Hive box: $e');
+      }
+      updateHiveChatDataBox(newMessage);
+      increaseUnreadInfluencer(chatId);
     } catch (e) {
       print('Error parsing message data: $e');
     }
   }
 
-  void UpdateMessage(Message message) {
+  Future<void> increaseUnreadInfluencer(String chatId) async {
+    final String chatDataBoxName = 'chat_data';
+    Box<ChatData>? chatDataBox;
+
+    chatDataBox = Hive.isBoxOpen(chatDataBoxName)
+        ? Hive.box<ChatData>(chatDataBoxName)
+        : await Hive.openBox<ChatData>(chatDataBoxName);
+
+    final chatsData = chatDataBox.get(chatId);
+
+    if (chatsData != null) {
+      chatsData.unreadByInfluencer = chatsData.unreadByInfluencer + 1;
+
+      await chatDataBox.put(chatId, chatsData);
+
+      print('Unread count for influencer reset to 0 in Hive');
+    } else {
+      print('Chat data not found in Hive for chat ID: $chatId');
+    }
+  }
+
+  void updateMessage(Message message) {
     messageModelObj.insert(0, message);
+    update();
+  }
+
+  void updatePendingMessage(Message message) {
+    pendingMessages.insert(0, message);
     update();
   }
 
@@ -569,12 +600,23 @@ class ChatsOpenedController extends GetxController {
     getUser(chatId);
   }
 
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
+  }
 
-void scrollToBottom() {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-  });
-}
+  void processPendingMessages() async {
+    if (pendingMessages.isNotEmpty) {
+      print('Processing pending messages...');
+
+      for (final message in pendingMessages) {
+        handleNewMessage(message.toJson());
+      }
+
+      pendingMessages.clear();
+    }
+  }
 
   Future<void> getUser(String chatId) async {
     //  isLoading.value = true;
@@ -608,79 +650,39 @@ void scrollToBottom() {
     }
   }
 
- 
-
-   
- MessageStatus intToMessageStatus(int status) {
-  switch (status) {
-    case 0:
-      return MessageStatus.sending;
-    case 1:
-      return MessageStatus.sent;
-    case 2:
-      return MessageStatus.failed;
-    default:
-      return MessageStatus.sending; 
-  }
-}
-
-
-Future<void> loadMessagesOrFetch(String chatId) async {
-  isLoading.value = false;
-  try {
-    final Box<Message> messageBox = await Hive.openBox<Message>('messages_$chatId');
-    final List<Message> storedMessages = messageBox.values.toList();
-
-    if (storedMessages.isNotEmpty) {
-
-      int batchSize = 10;
-      for (var i = 0; i < storedMessages.length; i += batchSize) {
-        List<Message> batch = storedMessages.skip(i).take(batchSize).toList();
-        messageModelObj.addAll(batch);
-        await Future.delayed(Duration(milliseconds: 50));
-      }
-      print('Messages loaded successfully from Hive for chat ID: $chatId');
-    } else {
-      isLoading.value = true;
-      await fetchAllMessagesWithInfluencer(chatId);
+  MessageStatus intToMessageStatus(int status) {
+    switch (status) {
+      case 0:
+        return MessageStatus.sending;
+      case 1:
+        return MessageStatus.sent;
+      case 2:
+        return MessageStatus.failed;
+      default:
+        return MessageStatus.sending;
     }
-
-  } catch (e) {
-    print('Error loading or fetching messages: $e');
-    error.value = 'Failed to load messages';
-  } finally {
-    isLoading.value = false;
   }
-} 
 
 /* 
-Future<void> loadMessagesOrFetch(String chatId) async {
-   // if (isLoadingMore.value || isLoading.value) return; // Prevent multiple requests
-
+  Future<void> loadMessagesOrFetch(String chatId) async {
     isLoading.value = false;
     try {
-      final Box<Message> messageBox = await Hive.openBox<Message>('messages_$chatId');
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
       final List<Message> storedMessages = messageBox.values.toList();
 
       if (storedMessages.isNotEmpty) {
-        final List<Message> messagesToLoad = storedMessages
-            .skip(currentPage * pageSize)
-            .take(pageSize)
-            .toList();
-
-        if (messagesToLoad.isEmpty) {
-          isLoadingMore.value = false;
-        } else {
-          messageModelObj.addAll(messagesToLoad);
-          currentPage++;
+        int batchSize = 10;
+        for (var i = 0; i < storedMessages.length; i += batchSize) {
+          List<Message> batch = storedMessages.skip(i).take(batchSize).toList();
+          messageModelObj.addAll(batch);
+          await Future.delayed(Duration(milliseconds: 50));
         }
+        print('Messages loaded successfully from Hive for chat ID: $chatId');
       } else {
+        isLoading.value = true;
         await fetchAllMessagesWithInfluencer(chatId);
       }
-
-      final userId = user.userModelObj().userId;
-      final fcmToken = await FirebaseMessaging.instance.getToken();
-      await storeFcmToken(userId, fcmToken);
     } catch (e) {
       print('Error loading or fetching messages: $e');
       error.value = 'Failed to load messages';
@@ -689,6 +691,57 @@ Future<void> loadMessagesOrFetch(String chatId) async {
     }
   }
  */
+
+  Future<void> loadMessagesOrFetch(String chatId) async {
+    isLoading.value = false;
+    try {
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
+      final List<Message> storedMessages = messageBox.values.toList();
+
+      if (storedMessages.isNotEmpty) {
+        storedMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+        int batchSize = 10;
+        for (var i = 0; i < storedMessages.length; i += batchSize) {
+          List<Message> batch = storedMessages.skip(i).take(batchSize).toList();
+          messageModelObj.addAll(batch);
+          await Future.delayed(Duration(milliseconds: 50));
+        }
+        print('Messages loaded successfully from Hive for chat ID: $chatId');
+        resetUnreadInfluencer(chatId);
+      } else {
+        isLoading.value = true;
+        await fetchAllMessagesWithInfluencer(chatId);
+      }
+    } catch (e) {
+      print('Error loading or fetching messages: $e');
+      error.value = 'Failed to load messages';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetUnreadInfluencer(String chatId) async {
+    final String chatDataBoxName = 'chat_data';
+    Box<ChatData>? chatDataBox;
+
+    chatDataBox = Hive.isBoxOpen(chatDataBoxName)
+        ? Hive.box<ChatData>(chatDataBoxName)
+        : await Hive.openBox<ChatData>(chatDataBoxName);
+
+    final chatsData = chatDataBox.get(chatId);
+
+    if (chatsData != null) {
+      chatsData.unreadByInfluencer = 0;
+
+      await chatDataBox.put(chatId, chatsData);
+
+      print('Unread count for influencer reset to 0 in Hive');
+    } else {
+      print('Chat data not found in Hive for chat ID: $chatId');
+    }
+  }
 
   Future<void> fetchAllMessagesWithInfluencer(String chatId) async {
     try {
@@ -771,96 +824,153 @@ Future<void> loadMessagesOrFetch(String chatId) async {
     return groupedMessages;
   }
 
-  void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
-    if (selectedInfluencer == null) {
-      print("selectedInfluencer is null");
-      return;
+
+
+ void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
+  
+  if (selectedInfluencer == null) {
+    print("selectedInfluencer is null");
+    return;
+  }
+
+  error('');
+  token = await storage.read(key: "token");
+
+  try {
+    isLoading.value = true;
+    
+    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
+   ChatData? existingChatInHive = chatBox.values.firstWhere(
+     (chat) => chat.influencerId == selectedInfluencer.id,
+      orElse: () => ChatData(
+      id: '',
+      creatorId: '',
+      influencerId: '',
+      creatorUserId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+       unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: [],
+     ),
+     );
+
+    if (existingChatInHive != null) {
+      print("Chat with influencer found in Hive, no need to save again.");
+      await fetchAllMessagesWithInfluencer(existingChatInHive.chatId);
+      Get.to(ChatsOpenedScreen(
+        selectedInfluencer: selectedInfluencer,
+        chatData: existingChatInHive,
+      ));
+      return; 
     }
 
-    isLoading.value = true;
-    error('');
-    token = await storage.read(key: "token");
+  
+    Response existingChatResponse =
+        await apiClient.getAllChatsWithInfluencers(token!);
+    if (existingChatResponse.isOk && existingChatResponse.body != null) {
+      List<dynamic> chatListMaps = existingChatResponse.body['data']['docs'];
+      List<ChatData> chatList =
+          chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
 
-    try {
-      // await Future.delayed(Duration(seconds: 10));
-      Response existingChatResponse =
-          await apiClient.getAllChatsWithInfluencers(token!);
-      if (existingChatResponse.isOk && existingChatResponse.body != null) {
-        //  final List<dynamic>? responseData = existingChatResponse.body;
-        List<dynamic> chatListMaps = existingChatResponse.body['data']['docs'];
-        List<ChatData> chatList =
-            chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
+      ChatData? existingChat = chatList.firstWhereOrNull(
+          (chat) => chat.influencerId == selectedInfluencer.id);
 
-        ChatData? existingChat = chatList.firstWhereOrNull(
-            (chat) => chat.influencerId == selectedInfluencer.id);
+      if (existingChat != null) {
+        isLoading.value = true;
+        await fetchAllMessagesWithInfluencer(existingChat.chatId);
+        Get.to(ChatsOpenedScreen(
+          selectedInfluencer: selectedInfluencer,
+          chatData: existingChat,
+        ));
+        return;
+      } else {
+        print("No existing chat found for the selected influencer");
 
-        if (existingChat != null) {
-          await fetchAllMessagesWithInfluencer(existingChat.chatId);
-          Get.to(ChatsOpenedScreen(
-            selectedInfluencer: selectedInfluencer,
-            chatData: existingChat,
-          ));
-          return;
-        } else {
-          print("No existing chat found for the selected influencer");
-          // No existing chat, proceed to create a new one
-          final now = DateTime.now();
-          final formattedTime = DateFormat('HH:mm').format(now);
-          final createdAt = DateTime(
-            now.year,
-            now.month,
-            now.day,
-            int.parse(formattedTime.substring(0, 2)),
-            int.parse(formattedTime.substring(3)),
-            0,
-          );
+        // No existing chat, proceed to create a new one
+        final now = DateTime.now();
+        final formattedTime = DateFormat('HH:mm').format(now);
+        final createdAt = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          int.parse(formattedTime.substring(0, 2)),
+          int.parse(formattedTime.substring(3)),
+          0,
+        );
 
-          String chatId = Uuid().v4();
-          String creatorId = user.userModelObj.value.id;
-          String creatorUserId = user.userModelObj.value.userId;
+        String chatId = Uuid().v4();
+        String creatorId = user.userModelObj.value.id;
+        String creatorUserId = user.userModelObj.value.userId;
 
-          ChatData newChat = ChatData(
-            id: '',
-            creatorId: creatorId,
-            influencerId: selectedInfluencer.id ?? '',
-            creatorUserId: creatorUserId,
-            influencerUserId: selectedInfluencer.userId ?? '',
-            unreadByCreator: 0,
-            unreadByInfluencer: 0,
-            blockedByCreator: false,
-            blockedByInfluencer: false,
-            chatId: chatId,
-            createdAt: createdAt,
-            updatedAt: createdAt,
-            messages: [],
-          );
+        ChatData newChat = ChatData(
+          id: '',
+          creatorId: creatorId,
+          influencerId: selectedInfluencer.id ?? '',
+          creatorUserId: creatorUserId,
+          influencerUserId: selectedInfluencer.userId ?? '',
+          unreadByCreator: 0,
+          unreadByInfluencer: 0,
+          blockedByCreator: false,
+          blockedByInfluencer: false,
+          chatId: chatId,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+          messages: [],
+        );
 
-          // Create the new chat
-          Response createChatResponse =
-              await apiClient.createChat(newChat, token);
-          if (createChatResponse.isOk) {
-            print('Chat created successfully');
-            Map<String, dynamic> chatDataMap = createChatResponse.body;
+        // Create the new chat
+        Response createChatResponse =
+            await apiClient.createChat(newChat, token);
+        if (createChatResponse.isOk) {
+          print('Chat created successfully');
+          Map<String, dynamic> chatDataMap = createChatResponse.body;
+
+          if (chatDataMap.containsKey('_id') &&
+              chatDataMap['_id'] is String) {
             ChatData createdChat = ChatData.fromJson(chatDataMap);
 
             Get.to(ChatsOpenedScreen(
               selectedInfluencer: selectedInfluencer,
               chatData: createdChat,
             ));
+
+            await saveChatToHive(createdChat);
           } else {
-            print("Failed to create chat: ${createChatResponse.statusCode}");
+            print("Chat data does not contain expected fields: $chatDataMap");
+            error('Chat creation response is missing required fields');
           }
+        } else {
+          print("Failed to create chat: ${createChatResponse.statusCode}");
         }
-      } else {
-        print(
-            "Failed to fetch existing chats: ${existingChatResponse.statusCode}");
       }
-    } catch (e) {
-      print("Error creating or fetching chat: $e");
-      error(e.toString());
-    } finally {
-      isLoading.value = false;
+    } else {
+      print("Failed to fetch existing chats: ${existingChatResponse.statusCode}");
     }
+  } catch (e) {
+    print("Error creating or fetching chat: $e");
+    error(e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+  Future<void> saveChatToHive(ChatData chat) async {
+    final String chatDataBoxName = 'chat_data';
+    Box<ChatData>? chatDataBox;
+
+    chatDataBox = Hive.isBoxOpen(chatDataBoxName)
+        ? Hive.box<ChatData>(chatDataBoxName)
+        : await Hive.openBox<ChatData>(chatDataBoxName);
+
+    // Store the chat in Hive
+    await chatDataBox.put(chat.chatId, chat); // Use chatId as the key
+
+    print('Chat saved to Hive: ${chat.chatId}');
   }
 
   Future<void> saveMessages(List<Message> messages, String chatId) async {
@@ -878,24 +988,26 @@ Future<void> loadMessagesOrFetch(String chatId) async {
     }
   }
 
- Future<void> loadMessages(String chatId) async {
-  try {
-    final Box<Message> messageBox = await Hive.openBox<Message>('messages_$chatId');
-    final List<Message> storedMessages = messageBox.values.toList();
+  Future<void> loadMessages(String chatId) async {
+    try {
+      final Box<Message> messageBox =
+          await Hive.openBox<Message>('messages_$chatId');
+      final List<Message> storedMessages = messageBox.values.toList();
 
-    if (storedMessages.isNotEmpty) {
-      // Sort messages by createdAt in ascending order (latest at the bottom)
-      storedMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-      
-      messageModelObj.assignAll(storedMessages);
-      print('Messages loaded and sorted successfully from Hive for chat ID: $chatId');
-    } else {
-      print('No messages found in Hive for chat ID: $chatId');
+      if (storedMessages.isNotEmpty) {
+        // Sort messages by createdAt in ascending order (latest at the bottom)
+        storedMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+        messageModelObj.assignAll(storedMessages);
+        print(
+            'Messages loaded and sorted successfully from Hive for chat ID: $chatId');
+      } else {
+        print('No messages found in Hive for chat ID: $chatId');
+      }
+    } catch (e) {
+      print('Error loading messages from Hive: $e');
     }
-  } catch (e) {
-    print('Error loading messages from Hive: $e');
   }
-}
 
   void chatJoin(String chatId) {
     _socketClient.socket.emit('onChatJoin', {'chatId': chatId});
@@ -956,24 +1068,26 @@ Future<void> loadMessagesOrFetch(String chatId) async {
       createdAt: now,
       updatedAt: now,
       isCompleteMessage: false,
-       status: MessageStatus.sending.index,
+      status: MessageStatus.sending.index,
     );
 
     messageController.clear();
-    isReverse.value = true; 
+    isReverse.value = true;
 
     if (!isDuplicateMessage(newMessage.messageId)) {
       UpdateList(newMessage);
     }
 
-     final boxName = 'messages_$chatId';
-     Box<Message>? messageBox;
-     
+    final boxName = 'messages_$chatId';
+    Box<Message>? messageBox;
+
     try {
-    messageBox = Hive.isBoxOpen(boxName) ? Hive.box<Message>(boxName) : await Hive.openBox<Message>(boxName);
-    await messageBox.put(messageId, newMessage);
+      messageBox = Hive.isBoxOpen(boxName)
+          ? Hive.box<Message>(boxName)
+          : await Hive.openBox<Message>(boxName);
+      await messageBox.put(messageId, newMessage);
     } catch (e) {
-    print('Error opening or accessing Hive box: $e');
+      print('Error opening or accessing Hive box: $e');
     }
     final token = await storage.read(key: "token");
     if (token == null) {
@@ -989,10 +1103,12 @@ Future<void> loadMessagesOrFetch(String chatId) async {
         final response = await apiClient.sendMessage(newMessage, token);
 
         if (response.isOk) {
-           isSent.value = true;
+          isSent.value = true;
           print('Message sent and stored successfully');
           //  newMessage.status = MessageStatus.sent.index;
           updateMessageStatus(MessageStatus.sent);
+          updateHiveChatDataBox(newMessage);
+
           socketClient.sendMessage(chatData, messageText);
           final name =
               "${capitalizeFirstLetter(user.userModelObj().firstName)} ${capitalizeFirstLetter(user.userModelObj().lastName)}";
@@ -1027,8 +1143,35 @@ Future<void> loadMessagesOrFetch(String chatId) async {
     }
   }
 
-  void scheduleRetry(
-  Message message, Box<Message>? messageBox, String token, String messageText) {
+  void updateHiveChatDataBox(Message newMessage) async {
+    final String chatDataBoxName = 'chat_data';
+    Box<ChatData>? chatDataBox;
+
+    try {
+      chatDataBox = Hive.isBoxOpen(chatDataBoxName)
+          ? Hive.box<ChatData>(chatDataBoxName)
+          : await Hive.openBox<ChatData>(chatDataBoxName);
+
+      if (chatDataBox != null) {
+        final ChatData? hiveChatData = chatDataBox.get(newMessage.chatId);
+
+        if (chatData != null) {
+          chatData.lastMessage = newMessage.text;
+          chatData.lastMessageTime = DateTime.now();
+
+          await chatDataBox.put(newMessage.chatId, hiveChatData!);
+          print('Chat data updated successfully');
+        } else {
+          print('Chat data for chatId ${newMessage.chatId} not found');
+        }
+      }
+    } catch (e) {
+      print('Error opening or accessing Hive box: $e');
+    }
+  }
+
+  void scheduleRetry(Message message, Box<Message>? messageBox, String token,
+      String messageText) {
     const retryInterval = Duration(seconds: 10);
     const retryDuration = Duration(minutes: 2);
     final endTime = DateTime.now().add(retryDuration);
@@ -1044,7 +1187,7 @@ Future<void> loadMessagesOrFetch(String chatId) async {
         try {
           final retryResponse = await apiClient.sendMessage(message, token);
           if (retryResponse.isOk) {
-             isSent.value = true;
+            isSent.value = true;
             updateMessageStatus(MessageStatus.sent);
             socketClient.sendMessage(chatData, message.text);
             final name =
@@ -1077,7 +1220,7 @@ Future<void> loadMessagesOrFetch(String chatId) async {
 
       if (DateTime.now().isAfter(endTime)) {
         message.status = MessageStatus.failed.index;
-         isSent.value = false;
+        isSent.value = false;
         await messageBox?.delete(message.messageId);
         timer.cancel();
       }
@@ -1094,10 +1237,9 @@ Future<void> loadMessagesOrFetch(String chatId) async {
     }
   }
 
-
   void UpdateList(Message message) {
     messageModelObj.insert(0, message);
-      scrollToBottom();
+    scrollToBottom();
     update();
   }
 
@@ -1108,18 +1250,29 @@ Future<void> loadMessagesOrFetch(String chatId) async {
   }
 
   @override
-  void onInit() async{
+  void onInit() async {
+    super.onInit();
+
     _socketClient.connect();
     print(_socketClient.isConnected);
-    // _socketClient.socket.emit('onChatJoin', {'message': 'user just joined'});
-    chatJoin(chatData.chatId);
+    _socketClient.socket.on('connect', (_) {
+      print('Socket connected successfully');
+      chatJoin(chatData.chatId);
+
+      processPendingMessages();
+    });
+
     _socketClient.socket.on('error', (errorData) {
       print('this error is from chat open');
       print('Socket Error: $errorData');
     });
+
+    if (_socketClient.isConnected.value) {
+      processPendingMessages();
+    }
+
     listenToNewMessage();
     // startKeepAliveTimer();
-    super.onInit();
 
     print('Chat data before getUser: $chatData');
 

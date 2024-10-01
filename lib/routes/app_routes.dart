@@ -135,6 +135,8 @@ import 'package:iynfluencer/presentation/technology_home_screen/binding/controll
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/presentation/transactions_screen/binding/transaction_binding.dart';
 import 'package:iynfluencer/presentation/transactions_screen/transaction_screen.dart';
+import 'package:iynfluencer/presentation/withdraw_transaction/binding/withdraw_transaction_binding.dart';
+import 'package:iynfluencer/presentation/withdraw_transaction/withdraw_transaction.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/withdrawal_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/binding/withdrawal_binding.dart';
 import 'package:iynfluencer/presentation/withdrawal_successful_screen/withdrawal_successful_screen.dart';
@@ -404,6 +406,8 @@ class AppRoutes {
   static const String disputeScreen = '/dispute_screen';
 
   static const String withdrawalScreen = '/withdrawal_screen';
+
+  static const String withdrawalTransactionScreen = '/withdrawal_transaction_screen';
 
   static const String withdrawalSuccessfulScreen =
       '/withdrawal_successful_screen';
@@ -1005,6 +1009,13 @@ class AppRoutes {
       page : () => WithdrawalScreen(),
       bindings: [
         WithdrawalBinding(),
+      ],
+    ),
+    GetPage(
+      name: withdrawalTransactionScreen,
+      page : () => WithdrawTransactionScreen(),
+      bindings: [
+        WithdrawTransactionBinding(),
       ],
     ),
     GetPage(

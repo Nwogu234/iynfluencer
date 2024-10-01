@@ -311,21 +311,23 @@ class CreatorMarkJobDetailsScreen extends GetWidget<CreatorAfterJobDetailsContro
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          margin: getMargin(left: 20, right: 20, bottom: 20),
-          decoration: AppDecoration.outlineIndigo507,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomButton(
-                  height: getVerticalSize(44),
-                  text: "Mark as Completed".tr,
-                  padding: ButtonPadding.PaddingAll12,
-                  onTap: () {
-                    onTapComplete();
-                  })
-            ],
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            margin: getMargin(left: 20, right: 20, bottom: 20),
+            decoration: AppDecoration.outlineIndigo507,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CustomButton(
+                    height: getVerticalSize(44),
+                    text: "Mark as Completed".tr,
+                    padding: ButtonPadding.PaddingAll12,
+                    onTap: () {
+                      onTapComplete();
+                    })
+              ],
+            ),
           ),
         ),
       ),

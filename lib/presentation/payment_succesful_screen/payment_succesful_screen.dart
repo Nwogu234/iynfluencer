@@ -98,20 +98,22 @@ class PaymentSuccesfulScreen extends GetWidget<PaymentSuccesfulController> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomButton(
-        onTap: () {
-          onTapAfter(args);
-        },
-        height: getVerticalSize(
-          46,
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
+          onTap: () {
+            onTapAfter(args);
+          },
+          height: getVerticalSize(
+            46,
+          ),
+          text: "lbl_done".tr,
+          margin: getMargin(
+            left: 20,
+            right: 20,
+            bottom: 31,
+          ),
+          padding: ButtonPadding.PaddingAll15,
         ),
-        text: "lbl_done".tr,
-        margin: getMargin(
-          left: 20,
-          right: 20,
-          bottom: 31,
-        ),
-        padding: ButtonPadding.PaddingAll15,
       ),
     );
   }

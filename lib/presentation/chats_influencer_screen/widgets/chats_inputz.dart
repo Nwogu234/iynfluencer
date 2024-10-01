@@ -383,7 +383,7 @@ class _ChatInputsBarState extends State<ChatInputsBar> {
                   child: CustomTextFormField2(
                     width: getHorizontalSize(334),
                     focusNode: widget.focusNode,
-                    autofocus: true,
+                    autofocus: false,
                     onChanged: (value) {
                       sendButton.value = value.isNotEmpty;
                     },

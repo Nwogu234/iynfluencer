@@ -32,13 +32,15 @@ class ChatDataAdapter extends TypeAdapter<ChatData> {
       messages: (fields[12] as List).cast<Message>(),
       creatorUser: fields[13] as UserModel?,
       influencerUser: fields[14] as UserModel?,
+      lastMessage: fields[15] as String?,
+      lastMessageTime: fields[16] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ChatData obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -68,7 +70,11 @@ class ChatDataAdapter extends TypeAdapter<ChatData> {
       ..writeByte(13)
       ..write(obj.creatorUser)
       ..writeByte(14)
-      ..write(obj.influencerUser);
+      ..write(obj.influencerUser)
+      ..writeByte(15)
+      ..write(obj.lastMessage)
+      ..writeByte(16)
+      ..write(obj.lastMessageTime);
   }
 
   @override

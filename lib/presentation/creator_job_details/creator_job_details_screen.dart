@@ -310,21 +310,23 @@ class CreatorJobDetailsScreen extends GetWidget<CreatorJobDetailsController> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CustomButton(
-                height: getVerticalSize(44),
-                text: "See all bids".tr,
-                padding: ButtonPadding.PaddingAll12,
-                onTap: () {
-                  onTapBid(selectedJob!);
-                })
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CustomButton(
+                  height: getVerticalSize(44),
+                  text: "See all bids".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  onTap: () {
+                    onTapBid(selectedJob!);
+                  })
+            ],
+          ),
         ),
       ),
     );

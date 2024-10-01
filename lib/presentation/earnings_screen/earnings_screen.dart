@@ -37,7 +37,6 @@ class _EarningsScreenState extends State<EarningsScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-
   }
 
   @override
@@ -119,6 +118,9 @@ class _EarningsScreenState extends State<EarningsScreen>
                             children: [
                               Flexible(
                                 child: CustomButton(
+                                  onTap: () {
+                                    onTapTransaction();
+                                  },
                                   height: getVerticalSize(42),
                                   text: "lbl_transactions".tr,
                                   margin: getMargin(right: 8),
@@ -130,6 +132,9 @@ class _EarningsScreenState extends State<EarningsScreen>
                               ),
                               Flexible(
                                 child: CustomButton(
+                                  onTap: () {
+                                    onTapWithdraw();
+                                  },
                                   height: getVerticalSize(42),
                                   text: "lbl_withdraw".tr,
                                   margin: getMargin(left: 8),
@@ -193,24 +198,24 @@ class _EarningsScreenState extends State<EarningsScreen>
                                                   getTitlesWidget:
                                                       (value, meta) {
                                                     return Text(
-                                                        "\$${value.toInt()}",
-                                                        style: TextStyle(
-                                                          color: ColorConstant.cyan100,
-                                                          fontWeight: FontWeight.w900
-                                                        ),
-                                                        );
+                                                      "\$${value.toInt()}",
+                                                      style: TextStyle(
+                                                          color: ColorConstant
+                                                              .cyan100,
+                                                          fontWeight:
+                                                              FontWeight.w900),
+                                                    );
                                                   },
                                                   interval: 1,
                                                 )),
                                                 bottomTitles: AxisTitles(
-                                                    sideTitles: 
-                                                       controller.bottomTitles)),
+                                                    sideTitles: controller
+                                                        .bottomTitles)),
                                             gridData: FlGridData(show: true),
                                             borderData: FlBorderData(
                                                 border: const Border(
                                                     bottom: BorderSide(),
                                                     left: BorderSide())),
-                                                    
                                             lineTouchData: LineTouchData(
                                               touchTooltipData:
                                                   LineTouchTooltipData(
@@ -232,11 +237,8 @@ class _EarningsScreenState extends State<EarningsScreen>
                                               },
                                               handleBuiltInTouches: true,
                                             ),
-                                          )))
-                                          )
-                                          ),
+                                          ))))),
                             ),
-
                             Padding(
                               padding: getPadding(top: 5),
                               child: Container(
@@ -273,11 +275,16 @@ class _EarningsScreenState extends State<EarningsScreen>
     );
   }
 
-  
-
-
   void onTapArrowleft25() {
     Get.back();
+  }
+
+  void onTapWithdraw() {
+    Get.toNamed(AppRoutes.withdrawalScreen);
+  }
+
+  void onTapTransaction() {
+    Get.toNamed(AppRoutes.withdrawalTransactionScreen);
   }
 }
 

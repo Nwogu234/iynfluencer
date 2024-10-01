@@ -297,39 +297,41 @@ class JobHiredScreen extends StatelessWidget {
               ]),
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            selectedJob?.status == 'Completed' ?
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              selectedJob?.status == 'Completed' ?
+                CustomButton(
+                  height: getVerticalSize(44),
+                  text: "This Job has been completed".tr,
+                  margin: getMargin(top: 10),
+                  variant: ButtonVariant.Neutral,
+                  padding: ButtonPadding.PaddingAll12,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
+                  onTap: () {}) :
               CustomButton(
-                height: getVerticalSize(44),
-                text: "This Job has been completed".tr,
-                margin: getMargin(top: 10),
-                variant: ButtonVariant.Neutral,
-                padding: ButtonPadding.PaddingAll12,
-                fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
-                onTap: () {}) :
-            CustomButton(
-                height: getVerticalSize(44),
-                text: "Mark complete".tr,
-                padding: ButtonPadding.PaddingAll12,
-                onTap: () async {
-                  await controller.completeJobFunc(
-                      context, selectedJob?.jobId ?? '', selectedJob);
-                  Get.back();
-                }),
-            CustomButton(
-                height: getVerticalSize(44),
-                text: "Dispute".tr,
-                margin: getMargin(top: 10),
-                variant: ButtonVariant.Neutral,
-                padding: ButtonPadding.PaddingAll12,
-                fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
-          ],
+                  height: getVerticalSize(44),
+                  text: "Mark complete".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  onTap: () async {
+                    await controller.completeJobFunc(
+                        context, selectedJob?.jobId ?? '', selectedJob);
+                    Get.back();
+                  }),
+              CustomButton(
+                  height: getVerticalSize(44),
+                  text: "Dispute".tr,
+                  margin: getMargin(top: 10),
+                  variant: ButtonVariant.Neutral,
+                  padding: ButtonPadding.PaddingAll12,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+            ],
+          ),
         ),
       ),
     );

@@ -31,8 +31,10 @@ class LogInController extends GetxController {
 
   Rx<bool> isShowPassword = true.obs;
   var biometricType = ''.obs;
+  var isFaceIdAvailable = false.obs;
+  var isFingerprintAvailable = false.obs;
 
-  Future<void> checkForStoredCredentials() async {
+    Future<void> checkForStoredCredentials() async {
     try {
       String? email = await storage.read(key: 'email');
       String? password = await storage.read(key: 'password');
@@ -57,32 +59,38 @@ class LogInController extends GetxController {
       if (canCheckBiometrics && isBiometricAvailable) {
         List<BiometricType> availableBiometrics =
             await auth.getAvailableBiometrics();
-
-        print("list of biometrics : $availableBiometrics");
+        print("List of available biometrics: $availableBiometrics");
 
         if (availableBiometrics.isNotEmpty) {
           isBiometricSupported.value = true;
 
           if (availableBiometrics.contains(BiometricType.face)) {
             print('Face ID is available');
-            biometricType.value = 'face';
+            isFaceIdAvailable.value = true;
             Get.snackbar('Biometrics Available',
                 'Face ID is available. You can use Face ID to login.');
           }
 
           if (availableBiometrics.contains(BiometricType.fingerprint)) {
             print('Fingerprint is available');
-            biometricType.value = 'fingerprint';
+            isFingerprintAvailable.value = true;
             Get.snackbar('Biometrics Available',
                 'Fingerprint is available. You can use Fingerprint to login.');
           }
+
           promptBiometricLogin();
         } else {
+          isBiometricSupported.value = false;
           Get.snackbar('Biometrics Unavailable',
               'No biometric types available on this device.');
         }
+      } else {
+        isBiometricSupported.value = false;
+        Get.snackbar('Biometrics Unavailable',
+            'This device does not support biometrics.');
       }
     } catch (e) {
+      isBiometricSupported.value = false;
       Get.snackbar('Error', 'Failed to check biometric availability.');
       print('Error checking biometrics: $e');
     }
@@ -106,7 +114,7 @@ class LogInController extends GetxController {
               signInTitle: 'Oops! Biometric authentication required!',
               cancelButton: 'No thanks',
             ),
-        ]);
+          ]);
     } on PlatformException catch (e) {
       print('Error using biometrics: $e');
     }
@@ -117,6 +125,7 @@ class LogInController extends GetxController {
       Get.snackbar('Error', 'Biometric authentication failed.');
     }
   }
+
 
   Future<void> saveLoginCredentials(String email, String password) async {
     await storage.write(key: 'email', value: email);
@@ -178,6 +187,7 @@ class LogInController extends GetxController {
       }
     }
   }
+
 
   Future<void> logIn() async {
     logInModelObj.update((val) {

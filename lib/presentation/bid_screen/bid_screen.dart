@@ -240,31 +240,33 @@ class BidScreen extends GetWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Obx(
-              () => CustomButton(
-                height: getVerticalSize(44),
-                text: "lbl_submit_bid2".tr,
-                padding: ButtonPadding.PaddingAll12,
-                loading: controller.isLoading.value,
-                onTap: () {
-                  controller.submitForm(
-                    context, 
-                    selectedJob.jobId!,
-                    selectedJob.creator?.userId ?? '',
-                    selectedJob.title!
-                    
-                    );
-                },
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Obx(
+                () => CustomButton(
+                  height: getVerticalSize(44),
+                  text: "lbl_submit_bid2".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  loading: controller.isLoading.value,
+                  onTap: () {
+                    controller.submitForm(
+                      context, 
+                      selectedJob.jobId!,
+                      selectedJob.creator?.userId ?? '',
+                      selectedJob.title!
+                      
+                      );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -16,6 +16,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
     this._job, {
     Key? key,
     this.onTapJobpost,
+    this.onTapBidpost,
   }) : super(
           key: key,
         );
@@ -25,6 +26,8 @@ class InfluencerHomeItemWidget extends StatelessWidget {
   var controller = Get.find<InfluencerHomeController>();
 
   VoidCallback? onTapJobpost;
+
+  VoidCallback? onTapBidpost;
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +221,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
                           text: "Apply Now".tr,
                           padding: ButtonPaddings.PaddingAll15,
                           onTap: () {
-                            onTapJobpost?.call();
+                            onTapBidpost?.call();
                           }),
                     ],
                   ),

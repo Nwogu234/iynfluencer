@@ -111,14 +111,16 @@ class EmailForgetScreen extends GetWidget<EmailCodeController> {
                         ))
                   ])),
         ),
-        bottomNavigationBar: CustomButton(
-            height: getVerticalSize(50),
-            text: "Continue".tr,
-            margin: getMargin(left: 20, right: 20, bottom: 43),
-            padding: ButtonPadding.PaddingAll15,
-            onTap: () {
-              onTapDone();
-            }));
+        bottomNavigationBar: SafeArea(
+          child: CustomButton(
+              height: getVerticalSize(50),
+              text: "Continue".tr,
+              margin: getMargin(left: 20, right: 20, bottom: 43),
+              padding: ButtonPadding.PaddingAll15,
+              onTap: () {
+                onTapDone();
+              }),
+        ));
   }
 
   /// Navigates to the previous screen.

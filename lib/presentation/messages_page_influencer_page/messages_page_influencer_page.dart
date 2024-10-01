@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
+import 'package:iynfluencer/presentation/influencer_drawer_item/influencer_drawer.dart';
 import 'package:iynfluencer/presentation/influencer_home_one_screen/controller/influencer_home_one_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -255,6 +256,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           backgroundColor: ColorConstant.whiteA700,
+          drawer: InfluencerDraweritem(),
           body: RefreshIndicator(
             onRefresh: _refresh,
             child: SingleChildScrollView(

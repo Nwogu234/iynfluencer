@@ -234,35 +234,38 @@ class _AllHomePageState extends State<AllHomePage>
                 SizedBox(height: 15.h),
                 SingleChildScrollView(
                   controller: _scrollController,
-                  child: Column(
-                    children: [
-                      /* for (var index = 0;
-                          index <
-                              (controller.isRecommendedLoading.value ||
-                                      messagesController.isTrendLoading.value
-                                  ? 5
-                                  : maxIndex);
-                          index++) */
-                      for (var index = 0;
-                          index <
-                              (controller.isRecommendedLoading.value
-                                  ? 5
-                                  : controller.recommendedInfluencers.length);
-                          index++)
-                        Padding(
-                            padding: EdgeInsets.only(bottom: 24.h),
-                            child: controller.isRecommendedLoading.value
-                                ? Listrectangle50ItemSkeletonWidget()
-                                : Animate(
-                                   effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
-                                  child: Listrectangle50ItemWidget(
-                                      controller.recommendedInfluencers[index],
-                                      index < messagesController.chatList.length
-                                          ? messagesController.chatList[index]
-                                          : null,
-                                    ),
-                                )),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom:50),
+                    child: Column(
+                      children: [
+                        /* for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value ||
+                                        messagesController.isTrendLoading.value
+                                    ? 5
+                                    : maxIndex);
+                            index++) */
+                        for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value
+                                    ? 5
+                                    : controller.recommendedInfluencers.length);
+                            index++)
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 24.h),
+                              child: controller.isRecommendedLoading.value
+                                  ? Listrectangle50ItemSkeletonWidget()
+                                  : Animate(
+                                     effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                    child: Listrectangle50ItemWidget(
+                                        controller.recommendedInfluencers[index],
+                                        index < messagesController.chatList.length
+                                            ? messagesController.chatList[index]
+                                            : null,
+                                      ),
+                                  )),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
@@ -15,6 +16,7 @@ import 'package:iynfluencer/presentation/influencer_social_media_home_screen/mod
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
+import 'package:iynfluencer/routes/app_routes.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -35,6 +37,7 @@ class _InfluencerSocialMediaHomePageState extends State<InfluencerSocialMediaHom
 
       InfluencerSocialController controller =
       Get.put(InfluencerSocialController(InfluencerSocialModel().obs));
+      final UserController user = Get.find();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
@@ -141,6 +144,7 @@ void _onScroll() {
                              separatorBuilder: (context, index) {
                                return SizedBox(height: getVerticalSize(16));
                              },
+                              padding: EdgeInsets.only(bottom: 100),
                              itemCount: controller.isJobsLoading.value
                                  ? 5
                                  : controller.infJobsList.length,
@@ -161,7 +165,11 @@ void _onScroll() {
                                       model,
                                       chatData
                                       );
-                                   }),
+                                   },
+                                     onTapBidpost: () {
+                                          onTapBid(model);
+                                        },
+                                   ),
                                  );
                                }
                              },
@@ -185,5 +193,14 @@ void _onScroll() {
      transition: Transition.zoom,
      duration: Duration(seconds:1)
     );
+  }
+
+  onTapBid(Jobz selectedJob) {
+    selectedJob?.bids != null &&
+    selectedJob!.bids!.isNotEmpty &&
+    selectedJob?.bids?.first.influencerId ==
+    user.userModelObj.value.influencerId ?
+    Get.toNamed(AppRoutes.editScreen, arguments: selectedJob) :
+    Get.toNamed(AppRoutes.bidScreen, arguments: selectedJob);
   }
 }

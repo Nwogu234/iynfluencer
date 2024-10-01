@@ -419,33 +419,35 @@ class _JobInfluencerDetailScreenState extends State<JobInfluencerDetailScreen> {
                                       ]))
                             ]))
                       ])))),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            widget.selectedJob?.status == 'Completed' 
-            ? CustomButton(
-                    height: getVerticalSize(44),
-                    text: "Job Completed".tr,
-                     variant: ButtonVariant.Neutral,
-                     padding: ButtonPadding.PaddingAll12,
-                     fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
-                  )  :
-                 CustomButton(
-                    height: getVerticalSize(44),
-                    text: "Complete Job".tr,
-                    padding: ButtonPadding.PaddingAll12,
-                    onTap: () {
-                      onTapJob(
-                        widget.selectedJob,
-                        chatControllers.chatData
-                      );
-                    },
-                  )
-          ],
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.selectedJob?.status == 'Completed' 
+              ? CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Job Completed".tr,
+                       variant: ButtonVariant.Neutral,
+                       padding: ButtonPadding.PaddingAll12,
+                       fontStyle: ButtonFontStyle.SatoshiBold14Gray900 
+                    )  :
+                   CustomButton(
+                      height: getVerticalSize(44),
+                      text: "Complete Job".tr,
+                      padding: ButtonPadding.PaddingAll12,
+                      onTap: () {
+                        onTapJob(
+                          widget.selectedJob,
+                          chatControllers.chatData
+                        );
+                      },
+                    )
+            ],
+          ),
         ),
       ),
     );

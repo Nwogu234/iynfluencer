@@ -44,13 +44,20 @@ class Listgroup883ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final data = listgroup883ItemModelObj.unreadByCreator;
-    String formattedDateTime = listgroup883ItemModelObj.messages.isNotEmpty
+   /*  String formattedDateTime = listgroup883ItemModelObj.messages.isNotEmpty
         ? formatDateTime(listgroup883ItemModelObj.messages.last.createdAt)
-        : '';
+        : ''; */
+     String formattedDateTime =
+        (listgroup883ItemModelObj.lastMessage?.isNotEmpty ?? false)
+            ? formatDateTime(listgroup883ItemModelObj.lastMessageTime ?? listgroup883ItemModelObj.messages.last.createdAt)
+           : "";
     final bool isOnline = false;
-    String messageText = listgroup883ItemModelObj.messages.isNotEmpty
-        ? listgroup883ItemModelObj.messages.last.text
-        : " ";
+   // String messageText = listgroup883ItemModelObj.messages.isNotEmpty
+   //     ? listgroup883ItemModelObj.messages.last.text
+    //    : " ";
+     String messageText = 
+      listgroup883ItemModelObj.lastMessage ??
+        "";
 
     String? avatarUrl = listgroup883ItemModelObj.creatorUser!.avatar;
     // Assuming this is a String
@@ -74,10 +81,10 @@ class Listgroup883ItemWidget extends StatelessWidget {
         builder: (context, snapshot) {
             final int? unreadByInfluencerValue = snapshot.data;
 
-          final data = // listgroup883ItemModelObj.unreadByCreator;
-            unreadByInfluencerValue != null
-                ? unreadByInfluencerValue
-               : listgroup883ItemModelObj.unreadByCreator;
+          final data = listgroup883ItemModelObj.unreadByCreator;
+          //  unreadByInfluencerValue != null
+           //     ? unreadByInfluencerValue
+           //    : listgroup883ItemModelObj.unreadByCreator;
 
           return InkWell(
             splashColor: ColorConstant.cyan100,

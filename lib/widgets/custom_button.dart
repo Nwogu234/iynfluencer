@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return alignment != null
+     return alignment != null
         ? Align(
             alignment: alignment!,
             child: _buildButtonWidget(),
@@ -102,7 +102,7 @@ class CustomButton extends StatelessWidget {
               style: _setFontStyle(),
             );
     }
-  }
+  } 
 
   _buildTextButtonStyle() {
     return TextButton.styleFrom(

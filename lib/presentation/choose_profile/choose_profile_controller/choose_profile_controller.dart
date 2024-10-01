@@ -51,6 +51,11 @@ class ChooseProfileController extends GetxController {
     final storage = new FlutterSecureStorage();
     var token = await storage.read(key: "token");
     print(token);
+    if (token == null) {
+    Get.snackbar('Error', 'User is not logged in.');
+    Get.back();
+    return;
+  }
     try {
       userModel.value = await apiClient.getUser(token!);
       print(userModel.value);

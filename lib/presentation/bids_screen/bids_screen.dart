@@ -159,7 +159,8 @@ class BidsScreen extends GetWidget<BidsController> {
                             return Animate(
                               effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
                               child: BidsItemWidget(
-                                  model, selectedJob, chatData),
+                                  model, selectedJob, chatData,
+                                  ),
                             );
                           },
                         );

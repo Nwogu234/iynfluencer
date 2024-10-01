@@ -12,8 +12,8 @@ import 'package:iynfluencer/presentation/influencer_profile_about_page/models/in
 /// This class manages the state of the InfluencerProfileAboutPage, including the
 /// current influencerProfileAboutModelObj
 class InfluencerProfileAboutController extends GetxController {
-
   InfluencerProfileAboutController(this.influencerProfileAboutModelObj);
+  Rx<bool> isLoading = false.obs;
 
   Rx<InfluencerProfileAboutModel> influencerProfileAboutModelObj;
-  }
+}

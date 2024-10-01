@@ -79,20 +79,22 @@ class DisputeSentScreen extends GetWidget<DisputeSentController> {
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-          height: getVerticalSize(
-            19,
+        bottomNavigationBar: SafeArea(
+          child: CustomButton(
+            height: getVerticalSize(
+              19,
+            ),
+            width: getHorizontalSize(
+              101,
+            ),
+            text: "lbl_return_to_home".tr,
+            margin: getMargin(
+              left: 137,
+              right: 137,
+              bottom: 44,
+            ),
+            fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
           ),
-          width: getHorizontalSize(
-            101,
-          ),
-          text: "lbl_return_to_home".tr,
-          margin: getMargin(
-            left: 137,
-            right: 137,
-            bottom: 44,
-          ),
-          fontStyle: ButtonFontStyle.SatoshiBold14Gray900,
         ),
       ),
     );

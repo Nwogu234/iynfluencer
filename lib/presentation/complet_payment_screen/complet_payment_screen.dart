@@ -276,28 +276,30 @@ class CompletPaymentScreen extends GetWidget<CompletPaymentController> {
                                         ])
                                   ]))
                         ])))),
-        bottomNavigationBar: Container(
-            margin: getMargin(left: 20, right: 20, bottom: 22),
-            decoration: AppDecoration.outlineIndigo503,
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomButton(
-                      onTap: () {
-                        onTapArrowleft292(args);
-                      },
-                      height: getVerticalSize(44),
-                      text: "msg_complete_payment".tr,
-                      padding: ButtonPadding.PaddingAll12),
-                  CustomButton(
-                      height: getVerticalSize(44),
-                      text: "lbl_dispute".tr,
-                      margin: getMargin(top: 10),
-                      variant: ButtonVariant.Neutral,
-                      padding: ButtonPadding.PaddingAll12,
-                      fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
-                ])));
+        bottomNavigationBar: SafeArea(
+          child: Container(
+              margin: getMargin(left: 20, right: 20, bottom: 22),
+              decoration: AppDecoration.outlineIndigo503,
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomButton(
+                        onTap: () {
+                          onTapArrowleft292(args);
+                        },
+                        height: getVerticalSize(44),
+                        text: "msg_complete_payment".tr,
+                        padding: ButtonPadding.PaddingAll12),
+                    CustomButton(
+                        height: getVerticalSize(44),
+                        text: "lbl_dispute".tr,
+                        margin: getMargin(top: 10),
+                        variant: ButtonVariant.Neutral,
+                        padding: ButtonPadding.PaddingAll12,
+                        fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+                  ])),
+        ));
   }
 
   /// Navigates to the previous screen.

@@ -639,142 +639,144 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
         ],
         styleType: Style.bgOutlineIndigo50_1,
       ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Obx(() {
-          if (controller.isLoading.value) {
-            return Stack(
-              children: [
-                PositionedDirectional(
-                  top: 150,
-                  start: 150,
-                  child: CustomLoadingWidget(
-                    animationController: animationController,
-                  ),
-                ),
-              ],
-            );
-          } else if (controller.error.value.isNotEmpty) {
-            return ResponsiveErrorWidget(
-              errorMessage: controller.error.value,
-              onRetry: () {
-                controller.getUser(chatId);
-              },
-              fullPage: true,
-            );
-          } else {
-            Map<String, List<Message>> groupedMessages =
-                controller.groupMessagesByDate(controller.messageModelObj);
-            return GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Padding(
-                padding: getPadding(left: 19, right: 19),
-                child: Column(
-                  children: [
-                    SizedBox(height: 16),
-                    Expanded(
-                      child: ListView.builder(
-                        //  controller: _scrollController,
-                        reverse: controller.isReverse.value,
-                        itemCount: groupedMessages.length,
-                        itemBuilder: (context, index) {
-                          String date = groupedMessages.keys.elementAt(index);
-                          List<Message> messages = groupedMessages[date]!;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              messages.isNotEmpty
-                                  ? DateLable(
-                                      dateTime: DateTime.parse(date),
-                                    )
-                                  : DateLable(
-                                      dateTime: widget.chatData.createdAt,
-                                    ),
-                              ListView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                reverse: true,
-                                itemCount: messages.length,
-                                itemBuilder: (context, subIndex) {
-                                  final message = messages[subIndex];
-                                  Rx<MessageStatus> messageStatusRx =
-                                      controller
-                                          .intToMessageStatus(
-                                              message.status ?? 0)
-                                          .obs;
-                                  String formattedDateTime =
-                                      DateFormat.jm('en_US')
-                                          .format(message.createdAt);
-                                  return ChatMessageBubble(
-                                    isCompleteMessage:
-                                        message.isCompleteMessage ?? false,
-                                    controller: controller,
-                                    messageText: message.text,
-                                    isReceived: message.authorUserId !=
-                                        widget.chatData.creatorUserId,
-                                    timestamp: formattedDateTime,
-                                    leadingImagePath: ImageConstant.imgVector,
-                                    trailingImagePath:
-                                        ImageConstant.imgVector,
-                                    messageModelObj: message.messageId,
-                                    onSwipedMessage: (messages) {
-                                      replyToMessage(message);
-                                      focusNode.requestFocus();
-                                    },
-                                    messageStatus: messageStatusRx,
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return Stack(
+                children: [
+                  PositionedDirectional(
+                    top: 150,
+                    start: 150,
+                    child: CustomLoadingWidget(
+                      animationController: animationController,
                     ),
-                    SizedBox(height: 10),
-                    PopScope(
-                      canPop: true,
-                      onPopInvoked: (didPop) {
-                        if (show.value) {
-                          show.value = false;
-                        } else {
-                          Navigator.of(context);
-                        }
-                      },
-                      child: SafeArea(
-                        bottom: true,
-                        top: false,
-                        child: Column(
-                          children: [
-                            ChatInputBar(
-                              replyMessage: widget.replyMessage,
-                              onCancelReply: () {
-                                cancelReply();
-                              },
-                              focusNode: focusNode,
-                              chatData: widget.chatData,
-                              icon: Icons.emoji_emotions_outlined,
-                              onPressed: () {
-                                controller.hideEmojiWidget();
-                                focusNode.unfocus();
-                                focusNode.canRequestFocus = false;
-                                show.value = !show.value;
-                              },
-                              messageController: controller.messageController,
-                              openedController: controller,
-                            ),
-                            show.value
-                                ? emojiSelect(controller)
-                                : const SizedBox.shrink(),
-                          ],
+                  ),
+                ],
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: () {
+                  controller.getUser(chatId);
+                },
+                fullPage: true,
+              );
+            } else {
+              Map<String, List<Message>> groupedMessages =
+                  controller.groupMessagesByDate(controller.messageModelObj);
+              return GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                  padding: getPadding(left: 19, right: 19),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                          //  controller: _scrollController,
+                          reverse: controller.isReverse.value,
+                          itemCount: groupedMessages.length,
+                          itemBuilder: (context, index) {
+                            String date = groupedMessages.keys.elementAt(index);
+                            List<Message> messages = groupedMessages[date]!;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                messages.isNotEmpty
+                                    ? DateLable(
+                                        dateTime: DateTime.parse(date),
+                                      )
+                                    : DateLable(
+                                        dateTime: widget.chatData.createdAt,
+                                      ),
+                                ListView.builder(
+                                  controller: _scrollController,
+                                  shrinkWrap: true,
+                                  reverse: false,
+                                  itemCount: messages.length,
+                                  itemBuilder: (context, subIndex) {
+                                    final message = messages[subIndex];
+                                    Rx<MessageStatus> messageStatusRx =
+                                        controller
+                                            .intToMessageStatus(
+                                                message.status ?? 0)
+                                            .obs;
+                                    String formattedDateTime =
+                                        DateFormat.jm('en_US')
+                                            .format(message.createdAt);
+                                    return ChatMessageBubble(
+                                      isCompleteMessage:
+                                          message.isCompleteMessage ?? false,
+                                      controller: controller,
+                                      messageText: message.text,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
+                                      timestamp: formattedDateTime,
+                                      leadingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
+                                      messageModelObj: message.messageId,
+                                      onSwipedMessage: (messages) {
+                                        replyToMessage(message);
+                                        focusNode.requestFocus();
+                                      },
+                                      messageStatus: messageStatusRx,
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      PopScope(
+                        canPop: true,
+                        onPopInvoked: (didPop) {
+                          if (show.value) {
+                            show.value = false;
+                          } else {
+                            Navigator.of(context);
+                          }
+                        },
+                        child: SafeArea(
+                          bottom: true,
+                          top: false,
+                          child: Column(
+                            children: [
+                              ChatInputBar(
+                                replyMessage: widget.replyMessage,
+                                onCancelReply: () {
+                                  cancelReply();
+                                },
+                                focusNode: focusNode,
+                                chatData: widget.chatData,
+                                icon: Icons.emoji_emotions_outlined,
+                                onPressed: () {
+                                  controller.hideEmojiWidget();
+                                  focusNode.unfocus();
+                                  focusNode.canRequestFocus = false;
+                                  show.value = !show.value;
+                                },
+                                messageController: controller.messageController,
+                                openedController: controller,
+                              ),
+                              show.value
+                                  ? emojiSelect(controller)
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-        }),
+              );
+            }
+          }),
+        ),
       ),
     );
   }

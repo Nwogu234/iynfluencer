@@ -73,17 +73,19 @@ class RequestAcceptedScreen extends GetWidget<RequestAcceptedController> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomButton(
-        height: getVerticalSize(
-          46,
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
+          height: getVerticalSize(
+            46,
+          ),
+          text: "lbl_see_your_jobs".tr,
+          margin: getMargin(
+            left: 20,
+            right: 20,
+            bottom: 31,
+          ),
+          padding: ButtonPadding.PaddingAll15,
         ),
-        text: "lbl_see_your_jobs".tr,
-        margin: getMargin(
-          left: 20,
-          right: 20,
-          bottom: 31,
-        ),
-        padding: ButtonPadding.PaddingAll15,
       ),
     );
   }

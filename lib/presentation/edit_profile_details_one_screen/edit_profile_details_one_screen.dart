@@ -242,13 +242,15 @@ class EditProfileDetailsOneScreen
           );
         },
       ),
-      bottomNavigationBar: CustomButton(
-        height: 50.h,
-        text: "msg_save_and_continue".tr,
-        margin: EdgeInsets.only(left: 19.w, right: 20.w, bottom: 38.h),
-        padding: ButtonPadding.PaddingAll15,
-        fontStyle: ButtonFontStyle.SatoshiBold14Gray100,
-        onTap: onTapSaveand,
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
+          height: 50.h,
+          text: "msg_save_and_continue".tr,
+          margin: EdgeInsets.only(left: 19.w, right: 20.w, bottom: 38.h),
+          padding: ButtonPadding.PaddingAll15,
+          fontStyle: ButtonFontStyle.SatoshiBold14Gray100,
+          onTap: onTapSaveand,
+        ),
       ),
     );
   }

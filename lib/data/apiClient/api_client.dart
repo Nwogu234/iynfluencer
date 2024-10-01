@@ -5,6 +5,7 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/notification/notification_model';
 import 'package:iynfluencer/data/models/review/review_model.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/data/models/withdrawal/withdraw.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
@@ -1008,4 +1009,54 @@ Future<Response> uploadFile(String filePath, String token) async {
       throw Exception('Server error');
     }
   }
+
+   // This is for creating withdrawal
+  Future<Response> createWithdrawal(WithdrawModel withdraw, var token) async {
+    Response response;
+    try {
+      response = await post(
+        '/users/me/withdraw', 
+        withdraw.toJson(),
+         headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print('Server error: ${response.statusText} , ${response.body}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  //this is for getting all withdrawals
+  Future<Response> fetchWithdrawal(var token, String userId) async {
+    Response response;
+    try {
+      response = await get(
+        '/users/me/withdraw/$userId',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of withdrawal');
+
+      throw Exception('Server error');
+    }
+  }
+
 }

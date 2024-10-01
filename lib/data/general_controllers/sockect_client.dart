@@ -24,24 +24,57 @@ class SocketClient extends GetxService {
     _initSocket();
   }
 
+  Future<void> _initializeSocketConnection() async {
+    int retryCount = 0;
+    const maxRetries = 5;
+    const retryDelay = Duration(seconds: 2);
+    const maxDelay = Duration(seconds: 16);
 
+    try {
+      while (retryCount < maxRetries) {
+        print(
+            'Attempting to connect to the socket... (Attempt: ${retryCount + 1})');
+
+        _initSocket();
+
+        await Future.delayed(Duration(seconds: 2));
+
+        if (isConnected.value) {
+          print('Socket connected successfully!');
+
+          _setupSocketListeners();
+          return;
+        } else {
+          retryCount++;
+          final delay = retryDelay * (1 << retryCount);
+
+          print(
+              'Socket connection failed. Retrying in ${delay.inSeconds} seconds...');
+          await Future.delayed(delay < maxDelay ? delay : maxDelay);
+        }
+      }
+
+      print('Max entries limit exceeded');
+    } catch (e) {
+      print('Error initializing socket connection: $e');
+    }
+  }
 
   void _initSocket() async {
     // Initialize the socket connection
     var storage = FlutterSecureStorage();
     var token = await storage.read(key: 'token');
     try {
-      socket =
-          IO.io('wss://iynf-chat.onrender.com/', <String, dynamic>{
+      socket = IO.io('wss://iynf-chat.onrender.com/', <String, dynamic>{
         'transports': ['websocket'],
         'extraHeaders': {'authorization': token},
         'autoConnect': true,
         'reconnection': true,
-      //  'reconnectionAttempts': 100000,
+        //  'reconnectionAttempts': 100000,
         'path': '/chat-socket',
         'timeout': 30000000,
         'reconnectionAttempts': null,
-        'reconnectionDelay': 1000, 
+        'reconnectionDelay': 1000,
         'reconnectionDelayMax': 3000,
         'randomizationFactor': 0.5,
       });
@@ -89,12 +122,11 @@ class SocketClient extends GetxService {
     socket.on('userJoin', (data) => _handleUserEvent(data, "joined"));
     socket.on('userLeave', (data) => _handleUserEvent(data, "left"));
   }
-  
 
   void _handleUserEvent(dynamic data, String eventType) {
     if (data is String) {
-     data = json.decode(data);
-   }
+      data = json.decode(data);
+    }
     var chatId = data['chatId'];
     var userFirstName = user.userModelObj().firstName;
     if (chatId != null && userFirstName != null) {
