@@ -35,14 +35,14 @@ class WithdrawalController extends GetxController {
     isLoading.value = true;
 
     if (amount <= 100) {
-    isLoading.value = false;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Insufficient balance'),
-      ),
-    );
-    return;
-  }
+      isLoading.value = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Insufficient balance'),
+        ),
+      );
+      return;
+    }
 
     try {
       final withdraw = WithdrawModel(
@@ -60,16 +60,22 @@ class WithdrawalController extends GetxController {
         accNameController.clear();
         bankNameController.clear();
         accNumberController.clear();
-        print( 'Withdraw Submitted Successfully');
+        print('Withdraw Submitted Successfully');
         Get.snackbar('Success', 'Withdraw Submitted Successfully');
         Get.toNamed(AppRoutes.withdrawalSuccessfulScreen,
-            parameters: {'amount': stringAmount});
+            parameters: {
+              'amount': stringAmount});
       } else if (response.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response.body['message'] ?? response.statusText),
           ),
         );
+        Get.toNamed(AppRoutes.withdrawlFailedScreen,
+            parameters: {
+              'amount': stringAmount,
+              'userId': userId
+              });
       } else if (response.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -82,6 +88,11 @@ class WithdrawalController extends GetxController {
             content: Text('An error occurred while submitting the form.'),
           ),
         );
+        Get.toNamed(AppRoutes.withdrawlFailedScreen,
+            parameters: {
+              'amount': stringAmount,
+              'userId': userId
+              });
       }
     } catch (e) {
       print('Error during submission: $e');
@@ -90,6 +101,12 @@ class WithdrawalController extends GetxController {
           content: Text('$e'),
         ),
       );
+      final stringAmount = ((user.userModelObj.value.balance) / 100).toString();
+      Get.toNamed(AppRoutes.withdrawlFailedScreen,
+       parameters: {
+              'amount': stringAmount,
+              'userId': userId
+              });
     } finally {
       isLoading.value = false;
     }

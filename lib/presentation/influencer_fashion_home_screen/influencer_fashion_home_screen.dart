@@ -37,7 +37,7 @@ class _InfluencerFashionHomePageState extends State<InfluencerFashionHomePage>
 
   late AnimationController animationController;
    final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      Get.put( MessagesPageInfluencerController());
    final UserController user = Get.find();
   final ScrollController _scrollController = ScrollController();
 

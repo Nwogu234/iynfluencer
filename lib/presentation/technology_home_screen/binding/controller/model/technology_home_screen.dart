@@ -40,7 +40,7 @@ class _TechnologyHomePageState extends State<TechnologyHomePage>
   final ScrollController _scrollController = ScrollController();
 
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
 
   void _onScroll() {
     if (!controller.isLoading.value &&
@@ -123,7 +123,7 @@ class _TechnologyHomePageState extends State<TechnologyHomePage>
                   padding: getMargin(top: 20),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: 150.h,
+                      height: 229.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.isTrendLoading.value

@@ -216,7 +216,7 @@ class MessagesPageInfluencerPage extends StatefulWidget {
 class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     with SingleTickerProviderStateMixin {
   MessagesPageInfluencerController controller = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
 
   InfluencerHomeController influencerController =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
@@ -381,7 +381,9 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                                   .chatModelObj[index];
                                               return Listgroup883ItemWidget(
                                                   listgroup883ItemModelObj:
-                                                      model);
+                                                      model,
+                                                  controller: controller,  
+                                                      );
                                             }
                                           },
                                         ),

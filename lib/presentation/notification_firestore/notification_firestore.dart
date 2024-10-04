@@ -76,11 +76,17 @@ class _NotificationFirestoreState extends State<NotificationFirestore>
               ),
             );
           } else if (controller.notifications.isEmpty) {
-            return ResponsiveEmptyWidget(
-                errorMessage: 'No Notifications found',
-                smallMessage: 'Your Notifications will appear here',
-                buttonText: "Ooops",
-                onRetry: () {});
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 200,
+                horizontal: 40
+              ),
+              child: ResponsiveEmptyWidget(
+                  errorMessage: 'No Notifications found',
+                  smallMessage: 'Your Notifications will appear here',
+                  buttonText: "Ooops",
+                  onRetry: () {}),
+            );
           } else {
             return ListView.separated(
               physics: BouncingScrollPhysics(),

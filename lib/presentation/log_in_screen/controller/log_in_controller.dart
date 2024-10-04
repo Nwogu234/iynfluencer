@@ -44,10 +44,10 @@ class LogInController extends GetxController {
         checkBiometricAvailability();
       } else {
         isCredentialsSaved.value = false;
-        Get.snackbar('Failed', 'Use Manual Login');
+        Get.snackbar('Oops', 'Login with password to activate biometric login');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Use Manual Login');
+      Get.snackbar('Oops', 'Login with password to activate biometric login');
     }
   }
 

@@ -448,7 +448,7 @@ class ChatsInfluencerScreen extends StatefulWidget {
 class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     with SingleTickerProviderStateMixin {
   MessagesPageInfluencerController messageInfluencerController = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
@@ -710,7 +710,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                       Expanded(
                         child: ListView.builder(
                          // controller: _scrollController,
-                          reverse: controllers.isReverse.value,
+                          reverse: false,
                           itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
                             String date = groupedMessages.keys.elementAt(index);

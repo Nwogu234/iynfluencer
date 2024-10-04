@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
 import 'package:iynfluencer/theme/app_decoration.dart';
 import 'package:iynfluencer/theme/app_style.dart';
@@ -9,17 +11,56 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_button_two.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
 
-class TrendingResultItemWidget extends StatelessWidget {
-  TrendingResultItemWidget({Key? key, required this.influencer})
+class TrendingResultItemWidget extends StatefulWidget {
+   final ChatData? chatData;
+
+  TrendingResultItemWidget({
+    Key? key, 
+    required this.influencer,
+     this.chatData,
+    })
       : super(key: key);
 
   final Influencer influencer;
 
+  @override
+  State<TrendingResultItemWidget> createState() => _TrendingResultItemWidgetState();
+}
+
+class _TrendingResultItemWidgetState extends State<TrendingResultItemWidget> {
   var controller = Get.find<SearchResultsController>();
+
+    final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser: null);
+
+       @override
+  void initState() {
+    super.initState();
+    Get.put(ChatsOpenedController(
+        chatData: widget.chatData ?? chatsData,
+        selectedInfluencer: widget.influencer));
+  }
 
   @override
   Widget build(BuildContext context) {
-    String? avatarUrl = influencer.user?.first.avatar;
+    final ChatsOpenedController chatsController =
+        Get.find<ChatsOpenedController>();
+
+    String? avatarUrl = widget.influencer.user?.first.avatar;
     //  "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${influencer.userId}-avatar.jpeg";
     // Assuming this is a String
     String imageProvider;
@@ -95,13 +136,13 @@ class TrendingResultItemWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}"
+                              "${capitalizeFirstLetter(widget.influencer.user?.first.firstName)} ${capitalizeFirstLetter(widget.influencer.user?.first.lastName)}"
                                           .length >
                                       10
-                                  ? "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}"
+                                  ? "${capitalizeFirstLetter(widget.influencer.user?.first.firstName)} ${capitalizeFirstLetter(widget.influencer.user?.first.lastName)}"
                                           .substring(0, 7) +
                                       "..."
-                                  : "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}",
+                                  : "${capitalizeFirstLetter(widget.influencer.user?.first.firstName)} ${capitalizeFirstLetter(widget.influencer.user?.first.lastName)}",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold16.copyWith(
@@ -111,7 +152,7 @@ class TrendingResultItemWidget extends StatelessWidget {
                               )),
                           SizedBox(height: 5),
                           Text(
-                            "${influencer.jobsDone.toString()} jobs completed"
+                            "${widget.influencer.jobsDone.toString()} jobs completed"
                                 .tr,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
@@ -120,13 +161,16 @@ class TrendingResultItemWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(width: 30),
+                      SizedBox(width: 50),
                       CustomButtonTwo(
                         shape: ButtonShape.RoundedBorderz12,
                         height: getVerticalSize(42),
                         width: getHorizontalSize(120),
                         text: 'Message'.tr,
-                        onTap: onTapEditprofile,
+                        onTap: (){
+                            chatsController.onTapChatCard(
+                            widget.influencer, chatsController.chatData);
+                        },
                         padding: ButtonPaddingz.PaddingAll12,
                         fontStyle: ButtonFontStylez.SatoshiBold15,
                       )
@@ -135,11 +179,7 @@ class TrendingResultItemWidget extends StatelessWidget {
                 ])));
   }
 
-  onTapEditprofile() {
-    Get.toNamed(
-      AppRoutes.editProfileDetailsOneScreen,
-    );
-  }
+ 
 }
 
 

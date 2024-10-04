@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
 import 'package:iynfluencer/presentation/search_results_screen/models/search_results_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/widget/trending_result_item_widget.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview_2.dart';
@@ -42,6 +43,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
       Get.put(SearchResultsController(SearchResultsModel().obs));
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
+   final MessagesController messagesController =
+      Get.put(MessagesController());
   
   Future<void> _refresh() async {
     await controller.refreshItems();
@@ -130,7 +133,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                                     padding:
                                             EdgeInsets.only(top: 2.h),
                                     child: TrendingResultItemWidget(
-                                      influencer: controller.filteredInfluencers[index]
+                                      influencer: controller.filteredInfluencers[index],
+                                      chatData:  index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
                                             ),
                                       );
                                     }

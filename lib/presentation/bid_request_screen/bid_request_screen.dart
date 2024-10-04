@@ -1,11 +1,12 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/bids_screen/widgets/bids_arguement.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
+import 'package:iynfluencer/presentation/influencer_bId_profile_page.dart/influencer_bid_profile_page.dart';
+import 'package:iynfluencer/presentation/influencer_profile_about_page/influencer_profile_about_page.dart';
 import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
 import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'controller/bid_request_controller.dart';
@@ -60,7 +61,8 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final JobBids? data = args.jobBid;
-    final Job? selectedJob = args.job;
+    final ChatData? chatData = args.chatData;
+    final Influencers? influencer =  data?.influencer;
     //final Influencer? influencer = data!.influencer;
     final ChatsOpenedController chatsController =
         Get.find<ChatsOpenedController>();
@@ -225,7 +227,7 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiBold14Gray900)),
                   Padding(
-                      padding: getPadding(left: 1, top: 15, right: 76),
+                      padding: getPadding(left: 1, top: 15, right: 30),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -241,13 +243,24 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                                           textAlign: TextAlign.left,
                                           style: AppStyle
                                               .txtSatoshiBold125Gray900a7),
-                                      Padding(
-                                          padding: getPadding(top: 3),
-                                          child: Text("lbl_view_profile".tr,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style: AppStyle
-                                                  .txtSatoshiLight135Blue900))
+                                      InkWell(
+                                        onTap: (){
+                                          Get.to(
+                                          InfluencerBidProfilePage(
+                                           chatData: chatData ?? chatsData, 
+                                          selectedInfluencer: influencer!),
+                                           transition: Transition.zoom,
+                                           duration: Duration(seconds:1)
+                                         );
+                                        },
+                                        child: Padding(
+                                            padding: getPadding(top: 3),
+                                            child: Text("lbl_view_profile".tr,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style: AppStyle
+                                                    .txtSatoshiLight135Blue900)),
+                                      )
                                     ])),
                             Padding(
                               padding: const EdgeInsets.only(left: 18.0),
@@ -262,7 +275,9 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                                             AppStyle.txtSatoshiLight135Gray600),
                                     Padding(
                                         padding: getPadding(top: 3),
-                                        child: Text("lbl_mar_2022".tr,
+                                        child: Text(
+                                          DateFormat("yyyy-MM-dd").format(
+                                              DateTime.parse(influencer!.createdAt!)),
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle
@@ -272,9 +287,9 @@ class _BidRequestScreenState extends State<BidRequestScreen> {
                           ])),
                   CustomButton(
                       onTap: (() {
-                           /* chatsController.onTapChatCard(
-                            influencer
-                             chatsController.chatData);  */
+                            chatsController.onTapChatBid(
+                            influencer,
+                             chatsController.chatData);  
                       }),
                       height: getVerticalSize(30),
                       width: getHorizontalSize(86),

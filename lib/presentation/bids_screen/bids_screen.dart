@@ -22,7 +22,7 @@ class BidsScreen extends GetWidget<BidsController> {
   final Job selectedJob = Get.arguments as Job;
 
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
       
 
   @override

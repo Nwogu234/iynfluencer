@@ -34,7 +34,7 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage>
     with SingleTickerProviderStateMixin {
   final MessagesController controller =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
 
   final GlobalKey<ScaffoldState> _scaffoldKey2 = GlobalKey<ScaffoldState>();
 

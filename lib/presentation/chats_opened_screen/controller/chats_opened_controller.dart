@@ -11,6 +11,7 @@ import 'package:iynfluencer/data/general_controllers/notification_service.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
@@ -449,8 +450,13 @@ class ChatsOpenedController extends GetxController {
 class ChatsOpenedController extends GetxController {
   final ChatData chatData;
   final Influencer? selectedInfluencer;
+  final Influencers? selectedInfluencers;
 
-  ChatsOpenedController({required this.chatData, this.selectedInfluencer}) {
+  ChatsOpenedController({
+    required this.chatData, 
+    this.selectedInfluencer,
+    this.selectedInfluencers,
+    }) {
     //  messageModelObj = chatData.messages.obs;
   }
 
@@ -569,10 +575,10 @@ class ChatsOpenedController extends GetxController {
 
     final chatsData = chatDataBox.get(chatId);
 
-    if (chatsData != null) {
-      chatsData.unreadByInfluencer = chatsData.unreadByInfluencer + 1;
+    if (chatData != null) {
+      chatData.unreadByInfluencer = chatData.unreadByInfluencer + 1;
 
-      await chatDataBox.put(chatId, chatsData);
+      await chatDataBox.put(chatId, chatsData!);
 
       print('Unread count for influencer reset to 0 in Hive');
     } else {
@@ -581,7 +587,8 @@ class ChatsOpenedController extends GetxController {
   }
 
   void updateMessage(Message message) {
-    messageModelObj.insert(0, message);
+  //  messageModelObj.insert(0, message);
+   messageModelObj.add(message);
     update();
   }
 
@@ -597,7 +604,7 @@ class ChatsOpenedController extends GetxController {
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     final String chatId = chatData.chatId;
-    getUser(chatId);
+    fetchAllMessagesWithInfluencer(chatId);
   }
 
   void scrollToBottom() {
@@ -663,34 +670,7 @@ class ChatsOpenedController extends GetxController {
     }
   }
 
-/* 
-  Future<void> loadMessagesOrFetch(String chatId) async {
-    isLoading.value = false;
-    try {
-      final Box<Message> messageBox =
-          await Hive.openBox<Message>('messages_$chatId');
-      final List<Message> storedMessages = messageBox.values.toList();
 
-      if (storedMessages.isNotEmpty) {
-        int batchSize = 10;
-        for (var i = 0; i < storedMessages.length; i += batchSize) {
-          List<Message> batch = storedMessages.skip(i).take(batchSize).toList();
-          messageModelObj.addAll(batch);
-          await Future.delayed(Duration(milliseconds: 50));
-        }
-        print('Messages loaded successfully from Hive for chat ID: $chatId');
-      } else {
-        isLoading.value = true;
-        await fetchAllMessagesWithInfluencer(chatId);
-      }
-    } catch (e) {
-      print('Error loading or fetching messages: $e');
-      error.value = 'Failed to load messages';
-    } finally {
-      isLoading.value = false;
-    }
-  }
- */
 
   Future<void> loadMessagesOrFetch(String chatId) async {
     isLoading.value = false;
@@ -732,10 +712,10 @@ class ChatsOpenedController extends GetxController {
 
     final chatsData = chatDataBox.get(chatId);
 
-    if (chatsData != null) {
-      chatsData.unreadByInfluencer = 0;
+    if (chatData != null) {
+      chatData.unreadByInfluencer = 0;
 
-      await chatDataBox.put(chatId, chatsData);
+      await chatDataBox.put(chatId, chatsData!);
 
       print('Unread count for influencer reset to 0 in Hive');
     } else {
@@ -763,6 +743,8 @@ class ChatsOpenedController extends GetxController {
             messages.add(message);
           }
 
+          messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
           messageModelObj.assignAll(messages);
           await saveMessages(messages, chatId);
         } else {
@@ -774,8 +756,11 @@ class ChatsOpenedController extends GetxController {
     } catch (e) {
       print('Error fetching messages: $e');
       error('Failed to fetch messages');
+      isTrendLoading.value = false;
+       isLoading.value = false;
     } finally {
       isTrendLoading.value = false;
+       isLoading.value = false;
     }
   }
 
@@ -825,9 +810,7 @@ class ChatsOpenedController extends GetxController {
   }
 
 
-
- void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
-  
+void onTapChatCard(Influencer? selectedInfluencer, ChatData chatData) async {
   if (selectedInfluencer == null) {
     print("selectedInfluencer is null");
     return;
@@ -837,52 +820,30 @@ class ChatsOpenedController extends GetxController {
   token = await storage.read(key: "token");
 
   try {
-    isLoading.value = true;
+    isLoading.value = false;
+
+    Response existingChatResponse = await apiClient.getAllChatsWithInfluencers(token!);
     
-    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
-   ChatData? existingChatInHive = chatBox.values.firstWhere(
-     (chat) => chat.influencerId == selectedInfluencer.id,
-      orElse: () => ChatData(
-      id: '',
-      creatorId: '',
-      influencerId: '',
-      creatorUserId: '',
-      influencerUserId: '',
-      unreadByCreator: 0,
-       unreadByInfluencer: 0,
-      blockedByCreator: false,
-      blockedByInfluencer: false,
-      chatId: '',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      messages: [],
-     ),
-     );
-
-    if (existingChatInHive != null) {
-      print("Chat with influencer found in Hive, no need to save again.");
-      await fetchAllMessagesWithInfluencer(existingChatInHive.chatId);
-      Get.to(ChatsOpenedScreen(
-        selectedInfluencer: selectedInfluencer,
-        chatData: existingChatInHive,
-      ));
-      return; 
-    }
-
-  
-    Response existingChatResponse =
-        await apiClient.getAllChatsWithInfluencers(token!);
     if (existingChatResponse.isOk && existingChatResponse.body != null) {
       List<dynamic> chatListMaps = existingChatResponse.body['data']['docs'];
-      List<ChatData> chatList =
-          chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
+      List<ChatData> chatList = chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
 
-      ChatData? existingChat = chatList.firstWhereOrNull(
-          (chat) => chat.influencerId == selectedInfluencer.id);
+      Set<String> uniqueChatIds = Set<String>();
+      ChatData? existingChat;
+
+      for (var chat in chatList) {
+        String chatKey = '${chat.influencerId}-${chat.creatorId}';
+        if (uniqueChatIds.add(chatKey)) {
+          if (chat.influencerId == selectedInfluencer.id) {
+            existingChat = chat;
+            break;
+          }
+        }
+      }
 
       if (existingChat != null) {
-        isLoading.value = true;
-        await fetchAllMessagesWithInfluencer(existingChat.chatId);
+        isLoading.value = false;
+        await loadMessagesOrFetch(existingChat.chatId);
         Get.to(ChatsOpenedScreen(
           selectedInfluencer: selectedInfluencer,
           chatData: existingChat,
@@ -891,7 +852,7 @@ class ChatsOpenedController extends GetxController {
       } else {
         print("No existing chat found for the selected influencer");
 
-        // No existing chat, proceed to create a new one
+        // Create a new chat since none exists
         final now = DateTime.now();
         final formattedTime = DateFormat('HH:mm').format(now);
         final createdAt = DateTime(
@@ -924,18 +885,125 @@ class ChatsOpenedController extends GetxController {
         );
 
         // Create the new chat
-        Response createChatResponse =
-            await apiClient.createChat(newChat, token);
+        Response createChatResponse = await apiClient.createChat(newChat, token);
         if (createChatResponse.isOk) {
           print('Chat created successfully');
           Map<String, dynamic> chatDataMap = createChatResponse.body;
 
-          if (chatDataMap.containsKey('_id') &&
-              chatDataMap['_id'] is String) {
+          if (chatDataMap.containsKey('_id') && chatDataMap['_id'] is String) {
             ChatData createdChat = ChatData.fromJson(chatDataMap);
 
             Get.to(ChatsOpenedScreen(
               selectedInfluencer: selectedInfluencer,
+              chatData: createdChat,
+            ));
+
+            await saveChatToHive(createdChat);
+          } else {
+            print("Chat data does not contain expected fields: $chatDataMap");
+            error('Chat creation response is missing required fields');
+          }
+        } else {
+          print("Failed to create chat: ${createChatResponse.statusCode}");
+        }
+      }
+    } else {
+      print("Failed to fetch existing chats: ${existingChatResponse.statusCode}");
+    }
+  } catch (e) {
+    print("Error creating or fetching chat: $e");
+    error(e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+
+void onTapChatBid(Influencers? selectedInfluencer, ChatData chatData) async {
+  if (selectedInfluencer == null) {
+    print("selectedInfluencer is null");
+    return;
+  }
+
+  error('');
+  token = await storage.read(key: "token");
+
+  try {
+    isLoading.value = false;
+
+    Response existingChatResponse = await apiClient.getAllChatsWithInfluencers(token!);
+    
+    if (existingChatResponse.isOk && existingChatResponse.body != null) {
+      List<dynamic> chatListMaps = existingChatResponse.body['data']['docs'];
+      List<ChatData> chatList = chatListMaps.map((chatMap) => ChatData.fromJson(chatMap)).toList();
+
+      Set<String> uniqueChatIds = Set<String>();
+      ChatData? existingChat;
+
+      for (var chat in chatList) {
+        String chatKey = '${chat.influencerId}-${chat.creatorId}';
+        if (uniqueChatIds.add(chatKey)) {
+          if (chat.influencerId == selectedInfluencer.sId) {
+            existingChat = chat;
+            break;
+          }
+        }
+      }
+
+      if (existingChat != null) {
+        isLoading.value = false;
+        await loadMessagesOrFetch(existingChat.chatId);
+        Get.to(ChatsOpenedScreen(
+          selectedInfluencers: selectedInfluencer,
+          chatData: existingChat,
+        ));
+        return;
+      } else {
+        print("No existing chat found for the selected influencer");
+
+        // Create a new chat since none exists
+        final now = DateTime.now();
+        final formattedTime = DateFormat('HH:mm').format(now);
+        final createdAt = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          int.parse(formattedTime.substring(0, 2)),
+          int.parse(formattedTime.substring(3)),
+          0,
+        );
+
+        String chatId = Uuid().v4();
+        String creatorId = user.userModelObj.value.id;
+        String creatorUserId = user.userModelObj.value.userId;
+
+        ChatData newChat = ChatData(
+          id: '',
+          creatorId: creatorId,
+          influencerId: selectedInfluencer.sId ?? '',
+          creatorUserId: creatorUserId,
+          influencerUserId: selectedInfluencer.userId ?? '',
+          unreadByCreator: 0,
+          unreadByInfluencer: 0,
+          blockedByCreator: false,
+          blockedByInfluencer: false,
+          chatId: chatId,
+          createdAt: createdAt,
+          updatedAt: createdAt,
+          messages: [],
+        );
+
+        // Create the new chat
+        Response createChatResponse = await apiClient.createChat(newChat, token);
+        if (createChatResponse.isOk) {
+          print('Chat created successfully');
+          Map<String, dynamic> chatDataMap = createChatResponse.body;
+
+          if (chatDataMap.containsKey('_id') && chatDataMap['_id'] is String) {
+            ChatData createdChat = ChatData.fromJson(chatDataMap);
+
+            Get.to(ChatsOpenedScreen(
+              selectedInfluencers: selectedInfluencer,
               chatData: createdChat,
             ));
 
@@ -968,7 +1036,7 @@ class ChatsOpenedController extends GetxController {
         : await Hive.openBox<ChatData>(chatDataBoxName);
 
     // Store the chat in Hive
-    await chatDataBox.put(chat.chatId, chat); // Use chatId as the key
+    await chatDataBox.put(chat.chatId, chat); 
 
     print('Chat saved to Hive: ${chat.chatId}');
   }
@@ -1072,7 +1140,7 @@ class ChatsOpenedController extends GetxController {
     );
 
     messageController.clear();
-    isReverse.value = true;
+    isReverse.value = false;
 
     if (!isDuplicateMessage(newMessage.messageId)) {
       UpdateList(newMessage);
@@ -1238,7 +1306,8 @@ class ChatsOpenedController extends GetxController {
   }
 
   void UpdateList(Message message) {
-    messageModelObj.insert(0, message);
+  //  messageModelObj.insert(0, message);
+   messageModelObj.add(message);
     scrollToBottom();
     update();
   }

@@ -11,11 +11,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../data/general_controllers/sockect_client.dart';
 
 class MessagesController extends GetxController {
-  MessagesController(this.messagesModelObj);
+ // MessagesController(this.messagesModelObj);
 
   TextEditingController searchController = TextEditingController();
 
-  Rx<MessagesModel> messagesModelObj;
+ // Rx<MessagesModel> messagesModelObj;
 
   var messages = <String>[].obs;
   bool empty = false;
@@ -39,7 +39,7 @@ class MessagesController extends GetxController {
   void onInit() {
     super.onInit();
 
-    socketClient.connect();
+    /* socketClient.connect();
 
     socketClient.socket.on('connected', (data) {
       messages.add(data.toString());
@@ -49,7 +49,7 @@ class MessagesController extends GetxController {
     socketClient.socket.on('error', (errorData) {
       print('Socket Error: $errorData');
     });
-
+ */
     getUser();
   }
 
@@ -113,7 +113,7 @@ class MessagesController extends GetxController {
 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
-    getUser();
+    fetchAndDisplayChats();
   }
 
 

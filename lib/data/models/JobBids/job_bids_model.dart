@@ -15,7 +15,7 @@ class JobBids {
   int? iV;
   bool? hired;
   String? hiredId;
-  Influencer? influencer;
+  Influencers? influencer;
   String? id;
   bool? paymentStatus;
 
@@ -54,7 +54,7 @@ class JobBids {
     hired = json['hired'] ?? false;
     hiredId = json['hiredId'] ?? '';
     influencer = json['influencer'] != null
-        ? new Influencer.fromJson(json['influencer'])
+        ? new Influencers.fromJson(json['influencer'])
         : null;
     id = json['id'] ?? '';
     paymentStatus =
@@ -85,7 +85,7 @@ class JobBids {
   }
 }
 
-class Influencer {
+class Influencers {
   String? sId;
   String? userId;
   List<String>? niche;
@@ -99,7 +99,7 @@ class Influencer {
   int? iV;
   User? user;
 
-  Influencer(
+  Influencers(
       {this.sId,
       this.userId,
       this.niche,
@@ -113,7 +113,7 @@ class Influencer {
       this.iV,
       this.user});
 
-  Influencer.fromJson(Map<String, dynamic> json) {
+  Influencers.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userId = json['userId'];
     niche = json['niche'].cast<String>();

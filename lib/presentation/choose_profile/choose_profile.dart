@@ -213,14 +213,16 @@ class ChooseProfile extends StatelessWidget {
                 ),
               ),
             ),
-            CustomButton(
-              height: 50.h,
-              text: "Continue",
-              margin: getMargin(top: 34),
-              padding: ButtonPadding.PaddingAll15,
-              onTap: () {
-                onTapSignupasa();
-              },
+            SafeArea(
+              child: CustomButton(
+                height: 50.h,
+                text: "Continue",
+                margin: getMargin(top: 34),
+                padding: ButtonPadding.PaddingAll15,
+                onTap: () {
+                  onTapSignupasa();
+                },
+              ),
             ),
           ],
         ),

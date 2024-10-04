@@ -12,14 +12,18 @@ class OnboardingScreenTwoScreen
   const OnboardingScreenTwoScreen({Key? key}) : super(key: key);
 
 
+
+
   @override
   Widget build(BuildContext context) {
+      final space = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
         backgroundColor: ColorConstant.gray90001,
         body: SafeArea(
           child: Container(
               width: double.maxFinite,
-              padding: getPadding(left: 20, top: 38, right: 20, bottom: 38),
+              padding: EdgeInsets.fromLTRB(20, 38, 20, space + 38),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

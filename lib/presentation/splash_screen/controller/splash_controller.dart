@@ -67,6 +67,39 @@ class SplashController extends GetxController {
     }
   } */
 
+
+ void onReady() async {
+    String? token = await storage.read(key: "token");
+    token=null;
+    await storage.write(key: 'activeProfile', value: null);
+    String? activeProfile = await storage.read(key: "activeProfile");
+
+    await _delayedProgressUpdate(2000, 0.2);
+
+    if (token == null) {
+      await _delayedProgressUpdate(1000, 0.8);
+      Get.offNamed(AppRoutes.onboardingScreenTwoScreen);
+    } else {
+      bool hasExpired = JwtDecoder.isExpired(token);
+
+      await _delayedProgressUpdate(1000, 0.8);
+
+      if (hasExpired == true) {
+        print(hasExpired);
+        Get.offNamed(AppRoutes.logInScreen);
+      } else if (activeProfile == "Creator") {
+        Get.offNamed(AppRoutes.homeCreatorContainerScreen);
+      } else if (activeProfile == null || activeProfile.isEmpty) {
+        Get.offNamed(AppRoutes.chooseProfile);
+      } else {
+        print(activeProfile);
+        Get.offNamed(AppRoutes.influencerTabScreen);
+      }
+    }
+  }
+}
+
+/* 
  @override
 void onReady() async {
   String? token = await storage.read(key: "token");
@@ -75,7 +108,7 @@ void onReady() async {
   await _delayedProgressUpdate(2000, 0.2);
 
   if (token == null) {
-    await _delayedProgressUpdate(2000, 0.8);
+    await _delayedProgressUpdate(1000, 0.8);
     Get.offNamed(AppRoutes.onboardingScreenTwoScreen);
     return;
   } else {
@@ -90,7 +123,6 @@ void onReady() async {
       String? activeProfile = await storage.read(key: "activeProfile");
       print('Active Profile from storage: $activeProfile');
 
-    
       if (activeProfile == null || (activeProfile != "Creator" && activeProfile != "Influencer")) {
         Get.offNamed(AppRoutes.chooseProfile);
       } else if (activeProfile == "Creator") {
@@ -99,6 +131,5 @@ void onReady() async {
         Get.offNamed(AppRoutes.influencerTabScreen);
       }
     }
-  }
-}
-}
+  } */
+

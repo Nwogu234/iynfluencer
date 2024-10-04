@@ -13,6 +13,8 @@ import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/env.dart';
 import 'package:iynfluencer/firebase_options.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'core/app_export.dart';
 import 'data/general_controllers/sockect_client.dart';

@@ -33,7 +33,7 @@ class _InfluencerSocialMediaHomePageState extends State<InfluencerSocialMediaHom
    with SingleTickerProviderStateMixin {
 
       final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      Get.put( MessagesPageInfluencerController());
 
       InfluencerSocialController controller =
       Get.put(InfluencerSocialController(InfluencerSocialModel().obs));

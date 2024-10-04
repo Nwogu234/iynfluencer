@@ -39,7 +39,7 @@ class _JobsMyBidsInfluencerPageState extends State<JobsMyBidsInfluencerPage>
   final jobsMyBidsInfluencerModelObj = ListmediainflueItemModel();
   late AnimationController animationController;
   final MessagesPageInfluencerController messagesController = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
 
   @override
   void initState() {

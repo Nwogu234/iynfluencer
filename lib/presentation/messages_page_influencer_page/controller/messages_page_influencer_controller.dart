@@ -5,7 +5,11 @@ import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
-import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';import 'package:flutter/material.dart';import 'package:flutter/material.dart';/// A controller class for the MessagesPageInfluencerPage.
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+/// A controller class for the MessagesPageInfluencerPage.
 
 /// This class manages the state of the MessagesPageInfluencerPage, including the
 /// current messagesPageInfluencerModelObj
@@ -135,14 +139,13 @@ var messages = <String>[].obs;
  */
 
 class MessagesPageInfluencerController extends GetxController {
+ // MessagesPageInfluencerController(this.messagesPageInfluencerModelObj);
 
-MessagesPageInfluencerController(this.messagesPageInfluencerModelObj);
+  TextEditingController searchController = TextEditingController();
 
-TextEditingController searchController = TextEditingController();
+ // Rx<MessagesPageInfluencerModel> messagesPageInfluencerModelObj;
 
-Rx<MessagesPageInfluencerModel> messagesPageInfluencerModelObj;
-
-var messages = <String>[].obs;
+  var messages = <String>[].obs;
   bool empty = false;
   var token;
   var error = ''.obs;
@@ -158,35 +161,21 @@ var messages = <String>[].obs;
   RxInt unreadInfluencer = 0.obs;
   List<ChatData> uniqueList = <ChatData>[].obs;
 
-  
-
   @override
   void onInit() {
     super.onInit();
-
-    socketClient.connect();
-
-    socketClient.socket.on('connected', (data) {
-      messages.add(data.toString());
-      update();
-    });
-
-
     getUser();
   }
 
-  
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     getUser();
   }
 
-  
   void setUnreadInfluencer(int value) {
     unreadInfluencer.value = value;
   }
 
-    
   getUser() async {
     isLoading.value = true;
     error('');
@@ -211,9 +200,6 @@ var messages = <String>[].obs;
     }
   }
 
-
-  
-  
   void infcSearch(String query) {
     searchController.text = query;
 
@@ -250,42 +236,74 @@ var messages = <String>[].obs;
     });
   }
 
-
-  
   Future<void> getCreatorsChat() async {
-  try {
-    isTrendLoading.value = true;
-    token = await storage.read(key: "token");
-    final Response response = await apiClient.getAllChatsWithCreators(token);
-    List<dynamic> chatJsonList = response.body['data']['docs'];
-    chatList.clear();
-    print(chatJsonList.length);
-    print(chatJsonList);
-    if (chatJsonList.isNotEmpty) {
-      chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
-      chatList.sort((a, b) {
-        final aLastMessageTime =
+    try {
+      isTrendLoading.value = true;
+      token = await storage.read(key: "token");
+      final Response response = await apiClient.getAllChatsWithCreators(token);
+      List<dynamic> chatJsonList = response.body['data']['docs'];
+      chatList.clear();
+      print(chatJsonList.length);
+      print(chatJsonList);
+      if (chatJsonList.isNotEmpty) {
+        chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+        chatList.sort((a, b) {
+          final aLastMessageTime =
               a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
           final bLastMessageTime =
               b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
           return bLastMessageTime.compareTo(aLastMessageTime);
-      });
-      chatModelObj.value = chatList;
-      error('');
-    } if (chatList.isEmpty) {
+        });
+        chatModelObj.value = chatList;
+        error('');
+      }
+      if (chatList.isEmpty) {
         error('You dont\'s have Influencers in your chats');
         empty = true;
         print('No chat data available.');
-      } 
-    isTrendLoading.value = false;
-  } catch (e) {
-    print('Error fetching influencers chat: $e');
-    error('Something went wrong');
-    isTrendLoading.value = false;
+      }
+      isTrendLoading.value = false;
+    } catch (e) {
+      print('Error fetching influencers chat: $e');
+      error('Something went wrong');
+      isTrendLoading.value = false;
+    }
   }
-}
+  Future<void> syncCreatorsChat() async {
+    try {
+      isTrendLoading.value = false;
+      token = await storage.read(key: "token");
+      final Response response = await apiClient.getAllChatsWithCreators(token);
+      List<dynamic> chatJsonList = response.body['data']['docs'];
+      chatList.clear();
+      print(chatJsonList.length);
+      print(chatJsonList);
+      if (chatJsonList.isNotEmpty) {
+        chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+        chatList.sort((a, b) {
+          final aLastMessageTime =
+              a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
+          final bLastMessageTime =
+              b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
+          return bLastMessageTime.compareTo(aLastMessageTime);
+        });
+        chatModelObj.value = chatList;
+        error('');
+      }
+      if (chatList.isEmpty) {
+        error('You dont\'s have Influencers in your chats');
+        empty = true;
+        print('No chat data available.');
+      }
+      isTrendLoading.value = false;
+    } catch (e) {
+      print('Error fetching influencers chat: $e');
+      error('Something went wrong');
+      isTrendLoading.value = false;
+    }
+  }
 
- Future<void> saveChats(List<ChatData> chats) async {
+  Future<void> saveChats(List<ChatData> chats) async {
     try {
       final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
       await chatBox.clear();
@@ -297,109 +315,165 @@ var messages = <String>[].obs;
     }
   }
 
-Future<void> loadChatsFromHive() async {
-  isLoading.value = false; 
-  try {
-    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
-    final List<ChatData> storedChats = chatBox.values
-        .where((chat) => chat.influencerUserId == user.userModelObj.value.userId)
-        .toList();
+  Future<void> loadChatsFromHive() async {
+    isLoading.value = false;
+    try {
+      final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
+      final List<ChatData> storedChats = chatBox.values
+          .where(
+              (chat) => chat.influencerUserId == user.userModelObj.value.userId)
+          .toList();
 
-    if (storedChats.isNotEmpty) {
-      final Set<String> uniqueCreatorUserIds = {};
-      uniqueList.clear(); 
+      if (storedChats.isNotEmpty) {
+        final Set<String> uniqueCreatorUserIds = {};
+        uniqueList.clear();
+
+        for (var chat in storedChats) {
+          if (chat is ChatData) {
+            final String creatorUserId = chat.creatorUserId;
+
+            if (!uniqueCreatorUserIds.contains(creatorUserId)) {
+              uniqueCreatorUserIds.add(creatorUserId);
+              uniqueList.add(chat);
+            } else {
+              print(
+                  'Duplicate chat detected for creatorUserId: $creatorUserId');
+            }
+          } else {
+            print(
+                'Warning: Expected ChatData instance but got ${chat.runtimeType}');
+          }
+        }
+
       
-      for (var chat in storedChats) {
+        uniqueList.sort((a, b) {
+          final DateTime? aLastMessageTime = a.lastMessageTime ?? a.updatedAt;
+          final DateTime? bLastMessageTime = b.lastMessageTime ?? b.updatedAt;
+
+          return (bLastMessageTime ?? DateTime.now())
+              .compareTo(aLastMessageTime ?? DateTime.now());
+        });
+
+        chatList.clear();
+        chatList.addAll(uniqueList); 
+        chatModelObj.value = chatList;
+
+        error(''); 
+        print('Loaded chats from Hive');
+        
+      } else {
+        print('No chats found in Hive. Fetching from API...');
+        await fetchAndDisplayChats();
+      }
+    } catch (e) {
+      print('Error loading chats from Hive: $e');
+      error('Failed to load chats from local storage.');
+    } finally {
+      isLoading.value = false; // Set loading to false at the end
+    }
+  }
+
+  Future<void> fetchAndDisplayChats() async {
+    isLoading.value = true;
+    try {
+      await getCreatorsChat();
+      print('Fetched chat list: $chatList');
+      final Set<String> uniqueCreatorUserIds = {};
+      uniqueList.clear();
+
+      for (var chat in chatList) {
         if (chat is ChatData) {
           final String creatorUserId = chat.creatorUserId;
 
-          // Check if the creator user ID is already in the set
           if (!uniqueCreatorUserIds.contains(creatorUserId)) {
             uniqueCreatorUserIds.add(creatorUserId);
-            uniqueList.add(chat); // Add unique chat to the list
-          } else {
-            print('Duplicate chat detected for creatorUserId: $creatorUserId');
+
+            uniqueList.add(chat);
           }
         } else {
-          print('Warning: Expected ChatData instance but got ${chat.runtimeType}');
+          print(
+              'Warning: Expected ChatData instance but got ${chat.runtimeType}');
         }
       }
 
-      // Sort unique chats based on last message time or updated time
-      uniqueList.sort((a, b) {
-        final DateTime? aLastMessageTime = a.lastMessageTime ?? a.updatedAt;
-        final DateTime? bLastMessageTime = b.lastMessageTime ?? b.updatedAt;
+      chatModelObj.value = uniqueList;
 
-        return (bLastMessageTime ?? DateTime.now())
-            .compareTo(aLastMessageTime ?? DateTime.now());
-      });
+      await saveChats(uniqueList);
 
-      chatList.clear();
-      chatList.addAll(uniqueList); // Update chatList with unique chats
-      chatModelObj.value = chatList;
+      print('Chat model object: ${chatModelObj.value.toString()}');
 
-      error(''); // Clear any previous errors
-      print('Loaded chats from Hive');
-    } else {
-      print('No chats found in Hive. Fetching from API...');
-      await fetchAndDisplayChats(); // Fetch from API if no chats found
+      if (chatModelObj.isEmpty) {
+        error('You don\'t have Influencers in your chats');
+        empty = true;
+      }
+    } catch (e) {
+      print('Error in fetchAndDisplayChats: $e');
+      error('Something went wrong');
+    } finally {
+      isLoading.value = false;
     }
-  } catch (e) {
-    print('Error loading chats from Hive: $e');
-    error('Failed to load chats from local storage.');
-  } finally {
-    isLoading.value = false; // Set loading to false at the end
   }
-}
 
-  
-Future<void> fetchAndDisplayChats() async {
-  isLoading.value = true;
-  try {
-    await getCreatorsChat(); 
-    print('Fetched chat list: $chatList');
-    final Set<String> uniqueCreatorUserIds = {};
-    uniqueList.clear();
-
-
-    for (var chat in chatList) {
-      if (chat is ChatData) {
-        final String creatorUserId = chat.creatorUserId;
-
-        if (!uniqueCreatorUserIds.contains(creatorUserId)) {
-          uniqueCreatorUserIds.add(creatorUserId);
-          
-        uniqueList.add(chat);
-        }
-      } else {
-        print('Warning: Expected ChatData instance but got ${chat.runtimeType}'); 
-      }
-    }
-
-    chatModelObj.value = uniqueList; 
-
-    await saveChats(uniqueList); 
-
-    print('Chat model object: ${chatModelObj.value.toString()}');
-
-    if (chatModelObj.isEmpty) {
-      error('You don\'t have Influencers in your chats');
-      empty = true;
-    }
-  } catch (e) {
-    print('Error in fetchAndDisplayChats: $e');
-    error('Something went wrong');
-  } finally {
+  Future<void> syncCreatorChatsWithServer() async {
     isLoading.value = false;
+    try {
+      await syncCreatorsChat();
+      print('Fetched chat list: $chatList');
+      final Set<String> uniqueCreatorUserIds = {};
+      uniqueList.clear();
+
+      for (var chat in chatList) {
+        if (chat is ChatData) {
+          final String creatorUserId = chat.creatorUserId;
+
+          if (!uniqueCreatorUserIds.contains(creatorUserId)) {
+            uniqueCreatorUserIds.add(creatorUserId);
+
+            uniqueList.add(chat);
+          }
+        } else {
+          print(
+              'Warning: Expected ChatData instance but got ${chat.runtimeType}');
+        }
+      }
+
+      chatModelObj.value = uniqueList;
+
+      syncChatList(uniqueList);
+
+      print('Chat model object: ${chatModelObj.value.toString()}');
+
+      if (chatModelObj.isEmpty) {
+        error('You don\'t have Influencers in your chats');
+        empty = true;
+      }
+    } catch (e) {
+      print('Error in fetchAndDisplayChats: $e');
+      error('Something went wrong');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+ Future<void> syncChatList(List<ChatData> fetchedChats) async {
+  try {
+    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
+
+    for (var chatData in fetchedChats) {
+      await chatBox.put(chatData.chatId, chatData);
+    }
+
+    print('Chats synced successfully');
+  } catch (e) {
+    print('Error syncing chat list: $e');
   }
 }
 
 
-
- @override 
- void onClose() { 
- // socketClient.disconnect();
-  searchController.dispose();
-  super.onClose(); 
-  } 
- }
+  @override
+  void onClose() {
+    // socketClient.disconnect();
+    searchController.dispose();
+    super.onClose();
+  }
+}

@@ -39,7 +39,7 @@ class HomeCreatorController extends GetxController {
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
 
 /* 
 //this is for animation

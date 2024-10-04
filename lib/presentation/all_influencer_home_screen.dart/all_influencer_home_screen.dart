@@ -33,7 +33,7 @@ class AllInfluencerHomePage extends StatefulWidget {
 class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
     with SingleTickerProviderStateMixin {
   final MessagesPageInfluencerController messagesController = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
   InfluencerHomeController controller =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

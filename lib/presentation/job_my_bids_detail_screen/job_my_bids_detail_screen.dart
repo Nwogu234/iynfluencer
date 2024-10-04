@@ -341,8 +341,10 @@ class _JobDetailsScreenState extends State<JobMyBidsDetailsScreen> {
                                   fontStyle: ButtonFontStyle.SatoshiBold13)
                             ])),
                         Padding(
-                            padding: getPadding(left: 20, top: 19),
-                            child: Row(children: [
+                            padding: getPadding(left: 20, top: 19, right:40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                               Padding(
                                   padding: getPadding(top: 1),
                                   child: Column(

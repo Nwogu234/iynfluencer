@@ -36,7 +36,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage>
 
   late AnimationController animationController;
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
   // final MessagesController messagesController = Get.find<MessagesController>();
   final ScrollController _scrollController = ScrollController();
 
@@ -113,7 +113,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage>
                   padding: getMargin(top: 20),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: 200.h,
+                      height: 229.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.isTrendLoading.value

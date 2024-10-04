@@ -36,7 +36,7 @@ class _FashionHomePageState extends State<FashionHomePage>
   late AnimationController animationController;
 
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
   final ScrollController _scrollController = ScrollController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -115,7 +115,7 @@ class _FashionHomePageState extends State<FashionHomePage>
                   padding: getMargin(top: 20),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: 200.h,
+                      height: 229.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.isTrendLoading.value

@@ -28,7 +28,7 @@ JobsJobsInfluencerController controller = Get.put(
 );
   late AnimationController animationController;
      final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs)); 
+      Get.put( MessagesPageInfluencerController()); 
 
   @override
   Widget build(BuildContext context) {

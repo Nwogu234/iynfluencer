@@ -33,7 +33,7 @@ class _InfluencerTechnologyHomePageState extends State<InfluencerTechnologyHomeP
 with SingleTickerProviderStateMixin{
 
   final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      Get.put(MessagesPageInfluencerController());
 
    InfluencerTechnologyController controller =
       Get.put(InfluencerTechnologyController(InfluencerTechnologyModel().obs));

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
@@ -457,11 +458,13 @@ class ChatsOpenedScreen extends StatefulWidget {
   ChatsOpenedScreen(
       {Key? key,
       this.selectedInfluencer,
+      this.selectedInfluencers,
       required this.chatData,
       this.selectedJob})
       : super(key: key);
 
   final Influencer? selectedInfluencer;
+  final Influencers? selectedInfluencers;
   // ChatData chatData;
   final ChatData chatData;
   final Job? selectedJob;
@@ -474,7 +477,7 @@ class ChatsOpenedScreen extends StatefulWidget {
 class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     with SingleTickerProviderStateMixin {
   final MessagesController messageController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
@@ -507,6 +510,10 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
       avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
       // avatarUrl =
       //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+    }  if (widget.selectedInfluencers != null) {
+      avatarUrl = widget.selectedInfluencers?.user?.avatar ?? '';
+      // avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
     } else if (widget.chatData != null) {
       avatarUrl = widget.chatData.influencerUser!.avatar;
       //  avatarUrl =
@@ -523,6 +530,9 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     if (widget.selectedInfluencer != null) {
       name =
           "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+    }  if (widget.selectedInfluencers != null) {
+      name =
+          "${capitalizeFirstLetter(widget.selectedInfluencers?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencers?.user?.lastName)}";
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
@@ -676,7 +686,7 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                       Expanded(
                         child: ListView.builder(
                           //  controller: _scrollController,
-                          reverse: controller.isReverse.value,
+                          reverse: false,
                           itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
                             String date = groupedMessages.keys.elementAt(index);
