@@ -8,6 +8,8 @@ class ImageConstant {
 
   static String imgGroup85256 = 'assets/images/img_group852_56.png';
 
+  static String imgLocation = 'assets/images/img_location_marker.svg';
+
   static String imgGroup85222 = 'assets/images/img_group852_22.png';
 
   static String imgFrameCyan300 = 'assets/images/img_frame_cyan_300.svg';
@@ -40,15 +42,25 @@ class ImageConstant {
 
   static String profilecover = 'assets/images/profilecover.png';
 
+  static String logo = 'assets/images/logo.png';
+
   static String imgArrowleftGray600 =
       'assets/images/img_arrowleft_gray_600.svg';
 
   static String imgGrid = 'assets/images/img_grid.svg';
 
+  static String imgUpload = 'assets/images/uploadsvg.svg';
+
   static String imgGroup85221 = 'assets/images/img_group852_21.png';
 
   static String imgArrowdownGray600 =
       'assets/images/img_arrowdown_gray_600.svg';
+
+  static String imgGreenArrow =
+      'assets/images/green_arrow.svg';
+
+  static String imgArrowMark =
+      'assets/images/img_mark.svg';
 
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
 
@@ -63,6 +75,10 @@ class ImageConstant {
   static String imgVector = 'assets/images/img_vector.svg';
 
   static String imgArrowleft = 'assets/images/img_arrowleft.svg';
+
+  static String imgChevronRight = 'assets/images/chevron-right.svg';
+
+  static String imgInformation = 'assets/images/information-circle.svg';
 
   static String imgGroup8525 = 'assets/images/img_group852_5.png';
 
@@ -92,6 +108,8 @@ class ImageConstant {
   static String imgEye2 = 'assets/images/img_eye_2.svg';
 
   static String imgArrowup = 'assets/images/img_arrowup.svg';
+
+  static String imgCalenders = 'assets/images/img_calendar.svg';
 
   static String imgGroup94785x85 = 'assets/images/img_group947_85x85.png';
 

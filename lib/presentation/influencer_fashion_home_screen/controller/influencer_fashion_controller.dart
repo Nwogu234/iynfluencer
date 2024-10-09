@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/influencer_fashion_home_screen/model/influencer_fashion_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -28,20 +29,12 @@ class InfluencerFashionController extends GetxController {
   Rx<bool> isLoading = false.obs;
   var error = ''.obs;
   Rx<bool> isJobsLoading = false.obs;
-  List<Job> jobsList = <Job>[].obs;
-  List<Job> infJobsList = <Job>[].obs;
+  List<Jobz> jobsList = <Jobz>[].obs;
+  List<Jobz> infJobsList = <Jobz>[].obs;
 
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
-  late final AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   // this is to get user when the jobs page is loaded
   getUser() async {
@@ -75,8 +68,8 @@ class InfluencerFashionController extends GetxController {
     print(response.body);
     if (response.isOk) {
       final responseJson = response.body;
-      final jobResponse = JobResponse.fromJson(responseJson);
-      jobsList = jobResponse.data.docs;
+      final jobResponse = JobResponsez.fromJson(responseJson);
+      jobsList = jobResponse.data.docs!;
 
       // Filter jobs based on the fashion niche and creatorId
       infJobsList = jobsList.where((job) => 
@@ -129,7 +122,6 @@ class InfluencerFashionController extends GetxController {
   void onClose() {
     super.onClose();
     searchController.dispose();
-    animationController.dispose();
   }
 
   

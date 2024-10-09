@@ -20,7 +20,7 @@ import 'models/influencer_home_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/presentation/community_page/community_page.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+
 import 'package:iynfluencer/presentation/messages_page/messages_page.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_circleimage.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview.dart';
@@ -83,9 +83,7 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
     return SafeArea(
         child: Scaffold(
       key: _scaffoldKey,
-      drawer: InfluencerDraweritem(
-        controller: controller,
-      ),
+      drawer: InfluencerDraweritem(),
       backgroundColor: ColorConstant.whiteA70001,
       body: RefreshIndicator(
           onRefresh: _refresh,
@@ -98,21 +96,13 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                         DefaultTextStyle(
-                          style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            'Home'.tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                                fontSize: 24.sp, fontWeight: FontWeight.bold),
                           ),
-                          child: AnimatedTextKit(
-                            repeatForever: true,
-                            pause: Duration(milliseconds: 6000),
-                            isRepeatingAnimation: true,
-                            totalRepeatCount: 3,
-                            animatedTexts: [
-                              TypewriterAnimatedText('Home'),
-                            ],
-                          ),
-                        ),
                           AppbarCircleimage(
                               url: (controller.updatedProfileImage.value
                                       as String?) ??
@@ -127,7 +117,7 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                   AppbarSearchview(
                       margin: getMargin(left: 5),
                       hintText: "msg_search_creators".tr,
-                      controller: controller.searchController,
+                      controller: controller.searchController2,
                       onSubmitted: (query) {
                         controller.onSearchSubmitted(query);
                       }),
@@ -262,7 +252,7 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                       ),
                     ),
                     SizedBox(
-                      height: getVerticalSize(1200),
+                      height: getVerticalSize(900),
                       child: TabBarView(
                         controller: _tabController, 
                         children: [

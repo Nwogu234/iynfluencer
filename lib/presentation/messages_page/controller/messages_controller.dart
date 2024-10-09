@@ -1,16 +1,15 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/apiClient/chatApi.dart';
-import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// A controller class for the MessagesPage.
-///
-/// This class manages the state of the MessagesPage, including the
-/// current messagesModelObj
+import '../../../data/general_controllers/sockect_client.dart';
+
+
 class MessagesController extends GetxController {
   MessagesController(this.messagesModelObj);
 
@@ -63,7 +62,7 @@ class MessagesController extends GetxController {
         error('Something went wrong');
         isLoading.value = false;
       } else {
-        getInfluencersChat().then((value) {
+        await getInfluencersChat().then((value) {
           isLoading.value = false;
         }).catchError((err) {
           isLoading.value = false;
@@ -83,7 +82,7 @@ class MessagesController extends GetxController {
   }
 
   
-
+/* 
   Future<void> getInfluencersChat() async {
     try {
       isTrendLoading.value = true;
@@ -115,6 +114,39 @@ class MessagesController extends GetxController {
       isTrendLoading.value = false;
     }
   }
+ */
+
+
+  Future<void> getInfluencersChat() async {
+  try {
+    isTrendLoading.value = true;
+    token = await storage.read(key: "token");
+    final Response response = await apiClient.getAllChatsWithInfluencers(token);
+    List<dynamic> chatJsonList = response.body['data']['docs'];
+    chatList.clear();
+    print(chatJsonList.length);
+    print(chatJsonList);
+    if (chatJsonList.isNotEmpty) {
+      chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+      chatList.sort((a, b) {
+        final aLastMessageTime = a.messages.isNotEmpty ? a.messages.last.createdAt : a.updatedAt;
+        final bLastMessageTime = b.messages.isNotEmpty ? b.messages.last.createdAt : b.updatedAt;
+        return bLastMessageTime.compareTo(aLastMessageTime);
+      });
+      chatModelObj.value = chatList;
+      error('');
+    } if (chatList.isEmpty) {
+        error('You don\'s have Influencers in your chats');
+        empty = true;
+        print('No chat data available.');
+      } 
+    isTrendLoading.value = false;
+  } catch (e) {
+    print('Error fetching influencers chat: $e');
+    error('Something went wrong');
+    isTrendLoading.value = false;
+  }
+}
 
   void setUnreadCreator(int value) {
     unreadCreator.value = value;
@@ -123,7 +155,7 @@ class MessagesController extends GetxController {
 
   @override
   void onClose() {
-    socketClient.disconnect();
+   // socketClient.disconnect();
     searchController.dispose();
     super.onClose();
   }

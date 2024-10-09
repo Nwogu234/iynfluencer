@@ -50,6 +50,14 @@ class RequestDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -87,7 +95,7 @@ class RequestDetailScreen extends StatelessWidget {
                     children: [
                       Padding(
                           padding: getPadding(left: 19),
-                          child: Text("msg_gaming_app_influencer".tr,
+                          child: Text("${jobrequest?.job?.title ?? ''}".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.txtSatoshiBold18)),
@@ -141,12 +149,12 @@ class RequestDetailScreen extends StatelessWidget {
                                             .txtSatoshiLight13Gray900ab);
                                   }))),
 
-                      Padding(
+                    /*   Padding(
                           padding: getPadding(left: 20, top: 28),
                           child: Text("lbl_about_job".tr,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
-                              style: AppStyle.txtSatoshiBold14Gray900)),
+                              style: AppStyle.txtSatoshiBold14Gray900)), */
                       // Padding(
                       //     padding: getPadding(left: 20, top: 14, right: 53),
                       //     child: Obx(() => ListView.separated(
@@ -165,7 +173,7 @@ class RequestDetailScreen extends StatelessWidget {
                       //               .value[index];
                       //           return RequestDetailItemWidget(model);
                       //         }))),
-                      Padding(
+                    /*   Padding(
                           padding: getPadding(left: 20, top: 7),
                           child: Text("lbl_total_bids".tr,
                               overflow: TextOverflow.ellipsis,
@@ -190,7 +198,7 @@ class RequestDetailScreen extends StatelessWidget {
                                         fontFamily: 'Satoshi',
                                         fontWeight: FontWeight.w300))
                               ]),
-                              textAlign: TextAlign.left)),
+                              textAlign: TextAlign.left)), */
                       Padding(
                           padding: getPadding(left: 20, top: 30),
                           child: Text("lbl_about_client".tr,
@@ -201,7 +209,8 @@ class RequestDetailScreen extends StatelessWidget {
                           padding: getPadding(left: 20, top: 13, right: 53),
                           child: Row(children: [
                             CustomImageView(
-                                imagePath: ImageConstant.imgGroup85246,
+                                fit: BoxFit.cover ,
+                                url: jobrequest?.creatorUserData?.avatar ?? '',
                                 height: getSize(40),
                                 width: getSize(40),
                                 radius: BorderRadius.circular(getSize(20.0))),
@@ -212,13 +221,15 @@ class RequestDetailScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text("lbl_mark_adebayo".tr,
+                                      Text(
+                                         "${capitalizeFirstLetter(jobrequest?.creatorUserData?.firstName)} ${capitalizeFirstLetter(jobrequest?.creatorUserData?.lastName)}",
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: AppStyle
                                               .txtSatoshiBold13Gray900ab),
                                       Row(children: [
-                                        Text("lbl_lagos_nigeria".tr,
+                                        Text(
+                                          '${jobrequest?.creatorUserData?.country ?? 'Nigeria'}'.tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle.txtSatoshiLight12),

@@ -32,14 +32,16 @@ class CustomBottomBar extends StatelessWidget {
       title: "lbl_chats".tr,
       type: BottomBarEnum.Chats,
     ),
-    BottomMenuModel(
-      icon: ImageConstant.imgUser,
-      title: "lbl_community".tr,
-      type: BottomBarEnum.Community,
-    )
+    // BottomMenuModel(
+    //   icon: ImageConstant.imgUser,
+    //   title: "lbl_community".tr,
+    //   type: BottomBarEnum.Community,
+    // )
   ];
 
   Function(BottomBarEnum)? onChanged;
+
+
 
   @override
   Widget build(BuildContext context) {

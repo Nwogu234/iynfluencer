@@ -1,0 +1,131 @@
+import 'dart:convert';
+
+class NotificationsResponse {
+  final String message;
+  final PaginatedNotifications paginatedNotifications;
+
+  NotificationsResponse({
+    required this.message,
+    required this.paginatedNotifications,
+  });
+
+  factory NotificationsResponse.fromJson(Map<String, dynamic> json) {
+    return NotificationsResponse(
+      message: json['message'] as String,
+      paginatedNotifications: PaginatedNotifications.fromJson(json['paginatedNotifications']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'message': message,
+      'paginatedNotifications': paginatedNotifications.toJson(),
+    };
+  }
+}
+
+class PaginatedNotifications {
+  final List<MNotification> docs;
+  final int totalDocs;
+  final int limit;
+  final int totalPages;
+  final int page;
+  final int pagingCounter;
+  final bool hasPrevPage;
+  final bool hasNextPage;
+  final int? prevPage;
+  final int? nextPage;
+
+  PaginatedNotifications({
+    required this.docs,
+    required this.totalDocs,
+    required this.limit,
+    required this.totalPages,
+    required this.page,
+    required this.pagingCounter,
+    required this.hasPrevPage,
+    required this.hasNextPage,
+    this.prevPage,
+    this.nextPage,
+  });
+
+  factory PaginatedNotifications.fromJson(Map<String, dynamic> json) {
+    return PaginatedNotifications(
+      docs: (json['docs'] as List)
+          .map((doc) => MNotification.fromJson(doc))
+          .toList(),
+      totalDocs: json['totalDocs'] as int,
+      limit: json['limit'] as int,
+      totalPages: json['totalPages'] as int,
+      page: json['page'] as int,
+      pagingCounter: json['pagingCounter'] as int,
+      hasPrevPage: json['hasPrevPage'] as bool,
+      hasNextPage: json['hasNextPage'] as bool,
+      prevPage: json['prevPage'] as int?,
+      nextPage: json['nextPage'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'docs': docs.map((doc) => doc.toJson()).toList(),
+      'totalDocs': totalDocs,
+      'limit': limit,
+      'totalPages': totalPages,
+      'page': page,
+      'pagingCounter': pagingCounter,
+      'hasPrevPage': hasPrevPage,
+      'hasNextPage': hasNextPage,
+      'prevPage': prevPage,
+      'nextPage': nextPage,
+    };
+  }
+}
+
+class MNotification {
+  final String title;
+  final String body;
+  final String type;
+  final String img;
+  final String? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
+
+  MNotification({
+    required this.title,
+    required this.body,
+    required this.type,
+    required this.img,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory MNotification.fromJson(Map<String, dynamic> json) {
+    return MNotification(
+      title: json['title'] as String,
+      body: json['body'] as String,
+      type: json['type'] as String,
+      img: json['img'] as String,
+      id: json['_id'] as String?,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : null,
+      v: json['__v'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'body': body,
+      'type': type,
+      'img': img,
+      '_id': id,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      '__v': v,
+    };
+  }
+}

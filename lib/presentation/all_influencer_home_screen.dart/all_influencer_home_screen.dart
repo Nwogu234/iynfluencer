@@ -3,11 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/bids_screen/controller/bids_controller.dart';
+import 'package:iynfluencer/presentation/bids_screen/models/bids_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -25,14 +33,17 @@ class AllInfluencerHomePage extends StatefulWidget {
 
 class _AllInfluencerHomePageState extends State<AllInfluencerHomePage>
     with SingleTickerProviderStateMixin {
+
+    final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
   InfluencerHomeController controller =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late AnimationController animationController;
+  final UserController user = Get.find();
   final ScrollController _scrollController = ScrollController();
-  
-  
+
   
 void _onScroll() {
   if (!controller.isLoading.value &&
@@ -63,6 +74,8 @@ void _onScroll() {
 
   @override
   Widget build(BuildContext context) {
+   
+
     return SafeArea(
       child: Scaffold(
         key:_scaffoldKey,
@@ -79,14 +92,19 @@ void _onScroll() {
             ),
           ],
         );
-      } else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-          top: 150,
-          start: 150,
-          child: ResponsiveErrorWidget(
-            errorMessage: controller.error.value,
-            onRetry: controller.getUser,
-            fullPage: true,
+      }  else if (controller.error.value.isNotEmpty) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            bottom: 350
+          ),
+          child: Center(
+            child: ResponsiveErrorWidget(
+              errorMessage: controller.error.value,
+              onRetry: controller.getUser,
+              fullPage: true,
+            ),
           ),
         );
       } else {
@@ -122,14 +140,15 @@ void _onScroll() {
                      Padding(
                        padding: getPadding(top: 19),
                        child: Container(
-                  //      height: getVerticalSize(1500),
+                        height: getVerticalSize(500),
                          width: double.infinity,
                          child: Obx(
                            () => ListView.separated(
                              physics: BouncingScrollPhysics(),
                              shrinkWrap: true,
                              separatorBuilder: (context, index) {
-                               return SizedBox(height: getVerticalSize(16));
+                               return SizedBox(
+                                height: getVerticalSize(16));
                              },
                              itemCount: controller.isJobsLoading.value
                                  ? 5
@@ -138,10 +157,17 @@ void _onScroll() {
                                if (controller.isJobsLoading.value) {
                                  return InfluencerHomeItemSkeletonWidget();
                                } else {
-                                 Job model = controller.infJobsList[index];
+                                 Jobz model = controller.infJobsList[index];
+                                 ChatData? chatData = 
+                                         index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null;
                                  return InfluencerHomeItemWidget(model,
                                      onTapJobpost: () {
-                                   onTapJobpost(model);
+                                   onTapJobpost(
+                                    model,
+                                    chatData,
+                                    );
                                  });
                                }
                              },
@@ -157,9 +183,10 @@ void _onScroll() {
     })));
   }
 
-   onTapJobpost(model) {
+   onTapJobpost(model, chatData) {
     Get.to(JobDetailsScreen(
       selectedJob: model,
+      chatData: chatData,
     ));
   }
 }

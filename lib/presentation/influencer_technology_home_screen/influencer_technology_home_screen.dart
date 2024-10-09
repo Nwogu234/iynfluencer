@@ -3,13 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/widgets/influencer_home_item_widget.dart';
 import 'package:iynfluencer/presentation/influencer_technology_home_screen/controller/influencer_technology_controller.dart';
 import 'package:iynfluencer/presentation/influencer_technology_home_screen/model/influencer_technology_model.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
+import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -24,6 +28,9 @@ class InfluencerTechnologyHomePage extends StatefulWidget {
 
 class _InfluencerTechnologyHomePageState extends State<InfluencerTechnologyHomePage> 
 with SingleTickerProviderStateMixin{
+
+  final  MessagesPageInfluencerController messagesController =
+      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
 
    InfluencerTechnologyController controller =
       Get.put(InfluencerTechnologyController(InfluencerTechnologyModel().obs));
@@ -121,7 +128,7 @@ void _onScroll() {
                      Padding(
                        padding: getPadding(top: 19),
                        child: Container(
-                       //  height: double.maxFinite,
+                         height: MediaQuery.of(context).size.height,
                          width: double.infinity,
                          child: Obx(
                            () => ListView.separated(
@@ -137,10 +144,17 @@ void _onScroll() {
                                if (controller.isJobsLoading.value) {
                                  return InfluencerHomeItemSkeletonWidget();
                                } else {
-                                 Job model = controller.infJobsList[index];
+                                 Jobz model = controller.infJobsList[index];
+                                 ChatData? chatData = 
+                                         index < messagesController.chatList.length
+                                        ? messagesController.chatList[index]
+                                        : null;
                                  return InfluencerHomeItemWidget(model,
                                      onTapJobpost: () {
-                                   onTapJobpost(model);
+                                   onTapJobpost(
+                                    model,
+                                    chatData
+                                    );
                                  });
                                }
                              },
@@ -157,9 +171,10 @@ void _onScroll() {
   }
 
   
-   onTapJobpost(model) {
+   onTapJobpost(model, chatData) {
     Get.to(JobDetailsScreen(
       selectedJob: model,
+      chatData: chatData,
     ));
   }
 }

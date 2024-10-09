@@ -13,3 +13,4 @@ class SearchResultsBinding extends Bindings {
     Get.lazyPut(() => SearchResultsController(SearchResultsModel().obs));
   }
 }
+

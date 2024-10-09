@@ -667,4 +667,11 @@ class AppStyle {
     fontFamily: 'Satoshi',
     fontWeight: FontWeight.w500,
   );
+
+  static TextStyle txtSatoshiMedium = TextStyle(
+    color: ColorConstant.black900,
+    fontSize: getFontSize(14.5),
+    fontFamily: 'Satoshi-Medium',
+    fontWeight: FontWeight.w400,
+  );
 }

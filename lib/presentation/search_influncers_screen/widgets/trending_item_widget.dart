@@ -22,7 +22,7 @@ class TrendingItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String countryCode = controller.user.getCountryCode(controller.user
-        .capitalizeFirstLetter(trendingItemModelObj.user!.first.country!));
+        .capitalizeFirstLetter(trendingItemModelObj.user?.first.country ?? ''));
     print(countryCode);
     String? avatarUrl = trendingItemModelObj.user?.first.avatar;
     //   "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${trendingItemModelObj.userId}-avatar.jpeg";
@@ -32,7 +32,7 @@ class TrendingItemWidget extends StatelessWidget {
 
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = "${controller.user.baseUrl}$avatarUrl";
+      imageProvider = avatarUrl;
     } else {
       imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
     }

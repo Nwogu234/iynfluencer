@@ -77,6 +77,7 @@ final Map<String, String> enUs = {
   "lbl_20": "20",
   "lbl_category": "Category",
   "lbl_message": "Message",
+  "lbl_view Profile": "View Profile",
   "lbl_bid_details": "Bid Details",
   "lbl_bid": "Bid",
   "lbl_edit_bid": "Edit Bid",

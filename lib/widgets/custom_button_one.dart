@@ -17,7 +17,7 @@ class CustomButtonOne extends StatelessWidget {
       this.prefixWidget,
       this.suffixWidget});
 
-  ButtonShape? shape;
+  ButtonShapez? shape;
 
   ButtonPaddings? padding;
 
@@ -176,6 +176,8 @@ class CustomButtonOne extends StatelessWidget {
     switch (variant) {
       case ButtonVariants.Neutral:
         return ColorConstant.gray200;
+      case ButtonVariants.Pink:
+        return ColorConstant.pink;
       case ButtonVariants.OutlineGray300b2:
         return ColorConstant.whiteA700;
       case ButtonVariants.FillLime100b2:
@@ -260,6 +262,7 @@ class CustomButtonOne extends StatelessWidget {
       case ButtonVariants.FillGray20003:
       case ButtonVariants.FillRedA700:
       case ButtonVariants.FillCyan30066:
+      case ButtonVariants.Pink:
         return null;
       default:
         return null;
@@ -294,19 +297,19 @@ class CustomButtonOne extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShape.RoundedBorder12:
+      case ButtonShapez.RoundedBorder12:
         return BorderRadius.circular(
           getHorizontalSize(
             12.00,
           ),
         );
-      case ButtonShape.RoundedBorder3:
+      case ButtonShapez.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
             3.00,
           ),
         );
-      case ButtonShape.Square:
+      case ButtonShapez.Square:
         return BorderRadius.circular(0);
       default:
         return BorderRadius.circular(
@@ -503,7 +506,7 @@ class CustomButtonOne extends StatelessWidget {
   }
 }
 
-enum ButtonShape {
+enum ButtonShapez {
   Square,
   RoundedBorder7,
   RoundedBorder12,
@@ -541,7 +544,7 @@ enum ButtonVariants {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
-  yellow200
+  yellow200, Pink
 }
 
 enum ButtonFontStyles {

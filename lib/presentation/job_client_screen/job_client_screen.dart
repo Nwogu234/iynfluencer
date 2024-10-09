@@ -155,7 +155,7 @@ class JobClientScreen extends GetWidget<JobClientController> {
                                                       margin: getMargin(top: 3),
                                                       variant: ButtonVariant
                                                           .FillLime100b2,
-                                                      shape: ButtonShape
+                                                      shape: ButtonShapes
                                                           .RoundedBorder12,
                                                       padding: ButtonPadding
                                                           .PaddingAll4,

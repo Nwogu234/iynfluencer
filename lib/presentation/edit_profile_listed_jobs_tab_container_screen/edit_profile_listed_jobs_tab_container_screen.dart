@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
@@ -12,6 +10,9 @@ import 'package:iynfluencer/presentation/creator_profile_listed_jobs_page/creato
 import 'package:iynfluencer/presentation/influencer_drawer_item/influencer_drawer.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
+import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/jobs_jobs_influencer_page.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/jobs_my_bids_influencer_page.dart';
+import 'package:iynfluencer/presentation/jobs_requests_influencer_page/jobs_requests_influencer_page.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
@@ -47,7 +48,7 @@ class EditProfileListedJobsTabContainerScreen
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                       SizedBox(
-                          height: getVerticalSize(410),
+                          height: getVerticalSize(390),
                           width: double.maxFinite,
                           child:
                               Stack(alignment: Alignment.bottomLeft, children: [
@@ -134,7 +135,7 @@ class EditProfileListedJobsTabContainerScreen
                                                         style: AppStyle
                                                             .txtSatoshiBold24),
                                                 
-                                                   Padding(
+/*                                                    Padding(
                                                      padding: const EdgeInsets.only(
                                                       bottom: 4,
                                                       right: 16
@@ -154,7 +155,7 @@ class EditProfileListedJobsTabContainerScreen
                                                         onTapEditprofile();
                                                      }),
                                                    ) 
-                                                
+                                                 */
                                                   ],
                                                 ),
                                               )),
@@ -304,7 +305,7 @@ class EditProfileListedJobsTabContainerScreen
                               tabs: [
                                 Tab(
                                     child: Text(
-                                      "lbl_listed_jobs".tr,
+                                      "My Bids".tr,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: AppStyle.txtSatoshiBold16.copyWith(
@@ -312,7 +313,7 @@ class EditProfileListedJobsTabContainerScreen
                                        fontWeight: FontWeight.normal
                                         ))),
                                 Tab(
-                                    child: Text("lbl_community_posts".tr,
+                                    child: Text("My jobs".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle.txtSatoshiBold16.copyWith(
@@ -320,7 +321,7 @@ class EditProfileListedJobsTabContainerScreen
                                             fontWeight: FontWeight.normal
                                         ))),
                                 Tab(
-                                    child: Text("Review".tr,
+                                    child: Text("Requests".tr,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle.txtSatoshiBold16.copyWith(
@@ -333,9 +334,12 @@ class EditProfileListedJobsTabContainerScreen
                           child: TabBarView(
                               controller: controller.tabviewController,
                               children: [
+                                /* CreatorProfileListedJobsPage(),
                                 CreatorProfileListedJobsPage(),
-                                CreatorProfileListedJobsPage(),
-                                CreatorProfileListedJobsPage()
+                                CreatorProfileListedJobsPage() */
+                                JobsMyBidsInfluencerPage(),
+                                JobsJobsInfluencerPage(),
+                                JobsRequestsInfluencerPage(),
                               ]))
                     ]))),
             ));

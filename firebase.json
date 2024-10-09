@@ -1,0 +1,17 @@
+{
+    "indexes":[],
+    "fieldOverrides":[],
+    "flutter":{
+      "platforms":{
+        "android":{
+          "default":{
+             "projectId":"iynfluencer-c4f3f",
+             "appId":"1:744503887130:android:cb14067f3e6e37381518a3",
+             "fileOutput":"android/app/google-services.json"}},
+               "dart":{
+                  "lib/firebase_options.dart":{
+                     "projectId":"iynfluencer-c4f3f",
+                        "configurations":{
+                        "android":"1:744503887130:android:cb14067f3e6e37381518a3",
+                        "ios":"1:744503887130:ios:3513a498ee0c7a681518a3"
+                        }}}}}}

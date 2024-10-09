@@ -23,6 +23,8 @@ class CreatorJobslistModel {
             createdAt: '2023-08-17T00:00:00.000Z',
             updatedAt: '2023-08-17T00:00:00.000Z',
             version: 1,
+            status: '',
+            bids: [],
             // creator: [],
             bidsCount: 0,
           )));

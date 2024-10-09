@@ -25,12 +25,14 @@ class CreatorJobslistPage extends StatefulWidget {
 class _CreatorJobslistPageState extends State<CreatorJobslistPage>
     with SingleTickerProviderStateMixin {
   late CreatorJobslistController controller;
-  BottomBarController bumcont=Get.put(BottomBarController());
-  HomeCreatorContainerController  homcont = Get.put(HomeCreatorContainerController());
+  BottomBarController bumcont = Get.put(BottomBarController());
+  HomeCreatorContainerController homcont =
+      Get.put(HomeCreatorContainerController());
+
 
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // Initialize creatorJobslistModelObj here
+  //Initialize creatorJobslistModelObj here
   final creatorJobslistModelObj = CreatorJobslistModel();
 
   late AnimationController animationController;
@@ -43,27 +45,31 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
       vsync: this,
     )..repeat();
     // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    // Create the controller using jobpostingItemList from creatorJobslistModelObj
-    controller = Get.put(CreatorJobslistController(
+     controller = Get.put(CreatorJobslistController(
       creatorJobslistModelObj.jobpostingItemList,
-    ));
+    )); 
   }
 
   @override
   void dispose() {
     animationController.dispose();
-    bumcont.dispose();
-    homcont.dispose();
     super.dispose();
   }
 
   onTapDetailcard(Job selectedJob) {
     final jobDetailsController = Get.put(CreatorJobDetailsController());
     jobDetailsController.setSelectedJob(selectedJob);
-    Get.to(()=>
-        CreatorJobDetailsScreen(selectedJob: selectedJob),
+    Get.to(
+      () => CreatorJobDetailsScreen(selectedJob: selectedJob),
     );
   }
+
+
+
+    Future<void> _refresh() async {
+    await controller.refreshItems();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,68 +80,80 @@ class _CreatorJobslistPageState extends State<CreatorJobslistPage>
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.transparent,
-        body: Obx(
-              () {
-            if (controller.isTrendLoading.value) {
-              return CustomLoadingWidget(
-                animationController: animationController,
-              );
-            } else if (controller.error.value.isNotEmpty) {
-              return ResponsiveErrorWidget(
-                errorMessage: controller.error.value,
-                onRetry: () {
-                  controller.getJobs();
-                  // ... [rest of the error handling code]
-                },
-                fullPage: true,
-              );
-            }else if(controller.empty) {
-              return ResponsiveEmptyWidget(
-                errorMessage: 'You have not posed any jobs yet',
-                buttonText: "Post job",
-                onRetry: () {
-                  homcont.currentRoute.value=AppRoutes.postPageScreen;
-                   Navigator.of(Get.nestedKey(1)!.currentState!.context).pushReplacementNamed(AppRoutes.postPageScreen);
-                  bumcont.selectedIndex.value=2;
-                },
-                fullPage: true,
-              );
-            }
-            else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Obx(
-                          () => ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: controller.isTrendLoading.value
-                            ? 5
-                            : controller.existingJobs.length,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: 20.h);
-                        },
-                        itemBuilder: (context, index) {
-                          if (controller.isTrendLoading.value) {
-                            return TrendinghorizonItemSkeletonWidget();
-                          } else {
-                            Job model = controller.existingJobs[index];
-                            return JobpostingItemWidget(
-                              creatorJobslistModelObj: model,
-                              index: index,
-                              onTapDetailcard: () {
-                                onTapDetailcard(model);
-                              },
+        body: RefreshIndicator(
+            onRefresh: _refresh,
+          child: Obx(
+            () {
+              if (controller.isTrendLoading.value) {
+                return CustomLoadingWidget(
+                  animationController: animationController,
+                );
+              } else if (controller.error.value.isNotEmpty) {
+                return ResponsiveErrorWidget(
+                  errorMessage: controller.error.value,
+                  onRetry: () {
+                    controller.getJobs();
+                    // ... [rest of the error handling code]
+                  },
+                  fullPage: true,
+                );
+              } else if (controller.empty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 50,
+                    horizontal: 25
+                  ),
+                  child: ResponsiveEmptyWidget(
+                    errorMessage: 'You have no posts yet',
+                    smallMessage: 'Your past posts will appear here',
+                    buttonText: "Post a new job",
+                    onRetry: () {
+                      homcont.currentRoute.value = AppRoutes.postPageScreen;
+                      Navigator.of(Get.nestedKey(1)?.currentState?.context ?? context)
+                          .pushReplacementNamed(AppRoutes.postPageScreen);
+                      bumcont.selectedIndex.value = 2;
+                    },
+                    fullPage: true,
+                  ),
+                );
+              } else {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Obx(
+                        () => ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          itemCount: controller.isTrendLoading.value
+                              ? 5
+                              : controller.existingJobs.length,
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              thickness: 0.1,
                             );
-                          }
-                        },
+                          },
+                          itemBuilder: (context, index) {
+                            if (controller.isTrendLoading.value) {
+                              return TrendinghorizonItemSkeletonWidget();
+                            } else {
+                              Job model = controller.existingJobs[index];
+                              return JobpostingItemWidget(
+                                creatorJobslistModelObj: model,
+                                index: index,
+                                onTapDetailcard: () {
+                                  onTapDetailcard(model);
+                                },
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }
-          },
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );

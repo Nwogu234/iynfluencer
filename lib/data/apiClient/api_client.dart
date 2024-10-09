@@ -1,6 +1,9 @@
-import 'dart:convert';
-
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/notification/notification_model';
+import 'package:iynfluencer/data/models/review/review_model.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
@@ -19,7 +22,7 @@ class ApiClient extends GetConnect {
   ApiClient() {
     httpClient.defaultContentType = "application/json";
     httpClient.baseUrl =
-        'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
+        'https://iynf-kong.onrender.com/api/v1/';
   }
 
   dynamic errorHandler(Response response) {
@@ -127,37 +130,147 @@ class ApiClient extends GetConnect {
     }
   }
 
+
+
   //this is for getting url to upload user pic
-  Future<Response> getPicUrl(var token) async {
-    Response response = Response();
-    try {
-      response = await get(
-        'users/me/upload_media_url?contentType=image/jpeg&field=avatar',
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token,
-        },
-      );
-      if (response.isOk) {
-        // print(response.body);
-        return response;
-      } else {
-        print(response);
-        // print(response.body);
-        throw Exception('error getting url');
-      }
-    } catch (e) {
-      errorHandler(response);
-      throw Exception('error getting url');
-    }
+ /*   Future<Response> getPicUrl(String filePath, String token) async {
+  try {
+    final file = File(filePath);
+    final List<int> fileBytes = await file.readAsBytesSync();
+    final formData = FormData({
+      'image': MultipartFile(
+       fileBytes,
+       filename: 'avatar.jpg',
+      contentType: 'image/jpeg',
+  ),
+});
+    return post(
+      'users/me/upload_media_url',
+      formData,
+      headers: {
+        'Authorization': token,
+      },
+    );
+  } catch (e) {
+    print(e);
+    throw Exception('Error uploading image');
   }
+} 
+ */
+
+ 
+ 
+
+
+ Future<Response> getPicUrl(String filePath, String token) async {
+  try {
+    final file = File(filePath);
+    final List<int> fileBytes = await file.readAsBytes();
+
+    String? contentType;
+    String? extension = filePath.split('.').last.toLowerCase();
+
+    switch (extension) {
+      case 'jpeg':
+      case 'jpg':
+        contentType = 'image/jpeg';
+        break;
+      case 'png':
+        contentType = 'image/png';
+        break;
+      default:
+        throw Exception('Unsupported file type');
+    }
+
+    final formData = FormData({
+      'image': MultipartFile(
+        fileBytes,
+        filename: 'avatar.$extension',
+        contentType: contentType
+      ),
+    });
+
+    return post(
+      'users/me/upload_media_url',
+      formData,
+      headers: {
+        'Authorization': token,
+      },
+    );
+  } catch (e) {
+    print(e);
+    throw Exception('Error uploading image');
+  }
+} 
+
+Future<Response> uploadFile(String filePath, String token) async {
+  try {
+    final file = File(filePath);
+    final List<int> fileBytes = await file.readAsBytes();
+    String? contentType;
+    String? key;
+
+    String? extension = filePath.split('.').last.toLowerCase();
+
+    
+    switch (extension) {
+      case 'jpeg':
+      case 'jpg':
+        contentType = 'image/jpeg';
+        key = 'image';
+        break;
+      case 'png':
+        contentType = 'image/png';
+        key = 'image';
+        break;
+      case 'mp3':
+        contentType = 'audio/mpeg';
+        key = 'audio';
+        break;
+      case 'mp4':
+        contentType = 'video/mp4';
+        key = 'video';
+        break;
+      case 'pdf':
+        contentType = 'application/pdf';
+        key = 'file';
+        break;
+      case 'doc':
+      case 'docx':
+        contentType = 'application/msword';
+        key = 'file';
+        break;
+      default:
+        throw Exception('Unsupported file type');
+    }
+
+    // Prepare the form data
+    final formData = FormData({
+      key: MultipartFile(
+        fileBytes,
+        filename: filePath.split('/').last,
+        contentType: contentType,
+      ),
+    });
+
+    return post(
+      'users/me/upload_media_url',
+      formData,
+      headers: {
+        'Authorization': token,
+      },
+    );
+  } catch (e) {
+    print(e);
+    throw Exception('Error uploading file');
+  }
+}
 
   // this is for updating profile pic url
   Future<Response> postAvatar(String avatarUrl, String token) {
     print("this is the one we are looking for $avatarUrl");
     return post(
       'users/me/save_avatar', {"avatar": avatarUrl},
-      // replace with your specific endpoint path
       headers: {
         "Content-Type": "application/json",
         'Authorization': token,
@@ -503,6 +616,35 @@ class ApiClient extends GetConnect {
     }
   }
 
+  //this is for updating a current bid
+    Future<Response> updateBid(BidModel bidRequest, var token, String bidId) async {
+    Response response;
+    try {
+      response = await patch(
+        'influencers/me/bids/$bidId/single',
+        bidRequest.toJson(), 
+        headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(bidRequest.toJson());
+        print('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer bid');
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+
 //this is for getting list of bids
   Future<Response> getInfluencerJobsBids(var token) async {
     Response response = Response();
@@ -650,8 +792,7 @@ class ApiClient extends GetConnect {
       if (response.isOk) {
         return response;
       } else {
-        // print(response);
-        // print(response.body);
+          print('Failed to delete message: ${response.statusCode}, ${response.body}');
         throw response.body['message'];
       }
     } catch (e) {
@@ -659,6 +800,158 @@ class ApiClient extends GetConnect {
       print(e);
       errorHandler(response);
       throw e;
+    }
+  }
+
+  Future<Response> completeAJob(String jobId, var token) async {
+    Response response = Response();
+    try {
+      response = await patch(
+        'creators/me/jobs/complete/$jobId',
+        null,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+          print('Failed to complete job: ${response.statusCode}, ${response.body}');
+        throw response.body['message'];
+      }
+    } catch (e) {
+      print('CompleteAJob');
+      print(e);
+      errorHandler(response);
+      throw e;
+    }
+  }
+
+  // This is for storing the notification
+  Future<Response> storeNotification(MNotification notification, var token) async {
+    Response response;
+    try {
+      response = await post(
+        'users/auth/notification', 
+        notification.toJson(),
+         headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  // This is for creating review
+  Future<Response> createReview(ReviewRequest review, var token) async {
+    Response response;
+    try {
+      response = await post(
+        '/influencers/me/jobs/postreview', 
+        review.toJson(),
+         headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print('Server error: ${response.statusText} , ${response.body}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  
+  //this is for getting list of notifications
+  Future<Response> fetchNotification(var token) async {
+    Response response;
+    try {
+      response = await get(
+        'users/auth/notification',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of notifications');
+
+      throw Exception('Server error');
+    }
+  }
+
+  //this is for getting reviews of a particular job
+  Future<Response> fetchReview(var token, String jobId) async {
+    Response response;
+    try {
+      response = await get(
+        '/influencers/me/jobs/reviews/$jobId',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of Reviews');
+
+      throw Exception('Server error');
+    }
+  }
+
+   //this is for updating a current review
+    Future<Response> updateReview(ReviewRequest review, var token, String reviewId) async {
+    Response response;
+    try {
+      response = await patch(
+        '/influencers/me/jobs/review/$reviewId',
+        review.toJson(), 
+        headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(review.toJson());
+        print('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from updating influencer bid');
+      print(e);
+      throw Exception('Server error');
     }
   }
 }

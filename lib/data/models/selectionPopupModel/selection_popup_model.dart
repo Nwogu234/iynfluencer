@@ -5,34 +5,27 @@ class SelectionPopupModel {
   String title;
   dynamic value;
   bool isSelected;
-  String? flag;
-  String? code;
 
-  SelectionPopupModel(
-      {this.id,
-      required this.title,
-      this.value,
-      this.isSelected = false,
-      this.flag,
-      this.code
-      });
-
-  @override
+  SelectionPopupModel({
+    this.id,
+    required this.title,
+    this.value,
+    this.isSelected = false,
+  });
+ @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SelectionPopupModel &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           title == other.title &&
-          value == other.value &&
-          flag == other.flag &&
-          code == other.code;
+          value == other.value;
 
   @override
-  int get hashCode => id.hashCode ^ title.hashCode ^ value.hashCode ^ flag.hashCode ^ code.hashCode;
+  int get hashCode => id.hashCode ^ title.hashCode ^ value.hashCode;
 
-  @override
+   @override
   String toString() {
-    return 'SelectionPopupModel {id: $id, title: $title, value: $value, isSelected: $isSelected, flag: $flag, code: $code }';
+    return 'SelectionPopupModel {id: $id, title: $title, value: $value, isSelected: $isSelected}';
   }
 }

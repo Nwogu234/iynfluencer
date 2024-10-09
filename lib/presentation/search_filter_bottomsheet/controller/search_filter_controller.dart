@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 /// This class manages the state of the SearchFilterBottomsheet, including the
 /// current searchFilterModelObj
 class SearchFilterController extends GetxController {
-
   TextEditingController frametwelveController = TextEditingController();
 
   TextEditingController frametwelveoneController = TextEditingController();
@@ -26,7 +25,6 @@ class SearchFilterController extends GetxController {
     frametwelveController.dispose();
     frametwelveoneController.dispose();
   }
-
 
   onSelected(SelectionPopupModel value) {
   selectedDropDownValue = value; 
@@ -50,17 +48,4 @@ class SearchFilterController extends GetxController {
   searchFilterModelObj.value.dropdownItemList1.refresh();
 }
 
-/* 
-  onSelected2(dynamic value) {
-    for (var element in searchFilterModelObj.value.dropdownItemList2.value) {
-      element.isSelected = false;
-      if (element.id == value.id) {
-        element.isSelected = true;
-      }
-    }
-    searchFilterModelObj.value.dropdownItemList2.refresh();
-  } 
-
-   */
- 
 }

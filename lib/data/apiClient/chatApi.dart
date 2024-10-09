@@ -5,17 +5,16 @@ class ApiClients extends GetConnect {
   // Configure the base URL
   ApiClients() {
     httpClient.defaultContentType = "application/json";
-    httpClient.baseUrl = 'https://iynf-kong-akbf9.ondigitalocean.app/api/v1/';
+    httpClient.baseUrl =
+    'https://iynf-kong.onrender.com/api/v1/';
   }
   dynamic errorHandler(Response response) {
     print(response.toString());
     switch (response.statusCode) {
       case 200:
         return response;
-
       case 201:
         return response;
-
       case 202:
         return response;
       case 500:
@@ -58,6 +57,7 @@ class ApiClients extends GetConnect {
       throw Exception('Server error');
     }
    
+
   }
 
   ///THIS IS FOR GETTING CHATS FOR CREATORS
@@ -83,9 +83,10 @@ class ApiClients extends GetConnect {
       print(e);
       throw Exception('Server error');
     }
+
   }
 
-  /// THIS IS FOR GETTING CHATS FOR CREATORS
+ /// THIS IS FOR GETTING CHATS FOR CREATORS
   Future<Response> getAllChatsWithCreators(String token) async {
     Response response;
     try {
@@ -109,7 +110,6 @@ class ApiClients extends GetConnect {
       throw Exception('Server error');
     }
   }
-
   /// THIS IS FOR GETTING MESSAGES WITH INFLUENCERs CREATORS
   Future<Response> getAllMessages(
       String chatId, String token) async {
@@ -132,7 +132,6 @@ class ApiClients extends GetConnect {
       throw Exception('Server error');
     }
   }
-
   /// THIS IS FOR SENDING A MESSAGE
   Future<Response<dynamic>> sendMessage(Message message, String token) async {
   try {
@@ -144,7 +143,6 @@ class ApiClients extends GetConnect {
         'Authorization': token,
       },
     );
-
     if (response.isOk) {
       print('Message sent and stored successfully');
       return response;
@@ -157,7 +155,6 @@ class ApiClients extends GetConnect {
     throw Exception('Server error');
   }
 }
-
  /// THIS IS FOR DELETING A MESSAGE
   Future<Response> deleteMessage(String chatId, String messageId, String token) async {
     Response response;

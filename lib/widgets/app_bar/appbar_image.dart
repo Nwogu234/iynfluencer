@@ -10,6 +10,7 @@ class AppbarImage extends StatelessWidget {
     this.imagePath,
     this.svgPath,
     this.margin,
+    this.color,
     required this.onTap,
   }) : super(
           key: key,
@@ -27,6 +28,8 @@ class AppbarImage extends StatelessWidget {
 
   Function onTap;
 
+   Color? color;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -41,6 +44,7 @@ class AppbarImage extends StatelessWidget {
           height: height,
           width: width,
           fit: BoxFit.contain,
+          color: color,
         ),
       ),
     );

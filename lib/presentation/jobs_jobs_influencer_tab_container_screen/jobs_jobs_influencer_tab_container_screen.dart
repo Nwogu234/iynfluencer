@@ -19,7 +19,7 @@ import 'package:iynfluencer/widgets/custom_bottom_bar.dart';
 import 'models/jobs_jobs_influencer_tab_container_model.dart';
 
 // ignore_for_file: must_be_immutable
-class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
+class JobsJobsInfluencerTabContainerScreen extends StatefulWidget {
   final String? profileImage;
 
   JobsJobsInfluencerTabContainerScreen({
@@ -29,13 +29,21 @@ class JobsJobsInfluencerTabContainerScreen extends StatelessWidget {
       : super(
           key: key,
         );
-  JobsJobsInfluencerTabContainerController controller = Get.put(
+
+  @override
+  State<JobsJobsInfluencerTabContainerScreen> createState() => _JobsJobsInfluencerTabContainerScreenState();
+}
+
+class _JobsJobsInfluencerTabContainerScreenState extends State<JobsJobsInfluencerTabContainerScreen> {
+  final controller = Get.put(
       JobsJobsInfluencerTabContainerController(
           JobsJobsInfluencerTabContainerModel().obs));
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); 
-  InfluencerHomeController influencerController =
+
+  final influencerController =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
-      
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

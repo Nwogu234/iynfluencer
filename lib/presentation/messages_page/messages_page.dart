@@ -30,7 +30,6 @@ class MessagesPage extends StatefulWidget {
 
 class _MessagesPageState extends State<MessagesPage>
     with SingleTickerProviderStateMixin {
-      
   final MessagesController controller =
       Get.put(MessagesController(MessagesModel().obs));
 
@@ -40,7 +39,6 @@ class _MessagesPageState extends State<MessagesPage>
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
   late AnimationController animationController;
- 
 
   @override
   void initState() {
@@ -49,6 +47,7 @@ class _MessagesPageState extends State<MessagesPage>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+    controller.onInit();
   }
 
   @override
@@ -109,52 +108,35 @@ class _MessagesPageState extends State<MessagesPage>
                   AppbarSearchview(
                     hintText: "Search Chats".tr,
                     controller: controller.searchController,
-                    onSubmitted: (query) async {
-                      Get.to(() => SearchCreatorScreen(
+                    /*   onSubmitted: 
+                    (query) async {
+                       Get.to(() => SearchCreatorScreen(
                             query: query,
                             trendingInfluencers:
                                 homeController.trendingInfluencers,
-                          ));
-                    },
+                          ));  
+                    }*/
                   ),
                   SizedBox(height: 10),
                   Divider(),
                   SizedBox(height: 10),
                   Obx(() {
                     if (controller.isTrendLoading.value) {
-                       return Stack(
-                        children: [
-                         CustomLoadingWidget(
-                          animationController: animationController,
-                             ),
-                          PositionedDirectional(
-                           bottom: 100,
-                           start: 150,
-                           child: SizedBox(), // You can replace SizedBox with your loading widget
-                          ),
-                         ],
-                       );
+                      return CustomLoadingWidget(
+                        animationController: animationController,
+                      );
                     } else if (controller.error.value.isNotEmpty) {
-                     return Stack(
-                     children: [
-                      ResponsiveErrorWidget(
+                      return ResponsiveErrorWidget(
                         errorMessage: controller.error.value,
                         onRetry: () {
-                         controller.getUser();
+                          controller.getUser();
                         },
-                      fullPage: true,
-                      ),
-                     PositionedDirectional(
-                      top: 150,
-                      start: 150,
-                     child: SizedBox(), // You can replace SizedBox with your error widget
-                    ),
-                  ],
-                  );
-                    }  else {
+                        fullPage: true,
+                      );
+                    } else {
                       return SizedBox(
                         width: size.width,
-                        height: MediaQuery.of(context).size.height,
+                        //   height: MediaQuery.of(context).size.height,
                         child: Padding(
                           padding: getPadding(
                             bottom: 5,
@@ -184,12 +166,12 @@ class _MessagesPageState extends State<MessagesPage>
                                       ChatData model =
                                           controller.chatList[index];
                                       return MessagesPageItemWidget(
-                                        messagesPageItemModelObj: model);
+                                          messagesPageItemModelObj: model);
                                     }
                                   },
                                 ),
                               ),
-                           /*    CustomIconButton(
+                              /*    CustomIconButton(
                                 height: 54,
                                 width: 54,
                                 margin: getMargin(

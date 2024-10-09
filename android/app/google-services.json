@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "744503887130",
+    "firebase_url": "https://iynfluencer-c4f3f-default-rtdb.firebaseio.com",
+    "project_id": "iynfluencer-c4f3f",
+    "storage_bucket": "iynfluencer-c4f3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744503887130:android:cb14067f3e6e37381518a3",
+        "android_client_info": {
+          "package_name": "com.iynfluencer.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCzC8RR3LxLNL6YzSNPgBaebqRv8baGJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

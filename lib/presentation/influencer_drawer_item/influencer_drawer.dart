@@ -1,7 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/presentation/home_creator_page/controller/home_creator_controller.dart';
 import 'package:iynfluencer/presentation/influencer_drawer_item/controller/influencer_drawer_controller.dart';
+import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
+import 'package:iynfluencer/presentation/influencer_tabs/contoller/influencers_tabs_controller.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/controller/jobs_jobs_influencer_tab_container_controller.dart';
+import 'package:iynfluencer/presentation/jobs_jobs_influencer_tab_container_screen/models/jobs_jobs_influencer_tab_container_model.dart';
 
 import '../creator_hireslist_tab_container_page/controller/creator_hireslist_tab_container_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +16,11 @@ import '../influencer_home_screen/controller/influencer_home_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class InfluencerDraweritem extends StatelessWidget {
-  final InfluencerHomeController controller;
-  final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  InfluencerDraweritem({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+  final influencerTabCont = Get.put(JobsJobsInfluencerTabContainerController(JobsJobsInfluencerTabContainerModel().obs));
+
+ final InfluencerHomeController controller = Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -228,21 +229,20 @@ class InfluencerDraweritem extends StatelessWidget {
 
   onTapMenutab03() {
     Get.toNamed(
-      AppRoutes.notificationPageClientScreen,
+      AppRoutes.notificationFirestore,
     );
   }
 
   onTapBecomean() {
     if (controller.user.userModelObj.value.creatorId != null) {
-      Get.delete<JobsJobsInfluencerTabContainerController>();
-      Get.delete<TabController>();
       storage.write(key: "activeProfile", value: "Creator");
-      Get.offNamed(
+      Get.delete<TabController>();
+      Get.offAllNamed(
         AppRoutes.homeCreatorContainerScreen,
       );
       // controller.dispose();
     } else {
-      Get.offNamed(
+      Get.offAllNamed(
         AppRoutes.completeProfileCreatorScreen,
       );
     }

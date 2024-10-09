@@ -1,6 +1,10 @@
+import 'package:country_flags/country_flags.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chats_influencer_controller.dart';
+import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
 import '../job_details_screen/widgets/job_details_item_widget.dart';
@@ -13,81 +17,50 @@ import 'package:iynfluencer/widgets/app_bar/appbar_title.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
 
-class JobDetailsScreen extends GetWidget<JobDetailsController> {
+class JobDetailsScreen extends StatefulWidget {
   JobDetailsScreen({
     this.selectedJob,
     this.fromBids = false,
+    this.chatData,
   });
 
-  final Job? selectedJob;
+  final Jobz? selectedJob;
   final bool? fromBids;
+  final ChatData? chatData;
 
-   ChatData chatData = ChatData(
-    id: 'id',
-    creatorId: 'CreatorId',
-    creatorUserId: 'CreatorUserId',
-    influencerId: 'InfluencerId',
-    influencerUserId: 'defaultInfluencerUserId',
-    unreadByCreator: 0,
-    unreadByInfluencer: 0,
-    blockedByCreator: false,
-    blockedByInfluencer: false,
-    chatId: ' ',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    messages: const [],
-    influencerUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-    creatorUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-  );
+  @override
+  State<JobDetailsScreen> createState() => _JobDetailsScreenState();
+}
 
+class _JobDetailsScreenState extends State<JobDetailsScreen> {
+  final UserController user = Get.find();
+
+  final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser: null);
+
+  @override
+  void initState() {
+    super.initState();
+    Get.put(ChatsInfluencerController(
+        chatData: widget.chatData ?? chatsData,
+        selectedJob: widget.selectedJob));
+  }
+
+  JobDetailsController controller = Get.put(JobDetailsController());
 
   @override
   Widget build(BuildContext context) {
@@ -95,30 +68,18 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
     //   selectedJob,
     // ];
 
-    ChatsInfluencerController chatController =
-      Get.put(ChatsInfluencerController(
-        chatData: chatData,
-        selectedJob: selectedJob
-        ));
- 
-    
-    String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${selectedJob?.creator?.userId}-avatar.jpeg";
-    // Assuming this is a String
-    String imageProvider;
-
-    if (avatarUrl != null && avatarUrl.isNotEmpty) {
-      imageProvider = avatarUrl;
-    } else {
-      imageProvider = "mypic.wit";
-    }
-
+    final ChatsInfluencerController chatControllers =
+        Get.find<ChatsInfluencerController>();
     String? capitalizeFirstLetter(String? text) {
       if (text == null || text.isEmpty) {
         return text;
       }
       return text[0].toUpperCase() + text.substring(1);
     }
+
+    String countryCode = user.getCountryCode(user.capitalizeFirstLetter(
+        widget.selectedJob?.creator?.user?.country!));
+    print(countryCode);
 
     return SafeArea(
       child: Scaffold(
@@ -149,7 +110,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                         children: [
                           Padding(
                               padding: getPadding(left: 19),
-                              child: Text("${selectedJob?.title}",
+                              child: Text("${widget.selectedJob?.title}",
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.txtSatoshiBold18)),
@@ -170,7 +131,8 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                   width: getHorizontalSize(324),
                                   margin:
                                       getMargin(left: 20, top: 9, right: 30),
-                                  child: Text("${selectedJob?.description}",
+                                  child: Text(
+                                      "${widget.selectedJob?.description}",
                                       maxLines: null,
                                       textAlign: TextAlign.left,
                                       style: AppStyle
@@ -188,12 +150,13 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                 margin: getMargin(left: 20, top: 9, right: 20),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: selectedJob!.responsibilities!
+                                  children: widget
+                                      .selectedJob!.responsibilities!
                                       .map((mediaFile) {
                                     return Padding(
                                         padding: getPadding(top: 7),
                                         child: Text(
-                                            mediaFile, //duration,budget,list of r4
+                                            mediaFile, 
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: AppStyle
@@ -226,7 +189,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                           text: TextSpan(children: [
                                             TextSpan(
                                                 text:
-                                                    "${selectedJob?.bidsCount ?? 0} ",
+                                                    "${widget.selectedJob?.bidsCount ?? 0} ",
                                                 style: AppStyle
                                                     .txtSatoshiBold125Gray900a7),
                                             TextSpan(
@@ -254,7 +217,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                   Padding(
                                     padding: getPadding(left: 20, top: 7),
                                     child: Text(
-                                      "${selectedJob?.duration} days",
+                                      "${widget.selectedJob?.duration} days",
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style:
@@ -280,7 +243,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                   Padding(
                                     padding: getPadding(left: 20, top: 7),
                                     child: Text(
-                                      '\$${capitalizeFirstLetter(selectedJob?.budgetFrom.toString())} - ${capitalizeFirstLetter(selectedJob?.budgetTo.toString())}',
+                                      '\$${capitalizeFirstLetter(widget.selectedJob?.budgetFrom.toString())} - ${capitalizeFirstLetter(widget.selectedJob?.budgetTo.toString())}',
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.left,
                                       style:
@@ -301,8 +264,9 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                               padding: getPadding(left: 20, top: 13, right: 53),
                               child: Row(children: [
                                 CustomImageView(
-                                    url: imageProvider,
                                     fit: BoxFit.cover,
+                                    url: widget.selectedJob?.creator?.user
+                                        ?.avatar,
                                     height: getSize(40),
                                     width: getSize(40),
                                     radius:
@@ -316,14 +280,14 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${capitalizeFirstLetter(selectedJob?.user?.firstName)} ${capitalizeFirstLetter(selectedJob?.user?.lastName)}",
+                                              "${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedJob?.creator?.user?.lastName)}",
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: AppStyle
                                                   .txtSatoshiBold13Gray900ab),
                                           Row(children: [
                                             Text(
-                                                "${selectedJob?.user?.country}",
+                                                "${widget.selectedJob?.creator?.user?.country}",
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
@@ -347,28 +311,30 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                                                             borderRadius:
                                                                 BorderRadiusStyle
                                                                     .circleBorder7),
-                                                    child: Stack(children: [
-                                                      CustomImageView(
-                                                          svgPath: ImageConstant
-                                                              .imgContrast,
-                                                          height:
-                                                              getVerticalSize(
-                                                                  13),
-                                                          width:
-                                                              getHorizontalSize(
-                                                                  14),
-                                                          alignment:
-                                                              Alignment.center)
-                                                    ])))
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5.0),
+                                                      child: Stack(children: [
+                                                        CountryFlag
+                                                            .fromCountryCode(
+                                                          countryCode,
+                                                          height: 15,
+                                                          width: 13,
+                                                          borderRadius: 10,
+                                                        ),
+                                                      ]),
+                                                    )))
                                           ])
                                         ])),
                                 Spacer(),
                                 CustomButton(
-                                   onTap:() {
-                                        chatController.onTapChatCard(
-                                          selectedJob,
-                                          chatData); 
-                                   },
+                                    onTap: () {
+                                      chatControllers.onTapChatsCard(
+                                          widget.selectedJob,
+                                          chatControllers.chatData,
+                                          null);
+                                    },
                                     height: getVerticalSize(30),
                                     width: getHorizontalSize(86),
                                     text: "lbl_message".tr,
@@ -458,13 +424,25 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              fromBids != null && fromBids == true
+              widget.selectedJob?.bids != null &&
+                      widget.selectedJob!.bids!.isNotEmpty &&
+                      widget.selectedJob?.bids?.first.influencerId ==
+                          user.userModelObj.value.influencerId
                   ? CustomButton(
                       height: getVerticalSize(44),
-                      text: "lbl_edit_bid".tr,
+                      text: "Edit bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
-                        // onTapBid();
+                        if (widget.selectedJob?.bids != null &&
+                            widget.selectedJob!.bids!.isNotEmpty) {
+                          onTapEdit(widget.selectedJob!);
+                        } else {
+                          Get.snackbar(
+                              'Sorry',
+                               'No Bid available to edit.',
+                               snackPosition: SnackPosition.BOTTOM,
+                         );
+                     }
                       },
                     )
                   : CustomButton(
@@ -472,7 +450,7 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
                       text: "lbl_bid".tr,
                       padding: ButtonPadding.PaddingAll12,
                       onTap: () {
-                        onTapBid();
+                        onTapBid(widget.selectedJob!);
                       },
                     ),
             ],
@@ -486,8 +464,20 @@ class JobDetailsScreen extends GetWidget<JobDetailsController> {
 
   /// When the action is triggered, this function uses the `Get` package to
   /// push the named route for the bidScreen.
-  onTapBid() {
-    Get.toNamed(AppRoutes.bidScreen, arguments: selectedJob);
+  onTapBid(Jobz selectedJob) {
+   // final id = widget.selectedJob?.bids?.first.influencerId ?? '';
+   // final UserController user = Get.find();
+   // final users = user.userModelObj.value.influencerId;
+   // print("$id, $users");
+    Get.toNamed(AppRoutes.bidScreen, arguments: widget.selectedJob);
+  }
+
+  onTapEdit(Jobz selectedJob) {
+   // final id = widget.selectedJob?.bids?.first.influencerId ?? '';
+   // final UserController user = Get.find();
+  //  final users = user.userModelObj.value.influencerId;
+  //  print("$id, $users");
+    Get.toNamed(AppRoutes.editScreen, arguments: widget.selectedJob);
   }
 
   /// Navigates to the previous screen.

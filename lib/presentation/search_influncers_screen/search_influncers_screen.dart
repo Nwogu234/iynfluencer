@@ -14,22 +14,22 @@ import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview_2.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 
+
 class SearchInfluncersScreen extends StatefulWidget {
   SearchInfluncersScreen({Key? key}) : super(key: key);
-
   @override
   State<SearchInfluncersScreen> createState() => _SearchInfluncersScreenState();
 }
-
 class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
     with SingleTickerProviderStateMixin {
   SearchInfluncersController controller =
       Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
-
+  SearchResultsController controllers =
+      Get.put(SearchResultsController(SearchResultsModel().obs));
   late AnimationController animationController;
-   late SearchInfluncersController controllers;
-  late SearchResultsController searchResultsController;
-
+  // late SearchInfluncersController controllers;
+  //late SearchResultsController searchResultsController;
+  
   @override
   void initState() {
     super.initState();
@@ -37,21 +37,15 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-
-     searchResultsController = Get.put(SearchResultsController(SearchResultsModel().obs));
-    controllers = Get.put(SearchInfluncersController(SearchInfluncersModel().obs));
   }
-
   @override
   void dispose() {
     animationController.dispose();
     super.dispose();
   }
-
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -241,7 +235,6 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
               }),
             )));
   }
-
   /// Navigates to the previous screen.
   ///
   /// When the action is triggered, this function uses the [Get] library to
@@ -253,13 +246,14 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
 
  void onTapSubmit(String? query) {
     // Get the SearchResultsController instance
-    final searchController = searchResultsController.searchController;
+    final searchController = controllers.searchController;
     searchController.text = query ?? '';
 
-   
-    searchResultsController.filterInfluencers(query:query);
 
-    if (searchResultsController.filteredInfluencers.isEmpty) {
+
+    controllers.filterInfluencers(query:query);
+
+    if (controllers.filteredInfluencers.isEmpty) {
     Get.snackbar(
       'No Influencers Found',
       'There are no influencers matching your search query.',
@@ -271,7 +265,5 @@ class _SearchInfluncersScreenState extends State<SearchInfluncersScreen>
   } else {
     Get.to(() => SearchResultsScreen(query:query));
   }
-
   }
-
 }

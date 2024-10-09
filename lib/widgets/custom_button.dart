@@ -17,7 +17,7 @@ class CustomButton extends StatelessWidget {
       this.prefixWidget,
       this.suffixWidget});
 
-  ButtonShape? shape;
+  ButtonShapes? shape;
 
   ButtonPadding? padding;
 
@@ -138,7 +138,10 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonPadding.PaddingAll4:
         return getPadding(
-          all: 4,
+          top:3,
+          bottom:3,
+          right:11,
+          left:11
         );
       case ButtonPadding.PaddingT4:
         return getPadding(
@@ -164,6 +167,13 @@ class CustomButton extends StatelessWidget {
           top: 32,
           right: 32,
           bottom: 32,
+        );
+      case ButtonPadding.PaddingT52:
+        return getPadding(
+          left: 12,
+          top: 8,
+          right: 12,
+          bottom: 8,
         );
       default:
         return getPadding(
@@ -200,6 +210,8 @@ class CustomButton extends StatelessWidget {
         return ColorConstant.gray20003;
       case ButtonVariant.FillRedA700:
         return ColorConstant.redA700;
+      case ButtonVariant.gray700:
+        return ColorConstant.gray100;
       case ButtonVariant.FillCyan30066:
         return ColorConstant.cyan30066;
       case ButtonVariant.OutlineIndigo50_3:
@@ -294,19 +306,25 @@ class CustomButton extends StatelessWidget {
 
   _setBorderRadius() {
     switch (shape) {
-      case ButtonShape.RoundedBorder12:
+      case ButtonShapes.RoundedBorder12:
         return BorderRadius.circular(
           getHorizontalSize(
-            12.00,
+            25.00,
           ),
         );
-      case ButtonShape.RoundedBorder3:
+      case ButtonShapes.RoundedBorder122:
+        return BorderRadius.circular(
+          getHorizontalSize(
+            30.00,
+          ),
+        );
+      case ButtonShapes.RoundedBorder3:
         return BorderRadius.circular(
           getHorizontalSize(
             3.00,
           ),
         );
-      case ButtonShape.Square:
+      case ButtonShapes.Square:
         return BorderRadius.circular(0);
       default:
         return BorderRadius.circular(
@@ -366,7 +384,7 @@ class CustomButton extends StatelessWidget {
         );
       case ButtonFontStyle.SatoshiBold115:
         return TextStyle(
-          color: ColorConstant.lime900,
+          color: ColorConstant.redA600,
           fontSize: getFontSize(
             11.5,
           ),
@@ -499,6 +517,15 @@ class CustomButton extends StatelessWidget {
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,
         );
+      case ButtonFontStyle.SatoshiBold13White700:
+        return TextStyle(
+          color: ColorConstant.whiteA700,
+          fontSize: getFontSize(
+            17,
+          ),
+          fontFamily: 'Satoshi',
+          fontWeight: FontWeight.w700,
+        );
       default:
         return TextStyle(
           color: ColorConstant.whiteA700,
@@ -512,11 +539,12 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-enum ButtonShape {
+enum ButtonShapes {
   Square,
   RoundedBorder7,
   RoundedBorder12,
   RoundedBorder3,
+  RoundedBorder122
 }
 
 enum ButtonPadding {
@@ -529,6 +557,7 @@ enum ButtonPadding {
   PaddingT13,
   PaddingT8,
   PaddingT32,
+  PaddingT52,
 }
 
 enum ButtonVariant {
@@ -549,11 +578,13 @@ enum ButtonVariant {
   FillRedA700,
   FillCyan30066,
   OutlineIndigo50_3,
-  yellow200
+  yellow200,
+  gray700
 }
 
 enum ButtonFontStyle {
   SatoshiBold14WhiteA700,
+  SatoshiBold13White700,
   SatoshiBold14,
   SatoshiBold14Gray90002,
   SatoshiBold14Gray600,

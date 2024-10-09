@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -9,6 +10,7 @@ import 'package:iynfluencer/presentation/chats_influencer_screen/controller/chat
 import 'package:iynfluencer/presentation/chats_opened_screen/controller/chats_opened_controller.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/widgets/chat_input.dart';
 import 'package:swipe_to/swipe_to.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
 import '../../../theme/app_decoration.dart';
@@ -46,30 +48,44 @@ class ChatMessageBubblez extends StatefulWidget {
 class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
   late final RxBool isDeleted = false.obs;
 
+      void _launchURL(String url) async {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        print('Could not launch $url');
+      }
+    }
+
   @override
   Widget build(BuildContext context) {
-    
-      Color bubbleColor =
+     final isUrl = RegExp(
+      r'^https?://www\.[^\s]+\.[^\s]+$',
+       caseSensitive: false
+       ).hasMatch(widget.messageText);
+    Color bubbleColor =
         widget.isReceived ? ColorConstant.gray200 : ColorConstant.cyan100;
     if (isDeleted.value == true) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.5),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-            bottomLeft:
-                widget.isReceived ? Radius.circular(0) : Radius.circular(20),
-            bottomRight:
-                widget.isReceived ? Radius.circular(20) : Radius.circular(0),
+      return Obx(() {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.5),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomLeft:
+                  widget.isReceived ? Radius.circular(0) : Radius.circular(20),
+              bottomRight:
+                  widget.isReceived ? Radius.circular(20) : Radius.circular(0),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(8),
-        child: Text(
-          'This message has been deleted',
-          style: TextStyle(color: Colors.black87),
-        ),
-      );
+          padding: EdgeInsets.all(8),
+          child: Text(
+            'This message has been deleted',
+            style: TextStyle(color: Colors.black87),
+          ),
+        );
+      });
     } else {
       return Column(
         crossAxisAlignment: widget.isReceived
@@ -117,7 +133,21 @@ class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
                           : Radius.circular(0),
                     ),
                   ),
-                  child: Text(widget.messageText,
+                  child: isUrl ?  RichText(
+                          text: TextSpan(
+                            text: widget.messageText,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: widget.isReceived
+                                  ? Colors.black87
+                                  : Colors.white,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => _launchURL(widget.messageText),
+                          ),
+                        ) :   
+                  Text(
+                    widget.messageText,
                       style: TextStyle(
                           color: widget.isReceived
                               ? Colors.black87
@@ -200,4 +230,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
       }
     });
   }
-  }
+}
+
+
+/* 
+ hhhhhhhhh and I are going to be in the office
+I/flutter ( 3857): 
+I/flutter ( 3857): www.facebook.com */

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
-import 'package:iynfluencer/core/utils/color_constant.dart';
-import 'package:iynfluencer/core/utils/image_constant.dart';
-import 'package:iynfluencer/core/utils/size_utils.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/controller/search_results_controller.dart';
 import 'package:iynfluencer/theme/app_decoration.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_button.dart';
+import 'package:iynfluencer/widgets/custom_button_two.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
 
 class TrendingResultItemWidget extends StatelessWidget {
@@ -21,9 +19,8 @@ class TrendingResultItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${influencer.userId}-avatar.jpeg";
+    String? avatarUrl = influencer.user?.first.avatar;
+    //  "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${influencer.userId}-avatar.jpeg";
     // Assuming this is a String
     String imageProvider;
 
@@ -40,8 +37,113 @@ class TrendingResultItemWidget extends StatelessWidget {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-   return SafeArea(
-            child: Container(
+    return SafeArea(
+        child: Container(
+          height: 900.h,
+            padding: getPadding(left: 6, top: 19, right: 1, bottom: 19),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                      padding: getPadding(left: 20),
+                      child: Text("lbl_influencers".tr,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: AppStyle.txtSatoshiBold16
+                              .copyWith(fontWeight: FontWeight.w600))),
+                  Container(
+                    width: double.maxFinite,
+                    padding:
+                        getPadding(left: 20, top: 16, right: 20, bottom: 16),
+                    child: Row(children: [
+                      Stack(
+                        children: [
+                          CustomImageView(
+                            fit: BoxFit.cover,
+                            url: imageProvider,
+                            height: getSize(55),
+                            width: getSize(55),
+                            radius: BorderRadius.circular(getSize(27.5)),
+                          ),
+                          Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.cyan100,
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: Center(
+                                  child: CustomImageView(
+                                    svgPath: ImageConstant.imgArrowMark,
+                                    height: getSize(5),
+                                    width: getSize(5),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )),
+                        ],
+                      ),
+                      SizedBox(width: 14),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}"
+                                          .length >
+                                      10
+                                  ? "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}"
+                                          .substring(0, 7) +
+                                      "..."
+                                  : "${capitalizeFirstLetter(influencer.user?.first.firstName)} ${capitalizeFirstLetter(influencer.user?.first.lastName)}",
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtSatoshiBold16.copyWith(
+                                fontSize: 16.sp,
+                                color: ColorConstant.black900,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          SizedBox(height: 5),
+                          Text(
+                            "${influencer.jobsDone.toString()} jobs completed"
+                                .tr,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: AppStyle.txtSatoshiLight14Gray900a2.copyWith(
+                                fontWeight: FontWeight.w600, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 30),
+                      CustomButtonTwo(
+                        shape: ButtonShape.RoundedBorderz12,
+                        height: getVerticalSize(42),
+                        width: getHorizontalSize(120),
+                        text: 'Message'.tr,
+                        onTap: onTapEditprofile,
+                        padding: ButtonPaddingz.PaddingAll12,
+                        fontStyle: ButtonFontStylez.SatoshiBold15,
+                      )
+                    ]),
+                  )
+                ])));
+  }
+
+  onTapEditprofile() {
+    Get.toNamed(
+      AppRoutes.editProfileDetailsOneScreen,
+    );
+  }
+}
+
+
+ /*        child: Container(
             padding: getPadding(left: 6, top: 19, right: 1, bottom: 19),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +278,7 @@ class TrendingResultItemWidget extends StatelessWidget {
                                                 left: 13,
                                               ),
                                               child: Text(
-                                                  "${capitalizeFirstLetter(influencer.user?.first.country)}"
+                                                  "${influencer.user?.first.country}"
                                                       .tr,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -303,12 +405,4 @@ class TrendingResultItemWidget extends StatelessWidget {
                           style: AppStyle.txtSatoshiBold16.copyWith(
                               color: ColorConstant.cyan100, fontSize: 13)))
                 ]),
-          ));
-  }
-
-  onTapEditprofile() {
-    Get.toNamed(
-      AppRoutes.editProfileDetailsOneScreen,
-    );
-  }
-}
+          ) */

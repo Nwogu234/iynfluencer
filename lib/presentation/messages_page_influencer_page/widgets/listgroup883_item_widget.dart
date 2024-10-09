@@ -1,15 +1,19 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_influencer_screen/chats_influencer_screen.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/chats_opened_screen.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 
+import '../../../data/models/messages/chatmodel.dart';
 import '../controller/messages_page_influencer_controller.dart';
 import '../models/listgroup883_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../models/messages_page_influencer_model.dart';
 
 // ignore: must_be_immutable
 class Listgroup883ItemWidget extends StatelessWidget {
@@ -20,21 +24,38 @@ class Listgroup883ItemWidget extends StatelessWidget {
 
   final ChatData listgroup883ItemModelObj;
 
-  final MessagesPageInfluencerController messageController = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
-
   final storage = new FlutterSecureStorage();
+
+    
+String formatDateTime(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+
+  if (difference.inDays < 1) {
+    return DateFormat.jm('en_US').format(dateTime); 
+  } else if (difference.inDays == 1) {
+    return 'YESTERDAY';
+  } else if (difference.inDays < 365) {
+    return DateFormat('MMM d').format(dateTime);
+  } else {
+    return DateFormat('MMM d, yyyy').format(dateTime); 
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
    // final data = listgroup883ItemModelObj.unreadByCreator;
+   String formattedDateTime = listgroup883ItemModelObj.messages.isNotEmpty
+        ? formatDateTime(listgroup883ItemModelObj.messages.last.createdAt)
+        : '';
     final bool isOnline = false;
     String messageText = listgroup883ItemModelObj.messages.isNotEmpty
         ? listgroup883ItemModelObj.messages.last.text
         : " ";
 
     String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${listgroup883ItemModelObj.creatorUserId}-avatar.jpeg";
+        listgroup883ItemModelObj.creatorUser!.avatar;
     // Assuming this is a String
     String imageProvider;
 
@@ -133,7 +154,7 @@ class Listgroup883ItemWidget extends StatelessWidget {
                     bottom: listgroup883ItemModelObj.messages.isNotEmpty ? 0 : 15,
                     ),
                   child: Text(
-                    timeago.format(listgroup883ItemModelObj.createdAt),
+                    formattedDateTime,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: AppStyle.txtSatoshiLight14Gray900a2,

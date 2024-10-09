@@ -16,83 +16,30 @@ import '../models/listrectangle50_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 
-// ignore: must_be_immutable
-class Listrectangle50ItemWidget extends StatelessWidget {
+/* // ignore: must_be_immutable
+class Listrectangle50ItemWidget extends StatefulWidget {
   Listrectangle50ItemWidget(
-    this.listrectangle50, {
+    this.listrectangle50, 
+    this.chatData,
+    {
     Key? key,
   }) : super(
           key: key,
         );
 
   Influencer listrectangle50;
-  ChatData chatData = ChatData(
-    id: 'id',
-    creatorId: 'CreatorId',
-    creatorUserId: 'CreatorUserId',
-    influencerId: 'InfluencerId',
-    influencerUserId: 'defaultInfluencerUserId',
-    unreadByCreator: 0,
-    unreadByInfluencer: 0,
-    blockedByCreator: false,
-    blockedByInfluencer: false,
-    chatId: '',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    messages: const [],
-    influencerUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-    creatorUser: UserModel(
-        id: 'id',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        email: 'email',
-        password: 'password',
-        termsAndConditionsAgreement: false,
-        isNewUser: false,
-        isSocial: false,
-        verified: false,
-        verifiedEmail: false,
-        followers: 0,
-        following: 0,
-        views: 0,
-        userId: 'userId',
-        createdAt: '',
-        updatedAt: '',
-        creatorId: 'creatorId',
-        influencerId: 'influencerId',
-        country: 'country',
-        dob: 'dob',
-        phone: 'phone',
-        username: 'username',
-        avatar: 'avatar',
-        cover: 'cover'),
-  );
+   ChatData? chatData;
+
+  @override
+  State<Listrectangle50ItemWidget> createState() =>
+      _Listrectangle50ItemWidgetState();
+}
+
+class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
+  
 
   var controller = Get.find<HomeCreatorController>();
+  late ChatsOpenedController chatsController;
 
   onTapprofilecard(Influencer listrectangle50) {
     Get.to(
@@ -101,12 +48,15 @@ class Listrectangle50ItemWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    ChatsOpenedController chatsController = Get.put(ChatsOpenedController(
-        chatData: chatData, selectedInfluencer: listrectangle50));
+  void initState() {
+    super.initState();
+    chatsController = Get.put(ChatsOpenedController(
+        chatData: widget.chatData!, selectedInfluencer: widget.listrectangle50));
+  }
 
-    String? avatarUrl =
-        "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${listrectangle50.userId}-avatar.jpeg";
+  @override
+  Widget build(BuildContext context) {
+    String? avatarUrl = widget.listrectangle50.user?.first.avatar;
     //  'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${listrectangle50.userId}-avatar.jpeg';
     // Assuming this is a String
     String imageProvider;
@@ -126,54 +76,54 @@ class Listrectangle50ItemWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        onTapprofilecard(listrectangle50);
+        onTapprofilecard(widget.listrectangle50);
       },
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            FittedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 30),
-                        child: Container(
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: CustomImageView(
-                            url: imageProvider,
-                            fit: BoxFit.cover,
-                            height: getSize(60),
-                            width: getSize(60),
-                            radius: BorderRadius.circular(getSize(25.0)),
-                          ),
+      child: SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CustomImageView(
+                          url: widget.listrectangle50.user?.first.avatar ??
+                              'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg',
+                          fit: BoxFit.cover,
+                          height: getSize(60),
+                          width: getSize(60),
+                          radius: BorderRadius.circular(getSize(50.0)),
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: getPadding(
-                            right: 50,
-                            top: 6,
-                            bottom: 3,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                    Padding(
+                      padding: getPadding(
+                        right: 10,
+                        top: 6,
+                        bottom: 3,
+                      ),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "${capitalizeFirstLetter(listrectangle50.user?.first.firstName)} ${capitalizeFirstLetter(listrectangle50.user?.first.lastName)}",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtSatoshiBold16,
+                              Container(
+                                width: 170,
+                                child: Text(
+                                  "${capitalizeFirstLetter(widget.listrectangle50.user?.first.firstName)} ${capitalizeFirstLetter(widget.listrectangle50.user?.first.lastName)}",
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Black900,
+                                ),
                               ),
                               Padding(
                                 padding: getPadding(
@@ -181,15 +131,16 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CustomImageView(
                                       svgPath:
                                           ImageConstant.imgFrameBlueGray400,
                                       height: getSize(
-                                        15,
+                                        13,
                                       ),
                                       width: getSize(
-                                        15,
+                                        13,
                                       ),
                                       margin: getMargin(
                                         bottom: 4,
@@ -200,68 +151,340 @@ class Listrectangle50ItemWidget extends StatelessWidget {
                                         left: 4,
                                       ),
                                       child: Text(
-                                          "${listrectangle50.jobsDone.toString()} jobs completed"
+                                          "${widget.listrectangle50.jobsDone.toString()} Jobs Completed"
                                               .tr,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiBold16
+                                          style: AppStyle.txtSatoshiMedium
                                               .copyWith(
-                                                  fontWeight:
-                                                      FontWeight.normal)),
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 10.sp)),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: getPadding(left: 30),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadiusStyle.txtRoundedBorder6.copyWith(),
+                          color: ColorConstant.pink,
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomImageView(
-                            svgPath: ImageConstant.imgFrameDustbin,
-                            height: getSize(
-                              18,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        // Ribbon color
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              size: 5,
+                              color: Colors.white,
                             ),
-                            width: getSize(
-                              18,
+                            Text(
+                              'View Profile',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10
+                                    .sp, // Adjust font size according to your design
+                              ),
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                             ),
-                            margin: getMargin(
-                              bottom: 2,
-                            ),
-                          ),
+                          ],
                         ),
-                      ]),
-                ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Text("${listrectangle50.bio}",
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold16
-                      .copyWith(fontSize: 14.sp, fontWeight: FontWeight.w600)),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: CustomButtonOne(
-                  height: getVerticalSize(50),
-                  text: "Message".tr,
-                  margin: getMargin(top: 17),
-                  padding: ButtonPaddings.PaddingAll156,
-                  onTap: () {
-                     chatsController.onTapChatCard(
-                      listrectangle50,
-                       chatData
-                       ); 
-                 }),
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Divider(
-                  thickness: 1.2,
-                ))
-          ]),
-        ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Text("${widget.listrectangle50.bio}",
+                    textAlign: TextAlign.left,
+                    style: AppStyle.txtSatoshiMedium.copyWith(
+                        fontSize: 12.sp, fontWeight: FontWeight.w400)),
+              ),
+              Padding(
+                padding: getPadding(right: 10),
+                child: Center(
+                  child: CustomButtonOne(
+                      variant: ButtonVariants.FillCyan300,
+                      height: getVerticalSize(50),
+                      text: "Message".tr,
+                      margin: getMargin(top: 17),
+                      padding: ButtonPaddings.PaddingAll15,
+                      onTap: () {
+                        chatsController.onTapChatCard(
+                            widget.listrectangle50, 
+                            widget.chatData!
+                            );
+                      }),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(
+                    thickness: .1,
+                  ))
+            ]),
+      ),
+    );
+  }
+}
+ */
+
+// ignore: must_be_immutable
+class Listrectangle50ItemWidget extends StatefulWidget {
+  Listrectangle50ItemWidget(
+    this.listrectangle50,
+    this.chatData, {
+    Key? key,
+  }) : super(
+          key: key,
+        );
+
+  Influencer listrectangle50;
+  ChatData? chatData;
+//final chatData = Get.arguments as ChatData;
+
+  @override
+  State<Listrectangle50ItemWidget> createState() =>
+      _Listrectangle50ItemWidgetState();
+}
+
+class _Listrectangle50ItemWidgetState extends State<Listrectangle50ItemWidget> {
+  var controller = Get.find<HomeCreatorController>();
+
+  // late ChatsOpenedController chatsController;
+
+  final chatsData = ChatData(
+      id: '',
+      creatorId: '',
+      creatorUserId: '',
+      influencerId: '',
+      influencerUserId: '',
+      unreadByCreator: 0,
+      unreadByInfluencer: 0,
+      blockedByCreator: false,
+      blockedByInfluencer: false,
+      chatId: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      messages: const [],
+      influencerUser: null,
+      creatorUser: null);
+
+  @override
+  void initState() {
+    super.initState();
+    /* chatsController = Get.put(ChatsOpenedController(
+     chatData: widget.chatData!, selectedInfluencer: widget.listrectangle50)); */
+    Get.put(ChatsOpenedController(
+        chatData: widget.chatData ?? chatsData,
+        selectedInfluencer: widget.listrectangle50));
+  }
+
+  onTapprofilecard(Influencer listrectangle50, ChatData? chatData) {
+    Get.to(
+      InfluencerProfileAboutPage(
+          chatData: chatData ?? chatsData, selectedInfluencer: listrectangle50),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ChatsOpenedController chatsController =
+        Get.find<ChatsOpenedController>();
+      String? avatarUrl = widget.listrectangle50.user?.first.avatar;
+    //  'https://iynf-kong-akbf9.ondigitalocean.app/users/avatars/user-${listrectangle50.userId}-avatar.jpeg';
+    // Assuming this is a String
+    String imageProvider;
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = "mypic.wit";
+    }
+
+    String? capitalizeFirstLetter(String? text) {
+      if (text == null || text.isEmpty) {
+        return text;
+      }
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    return GestureDetector(
+      onTap: () {
+        onTapprofilecard(
+          widget.listrectangle50,
+          widget.chatData,
+        );
+      },
+      child: SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CustomImageView(
+                          url: widget.listrectangle50.user?.first.avatar ??
+                              'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg',
+                          fit: BoxFit.cover,
+                          height: getSize(60),
+                          width: getSize(60),
+                          radius: BorderRadius.circular(getSize(50.0)),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: getPadding(
+                        right: 10,
+                        top: 6,
+                        bottom: 3,
+                      ),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 170,
+                                child: Text(
+                                  "${capitalizeFirstLetter(widget.listrectangle50.user?.first.firstName)} ${capitalizeFirstLetter(widget.listrectangle50.user?.first.lastName)}",
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold14Black900,
+                                ),
+                              ),
+                              Padding(
+                                padding: getPadding(
+                                  bottom: 5,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CustomImageView(
+                                      svgPath:
+                                          ImageConstant.imgFrameBlueGray400,
+                                      height: getSize(
+                                        13,
+                                      ),
+                                      width: getSize(
+                                        13,
+                                      ),
+                                      margin: getMargin(
+                                        bottom: 4,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: getPadding(
+                                        left: 4,
+                                      ),
+                                      child: Text(
+                                          "${widget.listrectangle50.jobsDone.toString()} Jobs Completed"
+                                              .tr,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          style: AppStyle.txtSatoshiMedium
+                                              .copyWith(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 10.sp)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: getPadding(left: 30),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadiusStyle.txtRoundedBorder6.copyWith(),
+                          color: ColorConstant.pink,
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        // Ribbon color
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              size: 5,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'View Profile',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10
+                                    .sp, // Adjust font size according to your design
+                              ),
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Text("${widget.listrectangle50.bio}",
+                    textAlign: TextAlign.left,
+                    style: AppStyle.txtSatoshiMedium.copyWith(
+                        fontSize: 12.sp, fontWeight: FontWeight.w400)),
+              ),
+              Padding(
+                padding: getPadding(right: 10),
+                child: Center(
+                  child: CustomButtonOne(
+                      variant: ButtonVariants.FillCyan300,
+                      height: getVerticalSize(50),
+                      text: "Message".tr,
+                      margin: getMargin(top: 17),
+                      padding: ButtonPaddings.PaddingAll15,
+                      onTap: () {
+                        chatsController.onTapChatCard(
+                            widget.listrectangle50, chatsController.chatData);
+                      }),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(
+                    thickness: .1,
+                  ))
+            ]),
       ),
     );
   }

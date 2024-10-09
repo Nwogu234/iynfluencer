@@ -16,6 +16,8 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 import 'package:iynfluencer/widgets/custom_search_view.dart';
 import 'package:iynfluencer/widgets/custom_text_form_field.dart';
 
+
+
 class SearchResultsScreen extends StatefulWidget {
   final String? query;
   final String? fromDate;
@@ -34,28 +36,23 @@ class SearchResultsScreen extends StatefulWidget {
   @override
   State<SearchResultsScreen> createState() => _SearchResultsScreenState();
 }
-
 class _SearchResultsScreenState extends State<SearchResultsScreen>
     with SingleTickerProviderStateMixin {
   SearchResultsController controller =
       Get.put(SearchResultsController(SearchResultsModel().obs));
-
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
-
   
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
-
   void _onScroll() {
     if (!controller.isLoading.value &&
         _scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
-      controller.loadRecommendedInfluencers();
+     // controller.loadRecommendedInfluencers();
     }
   }
-
   @override
   void initState() {
     super.initState();
@@ -67,18 +64,15 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
     controller.searchController.text = widget.query ?? '';
     _scrollController.addListener(_onScroll);
   }
-
   @override
   void dispose() {
     animationController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     String? query = widget.query;
-
     return RefreshIndicator(
       onRefresh: _refresh,
       child: SafeArea(
@@ -120,9 +114,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                   return SingleChildScrollView(
                     controller: _scrollController,
                     child: Container(
-                      height: 380.h,
+                      height: 900.h,
                       child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
                                           itemCount: controller.isRecommendedLoading.value
                                           ? 5
                                           : controller
@@ -136,7 +129,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                                         } else {
                                return Padding(
                                         padding:
-                                                EdgeInsets.only(right: 10.w),
+                                                EdgeInsets.only(top: 2.h),
                                         child: TrendingResultItemWidget(
                                           influencer: controller.filteredInfluencers[index]
                                                 ),
@@ -146,7 +139,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
                                       }),
                     )
                     
-
                   );
                 }
                 
@@ -155,7 +147,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
               ))),
     );
   }
-
   /// Navigates to the previous screen.
   ///
   /// When the action is triggered, this function uses the [Get] library to

@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/widgets/custom_small_button.dart';
 import 'package:iynfluencer/widgets/custom_small_button2.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,7 +19,7 @@ class InfluencerHomeItemWidget extends StatelessWidget {
           key: key,
         );
 
-  Job _job;
+  Jobz _job;
 
   var controller = Get.find<InfluencerHomeController>();
 
@@ -252,164 +253,3 @@ class InfluencerHomeItemWidget extends StatelessWidget {
   }
 }
 
-
-/* 
- child: Container(
-          padding: getPadding(
-            top: 13,
-            bottom: 13,
-          ),
-          decoration: AppDecoration.outlineIndigo501,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "${_job.title}",
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.left,
-                style: AppStyle.txtSatoshiBold14Gray900ab,
-              ),
-              Container(
-                width: getHorizontalSize(
-                  321,
-                ),
-                margin: getMargin(
-                  top: 15,
-                  right: 13,
-                ),
-                child: Text(
-                  "${_job.description}",
-                  maxLines: 2,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiLight14Gray900ab,
-                ),
-              ),
-              Padding(
-                padding: getPadding(
-                  top: 14,
-                  right: 67,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "lbl_budget".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight135Gray600,
-                        ),
-                        Padding(
-                          padding: getPadding(
-                            top: 3,
-                          ),
-                          child: Text(
-                            "\$${_job.budgetFrom}-\$${_job.budgetTo}".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold125Gray900a7,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "msg_project_duration".tr,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: AppStyle.txtSatoshiLight135Gray600,
-                        ),
-                        Padding(
-                          padding: getPadding(
-                            top: 3,
-                          ),
-                          child: Text(
-                            "${_job.duration} weeks".tr,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: AppStyle.txtSatoshiBold125Gray900a7,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              CustomImageView(
-                imagePath: ImageConstant.imgRectangle5069180x335,
-                height: getVerticalSize(
-                  180,
-                ),
-                width: getHorizontalSize(
-                  335,
-                ),
-                radius: BorderRadius.circular(
-                  getHorizontalSize(
-                    7,
-                  ),
-                ),
-                margin: getMargin(
-                  top: 16,
-                ),
-              ),
-              Padding(
-                padding: getPadding(
-                  top: 10,
-                  bottom: 8,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgGroup85230,
-                      height: getSize(
-                        30,
-                      ),
-                      width: getSize(
-                        30,
-                      ),
-                      radius: BorderRadius.circular(
-                        getSize(
-                          15.0,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(
-                        left: 12,
-                        top: 7,
-                        bottom: 3,
-                      ),
-                      child: Text(
-                        "${_job.user?.firstName}".tr,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiBold14Gray900ab,
-                      ),
-                    ),
-                    Padding(
-                      padding: getPadding(
-                        left: 8,
-                        top: 9,
-                        bottom: 3,
-                      ),
-                      child: Text(
-                        "lbl_11_mins_ago".tr,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: AppStyle.txtSatoshiLight125,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ), */

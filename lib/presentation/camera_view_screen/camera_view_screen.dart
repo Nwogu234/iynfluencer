@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/image_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/models/media_file/media_file.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_image.dart';
 import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 import 'package:iynfluencer/widgets/custom_image_view.dart';
@@ -13,16 +14,26 @@ import 'package:iynfluencer/widgets/custom_image_view.dart';
 class CameraViewScreen extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const  CameraViewScreen({
-    required this.path,
+   this.path,
+   this.mediaFile,
+   this.deliver
   //  required this.onImageSend,
     });
 
-  final String path;
+  final String? path;
+  final String? deliver;
+  final File? mediaFile;
  // final Function onImageSend;
   static TextEditingController _controller = TextEditingController();
+ final String baseUrl = 'https://iynf-kong-ko4xr.ondigitalocean.app';
 
   @override
   Widget build(BuildContext context) {
+     print('MediaFile: $mediaFile');
+    if (mediaFile != null) {
+      print('MediaFile Path: ${mediaFile!.path}');
+      print('MediaFile Path: $baseUrl/${mediaFile!.path.split('/').last}');
+    }
     
     return Scaffold(
       backgroundColor:Colors.black,
@@ -41,6 +52,7 @@ class CameraViewScreen extends StatelessWidget {
                 margin: getMargin(left: 10, top: 5, bottom: 20, right: 10)),
               ),
             actions:<Widget>[
+              path != null ?
               IconButton(
                 icon:Icon(
                   Icons.crop_rotate,
@@ -48,7 +60,8 @@ class CameraViewScreen extends StatelessWidget {
                   color: ColorConstant.whiteA700,
                 ),
                 onPressed:(){},
-              ),
+              ) : SizedBox.shrink(),
+                path != null ?
               IconButton(
                 icon: Icon(
                   Icons.emoji_emotions_outlined,
@@ -56,7 +69,8 @@ class CameraViewScreen extends StatelessWidget {
                   color: ColorConstant.whiteA700,
                 ),
                 onPressed:(){},
-              ),
+              ) : SizedBox.shrink(),
+               path != null ?
               IconButton(
                 icon:Icon(
                   Icons.title,
@@ -64,7 +78,8 @@ class CameraViewScreen extends StatelessWidget {
                   color: ColorConstant.whiteA700,
                 ),
                 onPressed:(){},
-              ),
+              ) : SizedBox.shrink(),
+               path != null ?
               IconButton(
                 icon: Icon(
                   Icons.edit,
@@ -72,7 +87,7 @@ class CameraViewScreen extends StatelessWidget {
                   color: ColorConstant.whiteA700,
                 ),
                 onPressed:(){},
-              )
+              ) : SizedBox.shrink(),
             ]
       
         ),
@@ -86,11 +101,22 @@ class CameraViewScreen extends StatelessWidget {
             Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height - 150,
-            child: Image.file(
-              File(path),
+            child: path != null ?   
+             Image.file(
+             File( path ?? ''),
               fit: BoxFit.cover,
+            ) : deliver != null ?
+            CustomImageView(
+              url: deliver ?? '',
+              fit: BoxFit.cover,
+            ) : 
+            Image.file(
+               mediaFile!,
+               fit: BoxFit.cover,
+              )  
+          
             ),
-            ),
+          path != null ?
             Positioned(
             bottom:0,
             child:Container(
@@ -129,10 +155,6 @@ class CameraViewScreen extends StatelessWidget {
                 ),
                 suffixIcon: InkWell(
                   onTap: (){
-                   /*  onImageSend(
-                      path,
-                      _controller.text.trim(),
-                    ); */
                   },
                   child:  CircleAvatar(
                     radius: 27,
@@ -147,7 +169,7 @@ class CameraViewScreen extends StatelessWidget {
               )
             )
             )
-            )
+            ) : SizedBox.shrink()
           ]
         ),
       ),

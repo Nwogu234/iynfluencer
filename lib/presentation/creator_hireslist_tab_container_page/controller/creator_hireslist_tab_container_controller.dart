@@ -13,6 +13,22 @@ class CreatorHireslistTabContainerController extends GetxController
 
   Rx<CreatorHireslistTabContainerModel> creatorHireslistTabContainerModelObj;
 
-  late TabController tabiewController =
-      Get.put(TabController(vsync: this, length: 2));
+  late TabController tabiewController;
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    tabiewController = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void onClose() {
+    tabiewController.dispose();
+    super.onClose();
+  }
 }
+
+
+
+

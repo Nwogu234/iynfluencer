@@ -205,7 +205,7 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
                                               text: "lbl_earnings".tr,
                                               margin:
                                                   getMargin(left: 2, top: 20),
-                                              shape: ButtonShape.Square,
+                                              shape: ButtonShapes.Square,
                                               fontStyle: ButtonFontStyle
                                                   .SatoshiLight16,
                                               prefixWidget: Container(
@@ -417,7 +417,7 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
         return AppRoutes.jobsJobsInfluencerPage;
 
       case BottomBarEnum.Chats:
-        return AppRoutes.messagesPageInfluencerPage;
+        return AppRoutes.messagesPage;
       case BottomBarEnum.Community:
         return AppRoutes.communityPage;
       default:
@@ -433,8 +433,8 @@ class InfluencerHomeOneScreen extends GetWidget<InfluencerHomeOneController> {
       case AppRoutes.jobsJobsInfluencerTabContainerScreen:
         return JobsJobsInfluencerTabContainerScreen();
 
-      case AppRoutes.messagesPageInfluencerPage:
-        return MessagesPageInfluencerPage();
+      case AppRoutes.messagesPage:
+        return MessagesPage();
       case AppRoutes.communityPage:
         return CommunityPage();
       default:

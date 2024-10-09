@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/apiClient/notificationApi.dart';
 import 'package:iynfluencer/presentation/log_in_screen/models/log_in_model.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +15,79 @@ class LogInController extends GetxController {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  var passwordFocusNode= FocusNode();
-  var emailFocusNode=FocusNode();
+  var passwordFocusNode = FocusNode();
+  var emailFocusNode = FocusNode();
   final apiClient = ApiClient();
+  final notificationClient = NotificationClient();
   String message = '';
+  
 
   Rx<LogInModel> logInModelObj = LogInModel(email: "", password: "").obs;
 
   Rx<bool> isShowPassword = true.obs;
+
+
+ /*  Future<void> logIn() async {
+  logInModelObj.update((val) {
+    val?.email = usernameController.text;
+    val?.password = passwordController.text;
+  });
+
+  Get.dialog(
+    Center(
+      child: CircularProgressIndicator(
+        color: ColorConstant.cyan100,
+      ),
+    ),
+    barrierDismissible: false,
+  );
+
+  try {
+    Response loginResponse = await apiClient.logIn(logInModelObj.value);
+    print("This is message response ${loginResponse.body["message"]}");
+    message = loginResponse.body['message'].toString();
+
+    if (loginResponse.body['status'].toString() == 'success') {
+       Get.back();
+      var headers = loginResponse.headers;
+      var authorization = headers?['authorization'];
+      await storage.write(key: 'token', value: authorization.toString());
+
+      try {
+       await notificationClient.startOAuthFlow();
+      } catch (e) {
+        Get.back(); 
+        print(e);
+        Get.snackbar('Error', 'OAuth process failed. Please try again.');
+        return; // Stop further processing
+      }
+
+
+      var activeProfile = await storage.read(key: 'activeProfile');
+      print(activeProfile);
+
+      if (activeProfile == null) {
+        Get.offNamed(AppRoutes.chooseProfile);
+      } else if (activeProfile == 'Creator') {
+        Get.offNamed(AppRoutes.homeCreatorContainerScreen);
+      } else {
+        Get.offNamed(AppRoutes.influencerTabScreen);
+      }
+        Get.snackbar('Success', 'Login successful!');
+    } else {
+      print(loginResponse.statusCode);
+      Get.back();
+      Get.snackbar('Failure', 'Login failed: ${loginResponse.body["message"].toString()}');
+    }
+  } catch (e) {
+    Get.back();
+    print(e);
+    Get.snackbar('Error', 'Server interrupted');
+  }
+}   
+ */
+ 
+
 
   Future<void> logIn() async {
     logInModelObj.update((val) {
@@ -30,7 +96,10 @@ class LogInController extends GetxController {
     });
 
     Get.dialog(
-      Center(child: CircularProgressIndicator()), // showing a loading dialog
+      Center(
+          child: CircularProgressIndicator(
+        color: ColorConstant.cyan100,
+      )), // showing a loading dialog
       barrierDismissible: false, // user must not close it manually
     );
 
@@ -51,6 +120,7 @@ class LogInController extends GetxController {
         // await storage.write(key: 'activeProfile', value:null);
         // var test = await storage.read(key: 'test');
         // print(test);
+       
         var activeProfile = await storage.read(key: 'activeProfile');
         print(activeProfile);
         if (activeProfile == null) {
@@ -71,7 +141,7 @@ class LogInController extends GetxController {
       print(e);
       Get.snackbar('Error', 'Sever interrupted');
     }
-  }
+  }   
 
   @override
   void onClose() {

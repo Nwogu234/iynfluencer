@@ -26,14 +26,6 @@ class JobsRequestsInfluencerController extends GetxController {
   final apiClient = ApiClient();
   var error = ''.obs;
   List<JobsRequestsInfluencerModel> existingJobs = [];
-  late AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   getUser() async {
     isLoading.value = true;

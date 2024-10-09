@@ -27,7 +27,9 @@ class CustomTextFormField extends StatelessWidget {
       this.onChanged,
       this.onSubmitted,
       this.onPressed,
-      this.label});
+      this.label,
+      this.query
+      });
 
   TextFormFieldShape? shape;
 
@@ -79,6 +81,8 @@ class CustomTextFormField extends StatelessWidget {
 
   final VoidCallback? onPressed;
 
+  final String? query;
+
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -94,6 +98,7 @@ class CustomTextFormField extends StatelessWidget {
       width: width ?? double.maxFinite,
       margin: margin,
       child: TextFormField(
+       // initialValue: query ?? '',
         controller: controller,
         focusNode: focusNode,
         autofocus: autofocus!,
@@ -148,7 +153,7 @@ class CustomTextFormField extends StatelessWidget {
         return TextStyle(
           color: ColorConstant.gray600,
           fontSize: getFontSize(
-            35,
+            22,
           ),
           fontFamily: 'Satoshi',
           fontWeight: FontWeight.w700,

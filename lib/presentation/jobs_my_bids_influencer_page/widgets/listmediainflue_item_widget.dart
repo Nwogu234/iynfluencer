@@ -1,5 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
+import 'package:iynfluencer/presentation/job_my_bids_detail_screen/job_my_bids_detail_screen.dart';
 import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/models/jobs_my_bids_influencer_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../controller/jobs_my_bids_influencer_controller.dart';
@@ -11,13 +13,15 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore: must_be_immutable
 class ListmediainflueItemWidget extends StatelessWidget {
   ListmediainflueItemWidget(
-    this.listmediainflueItemModelObj, {
+    this.listmediainflueItemModelObj, 
+     this.chatData,{
     Key? key,
   }) : super(
           key: key,
         );
 
-  JobsMyBidsInfluencerModel listmediainflueItemModelObj;
+  JobsMyBidsInfluencerModel? listmediainflueItemModelObj;
+   ChatData? chatData;
 
   // JobsMyBidsInfluencerController controller =
   //     Get.put<JobsMyBidsInfluencerController>();
@@ -35,9 +39,10 @@ class ListmediainflueItemWidget extends StatelessWidget {
     return GestureDetector(
         onTap: (() {
           Get.to(
-            JobDetailsScreen(
-              selectedJob: listmediainflueItemModelObj.job,
-              fromBids: true,
+            JobMyBidsDetailsScreen(
+              selectedJob: listmediainflueItemModelObj?.job!,
+              jobMyBids: listmediainflueItemModelObj,
+              chatData: chatData,
             ),
           );
         }),
@@ -55,7 +60,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      listmediainflueItemModelObj.job!.title!,
+                      listmediainflueItemModelObj?.job?.title ?? '',
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.txtSatoshiBold16,
@@ -104,7 +109,8 @@ class ListmediainflueItemWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               CustomImageView(
-                                url: listmediainflueItemModelObj.job?.user?.avatar ??  ImageConstant.imgGroup85233,
+                                fit: BoxFit.cover,
+                                url: listmediainflueItemModelObj?.job?.creatorDetails?.avatar ??  ImageConstant.imgGroup85233,
                                 height: getSize(
                                   30,
                                 ),
@@ -131,7 +137,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 ),
                               ),
                          Text(
-                              "${capitalizeFirstLetter(listmediainflueItemModelObj.job?.user?.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj.job?.user?.lastName ?? 'Adebayo')}",
+                              "${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.creatorDetails?.firstName ?? 'Mark')} ${capitalizeFirstLetter(listmediainflueItemModelObj?.job?.creatorDetails?.lastName ?? 'Adebayo')}",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.txtSatoshiLight135Gray600.copyWith(
@@ -159,8 +165,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 ),
                                 child: Text(
                                   timeago.format(DateTime.parse(
-                                      listmediainflueItemModelObj
-                                          .job!.createdAt!)),
+                                      listmediainflueItemModelObj?.job?.createdAt ?? '')),
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.txtSatoshiLight125.copyWith(
@@ -182,7 +187,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                           child: Text(
                             truncateWithEllipsis(
                               myString:
-                                  listmediainflueItemModelObj.job!.description!.tr,
+                                  listmediainflueItemModelObj?.job?.description?.tr ?? '',
                             ),
                             maxLines: null,
                             textAlign: TextAlign.left,
@@ -223,18 +228,18 @@ class ListmediainflueItemWidget extends StatelessWidget {
                             width: getHorizontalSize(
                               94,
                             ),
-                            text:  capitalizeFirstLetter(listmediainflueItemModelObj.status!),
+                            text:  capitalizeFirstLetter(listmediainflueItemModelObj?.status!),
                             // text: "lbl_accepted".tr,
                             margin: getMargin(
                               top: 5,
                             ),
                             variant:
-                                listmediainflueItemModelObj.status! == 'pending'
+                                listmediainflueItemModelObj?.status == 'pending'
                                     ? ButtonVariant.FillRed10099
                                     : ButtonVariant.FillGreenA10099,
-                            shape: ButtonShape.RoundedBorder12,
+                            shape: ButtonShapes.RoundedBorder12,
                             padding: ButtonPadding.PaddingT4,
-                            fontStyle:  listmediainflueItemModelObj.status! == 'pending' ?
+                            fontStyle:  listmediainflueItemModelObj?.status == 'pending' ?
                              ButtonFontStyle.SatoshiBold115Red700 :
                             ButtonFontStyle.SatoshiBold115Green700,
                             prefixWidget: Container(
@@ -242,9 +247,9 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 right: 4,
                               ),
                               child: CustomImageView(
-                                svgPath:  listmediainflueItemModelObj.status! == 'pending' ? 
+                                svgPath:  listmediainflueItemModelObj?.status == 'pending' ? 
                                 ImageConstant.imgClock :
-                                ImageConstant.imgSearchGreen700,
+                                ImageConstant.imgSearchGreen700, 
                               ),
                             ),
                           ),
@@ -274,7 +279,7 @@ class ListmediainflueItemWidget extends StatelessWidget {
                                 bottom: 20
                               ),
                               child: Text(
-                                '\$${listmediainflueItemModelObj.price!.toString()}',
+                                '\$${((listmediainflueItemModelObj?.price ?? 0) / 100).toString()}',
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtSatoshiBold125Gray900a7,

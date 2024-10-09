@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class InfluencerHomeController extends GetxController {
 
   final UserController user = Get.find();
 
-  TextEditingController searchController = TextEditingController();
+  late TextEditingController searchController2 = TextEditingController();
 
   Rx<InfluencerHomeModel> influencerHomeModelObj = InfluencerHomeModel().obs;
   final storage = new FlutterSecureStorage();
@@ -27,20 +28,12 @@ class InfluencerHomeController extends GetxController {
   Rx<bool> isLoading = false.obs;
   var error = ''.obs;
   Rx<bool> isJobsLoading = false.obs;
-  List<Job> jobsList = <Job>[].obs;
-  List<Job> infJobsList = <Job>[].obs;
-
+  List<Jobz> jobsList = <Jobz>[].obs;
+  List<Jobz> infJobsList = <Jobz>[].obs;
+  bool empty = false;
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
 
-  late final AnimationController animationController;
-
-  void initializeAnimationController(TickerProvider vsync) {
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: vsync,
-    )..repeat();
-  }
 
   // this is to get user when the jobs page is loaded
   getUser() async {
@@ -75,17 +68,24 @@ class InfluencerHomeController extends GetxController {
       print(response.body);
       if (response.isOk) {
         final responseJson = response.body;
-        final jobResponse = JobResponse.fromJson(responseJson);
-        jobsList = jobResponse.data.docs;
-        infJobsList = jobsList
+        final jobResponse = JobResponsez.fromJson(responseJson);
+        jobsList = jobResponse.data.docs!;
+       infJobsList = jobsList
             .where(
-                (item) => item.creatorId != user.userModelObj.value.creatorId)
+                (item) =>  item.creator!.creatorId != user.userModelObj.value.creatorId)
+                
+         //       item.creatorId != user.userModelObj.value.creatorId)
             .toList();
         print(jobsList); // List of Influencers
         error('');
         isJobsLoading.value = false;
+        if(infJobsList.isEmpty){
+            error("No Job Posts Found");
+            isJobsLoading.value = false;
+        }
+        
       } else {
-        error('Something went wrong');
+        error('Check your connection');
         isJobsLoading.value = false;
       }
     } catch (e) {
@@ -95,6 +95,8 @@ class InfluencerHomeController extends GetxController {
       isJobsLoading.value = false;
     }
   }
+
+  
 
   void onSearchSubmitted(String query) {
     print("Submitted query: $query");
@@ -120,8 +122,7 @@ class InfluencerHomeController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    searchController.dispose();
-    animationController.dispose();
+    searchController2.dispose();
   }
 
   

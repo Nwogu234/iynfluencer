@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/presentation/creator_hireslist_page/creator_hireslist_page.dart';
+import 'package:iynfluencer/presentation/creator_jobslist_page/creator_jobslist_page.dart';
 import 'package:iynfluencer/presentation/creator_profile_draweritem/creator_profile_draweritem.dart';
 import 'package:iynfluencer/presentation/creator_profile_listed_jobs_page/creator_profile_listed_jobs_page.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/controller/edit_profile_listed_jobs_tab_two_container_controller.dart';
@@ -40,7 +42,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                       SizedBox(
-                          height: getVerticalSize(325),
+                          height: getVerticalSize(365),
                           width: double.maxFinite,
                           child:
                               Stack(alignment: Alignment.bottomLeft, children: [
@@ -184,7 +186,13 @@ class EditProfileListedJobsTabTwoContainerScreen
                                       padding: getPadding(top: 10),
                                       child: Obx(() {
                                         if (controller.profileRx.value!= null) {
-                                          return Text(controller.profileRx.value!.data.bio);  // Displaying profile bio
+                                          return Text(
+                                           // controller.profileRx.value!.data.bio
+                                           truncateWithEllipsis(
+                                            myString: controller.profileRx.value!.data.bio,
+                                              textLength: 120,
+                                            ),
+                                           );  // Displaying profile bio
                                         } else {
                                           return CircularProgressIndicator();  // Show loading or placeholder
                                         }
@@ -224,7 +232,7 @@ class EditProfileListedJobsTabTwoContainerScreen
                                     child: Text("lbl_listed_jobs".tr,
                                         overflow: TextOverflow.ellipsis)),
                                 Tab(
-                                    child: Text("lbl_community_posts".tr,
+                                    child: Text("Hired Jobs".tr,
                                         overflow: TextOverflow.ellipsis))
                               ])),
                       SizedBox(
@@ -232,8 +240,10 @@ class EditProfileListedJobsTabTwoContainerScreen
                           child: TabBarView(
                               controller: controller.tabviewController,
                               children: [
-                                CreatorProfileListedJobsPage(),
-                                CreatorProfileListedJobsPage()
+                               // CreatorProfileListedJobsPage(),
+                               // CreatorProfileListedJobsPage()
+                                CreatorJobslistPage(),
+                                CreatorHireslistPage(),
                               ]))
                     ]))),
             bottomNavigationBar: CustomButton(

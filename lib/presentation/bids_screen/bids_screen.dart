@@ -1,4 +1,8 @@
 import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
+import 'package:iynfluencer/data/models/Jobs/job_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
+import 'package:iynfluencer/presentation/messages_page/models/messages_model.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -13,9 +17,16 @@ import 'package:iynfluencer/widgets/app_bar/custom_app_bar.dart';
 
 class BidsScreen extends GetWidget<BidsController> {
   BidsScreen({Key? key}) : super(key: key);
-  String? jobId = Get.parameters['id'];
+  // String? jobId = Get.parameters['id'];
+  final Job selectedJob = Get.arguments as Job;
+
+  final MessagesController messagesController =
+      Get.put(MessagesController(MessagesModel().obs));
+      
+
   @override
   Widget build(BuildContext context) {
+    String? jobId = selectedJob.jobId;
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
@@ -43,39 +54,39 @@ class BidsScreen extends GetWidget<BidsController> {
               Padding(
                 padding: getPadding(left: 22),
                 child: Row(
-                    // children: [
-                    //   RichText(
-                    //       text: TextSpan(children: [
-                    //         TextSpan(
-                    //             text: "lbl_all_bids2".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray900,
-                    //                 fontSize: getFontSize(14),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700)),
-                    //         TextSpan(
-                    //             text: "  ".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray600,
-                    //                 fontSize: getFontSize(14),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700)),
-                    //         TextSpan(
-                    //             text: "lbl_12".tr,
-                    //             style: TextStyle(
-                    //                 color: ColorConstant.gray600,
-                    //                 fontSize: getFontSize(13),
-                    //                 fontFamily: 'Satoshi',
-                    //                 fontWeight: FontWeight.w700))
-                    //       ]),
-                    //       textAlign: TextAlign.left),
-                    //   CustomImageView(
-                    //     svgPath: ImageConstant.imgArrowup,
-                    //     height: getSize(20),
-                    //     width: getSize(20),
-                    //     margin: getMargin(left: 6),
-                    //   ),
-                    // ],
+                     children: [
+                       RichText(
+                           text: TextSpan(children: [
+                            TextSpan(
+                                text: "lbl_all_bids2".tr,
+                                style: TextStyle(
+                                    color: ColorConstant.gray900,
+                                    fontSize: getFontSize(14),
+                                     fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700)),
+                             TextSpan(
+                                text: "  ".tr,
+                                style: TextStyle(
+                                    color: ColorConstant.gray600,
+                                    fontSize: getFontSize(14),
+                                    fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700)),
+                             TextSpan(
+                                text: selectedJob.bidsCount.toString().tr,
+                                style: TextStyle(
+                                     color: ColorConstant.gray600,
+                                    fontSize: getFontSize(13),
+                                     fontFamily: 'Satoshi',
+                                    fontWeight: FontWeight.w700))
+                           ]),
+                           textAlign: TextAlign.left),
+                       CustomImageView(
+                         svgPath: ImageConstant.imgArrowup,
+                        height: getSize(20),
+                         width: getSize(20),
+                         margin: getMargin(left: 6),
+                      ),
+                    ],
                     ),
               ),
               Expanded(
@@ -107,22 +118,28 @@ class BidsScreen extends GetWidget<BidsController> {
                         );
                       } else {
                         if (controller.isError.value) {
-                          return ResponsiveErrorWidget(
-                            errorMessage: controller.error.value,
-                            onRetry: () {
-                              controller.getUser(jobId);
-                            },
-                            fullPage: true,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: ResponsiveErrorWidget(
+                              errorMessage: controller.error.value,
+                              onRetry: () {
+                                controller.getUser(jobId);
+                              },
+                              fullPage: true,
+                            ),
                           ); // Your error widget
                         } else if (controller.allJobBids.isEmpty &&
                             !controller.isLoading.value) {
-                          return ResponsiveEmptyWidget(
-                            errorMessage: 'No Job Bids Available',
-                            buttonText: "Refresh now!",
-                            onRetry: () {
-                              controller.getUser(jobId);
-                            },
-                            fullPage: true,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: ResponsiveEmptyWidget(
+                              errorMessage: 'No Job Bids Available',
+                              buttonText: "Refresh now!",
+                              onRetry: () {
+                                controller.getUser(jobId);
+                              },
+                              fullPage: true,
+                            ),
                           );
                         } // Your error widget
                         else {
@@ -135,9 +152,12 @@ class BidsScreen extends GetWidget<BidsController> {
                             itemCount: controller.allJobBids.length,
                             itemBuilder: (context, index) {
                               JobBids model = controller.allJobBids[index];
+                              ChatData? chatData =
+                                  index < messagesController.chatList.length
+                                      ? messagesController.chatList[index]
+                                      : null;
                               return BidsItemWidget(
-                                model,
-                              );
+                                  model, selectedJob, chatData);
                             },
                           );
                         }

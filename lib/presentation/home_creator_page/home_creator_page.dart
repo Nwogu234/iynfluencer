@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -89,49 +90,85 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
       child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: ColorConstant.whiteA700,
-          drawer: CreatorProfileDraweritem(controller),
+          drawer: CreatorProfileDraweritem(),
+          appBar: CustomAppBar(
+            height: getVerticalSize(70),
+            leading: Obx(() {
+              if (controller.isLoading.value)
+                return Container();
+              else
+                return Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle
+                  ),
+                  child: AppbarCircleimage(
+                    fit: BoxFit.cover,
+                    url: controller.user.userModelObj.value.avatar,
+                    margin: EdgeInsets.only(left: 20, top: 14, bottom: 10),
+                    onTap: openDrawer,
+                     radius: BorderRadius.circular(
+                       getSize(25.r),
+                        ),
+                  ),
+                );
+            }),
+            leadingWidth: 60,
+            actions: [
+              Container(
+                child: AppbarSearchview(
+                    hintText: "Search influencers".tr,
+                    controller: controller.searchController,
+                    onTap: () {
+                      onTapSubmit();
+                    }),
+              ),
+            ],
+          ),
           body: RefreshIndicator(
             onRefresh: _refresh,
             child: SingleChildScrollView(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            DefaultTextStyle(
-                              style: AppStyle.txtSatoshiLight135Gray600
-                                  .copyWith(
-                                      fontSize: 24.sp,
-                                      fontWeight: FontWeight.bold),
-                              child: AnimatedTextKit(
-                                repeatForever: true,
-                                pause: Duration(milliseconds: 6000),
-                                isRepeatingAnimation: true,
-                                totalRepeatCount: 3,
-                                animatedTexts: [
-                                  TypewriterAnimatedText('Home'),
-                                ],
-                              ),
-                            ),
-                            AppbarCircleimage(
-                              url: controller.user.userModelObj.value.avatar,
-                              margin: EdgeInsets.only(
-                                  left: 20, top: 14, bottom: 14),
-                              onTap: openDrawer,
-                            ),
-                          ]),
+                    Divider(
+                      thickness: 0.1,
                     ),
-                    AppbarSearchview(
-                        hintText: "Search influencers".tr,
-                        controller: controller.searchController,
-                       // onSubmitted: onTapSubmit(),
-                        onTap: () {
-                          onTapSubmit();
+                    Padding(
+                      padding: getPadding(left: 15, top: 10),
+                      child: DefaultTextStyle(
+                        style: AppStyle.txtSatoshiLight135Gray600.copyWith(
+                            fontSize: getFontSize(17),
+                            fontWeight: FontWeight.bold),
+                        child: Obx(() {
+                          if (controller.isLoading.value)
+                            return Container();
+                          else
+                            return AnimatedTextKit(
+                              repeatForever: true,
+                              pause: Duration(milliseconds: 6000),
+                              isRepeatingAnimation: true,
+                              totalRepeatCount: 3,
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                    'Hello ${controller.user.capitalizeFirstLetter(controller.user.userModelObj.value.firstName)},',
+                                    textStyle: AppStyle.txtSatoshiBold16
+                                    .copyWith(
+                                  fontSize: 16.sp,
+                                  color: ColorConstant.black900,
+                                  fontWeight: FontWeight.w600,
+                                ), ),
+                              ],
+                            );
                         }),
+                      ),
+                    ),
+                    Padding(
+                      padding: getPadding(left: 15, bottom: 5),
+                      child: Text("What do you want to promote?".tr,
+                          textAlign: TextAlign.start,
+                          style: AppStyle.txtSatoshiMedium),
+                    ),
                     SizedBox(height: 10),
                     Container(
                       height: 60,
@@ -139,12 +176,13 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: TabBar(
-                            tabAlignment: TabAlignment.start,
+                            tabAlignment: TabAlignment.center,
                             isScrollable: true,
                             controller: _tabController,
                             indicator: BoxDecoration(
                                 color: ColorConstant.cyan100,
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius:
+                                    BorderRadius.circular(getSize(20))),
                             indicatorPadding: EdgeInsets.symmetric(vertical: 7),
                             labelColor: ColorConstant.whiteA700,
                             labelStyle: TextStyle(
@@ -160,7 +198,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                 14,
                               ),
                               fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                             onTap: (bool) {
                               setState(() {
@@ -179,7 +217,7 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                                                 : ColorConstant.gray300B2),
                                         width: isselected
                                             ? 0.0
-                                            : (selectedIndex == 1 ? 3.0 : 0.0)),
+                                            : (selectedIndex == 1 ? 1.0 : 0.0)),
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -265,15 +303,19 @@ class _HomeCreatorPageState extends State<HomeCreatorPage>
                             ]),
                       ),
                     ),
-                    SizedBox(
-                      height: getVerticalSize(890),
-                      child: TabBarView(controller: _tabController, children: [
-                        AllHomePage(),
-                        FashionHomePage(),
-                        TechnologyHomePage(),
-                        SocialMediaHomePage()
-                      ]),
-                    )
+                    Container(
+                      height: 600,
+                      // Use Expanded to allow TabBarView to take all available space
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          AllHomePage(),
+                          FashionHomePage(),
+                          TechnologyHomePage(),
+                          SocialMediaHomePage()
+                        ],
+                      ),
+                    ),
                   ]),
             ),
           )),

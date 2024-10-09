@@ -7,6 +7,7 @@ class JobBids {
   String? influencerId;
   String? coverLetter;
   int? price;
+  List<String>? terms;
   String? status;
   String? bidId;
   String? createdAt;
@@ -16,6 +17,7 @@ class JobBids {
   String? hiredId;
   Influencer? influencer;
   String? id;
+  bool? paymentStatus;
 
   JobBids(
       {this.sId,
@@ -23,6 +25,7 @@ class JobBids {
       this.influencerId,
       this.coverLetter,
       this.price,
+      this.terms,
       this.status,
       this.bidId,
       this.createdAt,
@@ -31,25 +34,31 @@ class JobBids {
       this.hired,
       this.hiredId,
       this.influencer,
-      this.id});
+      this.id,
+      this.paymentStatus});
 
   JobBids.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    jobId = json['jobId'];
-    influencerId = json['influencerId'];
-    coverLetter = json['coverLetter'];
-    price = json['price'];
-    status = json['status'];
-    bidId = json['bidId'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-    hired = json['hired'];
-    hiredId = json['hiredId'];
+    sId = json['_id'] ?? '';
+    jobId = json['jobId'] ?? '';
+    influencerId = json['influencerId'] ?? '';
+    coverLetter = json['coverLetter'] ?? '';
+    price = json['price'] ?? 0;
+    terms = json['terms'] != null 
+      ? List<String>.from(json['terms']) 
+      : [];
+    status = json['status'] ?? '';
+    bidId = json['bidId'] ?? '';
+    createdAt = json['createdAt'] ?? '';
+    updatedAt = json['updatedAt'] ?? '';
+    iV = json['__v'] ?? 0;
+    hired = json['hired'] ?? false;
+    hiredId = json['hiredId'] ?? '';
     influencer = json['influencer'] != null
         ? new Influencer.fromJson(json['influencer'])
         : null;
-    id = json['id'];
+    id = json['id'] ?? '';
+    paymentStatus =
+        json['paymentStatus'] != null ? json['paymentStatus'] : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +68,7 @@ class JobBids {
     data['influencerId'] = this.influencerId;
     data['coverLetter'] = this.coverLetter;
     data['price'] = this.price;
+    data['terms'] = this.terms;
     data['status'] = this.status;
     data['bidId'] = this.bidId;
     data['createdAt'] = this.createdAt;
@@ -70,6 +80,7 @@ class JobBids {
       data['influencer'] = this.influencer!.toJson();
     }
     data['id'] = this.id;
+    data['paymentStatus'] = this.paymentStatus;
     return data;
   }
 }

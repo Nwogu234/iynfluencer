@@ -24,7 +24,7 @@ class InfluencerTabsScreen extends GetWidget<InfluencerTabsController> {
                 initialRoute: controller.currentRoute.value,
                 onGenerateRoute: (routeSetting) => GetPageRoute(
                     page: () => getCurrentPage(controller.currentRoute.value),
-                    transition: Transition.native)),
+                    transition: Transition.fadeIn)),
             bottomNavigationBar:
                 InfluencerBottomBar(onChanged: (BottomBarEnum type) {
               controller.currentRoute.value = getCurrentRoute(type);
