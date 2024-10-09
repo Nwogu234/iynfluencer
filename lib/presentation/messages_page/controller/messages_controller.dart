@@ -216,7 +216,28 @@ Future<void> fetchAndDisplayChats() async {
           .toList();
 
       if (storedChats.isNotEmpty) {
-        storedChats.sort((a, b) {
+        final Set<String> uniqueInfluencerUserIds = {};
+        uniqueList.clear();
+
+        for (var chat in storedChats) {
+          if (chat is ChatData) {
+            final String influencerUserId = chat.influencerUserId;
+
+            if (!uniqueInfluencerUserIds.contains(influencerUserId)) {
+              uniqueInfluencerUserIds.add(influencerUserId);
+              uniqueList.add(chat);
+            } else {
+              print(
+                  'Duplicate chat detected for creatorUserId: $influencerUserId');
+            }
+          } else {
+            print(
+                'Warning: Expected ChatData instance but got ${chat.runtimeType}');
+          }
+        }
+
+      
+        uniqueList.sort((a, b) {
           final DateTime? aLastMessageTime = a.lastMessageTime ?? a.updatedAt;
           final DateTime? bLastMessageTime = b.lastMessageTime ?? b.updatedAt;
 
@@ -225,7 +246,7 @@ Future<void> fetchAndDisplayChats() async {
         });
 
         chatList.clear();
-        chatList.addAll(storedChats);
+        chatList.addAll(uniqueList);
         chatModelObj.value = chatList;
 
         error('');

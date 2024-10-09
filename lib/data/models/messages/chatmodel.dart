@@ -225,6 +225,8 @@ class UserModel extends HiveObject{
   String? avatar;
     @HiveField(23)
    String? cover;
+    @HiveField(24)
+   int? balance;
 
   UserModel({
     this.id,
@@ -238,6 +240,7 @@ class UserModel extends HiveObject{
     this.verified,
     this.verifiedEmail,
     this.followers,
+    this.balance,
     this.following,
     this.views,
     this.userId,
@@ -266,6 +269,7 @@ class UserModel extends HiveObject{
       verified: json['verified'],
       verifiedEmail: json['verifiedEmail'],
       followers: json['followers'],
+      balance: json['balance'],
       following: json['following'],
       views: json['views'],
       userId: json['userId'],
@@ -295,6 +299,7 @@ class UserModel extends HiveObject{
     data['verified'] = this.verified;
     data['verifiedEmail'] = this.verifiedEmail;
     data['followers'] = this.followers;
+    data['balance'] = this.balance;
     data['following'] = this.following;
     data['views'] = this.views;
     data['createdAt'] = this.createdAt;

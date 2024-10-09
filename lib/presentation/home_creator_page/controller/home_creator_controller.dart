@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:hive/hive.dart';
 import 'package:iynfluencer/core/app_export.dart';
+import 'package:iynfluencer/data/apiClient/chatApi.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/home_creator_page/models/home_creator_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
@@ -31,6 +34,7 @@ class HomeCreatorController extends GetxController {
   var error = ''.obs;
   List<Widget> tiles = [];
   var usePlaceholder = false.obs;
+  final ApiClients apiClients = ApiClients();
   RxString avatar = ''.obs;
   List<Influencer> trendingInfluencers = [];
   RxList<Influencer> recommendedInfluencers = <Influencer>[].obs;
@@ -38,8 +42,10 @@ class HomeCreatorController extends GetxController {
   RxString? updatedName = ''.obs;
   Rx<File?> updatedProfileImage = Rx<File?>(null);
   Rx<HomeCreatorModel> homeCreatorModelObj;
-  final MessagesController messagesController =
-      Get.put(MessagesController());
+  final MessagesController messagesController = Get.put(MessagesController());
+   List<ChatData> chatList = <ChatData>[].obs;
+   List<ChatData> uniqueList = <ChatData>[].obs;
+  late RxList<ChatData> chatModelObj = <ChatData>[].obs;
 
 /* 
 //this is for animation
@@ -110,12 +116,13 @@ class HomeCreatorController extends GetxController {
         error('');
         print(user.userModelObj.value.avatar);
         print(user.userModelObj.value.userId);
-          final playerId = OneSignal.login(user.userModelObj.value.userId);
+        final playerId = OneSignal.login(user.userModelObj.value.userId);
         print('this is playerId : $playerId');
         isLoading.value = false;
         avatar.value = user.userModelObj.value.avatar;
         getInfluencers();
         getRecommended();
+       // syncInfluencerChats();
       }
     } catch (e) {
       print(e);
@@ -173,6 +180,64 @@ class HomeCreatorController extends GetxController {
       updatedProfileImage.value = File(data['profileImagePath']);
     }
   }
+
+
+  void syncInfluencerChats() async {
+    String? token = await storage.read(key: "token");
+    final Response response =
+        await apiClients.getAllChatsWithInfluencers(token!);
+    if (response.isOk && response.body != null) {
+      List<dynamic> chatJsonList = response.body['data']['docs'];
+        chatList.addAll(chatJsonList.map((e) => ChatData.fromJson(e)).toList());
+       
+
+       final Set<String> uniqueInfluencerUserIds = {};
+       uniqueList.clear();
+
+      for (var chat in chatList) {
+        if (chat is ChatData) {
+          final String influencerUserId = chat.influencerUserId;
+
+          if (!uniqueInfluencerUserIds.contains(influencerUserId)) {
+            uniqueInfluencerUserIds.add(influencerUserId);
+
+            uniqueList.add(chat);
+          }
+        } else {
+          print(
+              'Warning: Expected ChatData instance but got ${chat.runtimeType}');
+        }
+      }
+
+    //  chatModelObj.value = uniqueList;
+
+      await saveChats(uniqueList);
+    } else {
+      print('Error occured when syncing chats');
+    }
+  }
+
+
+Future<void> saveChats(List<ChatData> chats) async {
+  try {
+    final Box<ChatData> chatBox = await Hive.openBox<ChatData>('chat_data');
+
+    
+    for (var chatData in chats) {
+      if (chatBox.containsKey(chatData.chatId)) {
+      
+         await chatBox.clear();
+        await chatBox.put(chatData.chatId, chatData);
+      } else {
+        await chatBox.put(chatData.chatId, chatData);
+      }
+    }
+
+    print('Chats saved/updated successfully in Hive');
+  } catch (e) {
+    print('Error saving messages: $e');
+  }
+}
 
   @override
   void onInit() {

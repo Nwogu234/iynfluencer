@@ -161,7 +161,7 @@ class _TrendingResultItemWidgetState extends State<TrendingResultItemWidget> {
                           ),
                         ],
                       ),
-                      SizedBox(width: 50),
+                      SizedBox(width: 40),
                       CustomButtonTwo(
                         shape: ButtonShape.RoundedBorderz12,
                         height: getVerticalSize(42),
