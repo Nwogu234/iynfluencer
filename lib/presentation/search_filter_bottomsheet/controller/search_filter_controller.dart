@@ -27,25 +27,44 @@ class SearchFilterController extends GetxController {
   }
 
   onSelected(SelectionPopupModel value) {
-  selectedDropDownValue = value; 
-  for (var element in searchFilterModelObj.value.dropdownItemList.value) {
-    element.isSelected = false;
-    if (element.id == value.id) {
-      element.isSelected = true;
+    selectedDropDownValue = value;
+    for (var element in searchFilterModelObj.value.dropdownItemList.value) {
+      element.isSelected = false;
+      if (element.id == value.id) {
+        element.isSelected = true;
+      }
     }
+    searchFilterModelObj.value.dropdownItemList.refresh();
   }
-  searchFilterModelObj.value.dropdownItemList.refresh();
-}
 
   onSelected1(SelectionPopupModel value) {
-  selectedDropDownValue1 = value; 
-  for (var element in searchFilterModelObj.value.dropdownItemList1.value) {
-    element.isSelected = false;
-    if (element.id == value.id) {
-      element.isSelected = true;
+    selectedDropDownValue1 = value;
+    for (var element in searchFilterModelObj.value.dropdownItemList1.value) {
+      element.isSelected = false;
+      if (element.id == value.id) {
+        element.isSelected = true;
+      }
     }
+    searchFilterModelObj.value.dropdownItemList1.refresh();
   }
-  searchFilterModelObj.value.dropdownItemList1.refresh();
-}
 
+  void onTapClear() {
+    frametwelveController.clear();
+    frametwelveoneController.clear();
+
+    selectedDropDownValue?.value = null;
+    selectedDropDownValue1?.value = null;
+
+    print('selectedDropDownValue: ${selectedDropDownValue?.value}');
+    print('selectedDropDownValue1: ${selectedDropDownValue1?.value}');
+
+    searchFilterModelObj.value.dropdownItemList.value.forEach((element) {
+      element.isSelected = false;
+    });
+    searchFilterModelObj.value.dropdownItemList1.value.forEach((element) {
+      element.isSelected = false;
+    });
+
+    update();
+  }
 }

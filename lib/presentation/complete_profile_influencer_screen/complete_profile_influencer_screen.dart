@@ -25,28 +25,28 @@ class CompleteProfileInfluencerScreen
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: Size(360, 690));
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: ColorConstant.whiteA70001,
-        appBar: CustomAppBar(
-          height: 54.h,
-          leadingWidth: 50.w,
-          leading: AppbarImage(
-              height: getSize(30.h),
-              width: getSize(30.w),
-              svgPath: ImageConstant.imgArrowleftGray600,
-              margin: getMargin(left: 20, top: 12, bottom: 12),
-              onTap: () {
-                onTapArrowleft1();
-              }),
-          actions: [
-            AppbarSubtitle2(
-                text: "lbl_skip".tr,
-                margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 17.h))
-          ],
-        ),
-        body: LayoutBuilder(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ColorConstant.whiteA70001,
+      /*   appBar: CustomAppBar(
+        height: 54.h,
+        leadingWidth: 50.w,
+        leading: AppbarImage(
+            height: getSize(30.h),
+            width: getSize(30.w),
+            svgPath: ImageConstant.imgArrowleftGray600,
+            margin: getMargin(left: 20, top: 12, bottom: 12),
+            onTap: () {
+              onTapArrowleft1();
+            }),
+        /* actions: [
+          AppbarSubtitle2(
+              text: "lbl_skip".tr,
+              margin: EdgeInsets.symmetric(horizontal: 28.w, vertical: 17.h))
+        ], */
+      ), */
+      body: SafeArea(
+        child: LayoutBuilder(
           builder: (context, constraints) {
             return FadeTransition(
               opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -60,7 +60,8 @@ class CompleteProfileInfluencerScreen
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   key: _formKey,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 5.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 19.w, vertical: 5.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -70,39 +71,55 @@ class CompleteProfileInfluencerScreen
                             textAlign: TextAlign.left,
                             style: AppStyle.txtH1),
                         GestureDetector(
-                          onTap: () async {
-                            final ImagePicker _picker = ImagePicker();
-                            try {
-                              final XFile? image = await _picker.pickImage(
-                                  source: ImageSource.gallery);
-                              if (image != null) {
-                                controller.profileImage.value =
-                                    File(image.path);
+                            onTap: () async {
+                              final ImagePicker _picker = ImagePicker();
+                              try {
+                                final XFile? image = await _picker.pickImage(
+                                    source: ImageSource.gallery);
+                                if (image != null) {
+                                  controller.profileImage.value =
+                                      File(image.path);
 
-
-                                await controller.user.uploadUserPic(image.path);
+                                  await controller.user
+                                      .uploadUserPic(image.path);
+                                }
+                              } catch (e) {
+                                Get.snackbar('Error',
+                                    'Failed to pick an image. Please try again.');
                               }
-                            } catch (e) {
-                              Get.snackbar('Error',
-                                  'Failed to pick an image. Please try again.');
-                            }
-                          },
-                          child: Obx(
-                                () => controller.profileImage.value == null
-                                ? CustomImageView(
-                              svgPath: ImageConstant.imgCheckmark,
-                              height: 90.h,
-                              width: 95.w,
-                              margin:
-                              EdgeInsets.only(left: 8.w, top: 31.h),
-                            )
-                                : CircleAvatar(
-                              radius: 45.h,
-                              backgroundImage:
-                              FileImage(controller.profileImage.value!),
-                            ),
-                          ),
-                        ),
+                            },
+                            child: Obx(
+                              () => controller.profileImage.value != null
+                                  ? CircleAvatar(
+                                      radius: 45.h,
+                                      backgroundImage: FileImage(
+                                          controller.profileImage.value!),
+                                    )
+                                  : (controller
+                                              .user.userModelObj.value.avatar !=
+                                          null
+                                      ? Container(
+                                        margin: EdgeInsets.only(
+                                          top: 50
+                                        ),
+                                        child: 
+                                          CustomImageView(
+                                            imagePath: controller.user.userModelObj.value
+                                                  .avatar!,
+                                            height: 45.h,
+                                            width: 45.w,
+                                             margin: EdgeInsets.only(
+                                              left: 8.w, top: 31.h),
+                                          )
+                                      )
+                                      : CustomImageView(
+                                          svgPath: ImageConstant.imgCheckmark,
+                                          height: 90.h,
+                                          width: 95.w,
+                                          margin: EdgeInsets.only(
+                                              left: 8.w, top: 31.h),
+                                        )),
+                            )),
                         Padding(
                             padding: getPadding(top: 25),
                             child: Column(
@@ -113,8 +130,9 @@ class CompleteProfileInfluencerScreen
                                     padding: getPadding(top: 25),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text("msg_what_s_your_primary".tr,
                                             overflow: TextOverflow.ellipsis,
@@ -122,57 +140,67 @@ class CompleteProfileInfluencerScreen
                                             style: AppStyle
                                                 .txtSatoshiLight13Gray900),
                                         Obx(
-                                              () => FormField<SelectionPopupModel>(
+                                          () => FormField<SelectionPopupModel>(
                                             validator: (value) {
-                                              if (value?.value == null || value?.value.isEmpty) {
+                                              if (value?.value == null ||
+                                                  value?.value.isEmpty) {
                                                 return 'Please select at least one option'; // Your validation logic here
                                               }
                                               return null;
                                             },
-                                            initialValue: controller.selectedNiche.value,
-                                            builder: (FormFieldState<SelectionPopupModel> state) {
+                                            initialValue:
+                                                controller.selectedNiche.value,
+                                            builder: (FormFieldState<
+                                                    SelectionPopupModel>
+                                                state) {
                                               return Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   CustoDropDown(
-                                                    value: controller.selectedNiche.value,
+                                                    value: controller
+                                                        .selectedNiche.value,
                                                     hintText: 'Add Niche',
                                                     focusNode: FocusNode(),
                                                     autofocus: true,
-                                                    items: controller.nicheToDisplay,
+                                                    items: controller
+                                                        .nicheToDisplay,
                                                     onChanged: (newValue) {
                                                       if (newValue != null) {
-                                                        controller.onDropdownItemChanged(newValue);
-                                                        state.didChange(newValue); // Trigger validation on change
+                                                        controller
+                                                            .onDropdownItemChanged(
+                                                                newValue);
+                                                        state.didChange(
+                                                            newValue); // Trigger validation on change
                                                       }
                                                     },
                                                   ),
                                                   if (state.hasError)
                                                     Text(
                                                       state.errorText!,
-                                                      style: TextStyle(color: Colors.red),
+                                                      style: TextStyle(
+                                                          color: Colors.red),
                                                     ),
                                                 ],
                                               );
                                             },
                                           ),
                                         ),
-
                                         Obx(() => Wrap(
-                                          spacing: 8.0.w,
-                                          children: controller
-                                              .selectedNiches.value
-                                              .map((niche) {
-                                            return Chip(
-                                              label: Text('${niche.title}'),
-                                              deleteIcon: Icon(
-                                                Icons.close,
-                                              ),
-                                              onDeleted: () => controller
-                                                  .handleNicheDelete(niche),
-                                            );
-                                          }).toList(),
-                                        )),
+                                              spacing: 8.0.w,
+                                              children: controller
+                                                  .selectedNiches.value
+                                                  .map((niche) {
+                                                return Chip(
+                                                  label: Text('${niche.title}'),
+                                                  deleteIcon: Icon(
+                                                    Icons.close,
+                                                  ),
+                                                  onDeleted: () => controller
+                                                      .handleNicheDelete(niche),
+                                                );
+                                              }).toList(),
+                                            )),
                                       ],
                                     ),
                                   ),
@@ -190,8 +218,8 @@ class CompleteProfileInfluencerScreen
                                       child: Text("msg_which_social_media".tr,
                                           maxLines: null,
                                           textAlign: TextAlign.left,
-                                          style:
-                                          AppStyle.txtSatoshiLight13Gray900)),
+                                          style: AppStyle
+                                              .txtSatoshiLight13Gray900)),
                                   CustomButton(
                                       height: getVerticalSize(44.h),
                                       text: "Add platforms",
@@ -210,14 +238,15 @@ class CompleteProfileInfluencerScreen
                                   Obx(() => controller.isAddingAccount.value
                                       ? _buildAccountForm()
                                       : _buildAccountChips()),
-
                                   if (controller.errorText.value != null)
-                                    Obx(() => Text(
-                                      controller.errorText.value,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 10.sp,
-                                      ),),
+                                    Obx(
+                                      () => Text(
+                                        controller.errorText.value,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
                                     )
                                 ])),
                         // Bio
@@ -246,7 +275,9 @@ class CompleteProfileInfluencerScreen
             );
           },
         ),
-        bottomNavigationBar: CustomButton(
+      ),
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
           height: 50.h,
           text: "msg_save_and_continue".tr,
           margin: EdgeInsets.only(left: 19.w, right: 20.w, bottom: 38.h),
@@ -258,12 +289,11 @@ class CompleteProfileInfluencerScreen
     );
   }
 
-void onTapArrowleft1() {
+  void onTapArrowleft1() {
     Get.back();
   }
 
-  void onTapSaveand()async {
-
+  void onTapSaveand() async {
     if (controller.socialMediaAccounts.value.isEmpty) {
       controller.errorText.value = "Please select at least one platform";
       // Return early if validation fails
@@ -278,15 +308,18 @@ void onTapArrowleft1() {
 
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller.animationController, curve: Curves.easeOut),
+        CurvedAnimation(
+            parent: controller.animationController, curve: Curves.easeOut),
       ),
       child: Wrap(
         spacing: 8.0.w,
         children: accountsCopy.map((account) {
           return Chip(
-            label: Text('${account.platformName.title} - ${account.followersCount} followers'),
+            label: Text(
+                '${account.platformName.title} - ${account.followersCount} followers'),
             deleteIcon: Icon(Icons.close),
-            onDeleted: () => controller.handleDelete(account, account.platformName),
+            onDeleted: () =>
+                controller.handleDelete(account, account.platformName),
           );
         }).toList(),
       ),
@@ -295,18 +328,17 @@ void onTapArrowleft1() {
 
   // Rest of the methods...
   Widget _buildAccountForm() {
-
-
     return FadeTransition(
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller.animationController, curve: Curves.easeIn),
+        CurvedAnimation(
+            parent: controller.animationController, curve: Curves.easeIn),
       ),
       child: Form(
         key: controller.formKey,
         child: Column(
           children: [
             Obx(
-                  () => FormField<SelectionPopupModel>(
+              () => FormField<SelectionPopupModel>(
                 validator: (value) {
                   if (value?.value == null || value?.value.isEmpty) {
                     return 'Please select a platform name';
@@ -347,7 +379,9 @@ void onTapArrowleft1() {
                 controller: controller.followersCountController,
                 hintText: 'Followers count',
                 validator: (value) {
-                  if (value == null || value.isEmpty || int.tryParse(value) == null) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      int.tryParse(value) == null) {
                     return 'Please enter a valid number of followers';
                   }
                   return null;
@@ -362,7 +396,9 @@ void onTapArrowleft1() {
                 controller: controller.platformUrlController,
                 hintText: 'Platform URL',
                 validator: (value) {
-                  if (value == null || value.isEmpty || !Uri.parse(value).isAbsolute) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      !Uri.parse(value).isAbsolute) {
                     return 'Please enter a valid URL';
                   }
                   return null;
@@ -388,15 +424,18 @@ void onTapArrowleft1() {
                     child: CustomButton(
                       text: 'Add',
                       onTap: () {
-                        if (controller.selectedSocialMedia.value.title =='Select Platform') {
-                          controller.errorText.value = "Please select at least one platform";
+                        if (controller.selectedSocialMedia.value.title ==
+                            'Select Platform') {
+                          controller.errorText.value =
+                              "Please select at least one platform";
                           // Return early if validation fails
                         }
                         if (controller.formKey.currentState!.validate()) {
                           controller.errorText.value = "";
                           controller.addAccount(
                               controller.selectedSocialMedia.value,
-                              int.parse(controller.followersCountController.text),
+                              int.parse(
+                                  controller.followersCountController.text),
                               controller.platformUrlController.text);
                           // controller.animationController.reverse();
                         }
@@ -412,5 +451,3 @@ void onTapArrowleft1() {
     );
   }
 }
-
-

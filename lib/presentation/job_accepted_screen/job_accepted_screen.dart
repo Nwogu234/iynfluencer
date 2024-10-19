@@ -17,10 +17,10 @@ class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: SafeArea(
+        child: Container(
           width: double.maxFinite,
           padding: getPadding(
             left: 20,
@@ -70,7 +70,7 @@ class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
                   bottom: 5,
                 ),
                 child: Text(
-                  "Job have been sucessfully completed $jobId".tr,
+                  "Job have been sucessfully completed for Job Id $jobId".tr,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtH2Gray600,
@@ -79,7 +79,9 @@ class JobAcceptedScreen extends GetWidget<JobAcceptedController> {
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
+      ),
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
           onTap: () {
             Get.back();
           },

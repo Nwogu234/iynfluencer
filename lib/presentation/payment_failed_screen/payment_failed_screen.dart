@@ -12,10 +12,10 @@ class PaymentFailedScreen extends GetWidget<PaymentFailedController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: SafeArea(
+        child: Container(
           width: double.maxFinite,
           padding: getPadding(
             left: 20,

@@ -1,3 +1,5 @@
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
+
 import 'controller/withdrawal_successful_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -6,28 +8,35 @@ import 'package:iynfluencer/widgets/custom_button.dart';
 // ignore_for_file: must_be_immutable
 class WithdrawalSuccessfulScreen
     extends GetWidget<WithdrawalSuccessfulController> {
-  const WithdrawalSuccessfulScreen({Key? key})
+  WithdrawalSuccessfulScreen({Key? key})
       : super(
           key: key,
         );
 
+  final UserController user = Get.find();
+
+  late final String amount = Get.parameters['amount'] ?? '';
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
-          width: double.maxFinite,
-          padding: getPadding(
-            left: 20,
-            top: 23,
-            right: 20,
-            bottom: 23,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomImageView(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: Container(
+        width: double.maxFinite,
+        padding: getPadding(
+          left: 20,
+          top: 23,
+          right: 20,
+          bottom: 23,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                onTapArrowleft32();
+              },
+              child: CustomImageView(
                 svgPath: ImageConstant.imgCancel,
                 height: getSize(
                   36,
@@ -37,50 +46,56 @@ class WithdrawalSuccessfulScreen
                 ),
                 alignment: Alignment.centerRight,
               ),
-              CustomImageView(
-                imagePath: ImageConstant.imgIcons8checkmark,
-                height: getSize(
-                  54,
-                ),
-                width: getSize(
-                  54,
-                ),
-                margin: getMargin(
-                  top: 84,
-                ),
+            ),
+            CustomImageView(
+              imagePath: ImageConstant.imgIcons8checkmark,
+              height: getSize(
+                54,
               ),
-              Padding(
-                padding: getPadding(
-                  top: 33,
-                ),
-                child: Text(
-                  "msg_withdrawal_successful".tr,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold20,
-                ),
+              width: getSize(
+                54,
               ),
-              Container(
-                width: getHorizontalSize(
-                  270,
-                ),
-                margin: getMargin(
-                  left: 32,
-                  top: 6,
-                  right: 31,
-                  bottom: 5,
-                ),
-                child: Text(
-                  "msg_you_ve_successfully2".tr,
-                  maxLines: null,
-                  textAlign: TextAlign.center,
-                  style: AppStyle.txtH2Gray600,
-                ),
+              margin: getMargin(
+                top: 84,
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: getPadding(
+                top: 33,
+              ),
+              child: Text(
+                "msg_withdrawal_successful".tr,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold20,
+              ),
+            ),
+            Container(
+              width: getHorizontalSize(
+                270,
+              ),
+              margin: getMargin(
+                left: 32,
+                top: 6,
+                right: 31,
+                bottom: 5,
+              ),
+              child: Text(
+                "You’ve successfully withdrawn \${$amount} from your account."
+                    .tr,
+                maxLines: null,
+                textAlign: TextAlign.center,
+                style: AppStyle.txtH2Gray600,
+              ),
+            ),
+          ],
         ),
-        bottomNavigationBar: CustomButton(
+      ),
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
+          onTap: () {
+            onTapArrowleft32();
+          },
           height: getVerticalSize(
             46,
           ),
@@ -94,5 +109,9 @@ class WithdrawalSuccessfulScreen
         ),
       ),
     );
+  }
+
+  onTapArrowleft32() {
+    Get.back();
   }
 }

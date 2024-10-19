@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/presentation/influencer_profile_comm_post_tab_container_screen/controller/influencer_profile_comm_post_hire_modal_controller.dart';
 import 'package:iynfluencer/presentation/jobs_jobs_influencer_page/models/jobs_jobs_influencer_model.dart';
 import 'package:iynfluencer/presentation/post_page_screen/post_page_screen.dart';
@@ -9,8 +10,13 @@ import 'package:iynfluencer/widgets/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class HireModal extends StatelessWidget {
-  Influencer influencer;
-  HireModal({Key? key, required this.influencer}) : super(key: key);
+  Influencer? influencer;
+  Influencers? influencers;
+
+  HireModal({
+    Key? key, 
+    this.influencers,
+    this.influencer}) : super(key: key);
   final InfluencerProfileCommHireModalContainerController _controller =
       Get.put(InfluencerProfileCommHireModalContainerController());
 
@@ -242,7 +248,7 @@ class HireModal extends StatelessWidget {
                           ? null
                           : _controller.sendJobRequest(
                               _controller.selectedJob.value,
-                              influencer.influencerId!);
+                             influencers?.influencerId ?? influencer?.influencerId ?? '');
                     },
                     variant: _controller.selectedJob.value == '' ||
                             _controller.isRequestLoading.value == true
@@ -267,7 +273,7 @@ class HireModal extends StatelessWidget {
                   onTap: () {
                     Get.to(PostPageScreen(
                       fromHire: true,
-                      fromHireInfluencerId: influencer.influencerId!,
+                      fromHireInfluencerId: influencers?.influencerId ?? influencer?.influencerId ?? '',
                     ));
                   },
                 )

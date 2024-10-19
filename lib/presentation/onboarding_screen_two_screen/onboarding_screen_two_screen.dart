@@ -12,97 +12,102 @@ class OnboardingScreenTwoScreen
   const OnboardingScreenTwoScreen({Key? key}) : super(key: key);
 
 
+
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: ColorConstant.gray90001,
-            body: Container(
-                width: double.maxFinite,
-                padding: getPadding(left: 20, top: 38, right: 20, bottom: 38),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      Obx(() => CarouselSlider.builder(
-                          options: CarouselOptions(
-                              height: getVerticalSize(169),
-                              initialPage: 0,
-                              autoPlay: true,
-                              viewportFraction: 1.0,
-                              enableInfiniteScroll: false,
-                              scrollDirection: Axis.horizontal,
-                              onPageChanged: (index, reason) {
-                                controller.sliderIndex.value = index;
-                              }),
-                          itemCount: controller.onboardingScreenTwoModelObj
-                              .value.sliderarrowleftItemList.value.length,
-                          itemBuilder: (context, index, realIndex) {
-                            SliderarrowleftItemModel model = controller
-                                .onboardingScreenTwoModelObj
-                                .value
-                                .sliderarrowleftItemList
-                                .value[index];
-                            return SliderarrowleftItemWidget(model);
-                          })),
-                      Obx(() => Container(
-                          height: getVerticalSize(10),
-                          margin: getMargin(top: 19),
-                          child: AnimatedSmoothIndicator(
-                              activeIndex: controller.sliderIndex.value,
-                              count: controller.onboardingScreenTwoModelObj
-                                  .value.sliderarrowleftItemList.value.length,
-                              axisDirection: Axis.horizontal,
-                              effect: ScrollingDotsEffect(
-                                  spacing: 9,
-                                  activeDotColor: ColorConstant.whiteA700,
-                                  dotColor: ColorConstant.blueGray1007f,
-                                  dotHeight: getVerticalSize(10),
-                                  dotWidth: getHorizontalSize(10))))),
-                      CustomButton(
-                          height: getVerticalSize(50),
-                          text: "Create an account",
-                          margin: getMargin(top: 89),
-                          variant: ButtonVariant.Neutral,
-                          padding: ButtonPadding.PaddingAll15,
-                          fontStyle: ButtonFontStyle.SatoshiBold14,
-                          onTap: () {
-                            onTapSignupasa();
-                          }),
-                      // CustomButton(
-                      //     height: getVerticalSize(50),
-                      //     text: "msg_sign_up_as_an_influencer".tr,
-                      //     margin: getMargin(top: 34),
-                      //     padding: ButtonPadding.PaddingAll15,
-                      //     fontStyle: ButtonFontStyle.SatoshiBold14,
-                      //     onTap: () {
-                      //       onTapSignupasan();
-                      //     }),
-                      GestureDetector(
-                          onTap: () {
-                            onTapTxtAlreadyhavean();
-                          },
-                          child: Padding(
-                              padding: getPadding(top: 126),
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "msg_already_have_an2".tr,
-                                        style: TextStyle(
-                                            color: ColorConstant.gray200,
-                                            fontSize: getFontSize(14),
-                                            fontFamily: 'Satoshi',
-                                            fontWeight: FontWeight.w300)),
-                                    TextSpan(
-                                        text: "lbl_sign_in".tr,
-                                        style: TextStyle(
-                                            color: ColorConstant.cyan300,
-                                            fontSize: getFontSize(14),
-                                            fontFamily: 'Satoshi',
-                                            fontWeight: FontWeight.w300))
-                                  ]),
-                                  textAlign: TextAlign.left)))
-                    ]))));
+      final space = MediaQuery.of(context).viewInsets.bottom;
+
+    return Scaffold(
+        backgroundColor: ColorConstant.gray90001,
+        body: SafeArea(
+          child: Container(
+              width: double.maxFinite,
+              padding: EdgeInsets.fromLTRB(20, 38, 20, space + 38),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Spacer(),
+                    Obx(() => CarouselSlider.builder(
+                        options: CarouselOptions(
+                            height: getVerticalSize(169),
+                            initialPage: 0,
+                            autoPlay: true,
+                            viewportFraction: 1.0,
+                            enableInfiniteScroll: false,
+                            scrollDirection: Axis.horizontal,
+                            onPageChanged: (index, reason) {
+                              controller.sliderIndex.value = index;
+                            }),
+                        itemCount: controller.onboardingScreenTwoModelObj
+                            .value.sliderarrowleftItemList.value.length,
+                        itemBuilder: (context, index, realIndex) {
+                          SliderarrowleftItemModel model = controller
+                              .onboardingScreenTwoModelObj
+                              .value
+                              .sliderarrowleftItemList
+                              .value[index];
+                          return SliderarrowleftItemWidget(model);
+                        })),
+                    Obx(() => Container(
+                        height: getVerticalSize(10),
+                        margin: getMargin(top: 19),
+                        child: AnimatedSmoothIndicator(
+                            activeIndex: controller.sliderIndex.value,
+                            count: controller.onboardingScreenTwoModelObj
+                                .value.sliderarrowleftItemList.value.length,
+                            axisDirection: Axis.horizontal,
+                            effect: ScrollingDotsEffect(
+                                spacing: 9,
+                                activeDotColor: ColorConstant.whiteA700,
+                                dotColor: ColorConstant.blueGray1007f,
+                                dotHeight: getVerticalSize(10),
+                                dotWidth: getHorizontalSize(10))))),
+                    CustomButton(
+                        height: getVerticalSize(50),
+                        text: "Create an account",
+                        margin: getMargin(top: 89),
+                        variant: ButtonVariant.Neutral,
+                        padding: ButtonPadding.PaddingAll15,
+                        fontStyle: ButtonFontStyle.SatoshiBold14,
+                        onTap: () {
+                          onTapSignupasa();
+                        }),
+                    // CustomButton(
+                    //     height: getVerticalSize(50),
+                    //     text: "msg_sign_up_as_an_influencer".tr,
+                    //     margin: getMargin(top: 34),
+                    //     padding: ButtonPadding.PaddingAll15,
+                    //     fontStyle: ButtonFontStyle.SatoshiBold14,
+                    //     onTap: () {
+                    //       onTapSignupasan();
+                    //     }),
+                    GestureDetector(
+                        onTap: () {
+                          onTapTxtAlreadyhavean();
+                        },
+                        child: Padding(
+                            padding: getPadding(top: 126),
+                            child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "msg_already_have_an2".tr,
+                                      style: TextStyle(
+                                          color: ColorConstant.gray200,
+                                          fontSize: getFontSize(14),
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w300)),
+                                  TextSpan(
+                                      text: "lbl_sign_in".tr,
+                                      style: TextStyle(
+                                          color: ColorConstant.cyan300,
+                                          fontSize: getFontSize(14),
+                                          fontFamily: 'Satoshi',
+                                          fontWeight: FontWeight.w300))
+                                ]),
+                                textAlign: TextAlign.left)))
+                  ])),
+        ));
   }
 
   /// Navigates to the onboardingScreenOneScreen when the action is triggered.

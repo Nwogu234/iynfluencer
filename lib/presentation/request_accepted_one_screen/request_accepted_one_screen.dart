@@ -12,69 +12,69 @@ class RequestAcceptedOneScreen extends GetWidget<RequestAcceptedOneController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        body: Container(
-          width: double.maxFinite,
-          padding: getPadding(
-            left: 20,
-            top: 23,
-            right: 20,
-            bottom: 23,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomImageView(
-                svgPath: ImageConstant.imgCancel,
-                height: getSize(
-                  36,
-                ),
-                width: getSize(
-                  36,
-                ),
-                alignment: Alignment.centerRight,
-              ),
-              CustomImageView(
-                imagePath: ImageConstant.imgIcons8checkmark,
-                height: getSize(
-                  54,
-                ),
-                width: getSize(
-                  54,
-                ),
-                margin: getMargin(
-                  top: 84,
-                ),
-              ),
-              Padding(
-                padding: getPadding(
-                  top: 35,
-                ),
-                child: Text(
-                  "msg_job_request_accepted".tr,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtSatoshiBold20,
-                ),
-              ),
-              Padding(
-                padding: getPadding(
-                  top: 6,
-                  bottom: 5,
-                ),
-                child: Text(
-                  "msg_you_ve_successfully".tr,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: AppStyle.txtH2Gray600,
-                ),
-              ),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      body: Container(
+        width: double.maxFinite,
+        padding: getPadding(
+          left: 20,
+          top: 23,
+          right: 20,
+          bottom: 23,
         ),
-        bottomNavigationBar: CustomButton(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CustomImageView(
+              svgPath: ImageConstant.imgCancel,
+              height: getSize(
+                36,
+              ),
+              width: getSize(
+                36,
+              ),
+              alignment: Alignment.centerRight,
+            ),
+            CustomImageView(
+              imagePath: ImageConstant.imgIcons8checkmark,
+              height: getSize(
+                54,
+              ),
+              width: getSize(
+                54,
+              ),
+              margin: getMargin(
+                top: 84,
+              ),
+            ),
+            Padding(
+              padding: getPadding(
+                top: 35,
+              ),
+              child: Text(
+                "msg_job_request_accepted".tr,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtSatoshiBold20,
+              ),
+            ),
+            Padding(
+              padding: getPadding(
+                top: 6,
+                bottom: 5,
+              ),
+              child: Text(
+                "msg_you_ve_successfully".tr,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: AppStyle.txtH2Gray600,
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: CustomButton(
           height: getVerticalSize(
             46,
           ),

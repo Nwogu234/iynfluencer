@@ -445,30 +445,32 @@ class TransactionOneScreen extends StatelessWidget {
         ),
       ),
 
-         bottomNavigationBar: Container(
-          margin: getMargin(left: 20, right: 20, bottom: 36, top: 40),
-          decoration: AppDecoration.fillWhiteA700,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-                  CustomButton(
-                      height: getVerticalSize(44),
-                      text: "Confirm Job done".tr,
-                      padding: ButtonPadding.PaddingAll12,
-                      onTap: () {
-                      },
-                  ),
-              CustomButton(
-                  height: getVerticalSize(44),
-                  text: "dispute".tr,
-                  margin: getMargin(top: 10),
-                  variant: ButtonVariant.Neutral,
-                  padding: ButtonPadding.PaddingAll12,
-                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
-            ],
-          ),
-        ),
+         bottomNavigationBar: SafeArea(
+           child: Container(
+            margin: getMargin(left: 20, right: 20, bottom: 36, top: 40),
+            decoration: AppDecoration.fillWhiteA700,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                    CustomButton(
+                        height: getVerticalSize(44),
+                        text: "Confirm Job done".tr,
+                        padding: ButtonPadding.PaddingAll12,
+                        onTap: () {
+                        },
+                    ),
+                CustomButton(
+                    height: getVerticalSize(44),
+                    text: "dispute".tr,
+                    margin: getMargin(top: 10),
+                    variant: ButtonVariant.Neutral,
+                    padding: ButtonPadding.PaddingAll12,
+                    fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+              ],
+            ),
+                   ),
+         ),
       )
       );
   }

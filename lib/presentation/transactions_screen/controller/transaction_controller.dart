@@ -14,6 +14,7 @@ class TransactionController extends GetxController {
   final UserController user = Get.find();
   final PaymentClient paymentClient = PaymentClient();
   RxList<Payment> payments = <Payment>[].obs;
+  RxList<Payment> paymentList = <Payment>[].obs;
 
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
@@ -50,41 +51,50 @@ class TransactionController extends GetxController {
     }
   }
 
-  Future<void> getAllTransactions() async {
-    try {
-      error.value = '';
-      isLoading.value = true;
-      token = await storage.read(key: "token");
-      if (token == null) {
-        error('Invalid token');
-        return;
-      }
 
-      final Response response = await paymentClient.fetchTransaction(token);
-      if (response.isOk) {
-        final responseData = response.body;
-        final List<dynamic>? transactionList = responseData['data']?['docs'];
-        print(transactionList?.length);
-        if (transactionList != null) {
-          payments.value =
-              transactionList.map((trans) => Payment.fromJson(trans)).toList();
-          print('transaction list: $payments');
-          if (payments.isEmpty) {
+Future<void> getAllTransactions() async {
+  try {
+    error.value = '';
+    isLoading.value = true;
+    token = await storage.read(key: "token");
+    if (token == null) {
+      error('Invalid token');
+      return;
+    }
+
+    final Response response = await paymentClient.fetchTransaction(token);
+    if (response.isOk) {
+      final responseData = response.body;
+      final List<dynamic>? transactionList = responseData['data']?['docs'];
+      print(transactionList?.length);
+      
+      if (transactionList != null) {
+      
+        final userId = user.userModelObj.value.userId;
+
+        payments.value = transactionList
+            .map((trans) => Payment.fromJson(trans))
+            .where((payment) => payment.creator?.userId == userId)
+            .toList();
+
+        print('Filtered transaction list: $payments');
+        
+        if (payments.isEmpty) {
           error('No Transactions found');
         }
-        } else {
-          payments.clear();
-          print('No transactions found');
-        }
       } else {
-        print('Failed to fetch transactions: ${response.statusText}');
+        payments.clear();
+        print('No transactions found');
       }
-    } catch (e) {
-      print('Error fetching transactions: $e');
-    } finally {
-      isLoading.value = false;
+    } else {
+      print('Failed to fetch transactions: ${response.statusText}');
     }
+  } catch (e) {
+    print('Error fetching transactions: $e');
+  } finally {
+    isLoading.value = false;
   }
+}
 
   String formatDateTime(DateTime dateTime) {
     final now = DateTime.now();

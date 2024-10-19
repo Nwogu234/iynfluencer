@@ -94,16 +94,18 @@ class PhoneVerificationScreen extends GetWidget<PhoneVerificationController> {
                                         })
                                   ]))
                         ]))),
-            bottomNavigationBar: CustomButton(
-                height: getVerticalSize(50),
-                text: "lbl_send_code".tr,
-                margin: getMargin(left: 20, right: 20, bottom: 45),
-                variant: ButtonVariant.Neutral,
-                padding: ButtonPadding.PaddingAll15,
-                fontStyle: ButtonFontStyle.SatoshiBold14Gray600,
-                onTap: () {
-                  onTapSendcode();
-                })));
+            bottomNavigationBar: SafeArea(
+              child: CustomButton(
+                  height: getVerticalSize(50),
+                  text: "lbl_send_code".tr,
+                  margin: getMargin(left: 20, right: 20, bottom: 45),
+                  variant: ButtonVariant.Neutral,
+                  padding: ButtonPadding.PaddingAll15,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray600,
+                  onTap: () {
+                    onTapSendcode();
+                  }),
+            )));
   }
 
   /// Navigates to the previous screen.

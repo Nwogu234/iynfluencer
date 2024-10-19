@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
@@ -44,11 +45,14 @@ class ListclientItemWidget extends StatelessWidget {
           selectedJob: listclientItemModelObj,
           chatData: chatData,
           
-        ));
+        ),
+         transition: Transition.zoom,
+         duration: Duration(seconds:1)
+        );
       }),
       child: Expanded(
         child: SizedBox(
-            height: getVerticalSize(350),
+            height: getVerticalSize(360),
             width: getHorizontalSize(
               336,
             ),
@@ -103,7 +107,12 @@ class ListclientItemWidget extends StatelessWidget {
                           radius: BorderRadius.circular(
                             getHorizontalSize(6),
                           ),
-                        ), 
+                        ).animate(
+                             delay: Duration(seconds: 1),  
+                              onPlay: (controller) => controller.repeat(period: Duration(seconds: 3)), 
+                      ).shakeY(
+                             delay:Duration(seconds:1)
+                      ),
                         Expanded(
                           child: Container(
                             width: getHorizontalSize(

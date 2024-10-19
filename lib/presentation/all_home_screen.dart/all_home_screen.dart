@@ -22,7 +22,7 @@ import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 import 'package:iynfluencer/widgets/staggerd_widget.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../data/models/Influencer/influencer_response_model.dart';
 
 class AllHomePage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _AllHomePageState extends State<AllHomePage>
       Get.put(HomeCreatorController(HomeCreatorModel().obs));
 
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
   //   final MessagesController messagesController = Get.find<MessagesController>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -95,7 +95,7 @@ class _AllHomePageState extends State<AllHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
+    return Scaffold(
       //   key: _scaffoldKey,
         body: Obx(() {
       if (controller.isLoading.value) {
@@ -106,16 +106,21 @@ class _AllHomePageState extends State<AllHomePage>
               animationController: animationController,
             )));
       } else if (controller.error.value.isNotEmpty) {
-        return ResponsiveErrorWidget(
-          errorMessage: controller.error.value,
-          onRetry: controller.getUser,
-          fullPage: true,
+        return Padding(
+           padding: const EdgeInsets.only(
+            bottom: 120,
+          ),
+          child: ResponsiveErrorWidget(
+            errorMessage: controller.error.value,
+            onRetry: controller.getUser,
+            fullPage: true,
+          ),
         );
       } else {
         return SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(
-            padding: getPadding(left: 10, top: 10),
+            padding: getPadding(left: 15, top: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,11 +137,14 @@ class _AllHomePageState extends State<AllHomePage>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
-                    child: StaggeredGrid.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                      children: controller.tiles,
+                    child: Animate(
+                       effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                      child: StaggeredGrid.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        children: controller.tiles,
+                      ),
                     ),
                   ),
                 ),
@@ -162,7 +170,7 @@ class _AllHomePageState extends State<AllHomePage>
                         ),
                       ),
                       Container(
-                        height: 225.h,
+                        height: 229.h,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: controller.isTrendLoading.value
@@ -177,12 +185,15 @@ class _AllHomePageState extends State<AllHomePage>
                             } else {
                               return Padding(
                                 padding: EdgeInsets.only(right: 10.w),
-                                child: TrendinghorizonItemWidget(
-                                    controller.trendingInfluencers[index],
-                                    index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
-                                    ),
+                                child: Animate(
+                                    effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                  child: TrendinghorizonItemWidget(
+                                      controller.trendingInfluencers[index],
+                                      index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                      ),
+                                ),
                               );
                             }
                           },
@@ -223,32 +234,38 @@ class _AllHomePageState extends State<AllHomePage>
                 SizedBox(height: 15.h),
                 SingleChildScrollView(
                   controller: _scrollController,
-                  child: Column(
-                    children: [
-                      /* for (var index = 0;
-                          index <
-                              (controller.isRecommendedLoading.value ||
-                                      messagesController.isTrendLoading.value
-                                  ? 5
-                                  : maxIndex);
-                          index++) */
-                      for (var index = 0;
-                          index <
-                              (controller.isRecommendedLoading.value
-                                  ? 5
-                                  : controller.recommendedInfluencers.length);
-                          index++)
-                        Padding(
-                            padding: EdgeInsets.only(bottom: 24.h),
-                            child: controller.isRecommendedLoading.value
-                                ? Listrectangle50ItemSkeletonWidget()
-                                : Listrectangle50ItemWidget(
-                                    controller.recommendedInfluencers[index],
-                                    index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom:50),
+                    child: Column(
+                      children: [
+                        /* for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value ||
+                                        messagesController.isTrendLoading.value
+                                    ? 5
+                                    : maxIndex);
+                            index++) */
+                        for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value
+                                    ? 5
+                                    : controller.recommendedInfluencers.length);
+                            index++)
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 24.h),
+                              child: controller.isRecommendedLoading.value
+                                  ? Listrectangle50ItemSkeletonWidget()
+                                  : Animate(
+                                     effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                    child: Listrectangle50ItemWidget(
+                                        controller.recommendedInfluencers[index],
+                                        index < messagesController.chatList.length
+                                            ? messagesController.chatList[index]
+                                            : null,
+                                      ),
                                   )),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -256,6 +273,6 @@ class _AllHomePageState extends State<AllHomePage>
           ),
         );
       }
-    })));
+    }));
   }
 }

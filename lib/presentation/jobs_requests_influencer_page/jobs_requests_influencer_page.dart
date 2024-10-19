@@ -1,3 +1,4 @@
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
 import 'package:iynfluencer/widgets/skeletons.dart';
 
@@ -83,25 +84,35 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                       );
                     } else {
                       if (controller.isError.value) {
-                        return ResponsiveErrorWidget(
-                          errorMessage: controller.error.value,
-                          onRetry: () {
-                            controller.getUser();
-                          },
-                          fullPage: true,
-                        ); // Your error widget
-                      } else if (controller
-                              .jobsRequestsInfluencerModelObj.isEmpty &&
-                          !controller.isTrendLoading.value) {
-                        return Center(
-                          child: ResponsiveEmptyWidget(
-                            errorMessage: 'You have (0) Jobs Requests',
-                            smallMessage: 'Your past Requests will appear here',
-                            buttonText: "Retry Now",
+                        return Padding(
+                           padding: const EdgeInsets.only(
+                            bottom: 350
+                          ),
+                          child: ResponsiveErrorWidget(
+                            errorMessage: controller.error.value,
                             onRetry: () {
                               controller.getUser();
                             },
                             fullPage: true,
+                          ),
+                        ); // Your error widget
+                      } else if (controller
+                              .jobsRequestsInfluencerModelObj.isEmpty &&
+                          !controller.isTrendLoading.value) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 350
+                          ),
+                          child: Center(
+                            child: ResponsiveEmptyWidget(
+                              errorMessage: 'You have (0) Jobs Requests',
+                              smallMessage: 'Your past Requests will appear here',
+                              buttonText: "Retry Now",
+                              onRetry: () {
+                                controller.getUser();
+                              },
+                              fullPage: true,
+                            ),
                           ),
                         ); // Your error widget
                       } else {
@@ -123,8 +134,11 @@ class _JobsRequestsInfluencerPageState extends State<JobsRequestsInfluencerPage>
                           itemBuilder: (context, index) {
                             JobsRequestsInfluencerModel model = controller
                                 .jobsRequestsInfluencerModelObj.value[index];
-                            return Listgroup855ItemWidget(
-                              model,
+                            return Animate(
+                               effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                              child: Listgroup855ItemWidget(
+                                model,
+                              ),
                             );
                           },
                         );

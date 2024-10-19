@@ -263,7 +263,10 @@ class Listgroup855ItemWidget extends StatelessWidget {
                       onTap: () {
                         Get.to(RequestDetailScreen(
                           jobrequest: listgroup855ItemModelObj,
-                        ));
+                        ),
+                         transition: Transition.zoom,
+                         duration: Duration(seconds:1)
+                        );
                         // Get.toNamed(
                         //   AppRoutes.requestDetailScreen,
                         // );

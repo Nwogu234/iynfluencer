@@ -5,10 +5,12 @@ import 'package:iynfluencer/core/app_export.dart';
 import 'package:iynfluencer/data/models/notification/notification_model';
 import 'package:iynfluencer/data/models/review/review_model.dart';
 import 'package:iynfluencer/data/models/use_model/user_model.dart';
+import 'package:iynfluencer/data/models/withdrawal/withdraw.dart';
 import 'package:iynfluencer/presentation/bid_screen/models/bid_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_creator_screen/models/complete_profile_creator_model.dart';
 import 'package:iynfluencer/presentation/complete_profile_influencer_screen/models/complete_profile_influencer_model.dart';
 import 'package:iynfluencer/presentation/creator_profile_draweritem/models/creator_profile_model.dart';
+import 'package:iynfluencer/presentation/forgot_password_screen/models/forgot_password_model.dart';
 import 'package:iynfluencer/presentation/sign_up_screen/models/sign_up_model.dart';
 import 'package:get/get.dart';
 
@@ -100,6 +102,58 @@ class ApiClient extends GetConnect {
     }
   }
 
+  // This is for forget Password
+  Future<Response> forgetPass(ForgotPasswordModel  forget) async {
+    Response response;
+    try {
+      response = await post(
+        'users/auth/forgot-password', forget.toJson(),
+        // headers: {"Content-Type": "application/json"}
+      );
+
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(forget.toJson());
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  // This is for forget Password
+  Future<Response> resetPass(LogInModel login) async {
+    Response response;
+    try {
+      response = await post(
+        'users/auth/reset-password', login.toJson(),
+        // headers: {"Content-Type": "application/json"}
+      );
+
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        print(response.statusCode);
+        print(login.toJson());
+        print('Server error: ${response.statusText}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
   //Get request for user using token
   Future<UserModel> getUser(String token) async {
     String tokenS = token.toString();
@@ -132,35 +186,9 @@ class ApiClient extends GetConnect {
 
 
 
-  //this is for getting url to upload user pic
- /*   Future<Response> getPicUrl(String filePath, String token) async {
-  try {
-    final file = File(filePath);
-    final List<int> fileBytes = await file.readAsBytesSync();
-    final formData = FormData({
-      'image': MultipartFile(
-       fileBytes,
-       filename: 'avatar.jpg',
-      contentType: 'image/jpeg',
-  ),
-});
-    return post(
-      'users/me/upload_media_url',
-      formData,
-      headers: {
-        'Authorization': token,
-      },
-    );
-  } catch (e) {
-    print(e);
-    throw Exception('Error uploading image');
-  }
-} 
- */
-
  
  
-
+ //this is for getting url to upload user pic
 
  Future<Response> getPicUrl(String filePath, String token) async {
   try {
@@ -644,6 +672,33 @@ Future<Response> uploadFile(String filePath, String token) async {
     }
   }
 
+  Future<Response> deleteBid(String bidId, String token) async {
+  Response response;
+  try {
+    
+    response = await delete(
+      'creators/me/deletebids/$bidId',
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      },
+    );
+
+    if (response.isOk) {
+      print('Bid deleted successfully');
+      return response;
+    } else {
+      print('Failed to delete bid');
+      print(response.body);
+      print(response.statusCode);
+      throw Exception('Server error: ${response.statusText} ${response.statusCode}, ${response.body}');
+    }
+  } catch (e) {
+    print('$e from deleting bid');
+    throw Exception('Server error');
+  }
+}
+
 
 //this is for getting list of bids
   Future<Response> getInfluencerJobsBids(var token) async {
@@ -954,4 +1009,54 @@ Future<Response> uploadFile(String filePath, String token) async {
       throw Exception('Server error');
     }
   }
+
+   // This is for creating withdrawal
+  Future<Response> createWithdrawal(WithdrawModel withdraw, var token) async {
+    Response response;
+    try {
+      response = await post(
+        '/users/me/withdraw', 
+        withdraw.toJson(),
+         headers: {
+        "Content-Type": "application/json",
+        'Authorization': token,
+      });
+      if (response.isOk) {
+        return response;
+      } else {
+        print('Server error: ${response.statusText} , ${response.body}');
+        return response;
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Server error');
+    }
+  }
+
+  //this is for getting all withdrawals
+  Future<Response> fetchWithdrawal(var token, String userId) async {
+    Response response;
+    try {
+      response = await get(
+        '/users/me/withdraw/$userId',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': token,
+        },
+      );
+      if (response.isOk) {
+        return response;
+      } else {
+        print(response);
+        print(response.body);
+        throw Exception('Server error');
+      }
+    } catch (e) {
+      print('$e from getting list of withdrawal');
+
+      throw Exception('Server error');
+    }
+  }
+
 }

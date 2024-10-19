@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/controller/home_creator_container_controller.dart';
+import 'package:iynfluencer/presentation/influencer_drawer_item/influencer_drawer.dart';
 import 'package:iynfluencer/presentation/influencer_home_one_screen/controller/influencer_home_one_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
@@ -201,7 +202,6 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
 
  */
 
-
 class MessagesPageInfluencerPage extends StatefulWidget {
   MessagesPageInfluencerPage({Key? key})
       : super(
@@ -216,7 +216,7 @@ class MessagesPageInfluencerPage extends StatefulWidget {
 class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     with SingleTickerProviderStateMixin {
   MessagesPageInfluencerController controller = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
 
   InfluencerHomeController influencerController =
       Get.put(InfluencerHomeController(InfluencerHomeModel().obs));
@@ -224,7 +224,7 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BottomBarController bottomBarController = Get.put(BottomBarController());
 
-    InfluencerHomeOneController influencerOneController =
+  InfluencerHomeOneController influencerOneController =
       Get.put(InfluencerHomeOneController());
 
   late AnimationController animationController;
@@ -245,11 +245,9 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     super.dispose();
   }
 
-  
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -258,8 +256,9 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
           key: _scaffoldKey,
           resizeToAvoidBottomInset: false,
           backgroundColor: ColorConstant.whiteA700,
+          drawer: InfluencerDraweritem(),
           body: RefreshIndicator(
-           onRefresh: _refresh,
+            onRefresh: _refresh,
             child: SingleChildScrollView(
                 child: Container(
                     width: double.maxFinite,
@@ -271,7 +270,8 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 22, vertical: 10),
                               child: Row(
-                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   DefaultTextStyle(
                                     style: AppStyle.txtSatoshiLight135Gray600
@@ -302,9 +302,12 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                       }),
                                 ],
                               )),
-                          AppbarSearchview(
+                          AppbarSearchview1(
                             hintText: "Search Chats".tr,
                             controller: controller.searchController,
+                            onTap: (query) {
+                              controller.infcSearch(query);
+                            },
                           ),
                           SizedBox(height: 10),
                           Divider(),
@@ -337,53 +340,58 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
                                   PositionedDirectional(
                                     top: 150,
                                     start: 150,
-                                    child:
-                                        SizedBox(), 
+                                    child: SizedBox(),
                                   ),
                                 ],
                               );
-                            }  else {
-                               return SizedBox(
-                          width: size.width,
-                       //   height: getVerticalSize(800),
-                          child: Padding(
-                            padding: getPadding(
-                              bottom: 5,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Obx(
-                                  () => ListView.separated(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        height: getVerticalSize(
-                                          1,
+                            } else {
+                              return SizedBox(
+                                width: size.width,
+                                //   height: getVerticalSize(800),
+                                child: Padding(
+                                  padding: getPadding(
+                                    bottom: 5,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Obx(
+                                        () => ListView.separated(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          separatorBuilder: (context, index) {
+                                            return SizedBox(
+                                              height: getVerticalSize(
+                                                1,
+                                              ),
+                                            );
+                                          },
+                                          itemCount: controller
+                                                  .isTrendLoading.value
+                                              ? 5
+                                              : controller.chatModelObj.length,
+                                          itemBuilder: (context, index) {
+                                            if (controller
+                                                .isTrendLoading.value) {
+                                              return BidsListWidgetSkeleton();
+                                            } else {
+                                              ChatData model = controller
+                                                  .chatModelObj[index];
+                                              return Listgroup883ItemWidget(
+                                                  listgroup883ItemModelObj:
+                                                      model,
+                                                  controller: controller,  
+                                                      );
+                                            }
+                                          },
                                         ),
-                                      );
-                                    },
-                                    itemCount: controller.isTrendLoading.value
-                                        ? 5
-                                        : controller.chatList.length,
-                                    itemBuilder: (context, index) {
-                                      if (controller.isTrendLoading.value) {
-                                        return BidsListWidgetSkeleton();
-                                      } else {
-                                        ChatData model =
-                                            controller.chatList[index];
-                                        return Listgroup883ItemWidget(
-                                          listgroup883ItemModelObj: model);
-                                      }
-                                    },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
+                              );
                             }
                           })
                         ]))),
@@ -395,4 +403,3 @@ class _MessagesPageInfluencerPageState extends State<MessagesPageInfluencerPage>
     _scaffoldKey.currentState?.openDrawer();
   }
 }
- 

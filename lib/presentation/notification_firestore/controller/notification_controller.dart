@@ -22,18 +22,6 @@ class NotificationController extends GetxController {
   final UserController user = Get.find();
   RxList<MNotification> notifications = <MNotification>[].obs;
 
-  /* Future<List<Map<String, dynamic>>> fetchNotifications() async {
-    final firestore = FirebaseFirestore.instance;
-    QuerySnapshot querySnapshot =
-        await firestore.collection('notifications').get();
-
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
- */
-
-
   Future<void> refreshItems() async {
     await Future.delayed(Duration(seconds: 1));
     getUser();
@@ -45,6 +33,12 @@ class NotificationController extends GetxController {
     getUser();
   }
 
+  String? capitalizeFirstLetter(String? text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   getUser() async {
     isLoading.value = true;
@@ -70,21 +64,26 @@ class NotificationController extends GetxController {
     }
   }
 
-
- 
   Future<void> fetchAllNotification() async {
     try {
       error.value = '';
       isLoading.value = true;
       token = await storage.read(key: "token");
-      
+
       final Response response = await apiClient.fetchNotification(token);
       if (response.isOk) {
         final responseData = response.body;
-        final List<dynamic>? notificationList = responseData['paginatedNotifications']?['docs'];
-        
+        final List<dynamic>? notificationList =
+            responseData['paginatedNotifications']?['docs'];
+
         if (notificationList != null) {
-          notifications.value = notificationList.map((notification) => MNotification.fromJson(notification)).toList();
+          final userFullName =
+              "${capitalizeFirstLetter(user.userModelObj.value.firstName)} ${capitalizeFirstLetter(user.userModelObj.value.lastName)}";
+          notifications.value = notificationList
+            .map((notification) => MNotification.fromJson(notification))
+            .where((notification) => notification.title != userFullName)
+            .toList();
+
           print('Notification list: $notifications');
         } else {
           notifications.clear();
@@ -100,4 +99,3 @@ class NotificationController extends GetxController {
     }
   }
 }
-

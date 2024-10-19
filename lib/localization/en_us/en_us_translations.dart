@@ -65,7 +65,7 @@ final Map<String, String> enUs = {
   "msg_request_accepted2": "request accepted",
   "lbl_bidders": "bidders",
   "msg_please_enter_your":
-      "Please enter your email address to receive a password reset link",
+      "Please enter your email address to receive a password reset code",
   "lbl_asking_amount": "Asking amount",
   "msg_terms_of_contract": "Terms of contract",
   "lbl_mar_20222": " Mar, 2022",

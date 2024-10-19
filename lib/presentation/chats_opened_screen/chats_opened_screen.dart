@@ -1,8 +1,10 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:iynfluencer/data/general_controllers/sockect_client.dart';
 import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Influencer/influencer_response_model.dart';
+import 'package:iynfluencer/data/models/JobBids/job_bids_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
 import 'package:iynfluencer/presentation/chats_opened_screen/models/chats_opened_model.dart';
@@ -450,16 +452,19 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 }
  */
 
+enum MessageStatus { sending, sent, failed }
 
 class ChatsOpenedScreen extends StatefulWidget {
-  ChatsOpenedScreen({
-    Key? key,
-    this.selectedInfluencer,
-    required this.chatData,
-    this.selectedJob
-  }) : super(key: key);
+  ChatsOpenedScreen(
+      {Key? key,
+      this.selectedInfluencer,
+      this.selectedInfluencers,
+      required this.chatData,
+      this.selectedJob})
+      : super(key: key);
 
   final Influencer? selectedInfluencer;
+  final Influencers? selectedInfluencers;
   // ChatData chatData;
   final ChatData chatData;
   final Job? selectedJob;
@@ -472,8 +477,7 @@ class ChatsOpenedScreen extends StatefulWidget {
 class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     with SingleTickerProviderStateMixin {
   final MessagesController messageController =
-      Get.put(MessagesController(MessagesModel().obs));
-
+      Get.put(MessagesController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
@@ -483,10 +487,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   RxBool show = false.obs;
   FocusNode focusNode = FocusNode();
   late ChatsOpenedController controller;
-  final scrollController = ScrollController();
-   List<Widget> chatList = [];
- // final  ChatsOpenedController controller = Get.find<ChatsOpenedController>();
-
+  List<Widget> chatList = [];
+  final ScrollController _scrollController = ScrollController();
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -494,7 +496,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     }
     return text[0].toUpperCase() + text.substring(1);
   }
-
 
   @override
   void initState() {
@@ -506,13 +507,17 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
 
     String? avatarUrl;
     if (widget.selectedInfluencer != null) {
-             avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
-     // avatarUrl =
-     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+      avatarUrl = widget.selectedInfluencer?.user?.first.avatar ?? '';
+      // avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
+    }  if (widget.selectedInfluencers != null) {
+      avatarUrl = widget.selectedInfluencers?.user?.avatar ?? '';
+      // avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.selectedInfluencer?.userId}-avatar.jpeg";
     } else if (widget.chatData != null) {
-       avatarUrl = widget.chatData.influencerUser!.avatar;
-    //  avatarUrl =
-     //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
+      avatarUrl = widget.chatData.influencerUser!.avatar;
+      //  avatarUrl =
+      //     "https://iynfluencer.s3.us-east-1.amazonaws.com/users/avatars/user-${widget.chatData?.influencerUserId}-avatar.jpeg";
     }
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
@@ -525,6 +530,9 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     if (widget.selectedInfluencer != null) {
       name =
           "${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencer?.user?.first.lastName)}";
+    }  if (widget.selectedInfluencers != null) {
+      name =
+          "${capitalizeFirstLetter(widget.selectedInfluencers?.user?.firstName)} ${capitalizeFirstLetter(widget.selectedInfluencers?.user?.lastName)}";
     } else if (widget.chatData != null) {
       name =
           "${capitalizeFirstLetter(widget.chatData.influencerUser?.firstName)} ${capitalizeFirstLetter(widget.chatData.influencerUser?.lastName)}";
@@ -536,12 +544,21 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
       titleName = "Mark Adebayo";
     }
 
-     controller = ChatsOpenedController(
+    controller = ChatsOpenedController(
       chatData: widget.chatData,
       selectedInfluencer: widget.selectedInfluencer,
-       ); 
+    );
 
-     controller.onInit();
+    controller.onInit();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!controller.isLoading.value && controller.isLoadingMore.value) {
+          controller.loadMessagesOrFetch(widget.chatData.chatId);
+        }
+      }
+    });
   }
 
   Future<void> _refresh() async {
@@ -551,50 +568,89 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
   @override
   void dispose() {
     animationController.dispose();
-    scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
     final String chatId = widget.chatData.chatId;
+    //  final Rx<MessageStatus> messageStatusRx = MessageStatus.sending.obs;
 
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: true,
-        backgroundColor: ColorConstant.gray5001,
-        appBar: CustomAppBar(
-          height: getVerticalSize(54),
-          leadingWidth: 52,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
-            onTap: () {
-              onTapArrowleft8();
-            },
-          ),
-          title: Padding(
-            padding: getPadding(left: 2, top: 3),
-            child: Row(
-              children: [
-                AppbarCircleimage(
-                  url: imageProvider,
-                  margin: getMargin(left: 10, top: 5, bottom: 20),
-                ),
-                AppbarSubtitle(
-                  text: titleName.tr,
-                  margin: getMargin(left: 14, top: 5, bottom: 20),
-                ),
-              ],
-            ),
-          ),
-          styleType: Style.bgOutlineIndigo50_1,
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ColorConstant.gray5001,
+      appBar: /* CustomAppBar(
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
+          onTap: () {
+            onTapArrowleft8(widget.chatData);
+          },
         ),
-        body: RefreshIndicator(
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: Row(
+            children: [
+              AppbarCircleimage(
+                url: imageProvider,
+                margin: getMargin(left: 10, top: 15, bottom: 20),
+              ),
+              AppbarSubtitle(
+                text: titleName.tr,
+                margin: getMargin(left: 14, top: 5, bottom: 20),
+              ),
+            ],
+          ),
+        ),
+        styleType: Style.bgOutlineIndigo50_1,
+      ), */
+    
+      CustomAppBar(
+        centerTitle: true,
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
+          onTap: () {
+            onTapArrowleft8(widget.chatData);
+          },
+        ),
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: AppbarSubtitle(
+            text: titleName.tr,
+            margin: getMargin( //left: 14,
+             top: 5,
+             bottom: 10,
+             right:10
+             ),
+          ),
+        ),
+    
+        actions: [
+           AppbarCircleimage(
+                url: imageProvider,
+               margin: getMargin( 
+                right: 10,
+                bottom: 5
+               )
+                //left: 10,
+               //  top: 15, bottom: 20),
+              ),
+        ],
+        styleType: Style.bgOutlineIndigo50_1,
+      ),
+      body: SafeArea(
+        child: RefreshIndicator(
           onRefresh: _refresh,
           child: Obx(() {
             if (controller.isLoading.value) {
@@ -618,7 +674,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                 fullPage: true,
               );
             } else {
-              Map<String, List<Message>> groupedMessages = controller.groupMessagesByDate(controller.messageModelObj);
+              Map<String, List<Message>> groupedMessages =
+                  controller.groupMessagesByDate(controller.messageModelObj);
               return GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Padding(
@@ -628,8 +685,8 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                       SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
-                          controller: scrollController,
-                          reverse: true,
+                          //  controller: _scrollController,
+                          reverse: false,
                           itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
                             String date = groupedMessages.keys.elementAt(index);
@@ -638,32 +695,44 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 messages.isNotEmpty
-                                    ?  DateLable(
-                                  dateTime: DateTime.parse(date),
-                                )  : DateLable(
+                                    ? DateLable(
+                                        dateTime: DateTime.parse(date),
+                                      )
+                                    : DateLable(
                                         dateTime: widget.chatData.createdAt,
-                                  ),
+                                      ),
                                 ListView.builder(
-                                  controller: scrollController,
+                                  controller: _scrollController,
                                   shrinkWrap: true,
-                                  reverse: true,
+                                  reverse: false,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
                                     final message = messages[subIndex];
-                                    String formattedDateTime = DateFormat.jm('en_US').format(message.createdAt);
+                                    Rx<MessageStatus> messageStatusRx =
+                                        controller
+                                            .intToMessageStatus(
+                                                message.status ?? 0)
+                                            .obs;
+                                    String formattedDateTime =
+                                        DateFormat.jm('en_US')
+                                            .format(message.createdAt);
                                     return ChatMessageBubble(
-                                      isCompleteMessage: message.isCompleteMessage ?? false,
+                                      isCompleteMessage:
+                                          message.isCompleteMessage ?? false,
                                       controller: controller,
                                       messageText: message.text,
-                                      isReceived: message.authorUserId != widget.chatData.creatorUserId,
+                                      isReceived: message.authorUserId !=
+                                          widget.chatData.creatorUserId,
                                       timestamp: formattedDateTime,
                                       leadingImagePath: ImageConstant.imgVector,
-                                      trailingImagePath: ImageConstant.imgVector,
+                                      trailingImagePath:
+                                          ImageConstant.imgVector,
                                       messageModelObj: message.messageId,
-                                      onSwipedMessage: (message) {
+                                      onSwipedMessage: (messages) {
                                         replyToMessage(message);
                                         focusNode.requestFocus();
                                       },
+                                      messageStatus: messageStatusRx,
                                     );
                                   },
                                 ),
@@ -715,8 +784,6 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
                   ),
                 ),
               );
-
-
             }
           }),
         ),
@@ -739,15 +806,15 @@ class _ChatsOpenedScreenState extends State<ChatsOpenedScreen>
     );
   }
 
-  void replyToMessage(Message message) {
-    widget.replyMessage.value = message;
+  void replyToMessage(Message messages) {
+    widget.replyMessage.value = messages;
   }
 
   void cancelReply() {
     widget.replyMessage.value = null;
   }
 
-  onTapArrowleft8() {
+  onTapArrowleft8(ChatData chatData) async {
     messageController.onInit();
     messageController.setUnreadCreator(0);
     Get.back(result: true);

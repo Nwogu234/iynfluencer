@@ -31,6 +31,16 @@ class CreatorProfileDraweritem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     String? avatarUrl = controller.user.userModelObj.value.avatar;
+    String imageProvider;
+
+    print(avatarUrl);
+
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      imageProvider = avatarUrl;
+    } else {
+      imageProvider = 'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+    }
     return Drawer(
         backgroundColor: Colors.white,
         child: SingleChildScrollView(
@@ -46,7 +56,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                     children: [
                       CustomImageView(
                         fit: BoxFit.cover,
-                          url: controller.user.userModelObj.value.avatar,
+                          url: imageProvider,
                           height: getSize(50),
                           width: getSize(50),
                           radius: BorderRadius.circular(24.r),
@@ -162,7 +172,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                       style: AppStyle.txtH2Gray900))
                             ])),
                       ),
-                      Padding(
+                     /*  Padding(
                           padding: EdgeInsets.only(left: 1.w, top: 19.h),
                           child: Row(children: [
                             CustomImageView(
@@ -175,7 +185,7 @@ class CreatorProfileDraweritem extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                     style: AppStyle.txtH2Gray900))
-                          ])),
+                          ])), */
                       CustomButton(
                           height: 46.h,
                           text: "msg_become_an_influencer".tr,

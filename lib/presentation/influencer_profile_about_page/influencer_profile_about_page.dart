@@ -27,7 +27,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
       {required this.chatData, required this.selectedInfluencer});
 
   final Influencer selectedInfluencer;
-  final ChatData chatData;
+  final ChatData? chatData;
 
   ChatData chatsData = ChatData(
     id: 'id',
@@ -102,7 +102,7 @@ class InfluencerProfileAboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     int socialname = 0;
     ChatsOpenedController chatsController = Get.put(ChatsOpenedController(
-        chatData: chatData, selectedInfluencer: selectedInfluencer));
+        chatData: chatData ?? chatsData, selectedInfluencer: selectedInfluencer));
 
     String? avatarUrl = selectedInfluencer.user?.first.avatar;
     String imageProvider;
@@ -171,798 +171,801 @@ class InfluencerProfileAboutPage extends StatelessWidget {
     0, (sum, social) => sum + (social.followersCount ?? 0)) ?? 0;
 
 
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: ColorConstant.whiteA700,
-            body: SingleChildScrollView(
-              child: Container(
-                width: double.maxFinite,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: CustomAppBar(
-                          height: getVerticalSize(44),
-                          leadingWidth: 45,
-                          leading: AppbarImage(
-                              color: ColorConstant.black900,
-                              height: getSize(30),
-                              width: getSize(30),
-                              svgPath: ImageConstant.imgArrowleftGray200,
-                              margin: getMargin(left: 15),
-                              onTap: () {
-                                onTapArrowleft7();
-                              }),
-                          actions: [
-                            AppbarImage(
-                              color: ColorConstant.black900,
-                              height: getVerticalSize(13),
-                              width: getHorizontalSize(20),
-                              svgPath: ImageConstant.imgVector,
-                              margin: getMargin(left: 16, right: 16, bottom: 4),
-                              onTap: () {},
-                            )
-                          ]),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomImageView(
-                              url: imageProvider,
-                              fit: BoxFit.cover,
-                              height: getSize(85),
-                              width: getSize(85),
-                              radius: BorderRadius.circular(getSize(70)),
-                              margin: getMargin(left: 5)),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: getPadding(
-                                top: 15,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      selectedInfluencer.jobsDone.toString(),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: AppStyle.txtSatoshiBold16
-                                          .copyWith(fontSize: 17.sp),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                      right: 2
-                                    ),
-                                    child: Text("Jobs".tr,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: AppStyle.txtSatoshiBold16
-                                            .copyWith(
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.normal)),
-                                  ),
-                                ],
-                              ),
-                            ),
+    return Scaffold(
+        backgroundColor: ColorConstant.whiteA700,
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: CustomAppBar(
+                      height: getVerticalSize(44),
+                      leadingWidth: 45,
+                      leading: AppbarImage(
+                          color: ColorConstant.black900,
+                          height: getSize(30),
+                          width: getSize(30),
+                          svgPath: ImageConstant.imgArrowleftGray200,
+                          margin: getMargin(left: 15),
+                          onTap: () {
+                            onTapArrowleft7();
+                          }),
+                      actions: [
+                        AppbarImage(
+                          color: ColorConstant.black900,
+                          height: getVerticalSize(13),
+                          width: getHorizontalSize(20),
+                          svgPath: ImageConstant.imgVector,
+                          margin: getMargin(left: 16, right: 16, bottom: 4),
+                          onTap: () {},
+                        )
+                      ]),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomImageView(
+                          url: imageProvider,
+                          fit: BoxFit.cover,
+                          height: getSize(85),
+                          width: getSize(85),
+                          radius: BorderRadius.circular(getSize(70)),
+                          margin: getMargin(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: getPadding(
+                            top: 15,
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: getPadding(
-                                top: 15,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      formatFollowers(totalFollowers).tr,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: AppStyle.txtSatoshiBold16
-                                          .copyWith(fontSize: 17.sp),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                    ),
-                                    child: Text("Followers".tr,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: AppStyle.txtSatoshiBold16
-                                            .copyWith(
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.normal)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: getPadding(
-                                top: 15,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      '0',
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      style: AppStyle.txtSatoshiBold16
-                                          .copyWith(fontSize: 17.sp),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: getPadding(
-                                      top: 1,
-                                    ),
-                                    child: Text("Total Views".tr,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: AppStyle.txtSatoshiBold16
-                                            .copyWith(
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.normal)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(
-                        "${capitalizeFirstLetter(selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(selectedInfluencer?.user?.first.lastName)}",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style:
-                            AppStyle.txtSatoshiBold16.copyWith(fontSize: 19.sp),
-                      ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 10),
-                        child: Column(
-                            children:
-                                selectedInfluencer.niche?.take(1).map((social) {
-                                      return Text(
-                                        'Passionate $social influencer on a mission to inspire and empower',
-                                        style: AppStyle.txtSatoshiMedium,
-                                      );
-                                    }).toList() ??
-                                    [SizedBox.shrink()])),
-                    Row(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            child: Row(children: [
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 4, right: 10),
-                                child: CustomImageView(
-                                  svgPath: ImageConstant.imgLocation,
-                                  height: getSize(20),
-                                  width: getSize(20),
-                                  color: ColorConstant.black90087,
+                                padding: getPadding(
+                                  top: 1,
+                                  bottom: 2,
+                                ),
+                                child: Text(
+                                  selectedInfluencer.jobsDone.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: AppStyle.txtSatoshiBold16
+                                      .copyWith(fontSize: 17.sp),
                                 ),
                               ),
                               Padding(
-                                  padding: getPadding(top: 3),
-                                  child: Text(
-                                    "${capitalizeFirstLetter(selectedInfluencer?.user?.first.country)}",
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiBold16.copyWith(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.normal),
-                                  )),
-                              SizedBox(width: 20),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, right: 10),
-                                child: CustomImageView(
-                                  svgPath: ImageConstant.imgCalenders,
-                                  height: getSize(25),
-                                  width: getSize(25),
-                                  color: ColorConstant.black90087,
+                                padding: getPadding(
+                                  top: 1,
+                                  right: 2
                                 ),
-                              ),
-                              Padding(
-                                  padding: getPadding(top: 2),
-                                  child: Text(
-                                    "Joined April 2022".tr,
+                                child: Text("Jobs".tr,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
-                                    style: AppStyle.txtSatoshiBold16.copyWith(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.normal),
-                                  )),
-                            ])),
-                      ],
-                    ),
-                    Padding(
-                        padding: getPadding(left: 2, bottom: 14, top: 14),
-                        child: Row(
+                                    style: AppStyle.txtSatoshiBold16
+                                        .copyWith(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.normal)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: getPadding(
+                            top: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CustomButtonTwo(
-                                shape: ButtonShape.RoundedBorderz12,
-                                height: getVerticalSize(50),
-                                width: getHorizontalSize(161),
-                                text: "Hire Now".tr,
-                                padding: ButtonPaddingz.PaddingAll12,
-                                onTap: () => Get.bottomSheet(
-                                    HireModal(influencer: selectedInfluencer),
-                                    backgroundColor: ColorConstant.whiteA700),
-                                fontStyle: ButtonFontStylez.SatoshiBold15,
-                              ),
-                              CustomButton(
-                                  shape: ButtonShapes.RoundedBorder12,
-                                  onTap: () {
-                                    chatsController.onTapChatCard(
-                                        selectedInfluencer, chatData);
-                                  },
-                                  height: getVerticalSize(50),
-                                  width: getHorizontalSize(161),
-                                  text: "Message".tr,
-                                  margin: getMargin(left: 12),
-                                  variant: ButtonVariant.FillGray200ab,
-                                  padding: ButtonPadding.PaddingAll4,
-                                  fontStyle:
-                                      ButtonFontStyle.SatoshiBold15Gray900)
-                            ])),
-                    Container(
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(color: ColorConstant.gray200Ab),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: ColorConstant.whiteA70001,
-                                      width: getHorizontalSize(1)),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder17),
-                              child: Container(
-                                width: getHorizontalSize(370),
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 5),
-                                        child: Text(
-                                          "lbl_about".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtH2Gray600,
-                                        ),
-                                      ),
-                                      Text("${selectedInfluencer.bio!}",
-                                          maxLines: null,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiMedium
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w400)),
-                                    ],
-                                  ),
+                              Padding(
+                                padding: getPadding(
+                                  top: 1,
+                                  bottom: 2,
+                                ),
+                                child: Text(
+                                  formatFollowers(totalFollowers).tr,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: AppStyle.txtSatoshiBold16
+                                      .copyWith(fontSize: 17.sp),
                                 ),
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 3),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: ColorConstant.whiteA70001,
-                                      width: getHorizontalSize(1)),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder17),
-                              child: Container(
-                                width: getHorizontalSize(370),
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 2),
-                                        child: Text(
-                                          "Niche".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtH2Gray600,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: getPadding(
-                                          left: 2,
-                                          top: 10,
-                                        ),
-                                        child: Wrap(
-                                          runSpacing: getVerticalSize(5),
-                                          spacing: getHorizontalSize(5),
-                                          children: selectedInfluencer?.niche
-                                                  ?.map((item) {
-                                                return Chipviewframe89ItemWidget(
-                                                  Chipviewframe89ItemModel(
-                                                    chipviewframe89ModelObj:
-                                                        item,
-                                                  ),
-                                                );
-                                              })?.toList() ??
-                                              [],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              Padding(
+                                padding: getPadding(
+                                  top: 1,
                                 ),
+                                child: Text("Followers".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiBold16
+                                        .copyWith(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.normal)),
                               ),
-                            ),
+                            ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 3),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: ColorConstant.whiteA70001,
-                                      width: getHorizontalSize(1)),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder17),
-                              child: Container(
-                                width: getHorizontalSize(370),
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 2),
-                                        child: Text(
-                                          "Social Media".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtH2Gray600,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 12.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: selectedInfluencer.socials
-                                                  ?.take(3)
-                                                  .map((social) {
-                                                socialname =
-                                                    social.followersCount;
-                                                IconData iconData = socialIcons[
-                                                        capitalizeFirstLetter(
-                                                            social
-                                                                .platformName)] ??
-                                                    Icons.error;
-                                                return Row(children: [
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .tiktok
-                                                      ? InkWell(
-                                                          onTap: () =>
-                                                              _launchURL(social
-                                                                  .platformUrl),
-                                                          child: Container(
-                                                              width: 35.w,
-                                                              height: 35.h,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                  iconData,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 35.sp)),
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 15),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .tiktok
-                                                      ? Column(
-                                                          children: [
-                                                            Text(
-                                                              formatFollowers(
-                                                                  socialname),
-                                                              style: AppStyle
-                                                                  .txtSatoshiBold16
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          17.sp),
-                                                            ),
-                                                            Text('followers',
-                                                                style: AppStyle
-                                                                    .txtSatoshiBold16
-                                                                    .copyWith(
-                                                                        fontSize: 13
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                          ],
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 50),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .twitter
-                                                      ? InkWell(
-                                                          onTap: () =>
-                                                              _launchURL(social
-                                                                  .platformUrl),
-                                                          child: Container(
-                                                              width: 35.w,
-                                                              height: 35.h,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                  iconData,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 35.sp)),
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 15),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .twitter
-                                                      ? Column(
-                                                          children: [
-                                                            Text(
-                                                              formatFollowers(
-                                                                  socialname),
-                                                              style: AppStyle
-                                                                  .txtSatoshiBold16
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          17.sp),
-                                                            ),
-                                                            Text('followers',
-                                                                style: AppStyle
-                                                                    .txtSatoshiBold16
-                                                                    .copyWith(
-                                                                        fontSize: 13
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                          ],
-                                                        )
-                                                      : SizedBox.shrink()
-                                                ]);
-                                              }).toList() ??
-                                              [
-                                                IconButton(
-                                                  icon: Icon(
-                                                      FontAwesomeIcons.heart,
-                                                      color: Colors.white,
-                                                      size: 15),
-                                                  onPressed: () {},
-                                                )
-                                              ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: selectedInfluencer.socials
-                                                  ?.take(3)
-                                                  .map((social) {
-                                                socialname =
-                                                    social.followersCount;
-                                                IconData iconData = socialIcons[
-                                                        capitalizeFirstLetter(
-                                                            social
-                                                                .platformName)] ??
-                                                    Icons.error;
-                                                return Row(children: [
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .youtube
-                                                      ? InkWell(
-                                                          onTap: () =>
-                                                              _launchURL(social
-                                                                  .platformUrl),
-                                                          child: Container(
-                                                              width: 35.w,
-                                                              height: 35.h,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                  iconData,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 35.sp)),
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 15),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .youtube
-                                                      ? Column(
-                                                          children: [
-                                                            Text(
-                                                              formatFollowers(
-                                                                  socialname),
-                                                              style: AppStyle
-                                                                  .txtSatoshiBold16
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          17.sp),
-                                                            ),
-                                                            Text('followers',
-                                                                style: AppStyle
-                                                                    .txtSatoshiBold16
-                                                                    .copyWith(
-                                                                        fontSize: 13
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                          ],
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 50),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .facebook
-                                                      ? InkWell(
-                                                          onTap: () =>
-                                                              _launchURL(social
-                                                                  .platformUrl),
-                                                          child: Container(
-                                                              width: 35.w,
-                                                              height: 35.h,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                  iconData,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 35.sp)),
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 15),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .facebook
-                                                      ? Column(
-                                                          children: [
-                                                            Text(
-                                                              formatFollowers(
-                                                                  socialname),
-                                                              style: AppStyle
-                                                                  .txtSatoshiBold16
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          17.sp),
-                                                            ),
-                                                            Text('followers',
-                                                                style: AppStyle
-                                                                    .txtSatoshiBold16
-                                                                    .copyWith(
-                                                                        fontSize: 13
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                          ],
-                                                        )
-                                                      : SizedBox.shrink()
-                                                ]);
-                                              }).toList() ??
-                                              [
-                                                IconButton(
-                                                  icon: Icon(
-                                                      FontAwesomeIcons.heart,
-                                                      color: Colors.white,
-                                                      size: 15),
-                                                  onPressed: () {},
-                                                )
-                                              ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: selectedInfluencer.socials
-                                                  ?.take(3)
-                                                  .map((social) {
-                                                socialname =
-                                                    social.followersCount;
-                                                IconData iconData = socialIcons[
-                                                        capitalizeFirstLetter(
-                                                            social
-                                                                .platformName)] ??
-                                                    Icons.error;
-                                                return Row(children: [
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .whatsapp
-                                                      ? InkWell(
-                                                          onTap: () =>
-                                                              _launchURL(social
-                                                                  .platformUrl),
-                                                          child: Container(
-                                                              width: 35.w,
-                                                              height: 35.h,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                  iconData,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 35.sp)),
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                  SizedBox(width: 15),
-                                                  iconData ==
-                                                          FontAwesomeIcons
-                                                              .whatsapp
-                                                      ? Column(
-                                                          children: [
-                                                            Text(
-                                                              formatFollowers(
-                                                                  socialname),
-                                                              style: AppStyle
-                                                                  .txtSatoshiBold16
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          17.sp),
-                                                            ),
-                                                            Text('followers',
-                                                                style: AppStyle
-                                                                    .txtSatoshiBold16
-                                                                    .copyWith(
-                                                                        fontSize: 13
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                          ],
-                                                        )
-                                                      : SizedBox.shrink(),
-                                                ]);
-                                              }).toList() ??
-                                              [
-                                                IconButton(
-                                                  icon: Icon(
-                                                      FontAwesomeIcons.heart,
-                                                      color: Colors.white,
-                                                      size: 15),
-                                                  onPressed: () {},
-                                                )
-                                              ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: ColorConstant.whiteA70001,
-                                      width: getHorizontalSize(1)),
-                                  borderRadius:
-                                      BorderRadiusStyle.roundedBorder17),
-                              child: Container(
-                                width: getHorizontalSize(370),
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 5),
-                                        child: Text(
-                                          "Jobs Completed".tr,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtH2Gray600,
-                                        ),
-                                      ),
-                                      Text(
-                                          "(${selectedInfluencer?.jobsDone})"
-                                              .tr,
-                                          maxLines: null,
-                                          textAlign: TextAlign.left,
-                                          style: AppStyle.txtSatoshiMedium
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w400)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    )
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: getPadding(
+                            top: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: getPadding(
+                                  top: 1,
+                                  bottom: 2,
+                                ),
+                                child: Text(
+                                  '0',
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: AppStyle.txtSatoshiBold16
+                                      .copyWith(fontSize: 17.sp),
+                                ),
+                              ),
+                              Padding(
+                                padding: getPadding(
+                                  top: 1,
+                                ),
+                                child: Text("Total Views".tr,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.txtSatoshiBold16
+                                        .copyWith(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.normal)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Text(
+                    "${capitalizeFirstLetter(selectedInfluencer?.user?.first.firstName)} ${capitalizeFirstLetter(selectedInfluencer?.user?.first.lastName)}",
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    style:
+                        AppStyle.txtSatoshiBold16.copyWith(fontSize: 19.sp),
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
+                    child: Column(
+                        children:
+                            selectedInfluencer.niche?.take(1).map((social) {
+                                  return Text(
+                                    'Passionate $social influencer on a mission to inspire and empower',
+                                    style: AppStyle.txtSatoshiMedium,
+                                  );
+                                }).toList() ??
+                                [SizedBox.shrink()])),
+                Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 10),
+                        child: Row(children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 4, right: 10),
+                            child: CustomImageView(
+                              svgPath: ImageConstant.imgLocation,
+                              height: getSize(20),
+                              width: getSize(20),
+                              color: ColorConstant.black90087,
+                            ),
+                          ),
+                          Padding(
+                              padding: getPadding(top: 3),
+                              child: Text(
+                                "${capitalizeFirstLetter(selectedInfluencer?.user?.first.country)}",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.txtSatoshiBold16.copyWith(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.normal),
+                              )),
+                          SizedBox(width: 20),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10, right: 10),
+                            child: CustomImageView(
+                              svgPath: ImageConstant.imgCalenders,
+                              height: getSize(25),
+                              width: getSize(25),
+                              color: ColorConstant.black90087,
+                            ),
+                          ),
+                          Padding(
+                              padding: getPadding(top: 2),
+                              child: Text(
+                                "Joined April 2022".tr,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.txtSatoshiBold16.copyWith(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.normal),
+                              )),
+                        ])),
                   ],
                 ),
-              ),
-            )));
+                Padding(
+                    padding: getPadding(left: 2, bottom: 14, top: 14),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomButtonTwo(
+                            shape: ButtonShape.RoundedBorderz12,
+                            height: getVerticalSize(50),
+                            width: getHorizontalSize(161),
+                            text: "Hire Now".tr,
+                            padding: ButtonPaddingz.PaddingAll12,
+                            onTap: () => Get.bottomSheet(
+                                HireModal(influencer: selectedInfluencer),
+                                backgroundColor: ColorConstant.whiteA700),
+                            fontStyle: ButtonFontStylez.SatoshiBold15,
+                          ),
+                          chatsController.isLoading.value == true ?
+                          CircularProgressIndicator() :
+
+                          CustomButton(
+                               loading: chatsController.isLoading.value,
+                              shape: ButtonShapes.RoundedBorder12,
+                              onTap: () {
+                                chatsController.onTapChatCard(
+                                    selectedInfluencer, chatData ?? chatsData);
+                              },
+                              height: getVerticalSize(50),
+                              width: getHorizontalSize(161),
+                              text: "Message".tr,
+                              margin: getMargin(left: 12),
+                              variant: ButtonVariant.FillGray200ab,
+                              padding: ButtonPadding.PaddingAll4,
+                              fontStyle:
+                                  ButtonFontStyle.SatoshiBold15Gray900)
+                        ])),
+                Container(
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(color: ColorConstant.gray200Ab),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ColorConstant.whiteA70001,
+                                  width: getHorizontalSize(1)),
+                              borderRadius:
+                                  BorderRadiusStyle.roundedBorder17),
+                          child: Container(
+                            width: getHorizontalSize(370),
+                            decoration: BoxDecoration(color: Colors.white),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      "lbl_about".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600,
+                                    ),
+                                  ),
+                                  Text("${selectedInfluencer.bio!}",
+                                      maxLines: null,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiMedium
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 3),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ColorConstant.whiteA70001,
+                                  width: getHorizontalSize(1)),
+                              borderRadius:
+                                  BorderRadiusStyle.roundedBorder17),
+                          child: Container(
+                            width: getHorizontalSize(370),
+                            decoration: BoxDecoration(color: Colors.white),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      "Niche".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: getPadding(
+                                      left: 2,
+                                      top: 10,
+                                    ),
+                                    child: Wrap(
+                                      runSpacing: getVerticalSize(5),
+                                      spacing: getHorizontalSize(5),
+                                      children: selectedInfluencer?.niche
+                                              ?.map((item) {
+                                            return Chipviewframe89ItemWidget(
+                                              Chipviewframe89ItemModel(
+                                                chipviewframe89ModelObj:
+                                                    item,
+                                              ),
+                                            );
+                                          })?.toList() ??
+                                          [],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 3),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ColorConstant.whiteA70001,
+                                  width: getHorizontalSize(1)),
+                              borderRadius:
+                                  BorderRadiusStyle.roundedBorder17),
+                          child: Container(
+                            width: getHorizontalSize(370),
+                            decoration: BoxDecoration(color: Colors.white),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      "Social Media".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: selectedInfluencer.socials
+                                              ?.take(3)
+                                              .map((social) {
+                                            socialname =
+                                                social.followersCount;
+                                            IconData iconData = socialIcons[
+                                                    capitalizeFirstLetter(
+                                                        social
+                                                            .platformName)] ??
+                                                Icons.error;
+                                            return Row(children: [
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .tiktok
+                                                  ? InkWell(
+                                                      onTap: () =>
+                                                          _launchURL(social
+                                                              .platformUrl),
+                                                      child: Container(
+                                                          width: 35.w,
+                                                          height: 35.h,
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Icon(
+                                                              iconData,
+                                                              color: Colors
+                                                                  .black,
+                                                              size: 35.sp)),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 15),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .tiktok
+                                                  ? Column(
+                                                      children: [
+                                                        Text(
+                                                          formatFollowers(
+                                                              socialname),
+                                                          style: AppStyle
+                                                              .txtSatoshiBold16
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      17.sp),
+                                                        ),
+                                                        Text('followers',
+                                                            style: AppStyle
+                                                                .txtSatoshiBold16
+                                                                .copyWith(
+                                                                    fontSize: 13
+                                                                        .sp,
+                                                                    fontWeight:
+                                                                        FontWeight.normal)),
+                                                      ],
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 50),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .twitter
+                                                  ? InkWell(
+                                                      onTap: () =>
+                                                          _launchURL(social
+                                                              .platformUrl),
+                                                      child: Container(
+                                                          width: 35.w,
+                                                          height: 35.h,
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Icon(
+                                                              iconData,
+                                                              color: Colors
+                                                                  .black,
+                                                              size: 35.sp)),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 15),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .twitter
+                                                  ? Column(
+                                                      children: [
+                                                        Text(
+                                                          formatFollowers(
+                                                              socialname),
+                                                          style: AppStyle
+                                                              .txtSatoshiBold16
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      17.sp),
+                                                        ),
+                                                        Text('followers',
+                                                            style: AppStyle
+                                                                .txtSatoshiBold16
+                                                                .copyWith(
+                                                                    fontSize: 13
+                                                                        .sp,
+                                                                    fontWeight:
+                                                                        FontWeight.normal)),
+                                                      ],
+                                                    )
+                                                  : SizedBox.shrink()
+                                            ]);
+                                          }).toList() ??
+                                          [
+                                            IconButton(
+                                              icon: Icon(
+                                                  FontAwesomeIcons.heart,
+                                                  color: Colors.white,
+                                                  size: 15),
+                                              onPressed: () {},
+                                            )
+                                          ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 8.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: selectedInfluencer.socials
+                                              ?.take(3)
+                                              .map((social) {
+                                            socialname =
+                                                social.followersCount;
+                                            IconData iconData = socialIcons[
+                                                    capitalizeFirstLetter(
+                                                        social
+                                                            .platformName)] ??
+                                                Icons.error;
+                                            return Row(children: [
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .youtube
+                                                  ? InkWell(
+                                                      onTap: () =>
+                                                          _launchURL(social
+                                                              .platformUrl),
+                                                      child: Container(
+                                                          width: 35.w,
+                                                          height: 35.h,
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Icon(
+                                                              iconData,
+                                                              color: Colors
+                                                                  .black,
+                                                              size: 35.sp)),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 15),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .youtube
+                                                  ? Column(
+                                                      children: [
+                                                        Text(
+                                                          formatFollowers(
+                                                              socialname),
+                                                          style: AppStyle
+                                                              .txtSatoshiBold16
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      17.sp),
+                                                        ),
+                                                        Text('followers',
+                                                            style: AppStyle
+                                                                .txtSatoshiBold16
+                                                                .copyWith(
+                                                                    fontSize: 13
+                                                                        .sp,
+                                                                    fontWeight:
+                                                                        FontWeight.normal)),
+                                                      ],
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 50),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .facebook
+                                                  ? InkWell(
+                                                      onTap: () =>
+                                                          _launchURL(social
+                                                              .platformUrl),
+                                                      child: Container(
+                                                          width: 35.w,
+                                                          height: 35.h,
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Icon(
+                                                              iconData,
+                                                              color: Colors
+                                                                  .black,
+                                                              size: 35.sp)),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 15),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .facebook
+                                                  ? Column(
+                                                      children: [
+                                                        Text(
+                                                          formatFollowers(
+                                                              socialname),
+                                                          style: AppStyle
+                                                              .txtSatoshiBold16
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      17.sp),
+                                                        ),
+                                                        Text('followers',
+                                                            style: AppStyle
+                                                                .txtSatoshiBold16
+                                                                .copyWith(
+                                                                    fontSize: 13
+                                                                        .sp,
+                                                                    fontWeight:
+                                                                        FontWeight.normal)),
+                                                      ],
+                                                    )
+                                                  : SizedBox.shrink()
+                                            ]);
+                                          }).toList() ??
+                                          [
+                                            IconButton(
+                                              icon: Icon(
+                                                  FontAwesomeIcons.heart,
+                                                  color: Colors.white,
+                                                  size: 15),
+                                              onPressed: () {},
+                                            )
+                                          ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 8.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: selectedInfluencer.socials
+                                              ?.take(3)
+                                              .map((social) {
+                                            socialname =
+                                                social.followersCount;
+                                            IconData iconData = socialIcons[
+                                                    capitalizeFirstLetter(
+                                                        social
+                                                            .platformName)] ??
+                                                Icons.error;
+                                            return Row(children: [
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .whatsapp
+                                                  ? InkWell(
+                                                      onTap: () =>
+                                                          _launchURL(social
+                                                              .platformUrl),
+                                                      child: Container(
+                                                          width: 35.w,
+                                                          height: 35.h,
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Icon(
+                                                              iconData,
+                                                              color: Colors
+                                                                  .black,
+                                                              size: 35.sp)),
+                                                    )
+                                                  : SizedBox.shrink(),
+                                              SizedBox(width: 15),
+                                              iconData ==
+                                                      FontAwesomeIcons
+                                                          .whatsapp
+                                                  ? Column(
+                                                      children: [
+                                                        Text(
+                                                          formatFollowers(
+                                                              socialname),
+                                                          style: AppStyle
+                                                              .txtSatoshiBold16
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      17.sp),
+                                                        ),
+                                                        Text('followers',
+                                                            style: AppStyle
+                                                                .txtSatoshiBold16
+                                                                .copyWith(
+                                                                    fontSize: 13
+                                                                        .sp,
+                                                                    fontWeight:
+                                                                        FontWeight.normal)),
+                                                      ],
+                                                    )
+                                                  : SizedBox.shrink(),
+                                            ]);
+                                          }).toList() ??
+                                          [
+                                            IconButton(
+                                              icon: Icon(
+                                                  FontAwesomeIcons.heart,
+                                                  color: Colors.white,
+                                                  size: 15),
+                                              onPressed: () {},
+                                            )
+                                          ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ColorConstant.whiteA70001,
+                                  width: getHorizontalSize(1)),
+                              borderRadius:
+                                  BorderRadiusStyle.roundedBorder17),
+                          child: Container(
+                            width: getHorizontalSize(370),
+                            decoration: BoxDecoration(color: Colors.white),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 15),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      "Jobs Completed".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtH2Gray600,
+                                    ),
+                                  ),
+                                  Text(
+                                      "(${selectedInfluencer?.jobsDone})"
+                                          .tr,
+                                      maxLines: null,
+                                      textAlign: TextAlign.left,
+                                      style: AppStyle.txtSatoshiMedium
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 
   /// Navigates to the previous screen.

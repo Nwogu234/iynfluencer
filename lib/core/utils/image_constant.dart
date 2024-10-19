@@ -62,7 +62,14 @@ class ImageConstant {
   static String imgArrowMark =
       'assets/images/img_mark.svg';
 
+  static String imgError =
+      'assets/images/img_errorFrame.svg';
+
   static String imgGroup85239 = 'assets/images/img_group852_39.png';
+
+  static String imgFaceId = 'assets/images/img_face.svg';
+
+  static String imgFinger = 'assets/images/img_fingerprint.svg';
 
   static String imgSearchGray600 = 'assets/images/img_search_gray_600.svg';
 
@@ -528,6 +535,8 @@ class ImageConstant {
       'assets/images/img_rectangle5060_190x335.png';
 
   static String imgFrame20x20 = 'assets/images/img_frame_20x20.svg';
+
+  static String imgFrameEye = 'assets/images/img_eye_big.svg';
 
   static String imgFrameBlueGray40018x18 =
       'assets/images/img_frame_blue_gray_400_18x18.svg';

@@ -73,17 +73,12 @@ class _CreatorHireslistTabContainerPageState extends State<CreatorHireslistTabCo
                   padding:
                       const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                   child:
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    AppbarCircleimage(
-                      url: userController.userModelObj.value.avatar,
-                      margin: EdgeInsets.only(top: 10, bottom: 14),
-                      onTap: openDrawer,
-                    ),
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: DefaultTextStyle(
                         style: AppStyle.txtSatoshiLight135Gray600.copyWith(
-                            fontSize: 20.sp, fontWeight: FontWeight.bold),
+                            fontSize: 24.sp, fontWeight: FontWeight.bold),
                         child: AnimatedTextKit(
                           repeatForever: true,
                           pause: Duration(milliseconds: 6000),
@@ -94,6 +89,11 @@ class _CreatorHireslistTabContainerPageState extends State<CreatorHireslistTabCo
                           ],
                         ),
                       ),
+                    ),
+                      AppbarCircleimage(
+                      url: userController.userModelObj.value.avatar,
+                      margin: EdgeInsets.only(top: 10, bottom: 14),
+                      onTap: openDrawer,
                     ),
                   ]),
                 ),
@@ -150,7 +150,7 @@ class _CreatorHireslistTabContainerPageState extends State<CreatorHireslistTabCo
                 ),
                 Expanded(
                   child: TabBarView(
-                    controller: controller.tabiewController??controller.tabiewController,
+                    controller: controller.tabiewController?? controller.tabiewController,
                     children: [
                       CreatorJobslistPage(),
                       CreatorHireslistPage(),

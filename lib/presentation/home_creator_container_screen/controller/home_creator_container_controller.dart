@@ -9,4 +9,6 @@ class HomeCreatorContainerController extends GetxController {
   Rx<HomeCreatorContainerModel> homeCreatorContainerModelObj =
       HomeCreatorContainerModel().obs;
   var currentRoute = AppRoutes.homeCreatorPage.obs;
+
+  
 }

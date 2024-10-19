@@ -63,7 +63,6 @@ class Data {
     );
   }
 }
-
 class Payment {
   String? id;
   String? creatorId;
@@ -83,6 +82,7 @@ class Payment {
   int? v;
   Bid? bid;
   Influencer? influencer;
+  Creator? creator;  // Added the creator field
   Job? job;
   String? ids;
 
@@ -105,32 +105,75 @@ class Payment {
     this.v,
     this.bid,
     this.influencer,
+    this.creator,  // Added the creator field
     this.job,
     this.ids,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
     return Payment(
-      id: json['_id'] ?? null,
-      creatorId: json['creatorId'] ?? null,
-      influencerId: json['influencerId'] ?? null,
-      jobId: json['jobId'] ?? null,
-      bidId: json['bidId'] ?? null,
-      reference: json['reference'] ?? null,
-      status: json['status'] ?? null,
-      amount: json['amount'] ?? null,
-      baseAmount: json['base_amount'] ?? null,
+      id: json['_id'],
+      creatorId: json['creatorId'],
+      influencerId: json['influencerId'],
+      jobId: json['jobId'],
+      bidId: json['bidId'],
+      reference: json['reference'],
+      status: json['status'],
+      amount: json['amount'],
+      baseAmount: json['base_amount'],
       history: json['history'] != null ? List<dynamic>.from(json['history']) : null,
       success: json['success'] ?? false,
       allocated: json['allocated'] ?? false,
-      transactionId: json['transactionId'] ?? null,
+      transactionId: json['transactionId'],
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
-      v: json['__v'] ?? null,
+      v: json['__v'],
       bid: json['bid'] != null ? Bid.fromJson(json['bid']) : null,
       influencer: json['influencer'] != null ? Influencer.fromJson(json['influencer']) : null,
+      creator: json['creator'] != null ? Creator.fromJson(json['creator']) : null,  // Mapping the creator field
       job: json['job'] != null ? Job.fromJson(json['job']) : null,
-      ids: json['id'] ?? null,
+      ids: json['id'],
+    );
+  }
+}
+
+class Creator {
+  String? id;
+  String? userId;
+  List<String>? niche;
+  String? bio;
+  bool? completed;
+  bool? suspended;
+  String? creatorId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+
+  Creator({
+    this.id,
+    this.userId,
+    this.niche,
+    this.bio,
+    this.completed,
+    this.suspended,
+    this.creatorId,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory Creator.fromJson(Map<String, dynamic> json) {
+    return Creator(
+      id: json['_id'],
+      userId: json['userId'],
+      niche: json['niche'] != null ? List<String>.from(json['niche']) : null,
+      bio: json['bio'],
+      completed: json['completed'],
+      suspended: json['suspended'],
+      creatorId: json['creatorId'],
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      v: json['__v'],
     );
   }
 }

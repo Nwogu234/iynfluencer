@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
 import 'package:iynfluencer/core/utils/size_utils.dart';
+import 'package:iynfluencer/data/general_controllers/user_controller.dart';
 import 'package:iynfluencer/data/models/Jobs/job_influencer_model.dart';
 import 'package:iynfluencer/data/models/Jobs/job_model.dart';
 import 'package:iynfluencer/data/models/messages/chatmodel.dart';
@@ -14,6 +16,7 @@ import 'package:iynfluencer/presentation/influencer_technology_home_screen/model
 import 'package:iynfluencer/presentation/job_details_screen/job_details_screen.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/controller/messages_page_influencer_controller.dart';
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
+import 'package:iynfluencer/routes/app_routes.dart';
 import 'package:iynfluencer/theme/app_style.dart';
 import 'package:iynfluencer/widgets/custom_loading.dart';
 import 'package:iynfluencer/widgets/error_widget.dart';
@@ -30,11 +33,12 @@ class _InfluencerTechnologyHomePageState extends State<InfluencerTechnologyHomeP
 with SingleTickerProviderStateMixin{
 
   final  MessagesPageInfluencerController messagesController =
-      Get.put( MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      Get.put(MessagesPageInfluencerController());
 
    InfluencerTechnologyController controller =
       Get.put(InfluencerTechnologyController(InfluencerTechnologyModel().obs));
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+   final UserController user = Get.find();
 
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
@@ -86,9 +90,12 @@ void _onScroll() {
           ],
         );
       } else if (controller.error.value.isNotEmpty) {
-        return PositionedDirectional(
-          top: 150,
-          start: 150,
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+            bottom: 450
+          ),
           child: ResponsiveErrorWidget(
             errorMessage: controller.error.value,
             onRetry: controller.getUser,
@@ -134,6 +141,7 @@ void _onScroll() {
                            () => ListView.separated(
                              physics: BouncingScrollPhysics(),
                              shrinkWrap: true,
+                              padding: EdgeInsets.only(bottom: 100),
                              separatorBuilder: (context, index) {
                                return SizedBox(height: getVerticalSize(16));
                              },
@@ -149,13 +157,20 @@ void _onScroll() {
                                          index < messagesController.chatList.length
                                         ? messagesController.chatList[index]
                                         : null;
-                                 return InfluencerHomeItemWidget(model,
-                                     onTapJobpost: () {
-                                   onTapJobpost(
-                                    model,
-                                    chatData
-                                    );
-                                 });
+                                 return Animate(
+                                  effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                   child: InfluencerHomeItemWidget(model,
+                                       onTapJobpost: () {
+                                     onTapJobpost(
+                                      model,
+                                      chatData
+                                      );
+                                   },
+                                     onTapBidpost: () {
+                                          onTapBid(model);
+                                        },
+                                   ),
+                                 );
                                }
                              },
                            ),
@@ -175,6 +190,18 @@ void _onScroll() {
     Get.to(JobDetailsScreen(
       selectedJob: model,
       chatData: chatData,
-    ));
+    ),
+     transition: Transition.zoom,
+    duration: Duration(seconds:1)
+    );
+  }
+
+    onTapBid(Jobz selectedJob) {
+     selectedJob?.bids != null &&
+    selectedJob!.bids!.isNotEmpty &&
+    selectedJob?.bids?.first.influencerId ==
+    user.userModelObj.value.influencerId ?
+    Get.toNamed(AppRoutes.editScreen, arguments: selectedJob) :
+    Get.toNamed(AppRoutes.bidScreen, arguments: selectedJob);
   }
 }

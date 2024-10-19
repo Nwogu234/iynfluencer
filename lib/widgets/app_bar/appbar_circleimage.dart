@@ -47,10 +47,10 @@ class AppbarCircleimage extends StatelessWidget {
             imagePath: imagePath,
             url: url,
             height: getSize(
-              50,
+              40,
             ),
             width: getSize(
-              50,
+              40,
             ),
             fit: BoxFit.cover,
             radius: BorderRadius.circular(

@@ -15,7 +15,7 @@ class BidsItemWidget extends StatelessWidget {
   BidsItemWidget(
     this.bidsItemModelObj,
     this.selectedJob,
-    this.chatData,{
+    this.chatData, {
     Key? key,
   }) : super(
           key: key,
@@ -67,7 +67,8 @@ class BidsItemWidget extends StatelessWidget {
                         children: [
                           CustomImageView(
                             fit: BoxFit.cover,
-                            url: bidsItemModelObj.influencer?.user?.avatar ?? 'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg',
+                            url: bidsItemModelObj.influencer?.user?.avatar ??
+                                'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg',
                             height: getSize(
                               50,
                             ),
@@ -190,6 +191,10 @@ class BidsItemWidget extends StatelessWidget {
                     },
                   ),
                   CustomButton(
+                    loading: controller.isLoading.value,
+                    onTap: () {
+                      onTapDelete(selectedJob);
+                    },
                     height: getVerticalSize(
                       32,
                     ),
@@ -210,6 +215,11 @@ class BidsItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  onTapDelete(Job selectedJob) {
+    final id = bidsItemModelObj.id ?? '';
+    controller.onDeleteBids(id);
   }
 
   onTapViewdetails(bidsItemModelObj, selectedJob, chatData) {

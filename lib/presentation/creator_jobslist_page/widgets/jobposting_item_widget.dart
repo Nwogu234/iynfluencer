@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iynfluencer/core/app_export.dart';
@@ -124,6 +125,11 @@ class JobpostingItemWidget extends StatelessWidget {
                                 color: ColorConstant.whiteA700,
                               )
                             ),
+                          ).animate(
+                             delay: Duration(seconds: 1),  
+                              onPlay: (controller) => controller.repeat(period: Duration(seconds: 3)), 
+                          ).shakeY(
+                             delay:Duration(seconds:1)
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10, bottom: 5),
@@ -163,6 +169,11 @@ class JobpostingItemWidget extends StatelessWidget {
                                 color: ColorConstant.whiteA700,
                               )
                             ),
+                          ).animate(
+                             delay: Duration(seconds: 1),  
+                              onPlay: (controller) => controller.repeat(period: Duration(seconds: 3)), 
+                          ).shakeY(
+                             delay:Duration(seconds:1)
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10, bottom: 5),
@@ -201,6 +212,11 @@ class JobpostingItemWidget extends StatelessWidget {
                                   color: ColorConstant.whiteA700,
                                 )
                             ),
+                          ).animate(
+                             delay: Duration(seconds: 1),  
+                              onPlay: (controller) => controller.repeat(period: Duration(seconds: 3)), 
+                          ).shakeY(
+                             delay:Duration(seconds:1)
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10, bottom: 5),

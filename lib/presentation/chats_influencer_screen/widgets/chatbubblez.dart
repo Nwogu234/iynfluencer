@@ -153,6 +153,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
                               ? Colors.black87
                               : Colors.white)),
                 ),
+                 Padding(
+                  padding: const EdgeInsets.only(top: 35, left: 5),
+                  child: widget.isReceived
+                      ? SizedBox.shrink()
+                      : _buildMessageStatusIcon(widget.controller)
+                ), 
                 if (!widget.isReceived && widget.trailingImagePath != null)
                   GestureDetector(
                     onTap: () {
@@ -230,10 +236,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubblez> {
       }
     });
   }
+
+  
+ Widget _buildMessageStatusIcon(ChatsInfluencerController  controller) {
+  return Obx(() {
+    return controller.isSent.value
+        ? Icon(Icons.done_all, size: 17, color: Colors.grey)
+        : Icon(Icons.error, size: 17, color: Colors.red);
+  });
+}
 }
 
 
-/* 
- hhhhhhhhh and I are going to be in the office
-I/flutter ( 3857): 
-I/flutter ( 3857): www.facebook.com */

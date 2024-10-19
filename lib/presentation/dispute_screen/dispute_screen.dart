@@ -109,14 +109,16 @@ class DisputeScreen extends GetWidget<DisputeController> {
                                             style: AppStyle.txtSatoshiLight13))
                                   ])))
                     ])),
-            bottomNavigationBar: CustomButton(
-                height: getVerticalSize(84),
-                text: "lbl_send2".tr,
-                margin: getMargin(bottom: 18),
-                variant: ButtonVariant.OutlineIndigo50_3,
-                shape: ButtonShapes.Square,
-                padding: ButtonPadding.PaddingT32,
-                fontStyle: ButtonFontStyle.SatoshiBold14Gray900)));
+            bottomNavigationBar: SafeArea(
+              child: CustomButton(
+                  height: getVerticalSize(84),
+                  text: "lbl_send2".tr,
+                  margin: getMargin(bottom: 18),
+                  variant: ButtonVariant.OutlineIndigo50_3,
+                  shape: ButtonShapes.Square,
+                  padding: ButtonPadding.PaddingT32,
+                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900),
+            )));
   }
 
   /// Navigates to the previous screen.

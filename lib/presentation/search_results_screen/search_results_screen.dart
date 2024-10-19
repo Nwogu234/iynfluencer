@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/messages_page/controller/messages_controller.dart';
 import 'package:iynfluencer/presentation/search_results_screen/models/search_results_model.dart';
 import 'package:iynfluencer/presentation/search_results_screen/widget/trending_result_item_widget.dart';
 import 'package:iynfluencer/widgets/app_bar/appbar_searchview_2.dart';
@@ -42,6 +43,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
       Get.put(SearchResultsController(SearchResultsModel().obs));
   late AnimationController animationController;
   final ScrollController _scrollController = ScrollController();
+   final MessagesController messagesController =
+      Get.put(MessagesController());
   
   Future<void> _refresh() async {
     await controller.refreshItems();
@@ -75,76 +78,78 @@ class _SearchResultsScreenState extends State<SearchResultsScreen>
     String? query = widget.query;
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: SafeArea(
-          child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor: ColorConstant.whiteA70002,
-              appBar: CustomAppBar(
-                  height: getVerticalSize(60),
-                  leadingWidth: 50,
-                  leading: AppbarImage(
-                      height: getSize(30),
-                      width: getSize(30),
-                      svgPath: ImageConstant.imgArrowleftGray600,
-                      margin: getMargin(left: 20, top: 15, bottom: 15),
-                      onTap: () {
-                        onTapArrowleft6();
-                      }),
-                  title: AppbarSearchview2(
-                      query: query!,
-                      margin: getMargin(left: 9),
-                      controller: controller.searchController),
-                  styleType: Style.bgOutlineIndigo500),
-              body: Obx(() {
-                if (controller.isLoading.value) {
-                  return Stack(
-                    children: [
-                      CustomLoadingWidget(
-                        animationController: animationController,
-                      ),
-                    ],
-                  );
-                } else if (controller.error.value.isNotEmpty) {
-                  return ResponsiveErrorWidget(
-                    errorMessage: controller.error.value,
-                    onRetry: controller.getUser(query),
-                    fullPage: true,
-                  );
-                } else {
-                  return SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Container(
-                      height: 900.h,
-                      child: ListView.builder(
-                                          itemCount: controller.isRecommendedLoading.value
-                                          ? 5
-                                          : controller
-                                              .filteredInfluencers.length,
-                                           itemBuilder: (context, index) {
-                            if (controller.isRecommendedLoading.value) {
-                              return Padding(
-                                    padding: EdgeInsets.only(right: 10.w),
-                                      child: TrendinghorizonItemSkeletonWidget(),
-                                          );
-                                        } else {
-                               return Padding(
-                                        padding:
-                                                EdgeInsets.only(top: 2.h),
-                                        child: TrendingResultItemWidget(
-                                          influencer: controller.filteredInfluencers[index]
-                                                ),
-                                          );
-                                        }
-                      
-                                      }),
-                    )
-                    
-                  );
-                }
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: ColorConstant.whiteA70002,
+          appBar: CustomAppBar(
+              height: getVerticalSize(60),
+              leadingWidth: 50,
+              leading: AppbarImage(
+                  height: getSize(30),
+                  width: getSize(30),
+                  svgPath: ImageConstant.imgArrowleftGray600,
+                  margin: getMargin(left: 20, top: 15, bottom: 15),
+                  onTap: () {
+                    onTapArrowleft6();
+                  }),
+              title: AppbarSearchview2(
+                  query: query!,
+                  margin: getMargin(left: 9),
+                  controller: controller.searchController),
+              styleType: Style.bgOutlineIndigo500),
+          body: Obx(() {
+            if (controller.isLoading.value) {
+              return Stack(
+                children: [
+                  CustomLoadingWidget(
+                    animationController: animationController,
+                  ),
+                ],
+              );
+            } else if (controller.error.value.isNotEmpty) {
+              return ResponsiveErrorWidget(
+                errorMessage: controller.error.value,
+                onRetry: controller.getUser(query),
+                fullPage: true,
+              );
+            } else {
+              return SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                  height: 900.h,
+                  child: ListView.builder(
+                                      itemCount: controller.isRecommendedLoading.value
+                                      ? 5
+                                      : controller
+                                          .filteredInfluencers.length,
+                                       itemBuilder: (context, index) {
+                        if (controller.isRecommendedLoading.value) {
+                          return Padding(
+                                padding: EdgeInsets.only(right: 10.w),
+                                  child: TrendinghorizonItemSkeletonWidget(),
+                                      );
+                                    } else {
+                           return Padding(
+                                    padding:
+                                            EdgeInsets.only(top: 2.h),
+                                    child: TrendingResultItemWidget(
+                                      influencer: controller.filteredInfluencers[index],
+                                      chatData:  index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                            ),
+                                      );
+                                    }
+                  
+                                  }),
+                )
                 
-              }
-              
-              ))),
+              );
+            }
+            
+          }
+          
+          )),
     );
   }
   /// Navigates to the previous screen.

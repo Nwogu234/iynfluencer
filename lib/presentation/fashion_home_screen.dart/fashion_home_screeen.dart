@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iynfluencer/core/utils/color_constant.dart';
@@ -35,7 +36,7 @@ class _FashionHomePageState extends State<FashionHomePage>
   late AnimationController animationController;
 
   final MessagesController messagesController =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController());
   final ScrollController _scrollController = ScrollController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -71,7 +72,7 @@ class _FashionHomePageState extends State<FashionHomePage>
   Widget build(BuildContext context) {
     // final messagesController = Get.find<MessagesController>();
 
-    return SafeArea(child: Scaffold(
+    return Scaffold(
        //  key: _scaffoldKey,
         body: Obx(() {
       if (controller.isLoading.value) {
@@ -79,10 +80,15 @@ class _FashionHomePageState extends State<FashionHomePage>
           animationController: animationController,
         );
       } else if (controller.error.value.isNotEmpty) {
-        return ResponsiveErrorWidget(
-          errorMessage: controller.error.value,
-          onRetry: controller.getUser,
-          fullPage: true,
+        return Padding(
+          padding: const EdgeInsets.only(
+            bottom: 120,
+          ),
+          child: ResponsiveErrorWidget(
+            errorMessage: controller.error.value,
+            onRetry: controller.getUser,
+            fullPage: true,
+          ),
         );
       } else {
         return SingleChildScrollView(
@@ -109,7 +115,7 @@ class _FashionHomePageState extends State<FashionHomePage>
                   padding: getMargin(top: 20),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: 200.h,
+                      height: 229.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.isTrendLoading.value
@@ -124,12 +130,15 @@ class _FashionHomePageState extends State<FashionHomePage>
                           } else {
                             return Padding(
                               padding: EdgeInsets.only(right: 10.w),
-                              child: TrendinghorizonItemWidget(
-                                  controller.trendingInfluencers[index],
-                                 index < messagesController.chatList.length
-                                        ? messagesController.chatList[index]
-                                        : null,
-                                  ),
+                              child: Animate(
+                                effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                child: TrendinghorizonItemWidget(
+                                    controller.trendingInfluencers[index],
+                                   index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                    ),
+                              ),
                             );
                           }
                         },
@@ -157,26 +166,32 @@ class _FashionHomePageState extends State<FashionHomePage>
                 SizedBox(height: 15.h),
                 SingleChildScrollView(
                   controller: _scrollController,
-                  child: Column(
-                    children: [
-                      for (var index = 0;
-                          index <
-                              (controller.isRecommendedLoading.value
-                                  ? 5
-                                  : controller.recommendedInfluencers.length);
-                          index++)
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 24.h),
-                          child: controller.isRecommendedLoading.value
-                              ? Listrectangle50ItemSkeletonWidget()
-                              : Listrectangle50ItemWidget(
-                                  controller.recommendedInfluencers[index],
-                                  index < messagesController.chatList.length
-                                      ? messagesController.chatList[index]
-                                      : null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom:50),
+                    child: Column(
+                      children: [
+                        for (var index = 0;
+                            index <
+                                (controller.isRecommendedLoading.value
+                                    ? 5
+                                    : controller.recommendedInfluencers.length);
+                            index++)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 24.h),
+                            child: controller.isRecommendedLoading.value
+                                ? Listrectangle50ItemSkeletonWidget()
+                                : Animate(
+                                   effects:[MoveEffect(duration: Duration(seconds:1)),FadeEffect(duration: Duration(seconds:1))],
+                                  child: Listrectangle50ItemWidget(
+                                      controller.recommendedInfluencers[index],
+                                      index < messagesController.chatList.length
+                                          ? messagesController.chatList[index]
+                                          : null,
+                                    ),
                                 ),
-                        ),
-                    ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -184,6 +199,6 @@ class _FashionHomePageState extends State<FashionHomePage>
           ),
         );
       }
-    })));
+    }));
   }
 }

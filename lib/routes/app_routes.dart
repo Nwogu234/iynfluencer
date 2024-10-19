@@ -9,9 +9,12 @@ import 'package:iynfluencer/presentation/complete_job_screen/binding/complete_jo
 import 'package:iynfluencer/presentation/complete_job_screen/complete_job_screen.dart';
 import 'package:iynfluencer/presentation/creator_after_job_detail_screen/binding/creator_after_job_detail_binding.dart';
 import 'package:iynfluencer/presentation/creator_after_job_detail_screen/creator_after_job_detail_screen.dart';
+import 'package:iynfluencer/presentation/earning_menu_tab/binding/earning_tab_binding.dart';
+import 'package:iynfluencer/presentation/earning_menu_tab/earning_menu_tab_screen.dart';
 import 'package:iynfluencer/presentation/edit_bid_screen/binding/edit_binding.dart';
 import 'package:iynfluencer/presentation/edit_bid_screen/edit_bid_screen.dart';
 import 'package:iynfluencer/presentation/edit_profile_listed_jobs_tab_two_container_screen/binding/edit_profile_listed_jobs_tab_two_container_binding.dart';
+import 'package:iynfluencer/presentation/email_forget_screen/email_forget_screen.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/binding/fashion_home_screen_binding.dart';
 import 'package:iynfluencer/presentation/fashion_home_screen.dart/fashion_home_screeen.dart';
 import 'package:iynfluencer/presentation/home_creator_container_screen/home_creator_container_screen.dart';
@@ -26,6 +29,8 @@ import 'package:iynfluencer/presentation/messages_page_influencer_page/messages_
 import 'package:iynfluencer/presentation/messages_page_influencer_page/models/messages_page_influencer_model.dart';
 import 'package:iynfluencer/presentation/notification_firestore/binding/notification_firestore_binding.dart';
 import 'package:iynfluencer/presentation/notification_firestore/notification_firestore.dart';
+import 'package:iynfluencer/presentation/reset_password_screen/binding/reset_password_binding.dart';
+import 'package:iynfluencer/presentation/reset_password_screen/reset_password_screen.dart';
 import 'package:iynfluencer/presentation/review_accepted_screen/binding/review_accepted_binding.dart';
 import 'package:iynfluencer/presentation/review_accepted_screen/review_accepted_screen.dart';
 import 'package:iynfluencer/presentation/social_media_home_screen.dart/binding/social_media_home_page_binding.dart';
@@ -130,6 +135,8 @@ import 'package:iynfluencer/presentation/technology_home_screen/binding/controll
 import 'package:iynfluencer/presentation/technology_home_screen/binding/controller/model/technology_home_screen.dart';
 import 'package:iynfluencer/presentation/transactions_screen/binding/transaction_binding.dart';
 import 'package:iynfluencer/presentation/transactions_screen/transaction_screen.dart';
+import 'package:iynfluencer/presentation/withdraw_transaction/binding/withdraw_transaction_binding.dart';
+import 'package:iynfluencer/presentation/withdraw_transaction/withdraw_transaction.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/withdrawal_screen.dart';
 import 'package:iynfluencer/presentation/withdrawal_screen/binding/withdrawal_binding.dart';
 import 'package:iynfluencer/presentation/withdrawal_successful_screen/withdrawal_successful_screen.dart';
@@ -185,6 +192,8 @@ class AppRoutes {
 
   static const String emailCodeScreen = '/email_code_screen/:param1/:param2';
 
+  static const String emailForgetScreen = '/email_forget_screen/:param1/:param2';
+
   static const String completeProfileCreatorScreen =
       '/complete_profile_creator_screen';
 
@@ -192,6 +201,8 @@ class AppRoutes {
       '/complete_profile_influencer_screen';
 
   static const String forgotPasswordScreen = '/forgot_password_screen';
+
+  static const String resetPasswordScreen = '/reset_password_screen';
 
   static const String creatorJobslistPage = '/creator_jobslist_page';
 
@@ -367,6 +378,8 @@ class AppRoutes {
 
   static const String notificationFirestore = '/notification_firestore';
 
+  static const String earningMenuTabScreen = '/earning_menu_tab_screen';
+
   static const String allHomePage = '/all_home_screen';
 
   static const String creatorAfterJobDetailsScreen = '/creator_after_job_details_screen';
@@ -393,6 +406,8 @@ class AppRoutes {
   static const String disputeScreen = '/dispute_screen';
 
   static const String withdrawalScreen = '/withdrawal_screen';
+
+  static const String withdrawalTransactionScreen = '/withdrawal_transaction_screen';
 
   static const String withdrawalSuccessfulScreen =
       '/withdrawal_successful_screen';
@@ -476,6 +491,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: emailForgetScreen,
+      page: () => EmailForgetScreen(),
+      bindings: [
+        EmailCodeBinding(),
+      ],
+    ),
+    GetPage(
       name: logInScreen,
       page: () => LogInScreen(),
       bindings: [
@@ -527,10 +549,25 @@ class AppRoutes {
     ),
 
     GetPage(
+      name: earningMenuTabScreen,
+      page: () =>  EarningMenuTabScreen(),
+      bindings: [
+        EarningTabBinding(),
+      ],
+    ),
+
+    GetPage(
       name: forgotPasswordScreen,
       page: () => ForgotPasswordScreen(),
       bindings: [
         ForgotPasswordBinding(),
+      ],
+    ),
+    GetPage(
+      name: resetPasswordScreen,
+      page: () => ResetPasswordScreen(),
+      bindings: [
+        ResetPasswordBinding(),
       ],
     ),
     GetPage(
@@ -972,6 +1009,13 @@ class AppRoutes {
       page : () => WithdrawalScreen(),
       bindings: [
         WithdrawalBinding(),
+      ],
+    ),
+    GetPage(
+      name: withdrawalTransactionScreen,
+      page : () => WithdrawTransactionScreen(),
+      bindings: [
+        WithdrawTransactionBinding(),
       ],
     ),
     GetPage(

@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iynfluencer/presentation/influencer_drawer_item/influencer_drawer.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/controller/influencer_home_controller.dart';
 import 'package:iynfluencer/presentation/influencer_home_screen/models/influencer_home_model.dart';
 import 'package:iynfluencer/presentation/jobs_my_bids_influencer_page/jobs_my_bids_influencer_page.dart';
@@ -50,6 +51,7 @@ class _JobsJobsInfluencerTabContainerScreenState extends State<JobsJobsInfluence
       child: Scaffold(
          key: _scaffoldKey,
         backgroundColor: ColorConstant.whiteA700,
+        drawer: InfluencerDraweritem(),
         body: Container(
           width: double.maxFinite,
           decoration: AppDecoration.fillWhiteA700,

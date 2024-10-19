@@ -31,26 +31,26 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
       return text[0].toUpperCase() + text.substring(1);
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorConstant.whiteA700,
-        appBar: CustomAppBar(
-            height: getVerticalSize(48),
-            leadingWidth: 50,
-            leading: AppbarImage(
-                height: getSize(30),
-                width: getSize(30),
-                svgPath: ImageConstant.imgArrowleftGray600,
-                margin: getMargin(left: 20, top: 9, bottom: 9),
-                onTap: () {
-                  onTapArrowleft16();
-                }),
-            centerTitle: true,
-            title: AppbarTitle(
-              text: "lbl_job_details".tr,
-            ),
-            styleType: Style.bgOutlineIndigo50_1),
-        body: SizedBox(
+    return Scaffold(
+      backgroundColor: ColorConstant.whiteA700,
+      appBar: CustomAppBar(
+          height: getVerticalSize(48),
+          leadingWidth: 50,
+          leading: AppbarImage(
+              height: getSize(30),
+              width: getSize(30),
+              svgPath: ImageConstant.imgArrowleftGray600,
+              margin: getMargin(left: 20, top: 9, bottom: 9),
+              onTap: () {
+                onTapArrowleft16();
+              }),
+          centerTitle: true,
+          title: AppbarTitle(
+            text: "lbl_job_details".tr,
+          ),
+          styleType: Style.bgOutlineIndigo50_1),
+      body: SafeArea(
+        child: SizedBox(
           width: size.width,
           child: SingleChildScrollView(
             padding: getPadding(top: 25),
@@ -377,62 +377,62 @@ class InfluencerJobTabScreen extends GetWidget<InfluencerJobTabController> {
                 ]),
           ),
         ),
-        bottomNavigationBar: Container(
-          margin: getMargin(left: 20, right: 20, bottom: 20),
-          //  decoration: AppDecoration.outlineIndigo507,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-           selectedJob?.review != null && selectedJob!.review!.isNotEmpty &&
-            selectedJob.review!.first.influencerId == controller.user.userModelObj.value.influencerId ?
-              CustomButton(
-           onTap: () {
-                if (selectedJob?.review != null && selectedJob!.review!.isNotEmpty) {
-                  controller.editReview(
-                     context,
-                     selectedJob!.review!.first.id,
-                      selectedJob?.influencerId ?? '',
-                    selectedJob?.creator?.creatorId ?? '',
-                    selectedJob?.jobId ?? '',
-                     selectedJob?.creator?.userId ?? '',
-                     selectedJob?.title ?? '',
-               );
-           } else {
-             Get.snackbar(
-                'Error',
-                 'No reviews available to edit.',
-                  snackPosition: SnackPosition.BOTTOM,
-                   );
-                 }
-               },
-                  height: getVerticalSize(44),
-                  text: "Edit review".tr,
-                  margin: getMargin(top: 10),
-                  variant: ButtonVariant.Neutral,
-                  padding: ButtonPadding.PaddingAll12,
-                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
-                  :
-              CustomButton(
-                  onTap: () {
-                    controller.submitReview(
-                        context,
-                       selectedJob?.influencerId ?? '',
-                        selectedJob?.creator?.creatorId ?? '',
-                        selectedJob?.jobId ?? '',
-                        selectedJob?.creator?.userId ?? '',
-                        selectedJob?.title ?? '',
-                       // isSubmitted
-                        );
-                  },
-                  height: getVerticalSize(44),
-                  text: "Submit for review".tr,
-                  margin: getMargin(top: 10),
-                  variant: ButtonVariant.Neutral,
-                  padding: ButtonPadding.PaddingAll12,
-                  fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
-            ],
-          ),
+      ),
+      bottomNavigationBar: Container(
+        margin: getMargin(left: 20, right: 20, bottom: 20),
+        //  decoration: AppDecoration.outlineIndigo507,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+         selectedJob?.review != null && selectedJob!.review!.isNotEmpty &&
+          selectedJob.review!.first.influencerId == controller.user.userModelObj.value.influencerId ?
+            CustomButton(
+         onTap: () {
+              if (selectedJob?.review != null && selectedJob!.review!.isNotEmpty) {
+                controller.editReview(
+                   context,
+                   selectedJob!.review!.first.id,
+                    selectedJob?.influencerId ?? '',
+                  selectedJob?.creator?.creatorId ?? '',
+                  selectedJob?.jobId ?? '',
+                   selectedJob?.creator?.userId ?? '',
+                   selectedJob?.title ?? '',
+             );
+         } else {
+           Get.snackbar(
+              'Error',
+               'No reviews available to edit.',
+                snackPosition: SnackPosition.BOTTOM,
+                 );
+               }
+             },
+                height: getVerticalSize(44),
+                text: "Edit review".tr,
+                margin: getMargin(top: 10),
+                variant: ButtonVariant.Neutral,
+                padding: ButtonPadding.PaddingAll12,
+                fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
+                :
+            CustomButton(
+                onTap: () {
+                  controller.submitReview(
+                      context,
+                     selectedJob?.influencerId ?? '',
+                      selectedJob?.creator?.creatorId ?? '',
+                      selectedJob?.jobId ?? '',
+                      selectedJob?.creator?.userId ?? '',
+                      selectedJob?.title ?? '',
+                     // isSubmitted
+                      );
+                },
+                height: getVerticalSize(44),
+                text: "Submit for review".tr,
+                margin: getMargin(top: 10),
+                variant: ButtonVariant.Neutral,
+                padding: ButtonPadding.PaddingAll12,
+                fontStyle: ButtonFontStyle.SatoshiBold14Gray900) 
+          ],
         ),
       ),
     );

@@ -41,9 +41,8 @@ class InfluencerHomeScreen extends StatefulWidget {
 }
 
 class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin{
-
-       @override
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
   bool get wantKeepAlive => true;
 
   InfluencerHomeController controller =
@@ -52,8 +51,8 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
   late AnimationController animationController;
 
   late TabController _tabController;
-   bool isselected = false;
-   int selectedIndex = 0;
+  bool isselected = false;
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -65,7 +64,6 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
     _tabController = TabController(length: 4, vsync: this);
   }
 
-
   @override
   void dispose() {
     animationController.dispose();
@@ -73,7 +71,6 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
     super.dispose();
   }
 
-  
   Future<void> _refresh() async {
     await controller.refreshItems();
   }
@@ -103,15 +100,46 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                             style: AppStyle.txtSatoshiLight135Gray600.copyWith(
                                 fontSize: 24.sp, fontWeight: FontWeight.bold),
                           ),
-                          AppbarCircleimage(
-                              url: (controller.updatedProfileImage.value
-                                      as String?) ??
-                                  controller.user.userModelObj.value.avatar,
-                              margin: EdgeInsets.only(
-                                  left: 20.w, top: 14.h, bottom: 14.h),
-                              onTap: () {
-                                openDrawer();
-                              }),
+                          Obx(() {
+                            if (controller.isLoading.value)
+                              return Container();
+                            else {
+                              String? avatarUrl = (controller
+                                      .updatedProfileImage.value as String?) ??
+                                  controller.user.userModelObj.value.avatar;
+                              String imageProvider;
+
+                              if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                                imageProvider = avatarUrl;
+                              } else {
+                                imageProvider =
+                                    'https://cdn-icons-png.flaticon.com/512/6915/6915987.png';
+                              }
+                              return AppbarCircleimage(
+                                  url: imageProvider,
+                                  margin: EdgeInsets.only(
+                                      left: 20.w, top: 14.h, bottom: 14.h),
+                                  onTap: () {
+                                    openDrawer();
+                                  });
+                            }
+                          })
+/* 
+                          Padding(
+                            padding: EdgeInsets.only(
+                                    left: 20.w, top: 14.h, bottom: 14.h) ??
+                                EdgeInsets.zero,
+                            child: Container(
+                              decoration: BoxDecoration(shape: BoxShape.circle),
+                              child: CustomImageView(
+                                  url: imageProvider,
+                                  margin: EdgeInsets.only(
+                                      left: 20.w, top: 14.h, bottom: 14.h),
+                                  onTap: () {
+                                    openDrawer();
+                                  }),
+                            ),
+                          ) */
                         ]),
                   ),
                   AppbarSearchview(
@@ -121,147 +149,148 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
                       onSubmitted: (query) {
                         controller.onSearchSubmitted(query);
                       }),
-                       SizedBox(height: 10),
-                    Container(
-                      height: 60,
-                      width: double.maxFinite,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TabBar(
-                            tabAlignment: TabAlignment.start,
-                            isScrollable: true,
-                            controller: _tabController,
-                            indicator: BoxDecoration(
-                                color: ColorConstant.cyan100,
-                                borderRadius: BorderRadius.circular(20)),
-                                indicatorPadding: EdgeInsets.symmetric(vertical: 7),
-                            labelColor: ColorConstant.whiteA700,
-                            labelStyle: TextStyle(
-                              fontSize: getFontSize(
-                                14.5,
-                              ),
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w800,
+                  SizedBox(height: 10),
+                  Container(
+                    height: 60,
+                    width: double.maxFinite,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TabBar(
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          controller: _tabController,
+                          indicator: BoxDecoration(
+                              color: ColorConstant.cyan100,
+                              borderRadius: BorderRadius.circular(20)),
+                          indicatorPadding: EdgeInsets.symmetric(vertical: 7),
+                          labelColor: ColorConstant.whiteA700,
+                          labelStyle: TextStyle(
+                            fontSize: getFontSize(
+                              14.5,
                             ),
-                            unselectedLabelColor: ColorConstant.black900,
-                            unselectedLabelStyle: TextStyle(
-                              fontSize: getFontSize(
-                                14,
-                              ),
-                              fontFamily: 'Satoshi',
-                              fontWeight: FontWeight.w600,
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w800,
+                          ),
+                          unselectedLabelColor: ColorConstant.black900,
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: getFontSize(
+                              14,
                             ),
-                            onTap: (bool) {
-                              setState(() {
-                                isselected = true;
-                              });
-                            },
-                            tabs: [
-                              Tab(
-                                  child: Container(
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w600,
+                          ),
+                          onTap: (bool) {
+                            setState(() {
+                              isselected = true;
+                            });
+                          },
+                          tabs: [
+                            Tab(
+                                child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : (selectedIndex == 0
+                                              ? ColorConstant.cyan100
+                                              : ColorConstant.gray300B2),
+                                      width: isselected
+                                          ? 0.0
+                                          : (selectedIndex == 1 ? 3.0 : 0.0)),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 13, vertical: 2),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    'All'.tr,
+                                    //    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            )),
+                            Tab(
+                              child: Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                         color: isselected
-                                            ? ColorConstant.cyan100
-                                            : (selectedIndex == 0 ? ColorConstant.cyan100 :ColorConstant.gray300B2),
-                                          width: isselected ? 0.0 : (selectedIndex == 1 ? 3.0 : 0.0)
-                                        ),
-                                  borderRadius: BorderRadius.circular(20)),
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 13, vertical: 2),
+                                      horizontal: 13, vertical: 5),
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      'All'.tr,
+                                      "Fashion".tr,
                                       //    overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
-                              )),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Fashion".tr,
-                                        //    overflow: TextOverflow.ellipsis,
-                                      ),
+                              ),
+                            ),
+                            Tab(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 5),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Technologies".tr,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
                               ),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                           color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                          ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Technologies".tr,
-                                        // overflow: TextOverflow.ellipsis,
-                                      ),
+                            ),
+                            Tab(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: isselected
+                                          ? ColorConstant.cyan100
+                                          : ColorConstant.gray300B2,
+                                      width: isselected ? 0.0 : 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 5),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Social Media".tr,
+                                      //  overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
                               ),
-                              Tab(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: isselected
-                                            ? ColorConstant.cyan100
-                                            : ColorConstant.gray300B2,
-                                        width: isselected ? 0.0 : 3.0,
-                                         ),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 13, vertical: 5),
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Social Media".tr,
-                                        //  overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                      ),
+                            ),
+                          ]),
                     ),
-                    SizedBox(
-                      height: getVerticalSize(900),
-                      child: TabBarView(
-                        controller: _tabController, 
-                        children: [
-                        AllInfluencerHomePage(),
-                        InfluencerFashionHomePage(),
-                        InfluencerTechnologyHomePage(),
-                        InfluencerSocialMediaHomePage()
-                      ]),
-                    )
+                  ),
+                  SizedBox(
+                    height: getVerticalSize(900),
+                    child: TabBarView(controller: _tabController, children: [
+                      AllInfluencerHomePage(),
+                      InfluencerFashionHomePage(),
+                      InfluencerTechnologyHomePage(),
+                      InfluencerSocialMediaHomePage()
+                    ]),
+                  )
                 ]),
           )),
     ));
@@ -315,4 +344,3 @@ class _InfluencerHomeScreenState extends State<InfluencerHomeScreen>
     _scaffoldKey.currentState?.openDrawer();
   }
 }
-

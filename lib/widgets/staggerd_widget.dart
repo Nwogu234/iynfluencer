@@ -79,6 +79,8 @@ class StaggeredWidget extends StatelessWidget {
           selectedInfluencer: listrectangle50,
           chatData: chatData ?? chatsData,
         ),
+        transition: Transition.zoom,
+        duration: Duration(seconds:1)
       );
     }
 

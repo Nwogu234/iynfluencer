@@ -448,7 +448,7 @@ class ChatsInfluencerScreen extends StatefulWidget {
 class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     with SingleTickerProviderStateMixin {
   MessagesPageInfluencerController messageInfluencerController = Get.put(
-      MessagesPageInfluencerController(MessagesPageInfluencerModel().obs));
+      MessagesPageInfluencerController());
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late AnimationController animationController;
@@ -458,6 +458,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
   RxBool show = false.obs;
   FocusNode focusNode = FocusNode();
   late ChatsInfluencerController controllers;
+  final ScrollController _scrollController = ScrollController();
 
   String? capitalizeFirstLetter(String? text) {
     if (text == null || text.isEmpty) {
@@ -523,55 +524,72 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
 
     // controllers.getUser(widget.chatData.chatId);
     controllers.onInit();
+
+     _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!controllers.isLoading.value && controllers.isLoadingMore.value) {
+          controllers.loadMessagesOrFetch(widget.chatData.chatId);
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
     animationController.dispose();
-
+     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
     final String chatId = widget.chatData.chatId;
 
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: true,
-        backgroundColor: ColorConstant.gray5001,
-        appBar: CustomAppBar(
-          height: getVerticalSize(54),
-          leadingWidth: 52,
-          leading: AppbarImage(
-            height: getSize(30),
-            width: getSize(30),
-            svgPath: ImageConstant.imgArrowleftGray600,
-            margin: getMargin(left: 10, top: 5, bottom: 20, right: 10),
-            onTap: () {
-              onTapArrowleft8();
-            },
-          ),
-          title: Padding(
-            padding: getPadding(left: 2, top: 3),
-            child: Row(
-              children: [
-                AppbarCircleimage(
-                  url: imageProvider,
-                  margin: getMargin(left: 10, top: 5, bottom: 20),
-                ),
-                AppbarSubtitle(
-                  text: titleName.tr,
-                  margin: getMargin(left: 14, top: 5, bottom: 20),
-                ),
-              ],
-            ),
-          ),
-          styleType: Style.bgOutlineIndigo50_1,
+    return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ColorConstant.gray5001,
+      appBar: CustomAppBar(
+        centerTitle: true,
+        height: getVerticalSize(50),
+        leadingWidth: 52,
+        leading: AppbarImage(
+          height: getSize(30),
+          width: getSize(30),
+          svgPath: ImageConstant.imgArrowleftGray600,
+          margin: getMargin(left: 10, top: 10, bottom: 15, right: 10),
+          onTap: () {
+            onTapArrowleft8();
+          },
         ),
-        body: RefreshIndicator(
+        title: Padding(
+          padding: getPadding(left: 2, top: 3),
+          child: AppbarSubtitle(
+            text: titleName.tr,
+            margin: getMargin( //left: 14,
+             top: 5,
+             bottom: 10,
+             right:10
+             ),
+          ),
+        ),
+    
+        actions: [
+           AppbarCircleimage(
+                url: imageProvider,
+               margin: getMargin( 
+                right: 10,
+                bottom: 5
+               )
+                //left: 10,
+               //  top: 15, bottom: 20),
+              ),
+        ],
+        styleType: Style.bgOutlineIndigo50_1,
+      ),
+      body: SafeArea(
+        child: RefreshIndicator(
           onRefresh: controllers.refreshItems,
           child: Obx(() {
             if (controllers.isLoading.value) {
@@ -679,7 +697,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                   ),
                 ),
               ); */
-
+            
               Map<String, List<Message>> groupedMessages =
                   controllers.groupMessagesByDate(controllers.messageModelObjs);
               return GestureDetector(
@@ -691,8 +709,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                       SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
-                          controller: scrollController,
-                          reverse: true,
+                         // controller: _scrollController,
+                          reverse: false,
                           itemCount: groupedMessages.length,
                           itemBuilder: (context, index) {
                             String date = groupedMessages.keys.elementAt(index);
@@ -709,8 +727,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                       ),
                                 SizedBox(height: 16),
                                 ListView.builder(
-                                  controller: scrollController,
-                                  reverse: true,
+                                  controller: _scrollController,
+                                  reverse: false,
                                   shrinkWrap: true,
                                   itemCount: messages.length,
                                   itemBuilder: (context, subIndex) {
@@ -732,7 +750,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                         trailingImagePath:
                                             ImageConstant.imgVector,
                                         messageModelObjs: message.messageId,
-                                        onSwipedMessage: (message) {
+                                        onSwipedMessage: (messages) {
                                           replyToMessage(message);
                                           focusNode.requestFocus();
                                         });
@@ -772,7 +790,7 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
                                   show.value = !show.value;
                                 },
                                 messageController:
-
+            
                                     /// widget.query != null
                                     //  ? controllers.queryController  :
                                     //  ? TextEditingController(text: widget.query) :
@@ -813,8 +831,8 @@ class _ChatsInfluencerScreenState extends State<ChatsInfluencerScreen>
     );
   }
 
-  void replyToMessage(Message message) {
-    widget.replyMessages.value = message;
+  void replyToMessage(Message messages) {
+    widget.replyMessages.value = messages;
   }
 
   void cancelReply() {

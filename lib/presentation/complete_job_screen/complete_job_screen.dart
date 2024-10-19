@@ -132,37 +132,39 @@ class _CompleteJobScreenState extends State<CompleteJobScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: getMargin(left: 20, right: 20, bottom: 20),
-        decoration: AppDecoration.outlineIndigo507,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Obx(
-              () => CustomButton(
-                margin: getMargin(bottom: 5),
-                height: getVerticalSize(44),
-                text: "Submit".tr,
-                padding: ButtonPadding.PaddingAll12,
-                loading: controller.isLoading.value,
-                fontStyle: ButtonFontStyle.SatoshiBold13White700,
-                onTap: () {
-                  onSubmit(selectedJob!, chatsData);
-                },
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: getMargin(left: 20, right: 20, bottom: 20),
+          decoration: AppDecoration.outlineIndigo507,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Obx(
+                () => CustomButton(
+                  margin: getMargin(bottom: 5),
+                  height: getVerticalSize(44),
+                  text: "Submit".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  loading: controller.isLoading.value,
+                  fontStyle: ButtonFontStyle.SatoshiBold13White700,
+                  onTap: () {
+                    onSubmit(selectedJob!, chatsData);
+                  },
+                ),
               ),
-            ),
-            Obx(
-              () => CustomButton(
-                height: getVerticalSize(44),
-                text: "Dispute".tr,
-                padding: ButtonPadding.PaddingAll12,
-                loading: controller.isLoading.value,
-                fontStyle: ButtonFontStyle.SatoshiBold13White700,
-                onTap: () {},
+              Obx(
+                () => CustomButton(
+                  height: getVerticalSize(44),
+                  text: "Dispute".tr,
+                  padding: ButtonPadding.PaddingAll12,
+                  loading: controller.isLoading.value,
+                  fontStyle: ButtonFontStyle.SatoshiBold13White700,
+                  onTap: () {},
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ));

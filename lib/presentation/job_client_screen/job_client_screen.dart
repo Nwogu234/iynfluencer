@@ -219,25 +219,27 @@ class JobClientScreen extends GetWidget<JobClientController> {
                                             ])
                                       ]))
                             ])))),
-            bottomNavigationBar: Container(
-                margin: getMargin(left: 20, right: 20, bottom: 52),
-                decoration: AppDecoration.outlineIndigo503,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomButton(
-                          height: getVerticalSize(44),
-                          text: "lbl_completed".tr,
-                          padding: ButtonPadding.PaddingAll12),
-                      CustomButton(
-                          height: getVerticalSize(44),
-                          text: "lbl_dispute".tr,
-                          margin: getMargin(top: 10),
-                          variant: ButtonVariant.Neutral,
-                          padding: ButtonPadding.PaddingAll12,
-                          fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
-                    ]))));
+            bottomNavigationBar: SafeArea(
+              child: Container(
+                  margin: getMargin(left: 20, right: 20, bottom: 52),
+                  decoration: AppDecoration.outlineIndigo503,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomButton(
+                            height: getVerticalSize(44),
+                            text: "lbl_completed".tr,
+                            padding: ButtonPadding.PaddingAll12),
+                        CustomButton(
+                            height: getVerticalSize(44),
+                            text: "lbl_dispute".tr,
+                            margin: getMargin(top: 10),
+                            variant: ButtonVariant.Neutral,
+                            padding: ButtonPadding.PaddingAll12,
+                            fontStyle: ButtonFontStyle.SatoshiBold14Gray900)
+                      ])),
+            )));
   }
 
   /// Navigates to the previous screen.

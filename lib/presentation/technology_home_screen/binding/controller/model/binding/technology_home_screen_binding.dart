@@ -12,7 +12,7 @@ class TechnologyHomePageBinding extends Bindings {
   @override
   void dependencies() {
       // Retrieve the ChatData passed as an argument
-    Get.lazyPut(() => MessagesController(MessagesModel().obs));
+    Get.lazyPut(() => MessagesController());
 
   }
 }

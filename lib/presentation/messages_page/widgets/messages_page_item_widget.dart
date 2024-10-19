@@ -14,43 +14,54 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class MessagesPageItemWidget extends StatelessWidget {
   final ChatData messagesPageItemModelObj;
- // VoidCallback? onTapChatcard;
-
+  // VoidCallback? onTapChatcard;
 
   MessagesPageItemWidget({
     Key? key,
     required this.messagesPageItemModelObj,
-  //  this.onTapChatcard,
+    //  this.onTapChatcard,
   }) : super(key: key);
 
- 
   final storage = new FlutterSecureStorage();
 
-String formatDateTime(DateTime dateTime) {
-  final now = DateTime.now();
-  final difference = now.difference(dateTime);
+  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
 
-  if (difference.inDays < 1) {
-    return DateFormat.jm('en_US').format(dateTime); 
-  } else if (difference.inDays == 1) {
-    return 'YESTERDAY';
-  } else if (difference.inDays < 365) {
-    return DateFormat('MMM d').format(dateTime);
-  } else {
-    return DateFormat('MMM d, yyyy').format(dateTime); 
+    if (difference.inDays < 1) {
+      return DateFormat.jm('en_US').format(dateTime);
+    } else if (difference.inDays == 1) {
+      return 'YESTERDAY';
+    } else if (difference.inDays < 365) {
+      return DateFormat('MMM d').format(dateTime);
+    } else {
+      return DateFormat('MMM d, yyyy').format(dateTime);
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-
-    String formattedDateTime = messagesPageItemModelObj.messages.isNotEmpty
-        ? formatDateTime(messagesPageItemModelObj.messages.last.createdAt)
-        : '';
+    String formattedDateTime =
+        (messagesPageItemModelObj.lastMessage?.isNotEmpty ?? false)
+            ? formatDateTime(messagesPageItemModelObj.lastMessageTime ?? messagesPageItemModelObj.messages.last.createdAt)
+           //     messagesPageItemModelObj.messages.last.createdAt
+           : "";
+      // messagesPageItemModelObj.messages.isNotEmpty
+      //  ? formatDateTime(messagesPageItemModelObj.messages.last.createdAt)
+      //  : '';
     final bool isOnline = false;
-    String messageText = messagesPageItemModelObj.messages.isNotEmpty
-        ? messagesPageItemModelObj.messages.last.text
-        : " ";
+    String messageText = 
+      messagesPageItemModelObj.lastMessage ??
+       // messagesPageItemModelObj.messages.last.text ??
+        "";
+    // (messagesPageItemModelObj.lastMessage?.isNotEmpty ?? false)
+     //     ? messagesPageItemModelObj.lastMessage ??
+    //         messagesPageItemModelObj.messages.last.text
+    //     : "";
+
+   //  messagesPageItemModelObj.messages.isNotEmpty
+   //    ? messagesPageItemModelObj.messages.last.text
+   //     : " ";
 
     String? avatarUrl = messagesPageItemModelObj.influencerUser!.avatar;
 
@@ -76,9 +87,10 @@ String formatDateTime(DateTime dateTime) {
         builder: (context, snapshot) {
           final int? unreadByCreatorValue = snapshot.data;
 
-          final data = unreadByCreatorValue != null
-              ? unreadByCreatorValue
-              : messagesPageItemModelObj.unreadByInfluencer;
+          final data =  messagesPageItemModelObj.unreadByInfluencer;
+             // unreadByCreatorValue != null
+             //     ? unreadByCreatorValue
+             //     : messagesPageItemModelObj.unreadByInfluencer;
           return InkWell(
             splashColor: ColorConstant.cyan100,
             onTap: () {
